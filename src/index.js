@@ -1,4 +1,5 @@
 import { attr } from './utilities';
+import { mouseOver } from './interactions';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
       (context) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = context.conditions;
         // run animation functions
+        mouseOver();
       }
     );
   };
