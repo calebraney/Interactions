@@ -1,5 +1,5 @@
 import { attr } from './utilities';
-import { mouseOver } from './interactions';
+import { mouseOver } from './interactions/mouseOver';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
