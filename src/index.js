@@ -1,9 +1,18 @@
 import { attr } from './utilities';
 import { mouseOver } from './interactions/mouseOver';
+import { cursor } from './interactions/cursor';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
   console.log('Local Script Loaded');
+
+  // register gsap plugins if available
+  if (gsap.ScrollTrigger !== undefined) {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+  if (gsap.Flip !== undefined) {
+    gsap.registerPlugin(Flip);
+  }
 
   //////////////////////////////
   //Global Variables
@@ -20,10 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
         isDesktop: '(min-width: 992px)',
         reduceMotion: '(prefers-reduced-motion: reduce)',
       },
-      (context) => {
-        let { isMobile, isTablet, isDesktop, reduceMotion } = context.conditions;
-        // run animation functions
-        mouseOver();
+      (gsapContext) => {
+        let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
+        // let individual instances decide if they are run
+        mouseOver(gsapContext);
+        //globaally run animations on specific breakpoints
+        if (isDesktop || isTablet) {
+          cursor();
+        }
       }
     );
   };

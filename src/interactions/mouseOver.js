@@ -1,6 +1,8 @@
-import { attr } from '../utilities';
+import { attr, checkBreakpoints } from '../utilities';
 
-export const mouseOver = function () {
+export const mouseOver = function (gsapContext) {
+  // animation ID
+  const ANIMATION_ID = 'mouseover';
   //elements
   const MOUSEOVER_WRAP = '[data-ix-mouseover="wrap"]';
   const MOUSEOVER_LAYER = '[data-ix-mouseover="layer"]';
@@ -18,6 +20,11 @@ export const mouseOver = function () {
     const layers = mouseOverItem.querySelectorAll(MOUSEOVER_LAYER);
     // return if items are null
     if (layers.length === 0) return;
+
+    //check breakpoints and quit function if set on specific breakpoints
+    let runOnBreakpoint = checkBreakpoints(mouseOverItem, ANIMATION_ID, gsapContext);
+    if (runOnBreakpoint === false) return;
+
     // find the target element if one exists, otherwise tge parent is the target
     let target = mouseOverItem.querySelector(MOUSEOVER_TARGET);
     if (!target) {

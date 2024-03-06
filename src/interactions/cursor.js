@@ -1,6 +1,8 @@
-import { attr } from '../utilities';
+import { attr, checkBreakpoints } from '../utilities';
 
-const cursor = function () {
+export const cursor = function (gsapContext) {
+  //animation ID
+  const ANIMATION_ID = 'cursor';
   //elements
   const CURSOR_WRAP = '[data-ix-cursor="wrap"]';
   const CURSOR_INNER = '[data-ix-cursor="inner"]';
@@ -15,6 +17,10 @@ const cursor = function () {
 
   // return if items are null
   if (!cursorWrap || !cursorInner) return;
+
+  //check breakpoints and quit function if set on specific breakpoints
+  let runOnBreakpoint = checkBreakpoints(cursorWrap, ANIMATION_ID, gsapContext);
+  if (runOnBreakpoint === false) return;
 
   const cursorHover = function () {
     // get all links without a no-hover attribute and any other elements with a hover attribute into an array
