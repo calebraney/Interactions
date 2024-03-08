@@ -1,4 +1,4 @@
-import { checkBreakpoints } from './utilities';
+import { attr, checkBreakpoints } from '../utiilities';
 
 export const scrolling = function (gsapContext) {
   //animation ID

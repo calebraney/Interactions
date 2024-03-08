@@ -1,4 +1,4 @@
-import { checkBreakpoints } from './utilities';
+import { attr, checkBreakpoints } from '../utilities';
 
 export const parallax = function (gsapContext) {
   //animation ID

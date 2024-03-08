@@ -1,4 +1,4 @@
-import { checkBreakpoints } from './utilities';
+import { attr, checkBreakpoints } from '../utilities';
 
 export const textLinks = function (gsapContext) {
   //animation ID
