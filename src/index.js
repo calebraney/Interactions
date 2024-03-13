@@ -1,5 +1,6 @@
 import { attr } from './utilities';
 import { mouseOver } from './interactions/mouseOver';
+import { scrolling } from './interactions/scrolling';
 import { cursor } from './interactions/cursor';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
         mouseOver(gsapContext);
+        scrolling(gsapContext);
         //globaally run animations on specific breakpoints
         if (isDesktop || isTablet) {
           cursor();

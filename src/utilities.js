@@ -1,5 +1,6 @@
 // attribute value checker
 export const attr = function (defaultVal, attrVal) {
+  //get the type of the default
   const defaultValType = typeof defaultVal;
   if (typeof attrVal !== 'string' || attrVal.trim() === '') return defaultVal;
   if (attrVal === 'true' && defaultValType === 'boolean') return true;
