@@ -107,7 +107,6 @@ export const scrolling = function (gsapContext) {
 
       //add tween
       let fromTween = tl.fromTo(layer, varsFrom, varsTo, position);
-      console.log(fromTween);
     });
   });
 };
