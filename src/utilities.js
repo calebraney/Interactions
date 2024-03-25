@@ -12,10 +12,10 @@ export const attr = function (defaultVal, attrVal) {
 };
 
 //split text utility
-export const runSplit = function (text) {
+export const runSplit = function (text, types = 'lines, words') {
   if (!text) return;
   typeSplit = new SplitType(text, {
-    types: 'lines, words',
+    types: types,
   });
   return typeSplit;
 };
