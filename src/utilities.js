@@ -1,3 +1,4 @@
+import SplitType from 'split-type';
 // attribute value checker
 export const attr = function (defaultVal, attrVal) {
   //get the type of the default
