@@ -1,7 +1,12 @@
 import { attr } from './utilities';
-import { mouseOver } from './interactions/mouseOver';
-import { scrolling } from './interactions/scrolling';
+import { accordion } from './interactions/accordion';
 import { cursor } from './interactions/cursor';
+import { hoverActive } from './interactions/hoverActive';
+import { mouseOver } from './interactions/mouseOver';
+import { parallax } from './interactions/parallax';
+import { scrollIn } from './interactions/scrollIn';
+import { scrolling } from './interactions/scrolling';
+import { textLinks } from './interactions/textLinks';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
