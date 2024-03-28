@@ -1,6 +1,7 @@
 import { attr } from './utilities';
 import { accordion } from './interactions/accordion';
 import { cursor } from './interactions/cursor';
+import { countUp } from './interactions/countUp';
 import { hoverActive } from './interactions/hoverActive';
 import { mouseOver } from './interactions/mouseOver';
 import { pageTransition } from './interactions/pageTransition';
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
         accordion(gsapContext);
+        countUp(gsapContext);
         hoverActive(gsapContext);
         mouseOver(gsapContext);
         pageTransition();
