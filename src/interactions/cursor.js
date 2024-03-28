@@ -1,5 +1,18 @@
 import { attr, checkBreakpoints } from '../utilities';
 
+/*
+CSS to include
+can also use pointer to check for non fine pointers
+@media not all and (pointer: fine) {
+
+@media (hover: none) {
+ .cursor {
+    pointer-events: none;
+    display: none;
+  }
+}
+*/
+
 export const cursor = function (gsapContext) {
   //animation ID
   const ANIMATION_ID = 'cursor';
@@ -17,6 +30,8 @@ export const cursor = function (gsapContext) {
 
   // return if items are null
   if (!cursorWrap || !cursorInner) return;
+  //check if the device has a touch screen
+  if ('ontouchstart' in window || navigator.maxTouchPoints) return;
 
   //check breakpoints and quit function if set on specific breakpoints
   let runOnBreakpoint = checkBreakpoints(cursorWrap, ANIMATION_ID, gsapContext);

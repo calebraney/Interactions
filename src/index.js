@@ -3,6 +3,7 @@ import { accordion } from './interactions/accordion';
 import { cursor } from './interactions/cursor';
 import { hoverActive } from './interactions/hoverActive';
 import { mouseOver } from './interactions/mouseOver';
+import { pageTransition } from './interactions/pageTransition';
 import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scrollIn';
 import { scrolling } from './interactions/scrolling';
@@ -38,8 +39,15 @@ document.addEventListener('DOMContentLoaded', function () {
       (gsapContext) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
+        accordion(gsapContext);
+        hoverActive(gsapContext);
         mouseOver(gsapContext);
+        pageTransition();
+        parallax(gsapContext);
+        scrollIn(gsapContext);
         scrolling(gsapContext);
+        textLinks(gsapContext);
+
         //globaally run animations on specific breakpoints
         if (isDesktop || isTablet) {
           cursor();
