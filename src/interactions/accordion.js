@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from './utilities';
+import { attr, checkBreakpoints } from '../utilities';
 
 export const accordion = function (gsapContext) {
   //animation ID
