@@ -1,16 +1,22 @@
 import { CountUp } from 'countup.js';
+import { attr, checkBreakpoints } from '../utilities';
 
 export const countUp = function (gsapContext) {
   //animation ID
   const ANIMATION_ID = 'countup';
-  //options
-  const SCROLLING_START = 'data-ix-scrolling-start';
-  const SCROLLING_DURATION = 'data-ix-scrolling-duration';
   //selectors
-  const COUNT_WRAP = '[data-ix-countup="item"]';
+  const ITEM = '[data-ix-countup="item"]';
+  //options
+  const OPTION_START = 'data-ix-countup-start';
+  const OPTION_DURATION = 'data-ix-countup-duration';
+  const OPTION_ACTIVE_CLASS = 'data-ix-countup-active';
+  //classes
+  const ACTIVE_CLASS = 'is-active';
+
   //elements
-  const items = document.querySelectorAll(COUNT_WRAP);
+  const items = document.querySelectorAll(ITEM);
   items.forEach((item) => {
+    const parent = item.parentElement;
     //check breakpoints and quit function if set on specific breakpoints
     let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false) return;
@@ -20,8 +26,9 @@ export const countUp = function (gsapContext) {
     //check for decimal points
     decimalPoints = countDecimalPoints(number);
     //proccess options
-    let duration = attr(2.5, item.getAttribute(SCROLLING_DURATION));
-    let start = attr('top bottom', item.getAttribute(SCROLLING_START));
+    let duration = attr(2.5, item.getAttribute(OPTION_DURATION));
+    let start = attr('top bottom', item.getAttribute(OPTION_START));
+    let activeClass = attr(ACTIVE_CLASS, item.getAttribute(OPTION_ACTIVE_CLASS));
 
     //count up function
     const countUp = new CountUp(item, number, {
@@ -38,6 +45,11 @@ export const countUp = function (gsapContext) {
         scrub: true,
         onEnter: () => {
           countUp.start();
+          parent.classList.add(activeClass);
+          //after duration remove active class
+          setTimeout(() => {
+            parent.classList.remove(activeClass);
+          }, duration * 1000);
         },
       },
     });

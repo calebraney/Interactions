@@ -3,7 +3,7 @@ import { attr } from '../utilities';
 /*
 Include this css in the head code
 <style>
-.transition_wrap {
+.wrap {
 	display: flex;
 }
 </style>
@@ -13,20 +13,20 @@ export const pageTransition = function () {
   // Animation ID
   const ANIMATION_ID = 'pagetransition';
   // Elements
-  const TRANSITION_WRAP = '[data-ix-pagetransition="wrap"]';
-  const TRANSITION_COLUMN = '[data-ix-pagetransition="column"]';
+  const WRAP = '[data-ix-pagetransition="wrap"]';
+  const COLUMN = '[data-ix-pagetransition="column"]';
   //Options
   // if '[data-ix-pagetransition="false"]' then prevent the transition
-  const TRANSITION_EXCLUDE = 'data-ix-pagetransition';
+  const EXCLUDE = 'data-ix-pagetransition';
   //Get Elements
-  const transitionWrap = document.querySelector(TRANSITION_WRAP);
-  const transitionColumns = document.querySelectorAll(TRANSITION_COLUMN);
+  const transitionWrap = document.querySelector(WRAP);
+  const transitionColumns = document.querySelectorAll(COLUMN);
   if (!transitionWrap || transitionColumns.length === 0) return;
 
   // Page load animation
   const tlLoad = gsap.timeline();
-  tlLoad.to(TRANSITION_COLUMN, { yPercent: -100, stagger: 0.2 });
-  tlLoad.set(TRANSITION_WRAP, { display: 'none' });
+  tlLoad.to(COLUMN, { yPercent: -100, stagger: 0.2 });
+  tlLoad.set(WRAP, { display: 'none' });
 
   const checkLink = function (link) {
     if (!link || link.tagName !== 'A') {
@@ -38,7 +38,7 @@ export const pageTransition = function () {
     const target = link.target;
     const href = link.getAttribute('href');
     //check the link for a prevent transition attribute.
-    const playTransition = attr(true, link.getAttribute(TRANSITION_EXCLUDE));
+    const playTransition = attr(true, link.getAttribute(EXCLUDE));
     // link doesn't have prevent transition attribute, link is for the current site, link isn't an anchor, link doesn't open in new tab
     if (
       !hostname ||
@@ -74,8 +74,8 @@ export const pageTransition = function () {
               window.location.href = linkURL;
             }, 100),
         });
-        tlClick.set(TRANSITION_WRAP, { display: 'flex' });
-        tlClick.fromTo(TRANSITION_COLUMN, { yPercent: 100 }, { yPercent: 0, stagger: 0.2 });
+        tlClick.set(WRAP, { display: 'flex' });
+        tlClick.fromTo(COLUMN, { yPercent: 100 }, { yPercent: 0, stagger: 0.2 });
       });
     }
   });

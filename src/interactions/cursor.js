@@ -17,16 +17,17 @@ export const cursor = function (gsapContext) {
   //animation ID
   const ANIMATION_ID = 'cursor';
   //elements
-  const CURSOR_WRAP = '[data-ix-cursor="wrap"]';
-  const CURSOR_INNER = '[data-ix-cursor="inner"]';
-  const CURSOR_DOT = '[data-ix-cursor="dot"]';
-  const CURSOR_HOVER = '[data-ix-cursor="hover"]';
-  const CURSOR_NO_HOVER = '[data-ix-cursor="no-hover"]';
+  const WRAP = '[data-ix-cursor="wrap"]';
+  const INNER = '[data-ix-cursor="inner"]';
+  const DOT = '[data-ix-cursor="dot"]';
+  const HOVER = '[data-ix-cursor="hover"]';
+  const NO_HOVER = '[data-ix-cursor="no-hover"]';
+  //classes
   const HOVER_CLASS = 'is-hover';
   // select the items
-  const cursorWrap = document.querySelector(CURSOR_WRAP);
-  const cursorInner = document.querySelector(CURSOR_INNER);
-  const cursorDot = document.querySelector(CURSOR_DOT);
+  const cursorWrap = document.querySelector(WRAP);
+  const cursorInner = document.querySelector(INNER);
+  const cursorDot = document.querySelector(DOT);
 
   // return if items are null
   if (!cursorWrap || !cursorInner) return;
@@ -39,9 +40,7 @@ export const cursor = function (gsapContext) {
 
   const cursorHover = function () {
     // get all links without a no-hover attribute and any other elements with a hover attribute into an array
-    const hoverElements = gsap.utils.toArray(
-      `${CURSOR_HOVER}, :is(a, button):not(${CURSOR_NO_HOVER})`
-    );
+    const hoverElements = gsap.utils.toArray(`${HOVER}, :is(a, button):not(${NO_HOVER})`);
     hoverElements.forEach((item) => {
       if (!item || !cursorDot) return;
       item.addEventListener('mouseover', function (e) {

@@ -4,28 +4,28 @@ export const parallax = function (gsapContext) {
   //animation ID
   const ANIMATION_ID = 'parallax';
   //elements
-  const PARALLAX_WRAP = `[data-ix-parallax="wrap"]`;
-  const PARALLAX_SECTION = `[data-ix-parallax="section"]`;
-  const PARALLAX_TRIGGER = `[data-ix-parallax="trigger"]`;
+  const WRAP = `[data-ix-parallax="wrap"]`;
+  const SECTION = `[data-ix-parallax="section"]`;
+  const TRIGGER = `[data-ix-parallax="trigger"]`;
   //options
-  const PARALLAX_TYPE = 'data-ix-parallax-type'; //options are uncover, cover, or parallax
-  const PARALLAX_AMOUNT = 'data-ix-parallax-amount';
+  const TYPE = 'data-ix-parallax-type'; //options are uncover, cover, or parallax
+  const AMOUNT = 'data-ix-parallax-amount';
 
-  const parallaxItems = gsap.utils.toArray(PARALLAX_WRAP);
+  const parallaxItems = gsap.utils.toArray(WRAP);
   parallaxItems.forEach((parallaxItem) => {
-    const section = parallaxItem.querySelector(PARALLAX_SECTION);
-    const trigger = parallaxItem.querySelector(PARALLAX_TRIGGER);
+    const section = parallaxItem.querySelector(SECTION);
+    const trigger = parallaxItem.querySelector(TRIGGER);
     if (!parallaxItem || !section || !trigger) return;
     //set default animation type
     let animationType = 'uncover';
-    animationType = attr('uncover', parallaxItem.getAttribute(PARALLAX_TYPE));
-    moveAmount = attr(50, parallaxItem.getAttribute(PARALLAX_AMOUNT));
+    animationType = attr('uncover', parallaxItem.getAttribute(TYPE));
+    moveAmount = attr(50, parallaxItem.getAttribute(AMOUNT));
 
     //check breakpoints and quit function if set on specific breakpoints
     let runOnBreakpoint = checkBreakpoints(parallaxItem, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false) return;
 
-    // animationType = attr('uncover', parallaxItem.getAttribute(PARALLAX_TYPE));
+    // animationType = attr('uncover', parallaxItem.getAttribute(TYPE));
     // default GSAP options for uncover animation
     const settings = {
       scrub: true,

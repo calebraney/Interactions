@@ -4,16 +4,16 @@ export const accordion = function (gsapContext) {
   //animation ID
   const ANIMATION_ID = 'accordion';
   //elements
-  const ACCORDION_WRAP = '[data-ix-accordion="wrap"]';
-  const ACCORDION_ITEM = '[data-ix-accordion="item"]';
-  const ACCORDION_TOP = '[data-ix-accordion="top"]';
+  const WRAP = '[data-ix-accordion="wrap"]';
+  const ITEM = '[data-ix-accordion="item"]';
+  const TOP = '[data-ix-accordion="top"]';
   //options
   const OPTION_FIRST_OPEN = 'data-ix-accordion-first-open';
   const OPTION_ONE_ACTIVE = 'data-ix-accordion-one-active';
   const OPTION_KEEP_ONE_OPEN = 'data-ix-accordion-keep-one-open';
   const OPTION_HOVER_OPEN = 'data-ix-accordion-hover';
   const ACTIVE_CLASS = 'is-active';
-  const accordionLists = gsap.utils.toArray(ACCORDION_WRAP);
+  const accordionLists = gsap.utils.toArray(WRAP);
 
   // utility function to open or close accordions
   const openAccordion = function (item, open = true) {
@@ -56,7 +56,7 @@ export const accordion = function (gsapContext) {
     let keepOneOpen = attr(false, list.getAttribute(OPTION_KEEP_ONE_OPEN));
     let hoverOnly = attr(false, list.getAttribute(OPTION_HOVER_OPEN));
     //get the first accordion item and all of the items
-    const accordionItems = list.querySelectorAll(ACCORDION_ITEM);
+    const accordionItems = list.querySelectorAll(ITEM);
     if (accordionItems.length === 0) return;
     const firstItem = list.firstElementChild;
     if (firstOpen) {
@@ -66,10 +66,10 @@ export const accordion = function (gsapContext) {
       // Add event listener for when accordion lists are clicked
       list.addEventListener('click', function (e) {
         // check if the clicked element was the top of an accordion and get that accordion
-        const clickedEl = e.target.closest(ACCORDION_TOP);
+        const clickedEl = e.target.closest(TOP);
         if (!clickedEl) return;
         // get all the accordions within this list and the active item
-        const clickedItem = clickedEl.closest(ACCORDION_ITEM);
+        const clickedItem = clickedEl.closest(ITEM);
         // check if the clicked item is already active
         let clickedItemAlreadyActive = clickedItem.classList.contains(ACTIVE_CLASS);
         // if item is NOT ACTIVE
@@ -100,7 +100,7 @@ export const accordion = function (gsapContext) {
       });
     }
     if (hoverOnly) {
-      const accordionItems = list.querySelectorAll(ACCORDION_ITEM);
+      const accordionItems = list.querySelectorAll(ITEM);
       accordionItems.forEach((item) => {
         item.addEventListener('mouseover', function () {
           openAccordion(item);
