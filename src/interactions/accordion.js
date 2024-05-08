@@ -56,7 +56,7 @@ export const accordion = function (gsapContext) {
     let keepOneOpen = attr(false, list.getAttribute(OPTION_KEEP_ONE_OPEN));
     let hoverOnly = attr(false, list.getAttribute(OPTION_HOVER_OPEN));
     //get the first accordion item and all of the items
-    const accordionItems = list.querySelectorAll(ITEM);
+    const accordionItems = Array.from(list.querySelectorAll(ITEM));
     if (accordionItems.length === 0) return;
     const firstItem = list.firstElementChild;
     if (firstOpen) {
@@ -97,10 +97,19 @@ export const accordion = function (gsapContext) {
         if (clickedItemAlreadyActive && !keepOneOpen) {
           openAccordion(clickedItem, false);
         }
+        // if the current item IS ACTIVE and keep one open is true check how many items are active
+        if (clickedItemAlreadyActive && keepOneActive) {
+          const activeItems = accordionItems.filter(function (item) {
+            return item.classList.contains(activeClass);
+          });
+          //if there are more than 1 items active close the current one
+          if (activeItems.length > 1) {
+            openAccordion(item, false);
+          }
+        }
       });
     }
     if (hoverOnly) {
-      const accordionItems = list.querySelectorAll(ITEM);
       accordionItems.forEach((item) => {
         item.addEventListener('mouseover', function () {
           openAccordion(item);
