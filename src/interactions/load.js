@@ -1,0 +1,85 @@
+import { attr, checkBreakpoints, runSplit } from '../utilities';
+
+export const load = function () {
+  //animation ID
+  const ANIMATION_ID = 'load';
+  // hero animation attribute
+  const ATTRIBUTE = 'data-ix-load';
+  // hero animation selectors
+  const HEADING = 'heading';
+  const ITEM = 'item';
+  const IMAGE = 'image';
+  //tween options
+  const POSITION = 'data-ix-load-position'; // sequential by default, use "<" to start tweens together
+  const DEFAULT_STAGGER = '<0.2';
+
+  const items = gsap.utils.toArray(`[${ATTRIBUTE}]`);
+
+  if (items.length === 0) return;
+
+  const splitText = runSplit(title, 'lines, words, chars');
+  if (!splitText) return;
+
+  const tl = gsap.timeline({
+    paused: true,
+    defaults: {
+      ease: 'power1.out',
+      duration: 0.6,
+    },
+  });
+  //anything that needs to be set to start the interaction happens here
+  tl.set(title, { opacity: 1 });
+
+  //h1 load tween
+  const loadHeading = function (item) {
+    //split the text
+    const splitText = runSplit(item);
+    if (!splitText) return;
+    // get the position attribute
+    const position = attr('<', layer.getAttribute(POSITION));
+    tl.fromTo(
+      splitText.words,
+      { opacity: 0 },
+      { opacity: 1, stagger: { each: 0.1, from: 'random' } },
+      position
+    );
+  };
+  //images load tween
+  const loadImage = function (item) {
+    // get the position attribute or set defautl position
+    const position = attr(DEFAULT_STAGGER, layer.getAttribute(POSITION));
+    tl.fromTo(splitText.words, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1 }, position);
+  };
+  //default load tween
+  const loadItem = function (item) {
+    // get the position attribute
+    const position = attr(DEFAULT_STAGGER, layer.getAttribute(POSITION));
+    tl.fromTo(splitText.words, { opacity: 0, y: '2rem' }, { opacity: 1, y: '0rem' }, position);
+  };
+
+  //get all elements and apply animations
+  items.forEach((item) => {
+    if (!item) return;
+    //check breakpoints and quit function if set on specific breakpoints
+    let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
+    if (runOnBreakpoint === false) return;
+    //find the type of the scrolling animation
+    const loadType = item.getAttribute(ELEMENT);
+    if (loadType === HEADING) {
+      loadHeading(item);
+    }
+    if (loadType === IMAGE) {
+      loadImage(item);
+    }
+    if (loadType === ITEM) {
+      loadItem(item);
+    }
+  });
+
+  //Play interaction on page load
+  document.addEventListener('DOMContentLoaded', function () {
+    tl.play();
+  });
+  // Alternatively use the returned tl to trigger the interaction after transition or image load
+  return tl;
+};
