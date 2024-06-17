@@ -1,5 +1,10 @@
 import { attr, checkBreakpoints, runSplit } from '../utilities';
+/* CSS in PAGE Head
 
+html:not(.w-editor) [data-ix-load] {
+	opacity: 0;
+}
+*/
 export const load = function () {
   //animation ID
   const ANIMATION_ID = 'load';
@@ -28,7 +33,7 @@ export const load = function () {
     },
   });
   //anything that needs to be set to start the interaction happens here
-  tl.set(title, { opacity: 1 });
+  tl.set(items, { opacity: 1 });
 
   //h1 load tween
   const loadHeading = function (item) {
