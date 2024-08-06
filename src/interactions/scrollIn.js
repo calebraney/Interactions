@@ -88,6 +88,10 @@ export const scrollIn = function (gsapContext) {
 
   const scrollInItem = function (item) {
     if (!item) return;
+    //check if item is rich text and if it is apply animation to first child
+    if (item.classList.contains('w-richtext') && item.firstChild !== null) {
+      item = item.firstChild;
+    }
     const tl = scrollInTL(item);
     const tween = defaultTween(item, tl);
   };
