@@ -10,6 +10,7 @@ import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scrollIn';
 import { scrolling } from './interactions/scrolling';
 import { textLinks } from './interactions/textLinks';
+import { initLenis } from './interactions/lenis';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
