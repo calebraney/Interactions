@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modules = {
       navigation: true,
       pagination: false,
+      scrollbar: false,
       autoplay: false,
     };
     const sliders = createSlider(components, options, modules);

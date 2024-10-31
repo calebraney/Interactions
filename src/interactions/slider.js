@@ -11,6 +11,8 @@ export const createSlider = function (components, options, modules) {
   const NEXT_BUTTON = '.swiper-next';
   const PREVIOUS_BUTTON = '.swiper-prev';
   const BULLET_WRAP = '.swiper-bullet-wrapper';
+  const SCROLLBAR = '.swiper-scrollbar';
+  const SCROLLBAR_DRAG = '.swiper-scrollbar-drag';
   //classes
   const ACTIVE_CLASS = 'is-active';
   const DISABLED_CLASS = 'is-disabled';
@@ -64,6 +66,35 @@ export const createSlider = function (components, options, modules) {
         },
       };
       finalModules = { ...finalModules, ...paginationSettings };
+    }
+    //SCROLLBAR
+    if (modules.scrollbar === true) {
+      //get the pagination elements
+      const scrollbarEl = component.querySelector(SCROLLBAR);
+      //set the pagination settings
+      const scrollbarSettings = {
+        scrollbar: {
+          el: scrollbarEl,
+          dragClass: SCROLLBAR_DRAG,
+          draggable: true,
+          dragSize: 'auto', //or set in number of pixels
+          snapOnRelease: false,
+        },
+      };
+      finalModules = { ...finalModules, ...scrollbarSettings };
+    }
+    //AUTOPLAY
+    if (modules.autoplay === true) {
+      //set the autoplay settings
+      const autoplaySettings = {
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: false,
+          stopOnLastSlide: true,
+        },
+      };
+      finalModules = { ...finalModules, ...autoplaySettings };
     }
 
     //combine all the settings
