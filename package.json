@@ -20,7 +20,8 @@
     "esbuild": "^0.15.18",
     "gsap": "^3.12.2",
     "prettier": "2.8.1",
-    "serve": "^14.1.2"
+    "serve": "^14.1.2",
+    "swiper": "^11.1.14"
   },
   "dependencies": {
     "countup.js": "^2.8.0",

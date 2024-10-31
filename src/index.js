@@ -1,4 +1,5 @@
 import { attr } from './utilities';
+import { createSlider } from './interactions/slider';
 import { accordion } from './interactions/accordion';
 import { cursor } from './interactions/cursor';
 import { countUp } from './interactions/countUp';
@@ -24,6 +25,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   //Global Variables
+
+  //////////////////////////////
+  //Slider instances
+  const caseGallerySlider = function () {
+    const COMPONENT = '.case-gallery-slider_component';
+    const components = [...document.querySelectorAll(COMPONENT)];
+    const options = {
+      slidesPerView: 'auto',
+      loop: true,
+    };
+    const modules = {
+      navigation: true,
+      pagination: false,
+      autoplay: false,
+    };
+    const sliders = createSlider(components, options, modules);
+  };
 
   //////////////////////////////
   //Control Functions on page load
