@@ -1,7 +1,7 @@
 import { attr, checkBreakpoints, runSplit } from '../utilities';
 /* CSS in PAGE Head
 
-html:not(.w-editor) [data-ix-load] {
+html:not(.w-editor) [data-ix-load]:not([data-ix-load="stagger"]) {
 	opacity: 0;
 }
  html:not(.w-editor) [data-ix-load="stagger"] > * {
