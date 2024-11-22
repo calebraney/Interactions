@@ -140,19 +140,29 @@ export const scrollIn = function (gsapContext) {
     //item is the image wrap for this animation
     if (!item) return;
     //set clip path directions
-    const clipStart = getCLipStart(item);
-    const clipEnd = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+    const child = item.firstChild;
     //create timeline
     const tl = scrollInTL(item);
     tl.fromTo(
-      item,
+      child,
       {
-        clipPath: clipStart,
+        scale: 1.2,
       },
       {
-        clipPath: clipEnd,
+        scale: 1,
         duration: 1,
       }
+    );
+    tl.fromTo(
+      item,
+      {
+        scale: 0.9,
+      },
+      {
+        scale: 1,
+        duration: 1,
+      },
+      '<'
     );
   };
 

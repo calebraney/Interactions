@@ -1539,18 +1539,28 @@
     };
     const scrollInImage = function(item2) {
       if (!item2) return;
-      const clipStart = getCLipStart(item2);
-      const clipEnd = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
+      const child = item2.firstChild;
       const tl = scrollInTL(item2);
+      tl.fromTo(
+        child,
+        {
+          scale: 1.2
+        },
+        {
+          scale: 1,
+          duration: 1
+        }
+      );
       tl.fromTo(
         item2,
         {
-          clipPath: clipStart
+          scale: 0.9
         },
         {
-          clipPath: clipEnd,
+          scale: 1,
           duration: 1
-        }
+        },
+        "<"
       );
     };
     const scrollInLine = function(item2) {
