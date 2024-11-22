@@ -73,6 +73,10 @@ export const scrollIn = function (gsapContext) {
   };
 
   const scrollInHeading = function (item) {
+    //check if item is rich text
+    if (item.classList.contains('w-richtext')) {
+      item = item.firstChild;
+    }
     //split the text
     const splitText = runSplit(item);
     if (!splitText) return;

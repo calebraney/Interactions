@@ -11,6 +11,7 @@ import { scrollIn } from './interactions/scrollIn';
 import { scrolling } from './interactions/scrolling';
 import { textLinks } from './interactions/textLinks';
 import { initLenis } from './interactions/lenis';
+import { load } from './interactions/load';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
         parallax(gsapContext);
         scrollIn(gsapContext);
         scrolling(gsapContext);
+        load(gsapContext);
         textLinks(gsapContext);
 
         //globaally run animations on specific breakpoints

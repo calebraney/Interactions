@@ -13,17 +13,19 @@
   "type": "module",
   "scripts": {
     "serve": "serve",
-    "build": "node ./bin/build.js",
-    "build-old": "esbuild src/index.js --bundle --outfile=dist/index.js --watch"
+    "build": "cross-env NODE_ENV=production node ./bin/build.js",
+    "dev": "cross-env NODE_ENV=development node ./bin/build.js"
   },
   "devDependencies": {
-    "esbuild": "^0.15.18",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.21.5",
     "gsap": "^3.12.2",
     "prettier": "2.8.1",
     "serve": "^14.1.2",
     "swiper": "^11.1.14"
   },
   "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
     "countup.js": "^2.8.0",
     "split-type": "^0.3.4"
   }

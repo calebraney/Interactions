@@ -1,10 +1,10 @@
 import { attr, checkBreakpoints, runSplit } from '../utilities';
 /* CSS in PAGE Head
 
-html:not(.w-editor) [data-ix-load]:not([data-ix-load="stagger"]) {
+html:not(.w-editor) [data-ix-load]:not([data-ix-load="stagger"], [data-ix-load-run="false"]) {
 	opacity: 0;
 }
- html:not(.w-editor) [data-ix-load="stagger"] > * {
+ html:not(.w-editor) [data-ix-load="stagger"]:not([data-ix-load-run="false"]) > * {
 	opacity: 0;
 }
 */
@@ -38,12 +38,18 @@ export const load = function (gsapContext) {
 
   //h1 load tween
   const loadHeading = function (item) {
+    //check if item is rich text and if it is find the first child and set it to be the heading
+    if (item.classList.contains('w-richtext')) {
+      item.style.opacity = '1';
+      item = item.firstChild;
+    }
     //split the text
     const splitText = runSplit(item);
     if (!splitText) return;
     // get the position attribute
     const position = attr('<', item.getAttribute(POSITION));
     tl.set(item, { opacity: 1 });
+    console.log(item);
     tl.fromTo(
       splitText.words,
       { opacity: 0, y: '50%', rotateX: 45 },
