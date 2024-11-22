@@ -1481,8 +1481,11 @@
         opacity: 1,
         y: "0rem"
       };
-      if (options.stagger === true) {
+      if (options.stagger === "small") {
         varsTo.stagger = { each: 0.1, from: "start" };
+      }
+      if (options.stagger === "large") {
+        varsTo.stagger = { each: 0.3, from: "start" };
       }
       const tween = tl.fromTo(item2, varsFrom, varsTo);
       return tween;
@@ -1494,7 +1497,7 @@
       const splitText = runSplit(item2);
       if (!splitText) return;
       const tl = scrollInTL(item2);
-      const tween = defaultTween(splitText.words, tl, { stagger: true, skew: "large" });
+      const tween = defaultTween(splitText.words, tl, { stagger: "small", skew: "large" });
       tl.eventCallback("onComplete", () => {
         splitText.revert();
       });
@@ -1592,7 +1595,7 @@
       const children = gsap.utils.toArray(item2.children);
       if (children.length === 0) return;
       const tl = scrollInTL(item2);
-      const tween = defaultTween(children, tl, { stagger: true });
+      const tween = defaultTween(children, tl, { stagger: "large" });
     };
     const scrollInRichText = function(item2) {
       if (!item2) return;

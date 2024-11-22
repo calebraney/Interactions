@@ -64,8 +64,11 @@ export const scrollIn = function (gsapContext) {
     };
     //optional adjustments to the tween
     // {stagger: large}
-    if (options.stagger === true) {
+    if (options.stagger === 'small') {
       varsTo.stagger = { each: 0.1, from: 'start' };
+    }
+    if (options.stagger === 'large') {
+      varsTo.stagger = { each: 0.3, from: 'start' };
     }
     // putting tween together
     const tween = tl.fromTo(item, varsFrom, varsTo);
@@ -83,7 +86,7 @@ export const scrollIn = function (gsapContext) {
     //set heading to full opacity (check to see if needed)
     // item.style.opacity = 1;
     const tl = scrollInTL(item);
-    const tween = defaultTween(splitText.words, tl, { stagger: true, skew: 'large' });
+    const tween = defaultTween(splitText.words, tl, { stagger: 'small', skew: 'large' });
     //add event calleback to revert text on completion
     tl.eventCallback('onComplete', () => {
       splitText.revert();
@@ -202,7 +205,7 @@ export const scrollIn = function (gsapContext) {
     const children = gsap.utils.toArray(item.children);
     if (children.length === 0) return;
     const tl = scrollInTL(item);
-    const tween = defaultTween(children, tl, { stagger: true });
+    const tween = defaultTween(children, tl, { stagger: 'large' });
   };
 
   const scrollInRichText = function (item) {
