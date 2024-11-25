@@ -90,4 +90,6 @@ export const initLenis = function () {
     });
   }
   toggleScroll();
+  //retun lenis so it can be accessed elsewhere
+  return lenis;
 };
