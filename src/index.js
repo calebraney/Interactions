@@ -2,16 +2,17 @@ import { attr } from './utilities';
 import { createSlider } from './interactions/slider';
 import { accordion } from './interactions/accordion';
 import { cursor } from './interactions/cursor';
-import { countUp } from './interactions/countUp';
-import { hoverActive } from './interactions/hoverActive';
-import { mouseOver } from './interactions/mouseOver';
-import { pageTransition } from './interactions/pageTransition';
-import { parallax } from './interactions/parallax';
-import { scrollIn } from './interactions/scrollIn';
-import { scrolling } from './interactions/scrolling';
-import { textLinks } from './interactions/textLinks';
-import { initLenis } from './interactions/lenis';
+import { countUp } from './interactions/count-up';
+import { hoverActive } from './interactions/hover-active';
 import { load } from './interactions/load';
+import { logoTicker } from './interactions/logo-ticker';
+import { mouseOver } from './interactions/mouse-over';
+import { pageTransition } from './interactions/page-transition';
+import { parallax } from './interactions/parallax';
+import { scrollIn } from './interactions/scroll-in';
+import { scrolling } from './interactions/scrolling';
+import { textLinks } from './interactions/text-links';
+import { initLenis } from './interactions/lenis';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         scrollIn(gsapContext);
         scrolling(gsapContext);
         load(gsapContext);
+        logoTicker(gsapContext);
         textLinks(gsapContext);
 
         //globaally run animations on specific breakpoints

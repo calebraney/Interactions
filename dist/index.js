@@ -1151,7 +1151,7 @@
     }, i2;
   }();
 
-  // src/interactions/countUp.js
+  // src/interactions/count-up.js
   var countUp = function(gsapContext) {
     const ANIMATION_ID = "countup";
     const ITEM = '[data-ix-countup="item"]';
@@ -1201,7 +1201,7 @@
     return parts[1].length;
   }
 
-  // src/interactions/hoverActive.js
+  // src/interactions/hover-active.js
   var hoverActive = function(gsapContext) {
     const ANIMATION_ID = "hoveractive";
     const WRAP = '[data-ix-hoveractive="wrap"]';
@@ -1244,7 +1244,132 @@
     }
   };
 
-  // src/interactions/mouseOver.js
+  // src/interactions/load.js
+  var load = function(gsapContext) {
+    const ANIMATION_ID = "load";
+    const ATTRIBUTE = "data-ix-load";
+    const HEADING = "heading";
+    const ITEM = "item";
+    const IMAGE = "image";
+    const STAGGER = "stagger";
+    const POSITION = "data-ix-load-position";
+    const DEFAULT_STAGGER = "<0.2";
+    const items = gsap.utils.toArray(`[${ATTRIBUTE}]`);
+    if (items.length === 0) return;
+    const tl = gsap.timeline({
+      paused: true,
+      defaults: {
+        ease: "power1.out",
+        duration: 0.8
+      }
+    });
+    const loadHeading = function(item2) {
+      if (item2.classList.contains("w-richtext")) {
+        item2.style.opacity = "1";
+        item2 = item2.firstChild;
+      }
+      const splitText = runSplit(item2);
+      if (!splitText) return;
+      const position = attr("<", item2.getAttribute(POSITION));
+      tl.set(item2, { opacity: 1 });
+      console.log(item2);
+      tl.fromTo(
+        splitText.words,
+        { opacity: 0, y: "50%", rotateX: 45 },
+        { opacity: 1, y: "0%", rotateX: 0, stagger: { each: 0.1, from: "left" } },
+        position
+      );
+    };
+    const loadImage = function(item2) {
+      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
+      tl.fromTo(item2, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1 }, position);
+    };
+    const loadItem = function(item2) {
+      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
+      tl.fromTo(item2, { opacity: 0, y: "2rem" }, { opacity: 1, y: "0rem" }, position);
+    };
+    const loadStagger = function(item2) {
+      if (!item2) return;
+      const children = gsap.utils.toArray(item2.children);
+      if (children.length === 0) return;
+      children.forEach((child, index) => {
+        if (index === 0) {
+          item2.style.opacity = 1;
+        }
+        loadItem(child);
+      });
+    };
+    items.forEach((item2) => {
+      if (!item2) return;
+      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const loadType = item2.getAttribute(ATTRIBUTE);
+      if (loadType === HEADING) {
+        loadHeading(item2);
+      }
+      if (loadType === IMAGE) {
+        loadImage(item2);
+      }
+      if (loadType === ITEM) {
+        loadItem(item2);
+      }
+      if (loadType === STAGGER) {
+        loadStagger(item2);
+      }
+    });
+    tl.play(0);
+    return tl;
+  };
+
+  // src/interactions/logo-ticker.js
+  var logoTicker = function(gsapContext) {
+    const ANIMATION_ID = "logoticker";
+    const WRAP = '[data-ix-logoticker="wrap"]';
+    const LIST = '[data-ix-logoticker="list"]';
+    const REVERSE = "data-ix-logoticker-reverse";
+    const DURATION = "data-ix-logoticker-duration";
+    const CHANGE_SPEED_ON_HOVER = "data-ix-logoticker-accelerate";
+    const wraps = document.querySelectorAll(WRAP);
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const lists = wrap.querySelectorAll(LIST);
+      let reverse = attr(false, wrap.getAttribute(REVERSE));
+      let duration = attr(30, wrap.getAttribute(DURATION));
+      let accelerate = attr(false, wrap.getAttribute(CHANGE_SPEED_ON_HOVER));
+      let direction = 1;
+      if (reverse) {
+        direction = -1;
+      }
+      let tl = gsap.timeline({
+        repeat: -1,
+        defaults: {
+          ease: "none"
+        }
+      });
+      tl.fromTo(
+        lists,
+        {
+          xPercent: 0
+        },
+        {
+          xPercent: -100 * direction,
+          duration
+        }
+      );
+      if (accelerate) {
+        wrap.addEventListener("mouseenter", (event) => {
+          tl.timeScale(2);
+        });
+        wrap.addEventListener("mouseleave", (event) => {
+          tl.timeScale(1);
+        });
+      }
+    });
+  };
+
+  // src/interactions/mouse-over.js
   var mouseOver = function(gsapContext) {
     const ANIMATION_ID = "mouseover";
     const WRAP = '[data-ix-mouseover="wrap"]';
@@ -1319,7 +1444,7 @@
     });
   };
 
-  // src/interactions/pageTransition.js
+  // src/interactions/page-transition.js
   var pageTransition = function() {
     const ANIMATION_ID = "pagetransition";
     const WRAP = '[data-ix-pagetransition="wrap"]';
@@ -1429,7 +1554,7 @@
     });
   };
 
-  // src/interactions/scrollIn.js
+  // src/interactions/scroll-in.js
   var scrollIn = function(gsapContext) {
     const ANIMATION_ID = "scrollin";
     const ELEMENT = "data-ix-scrollin";
@@ -1761,7 +1886,7 @@
     });
   };
 
-  // src/interactions/textLinks.js
+  // src/interactions/text-links.js
   var textLinks = function(gsapContext) {
     const ANIMATION_ID = "textlink";
     const WRAP = '[data-ix-textlink="wrap"]';
@@ -1814,83 +1939,6 @@
     });
   };
 
-  // src/interactions/load.js
-  var load = function(gsapContext) {
-    const ANIMATION_ID = "load";
-    const ATTRIBUTE = "data-ix-load";
-    const HEADING = "heading";
-    const ITEM = "item";
-    const IMAGE = "image";
-    const STAGGER = "stagger";
-    const POSITION = "data-ix-load-position";
-    const DEFAULT_STAGGER = "<0.2";
-    const items = gsap.utils.toArray(`[${ATTRIBUTE}]`);
-    if (items.length === 0) return;
-    const tl = gsap.timeline({
-      paused: true,
-      defaults: {
-        ease: "power1.out",
-        duration: 0.8
-      }
-    });
-    const loadHeading = function(item2) {
-      if (item2.classList.contains("w-richtext")) {
-        item2.style.opacity = "1";
-        item2 = item2.firstChild;
-      }
-      const splitText = runSplit(item2);
-      if (!splitText) return;
-      const position = attr("<", item2.getAttribute(POSITION));
-      tl.set(item2, { opacity: 1 });
-      console.log(item2);
-      tl.fromTo(
-        splitText.words,
-        { opacity: 0, y: "50%", rotateX: 45 },
-        { opacity: 1, y: "0%", rotateX: 0, stagger: { each: 0.1, from: "left" } },
-        position
-      );
-    };
-    const loadImage = function(item2) {
-      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-      tl.fromTo(item2, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1 }, position);
-    };
-    const loadItem = function(item2) {
-      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-      tl.fromTo(item2, { opacity: 0, y: "2rem" }, { opacity: 1, y: "0rem" }, position);
-    };
-    const loadStagger = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
-      if (children.length === 0) return;
-      children.forEach((child, index) => {
-        if (index === 0) {
-          item2.style.opacity = 1;
-        }
-        loadItem(child);
-      });
-    };
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      const loadType = item2.getAttribute(ATTRIBUTE);
-      if (loadType === HEADING) {
-        loadHeading(item2);
-      }
-      if (loadType === IMAGE) {
-        loadImage(item2);
-      }
-      if (loadType === ITEM) {
-        loadItem(item2);
-      }
-      if (loadType === STAGGER) {
-        loadStagger(item2);
-      }
-    });
-    tl.play(0);
-    return tl;
-  };
-
   // src/index.js
   document.addEventListener("DOMContentLoaded", function() {
     console.log("Local Script Loaded");
@@ -1936,6 +1984,7 @@
           scrollIn(gsapContext);
           scrolling(gsapContext);
           load(gsapContext);
+          logoTicker(gsapContext);
           textLinks(gsapContext);
           if (isDesktop || isTablet) {
             cursor();
