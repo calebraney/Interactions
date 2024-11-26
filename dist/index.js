@@ -1009,13 +1009,16 @@
     const ANIMATION_ID = "cursor";
     const WRAP = '[data-ix-cursor="wrap"]';
     const INNER = '[data-ix-cursor="inner"]';
+    const OUTER = '[data-ix-cursor="outer"]';
     const DOT = '[data-ix-cursor="dot"]';
     const HOVER = '[data-ix-cursor="hover"]';
     const NO_HOVER = '[data-ix-cursor="no-hover"]';
+    const INNER_DELAY = 0.01;
+    const OUTER_DELAY = 0.4;
     const HOVER_CLASS = "is-hover";
     const cursorWrap = document.querySelector(WRAP);
     const cursorInner = document.querySelector(INNER);
-    const cursorDot = document.querySelector(DOT);
+    const cursorOuter = document.querySelector(OUTER);
     if (!cursorWrap || !cursorInner) return;
     if ("ontouchstart" in window || navigator.maxTouchPoints) return;
     let runOnBreakpoint = checkBreakpoints(cursorWrap, ANIMATION_ID, gsapContext);
@@ -1023,46 +1026,31 @@
     const cursorHover = function() {
       const hoverElements = gsap.utils.toArray(`${HOVER}, :is(a, button):not(${NO_HOVER})`);
       hoverElements.forEach((item2) => {
-        if (!item2 || !cursorDot) return;
+        if (!item2 || !cursorInner) return;
         item2.addEventListener("mouseover", function(e) {
-          cursorDot.classList.add(HOVER_CLASS);
+          cursorInner.classList.add(HOVER_CLASS);
         });
         item2.addEventListener("mouseleave", function(e) {
-          cursorDot.classList.remove(HOVER_CLASS);
+          cursorInner.classList.remove(HOVER_CLASS);
         });
       });
     };
     cursorHover();
     const cursorClick = function() {
-      if (!cursorDot) return;
-      document.addEventListener("click", function(e) {
-        let tl = gsap.timeline({});
-        tl.fromTo(cursorDot, { rotateZ: -45 }, { rotateZ: 45, ease: "power1.out", duration: 0.3 });
-      });
     };
     cursorClick();
     const cursorMove = function() {
-      let progressObject = { x: 0, y: 0 };
-      let cursorXTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      cursorXTimeline.fromTo(cursorInner, { x: "-50vw" }, { x: "50vw" });
-      let cursorYTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-      cursorYTimeline.fromTo(cursorInner, { y: "-50vh" }, { y: "50vh" });
-      function setTimelineProgress(xValue, yValue) {
-        gsap.to(progressObject, {
-          x: xValue,
-          y: yValue,
-          ease: "none",
-          duration: 0,
-          onUpdate: () => {
-            cursorXTimeline.progress(progressObject.x);
-            cursorYTimeline.progress(progressObject.y);
-          }
-        });
-      }
-      document.addEventListener("mousemove", function(e) {
-        let mousePercentX = e.clientX / window.innerWidth;
-        let mousePercentY = e.clientY / window.innerHeight;
-        setTimelineProgress(mousePercentX, mousePercentY);
+      gsap.set(cursorInner, { xPercent: -50, yPercent: -50 });
+      gsap.set(cursorOuter, { xPercent: -50, yPercent: -50 });
+      let innerX = gsap.quickTo(cursorInner, "x", { duration: INNER_DELAY, ease: "non" });
+      let innerY = gsap.quickTo(cursorInner, "y", { duration: INNER_DELAY, ease: "non" });
+      let outerX = gsap.quickTo(cursorOuter, "x", { duration: OUTER_DELAY, ease: "power3" });
+      let outerY = gsap.quickTo(cursorOuter, "y", { duration: OUTER_DELAY, ease: "power3" });
+      window.addEventListener("mousemove", (e) => {
+        innerX(e.clientX);
+        innerY(e.clientY);
+        outerX(e.clientX);
+        outerY(e.clientY);
       });
     };
     cursorMove();
@@ -1206,28 +1194,48 @@
     const ANIMATION_ID = "hoveractive";
     const WRAP = '[data-ix-hoveractive="wrap"]';
     const ITEM = '[data-ix-hoveractive="item"]';
+    const TARGET = '[data-ix-hoveractive="target"]';
+    const ID = "data-ix-hoveractive-id";
     const OPTION_ACTIVE_CLASS = "data-ix-hoveractive-class";
     const OPTION_KEEP_ACTIVE = "data-ix-hoveractive-keep-active";
     const ACTIVE_CLASS = "is-active";
     const wraps = gsap.utils.toArray(WRAP);
-    const activateOnHover = function(parent) {
-      const children = parent.querySelectorAll(ITEM);
+    const hoverActiveList = function(parent) {
+      const children = [...parent.querySelectorAll(ITEM)];
       let activeClass2 = attr(ACTIVE_CLASS, parent.getAttribute(OPTION_ACTIVE_CLASS));
       let keepActive = attr(false, parent.getAttribute(OPTION_KEEP_ACTIVE));
-      console.log("enter");
+      function activateItem(item2, activate = true) {
+        let hasTarget = true;
+        const itemID = item2.getAttribute(ID);
+        const targetEl = parent.querySelector(`${TARGET}[${ID}="${itemID}"]`);
+        if (!itemID || !targetEl) {
+          hasTarget = false;
+        }
+        if (activate) {
+          item2.classList.add(activeClass2);
+          if (hasTarget) {
+            targetEl.classList.add(activeClass2);
+          }
+        } else {
+          item2.classList.remove(activeClass2);
+          if (hasTarget) {
+            targetEl.classList.remove(activeClass2);
+          }
+        }
+      }
       children.forEach((currentItem) => {
         currentItem.addEventListener("mouseover", function(e) {
           children.forEach((child) => {
             if (child === currentItem) {
-              child.classList.add(activeClass2);
+              activateItem(child, true);
             } else {
-              child.classList.remove(activeClass2);
+              activateItem(currentItem, false);
             }
           });
         });
         currentItem.addEventListener("mouseleave", function(e) {
           if (!keepActive) {
-            currentItem.classList.remove(activeClass2);
+            activateItem(currentItem, false);
           }
         });
       });
@@ -1236,11 +1244,11 @@
       wraps.forEach((wrap) => {
         let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
         if (runOnBreakpoint === false) return;
-        activateOnHover(wrap);
+        hoverActiveList(wrap);
       });
     } else {
       const body = document.querySelector(body);
-      activateOnHover(body);
+      hoverActiveList(body);
     }
   };
 
@@ -1977,6 +1985,7 @@
           let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
           accordion(gsapContext);
           countUp(gsapContext);
+          cursor(gsapContext);
           hoverActive(gsapContext);
           mouseOver(gsapContext);
           pageTransition();

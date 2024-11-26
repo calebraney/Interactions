@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // let individual instances decide if they are run
         accordion(gsapContext);
         countUp(gsapContext);
+        cursor(gsapContext);
         hoverActive(gsapContext);
         mouseOver(gsapContext);
         pageTransition();
