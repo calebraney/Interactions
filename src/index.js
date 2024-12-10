@@ -11,6 +11,7 @@ import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
+import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
 import { initLenis } from './interactions/lenis';
 
@@ -71,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         parallax(gsapContext);
         scrollIn(gsapContext);
         scrolling(gsapContext);
+        textScrub(gsapContext);
         load(gsapContext);
         logoTicker(gsapContext);
         textLinks(gsapContext);
