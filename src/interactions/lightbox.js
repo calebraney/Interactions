@@ -77,7 +77,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
       parent.addEventListener('keydown', (e) => {
         // if key is Enter and the target is the lightbox trigger, open lightbox
         if (e.key === 'Enter' && e.target === trigger) {
-          openModal(lightbox, player);
+          openModal(lightbox);
         }
         // if escape is pressed when lightbox is open, close lightbox
         if (e.key === 'Escape' && activeLightbox !== false) {
@@ -90,7 +90,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
         // if the click target was in the lightbox trigger
         if (e.target.closest(LIGHTBOX_TRIGGER) !== null) {
           // Find the next dialog sibling and open it
-          openModal(lightbox, player);
+          openModal(lightbox);
         }
         // Check if the clicked element is a close button inside a dialog
         else if (e.target.closest(LIGHTBOX_CLOSE_BTN) !== null) {
