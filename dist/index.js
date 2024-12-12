@@ -3568,13 +3568,13 @@
     const VIDEO_CLASS = ".plyr_component";
     const NO_SCROLL = "no-scroll";
     let activeLightbox = false;
-    const activateLightboxes = function(listElement, pagePlayers2, pagePlayerComponents2) {
-      const filterPlayers = function(pagePlayers3, pagePlayerComponents3, players2, plyrComponents2) {
-        pagePlayerComponents3.forEach((component, index) => {
-          const matchingPlayer = pagePlayers3[index];
+    const activateLightboxes = function(listElement) {
+      const filterPlayers = function(pagePlayers2, pagePlayerComponents2) {
+        pagePlayerComponents2.forEach((component, index) => {
+          const matchingPlayer = pagePlayers2[index];
           if (Boolean(component.closest(LIGHTBOX_COMPONENT))) {
-            players2.push(pagePlayers3[index]);
-            plyrComponents2.push(pagePlayerComponents3[index]);
+            players.push(pagePlayers2[index]);
+            plyrComponents.push(pagePlayerComponents2[index]);
           }
         });
       };
@@ -3593,7 +3593,7 @@
       const lightboxElements = [];
       const players = [];
       const plyrComponents = [];
-      filterPlayers(pagePlayers2, pagePlayerComponents2, players, plyrComponents);
+      filterPlayers(pagePlayers, pagePlayerComponents);
       if (lightboxTriggers.length === 0) return;
       lightboxTriggers.forEach((trigger, index) => {
         const parent = trigger.parentElement;
@@ -3608,14 +3608,14 @@
             openModal(lightbox2, player2);
           }
           if (e2.key === "Escape" && activeLightbox !== false) {
-            closeModal(lightbox2, player2);
+            closeModal(lightbox2);
           }
         });
         parent.addEventListener("click", (e2) => {
           if (e2.target.closest(LIGHTBOX_TRIGGER) !== null) {
             openModal(lightbox2, player2);
           } else if (e2.target.closest(LIGHTBOX_CLOSE_BTN) !== null) {
-            closeModal(lightbox2, player2);
+            closeModal(lightbox2);
             if (player2) {
               player2.pause();
             }
@@ -3624,20 +3624,14 @@
             if (index === lightboxElements.length - 1) {
               nextLightbox = lightboxElements[0];
             }
-            closeModal(lightbox2, player2);
-            if (player2) {
-              player2.pause();
-            }
+            closeModal(lightbox2);
             openModal(nextLightbox);
           } else if (e2.target.closest(LIGHTBOX_PREVIOUS_BTN) !== null) {
             let previousLightbox = lightboxElements[index - 1];
             if (index === 0) {
               previousLightbox = lightboxElements[lightboxElements.length - 1];
             }
-            closeModal(lightbox2, player2);
-            if (player2) {
-              player2.pause();
-            }
+            closeModal(lightbox2);
             openModal(previousLightbox);
           }
         });
@@ -3665,10 +3659,10 @@
       wraps.forEach((wrap) => {
         let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
         if (runOnBreakpoint === false) return;
-        activateLightboxes(wrap, pagePlayers, pagePlayerComponents);
+        activateLightboxes(wrap);
       });
     } else {
-      activateLightboxes(body, pagePlayers, pagePlayerComponents);
+      activateLightboxes(body);
     }
   };
 

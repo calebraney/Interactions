@@ -9,6 +9,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
   const LIGHTBOX_CLOSE_BTN = '[data-ix-lightbox="close"]';
   const LIGHTBOX_NEXT_BTN = '[data-ix-lightbox="next"]';
   const LIGHTBOX_PREVIOUS_BTN = '[data-ix-lightbox="previous"]';
+  // elements used for lightbox thumbnails
   //   const LIGHTBOX_IMAGE = '[data-ix-lightbox="image"]';
   //   const LIGHTBOX_THUMBNAIL = '[data-ix-lightbox="thumbnail"]';
   //   const LIGHTBOX_VID_THUMBNAIL = '[data-ix-lightbox="video-thumbnail"]';
@@ -22,9 +23,9 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
   let activeLightbox = false;
 
   //function to activate lightboxes
-  const activateLightboxes = function (listElement, pagePlayers, pagePlayerComponents) {
+  const activateLightboxes = function (listElement) {
     //utility function to filter out the players that aren't in lightboxes
-    const filterPlayers = function (pagePlayers, pagePlayerComponents, players, plyrComponents) {
+    const filterPlayers = function (pagePlayers, pagePlayerComponents) {
       // players = pagePlayers.filter((player) => Boolean(player.closest(LIGHTBOX_COMPONENT)));
       pagePlayerComponents.forEach((component, index) => {
         const matchingPlayer = pagePlayers[index];
@@ -55,7 +56,8 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
     const lightboxElements = [];
     const players = [];
     const plyrComponents = [];
-    filterPlayers(pagePlayers, pagePlayerComponents, players, plyrComponents);
+
+    filterPlayers(pagePlayers, pagePlayerComponents);
     if (lightboxTriggers.length === 0) return;
     lightboxTriggers.forEach((trigger, index) => {
       //get the parent element of the trigger, and find the lightbox within that element
@@ -66,8 +68,8 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
       lightboxElements.push(lightbox);
 
       if (!lightbox) return;
-      //get other lightbox elements
 
+      //get the player for this lightbox
       let player = false;
       player = findPlayer(lightbox);
 
@@ -79,7 +81,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
         }
         // if escape is pressed when lightbox is open, close lightbox
         if (e.key === 'Escape' && activeLightbox !== false) {
-          closeModal(lightbox, player);
+          closeModal(lightbox);
         }
       });
 
@@ -93,7 +95,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
         // Check if the clicked element is a close button inside a dialog
         else if (e.target.closest(LIGHTBOX_CLOSE_BTN) !== null) {
           // Find the closest dialog parent and close it
-          closeModal(lightbox, player);
+          closeModal(lightbox);
           if (player) {
             player.pause();
           }
@@ -106,10 +108,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
           if (index === lightboxElements.length - 1) {
             nextLightbox = lightboxElements[0];
           }
-          closeModal(lightbox, player);
-          if (player) {
-            player.pause();
-          }
+          closeModal(lightbox);
           openModal(nextLightbox);
         }
         // Check if the clicked element is a close button inside a dialog
@@ -120,10 +119,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
           if (index === 0) {
             previousLightbox = lightboxElements[lightboxElements.length - 1];
           }
-          closeModal(lightbox, player);
-          if (player) {
-            player.pause();
-          }
+          closeModal(lightbox);
           openModal(previousLightbox);
         }
       });
@@ -178,9 +174,9 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
     wraps.forEach((wrap) => {
       let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
-      activateLightboxes(wrap, pagePlayers, pagePlayerComponents);
+      activateLightboxes(wrap);
     });
   } else {
-    activateLightboxes(body, pagePlayers, pagePlayerComponents);
+    activateLightboxes(body);
   }
 };
