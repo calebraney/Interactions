@@ -49,7 +49,6 @@ export const load = function (gsapContext) {
     // get the position attribute
     const position = attr('<', item.getAttribute(POSITION));
     tl.set(item, { opacity: 1 });
-    console.log(item);
     tl.fromTo(
       splitText.words,
       { opacity: 0, y: '50%', rotateX: 45 },

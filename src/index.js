@@ -4,6 +4,7 @@ import { accordion } from './interactions/accordion';
 import { cursor } from './interactions/cursor';
 import { countUp } from './interactions/count-up';
 import { hoverActive } from './interactions/hover-active';
+import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
 import { logoTicker } from './interactions/logo-ticker';
 import { mouseOver } from './interactions/mouse-over';
@@ -13,6 +14,7 @@ import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
+import { videoPlyr } from './interactions/video-plyr';
 import { initLenis } from './interactions/lenis';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   //Global Variables
+  let lenis;
 
   //////////////////////////////
   //Slider instances
@@ -63,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
       (gsapContext) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
+        lenis = initLenis();
         accordion(gsapContext);
         countUp(gsapContext);
         cursor(gsapContext);
@@ -76,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
         load(gsapContext);
         logoTicker(gsapContext);
         textLinks(gsapContext);
+        const [players, components] = videoPlyr();
+        lightbox(gsapContext, players, components);
 
         //globaally run animations on specific breakpoints
         if (isDesktop || isTablet) {

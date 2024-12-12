@@ -13,20 +13,17 @@ export const hoverActive = function (gsapContext) {
   const OPTION_KEEP_ACTIVE = 'data-ix-hoveractive-keep-active';
   const ACTIVE_CLASS = 'is-active';
 
-  //select all the wrap elements
-  const wraps = gsap.utils.toArray(WRAP);
+  const hoverActiveList = function (listElement) {
+    const children = [...listElement.querySelectorAll(ITEM)];
 
-  const hoverActiveList = function (parent) {
-    const children = [...parent.querySelectorAll(ITEM)];
-
-    let activeClass = attr(ACTIVE_CLASS, parent.getAttribute(OPTION_ACTIVE_CLASS));
-    let keepActive = attr(false, parent.getAttribute(OPTION_KEEP_ACTIVE));
+    let activeClass = attr(ACTIVE_CLASS, listElement.getAttribute(OPTION_ACTIVE_CLASS));
+    let keepActive = attr(false, listElement.getAttribute(OPTION_KEEP_ACTIVE));
 
     //helper function to activate or deactivate items
     function activateItem(item, activate = true) {
       let hasTarget = true;
       const itemID = item.getAttribute(ID);
-      const targetEl = parent.querySelector(`${TARGET}[${ID}="${itemID}"]`);
+      const targetEl = listElement.querySelector(`${TARGET}[${ID}="${itemID}"]`);
       //if target or id isn't found set hasTarget to false
       if (!itemID || !targetEl) {
         hasTarget = false;
@@ -66,6 +63,8 @@ export const hoverActive = function (gsapContext) {
     });
   };
 
+  //select all the wrap elements
+  const wraps = [...document.querySelectorAll(WRAP)];
   //if wraps exist run on each wrap, otherwise run on the body
   if (wraps.length >= 0) {
     wraps.forEach((wrap) => {
@@ -74,7 +73,7 @@ export const hoverActive = function (gsapContext) {
       hoverActiveList(wrap);
     });
   } else {
-    const body = document.querySelector(body);
+    const body = document.querySelector('body');
     hoverActiveList(body);
   }
 };
