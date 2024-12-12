@@ -3589,7 +3589,6 @@
         return player;
       };
       const lightboxTriggers = [...listElement.querySelectorAll(LIGHTBOX_TRIGGER)];
-      const lightboxParents = [];
       const lightboxElements = [];
       const players = [];
       const plyrComponents = [];
@@ -3598,7 +3597,6 @@
       lightboxTriggers.forEach((trigger, index) => {
         const parent = trigger.parentElement;
         const lightbox2 = parent.querySelector(LIGHTBOX_COMPONENT);
-        lightboxParents.push(parent);
         lightboxElements.push(lightbox2);
         if (!lightbox2) return;
         let player2 = false;

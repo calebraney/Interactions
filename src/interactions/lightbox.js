@@ -50,9 +50,8 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
       return player;
     };
 
-    //Arrays of lightbox elements
+    //Arrays of lightbox and video player elements
     const lightboxTriggers = [...listElement.querySelectorAll(LIGHTBOX_TRIGGER)];
-    const lightboxParents = [];
     const lightboxElements = [];
     const players = [];
     const plyrComponents = [];
@@ -64,7 +63,6 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
       const parent = trigger.parentElement;
       const lightbox = parent.querySelector(LIGHTBOX_COMPONENT);
       //add parent and lightboxes to the array
-      lightboxParents.push(parent);
       lightboxElements.push(lightbox);
 
       if (!lightbox) return;
