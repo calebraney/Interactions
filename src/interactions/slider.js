@@ -1,9 +1,15 @@
+import Swiper from 'swiper';
+import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 //Curently uses the CDN Version of swiper, if you want to integrate swiper you'll need to configure modules manually
 // Import Swiper and modules
 // import Swiper from 'swiper';
 // import { Navigation, Pagination, Scrollbar } from 'swiper/modules';
 // then you'll need to create a dynamic check for modules in the funciton and then include them in the swiper object
 //  modules: [Navigation, Pagination, Scrollbar],
+
+//Add CSS to the page head
+// <!-- Swiper CSS -->
+// <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
 export const createSlider = function (components, options, modules) {
   //Element selectors
