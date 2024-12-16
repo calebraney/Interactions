@@ -120,16 +120,17 @@ export const scrolling = function (gsapContext) {
       varsFrom.opacity = attrIfSet(layer, OPACITY_START, 0);
       varsTo.opacity = attrIfSet(layer, OPACITY_END, 0);
       //get clip path values (and allow keyword names light right, or full)
-      const clipStart = getClipDirection(layer, CLIP_START, 'right');
-      const clipEnd = getClipDirection(layer, CLIP_END, 'full');
-      varsFrom.clipPath = attrIfSet(layer, CLIP_START, clipStart);
-      varsTo.clipPath = attrIfSet(layer, CLIP_END, clipEnd);
+      const clipStart = attrIfSet(layer, CLIP_START, 'left');
+      const clipEnd = attrIfSet(layer, CLIP_END, 'full');
+      //convert keyword names into actual clip values
+      varsFrom.clipPath = getClipDirection(clipStart);
+      varsTo.clipPath = getClipDirection(clipEnd);
 
       // get the position attribute
       const position = attr('<', layer.getAttribute(POSITION));
 
       //add tween
-      let fromTween = tl.fromTo(layer, varsFrom, varsTo, position);
+      let tween = tl.fromTo(layer, varsFrom, varsTo, position);
     });
   });
 };

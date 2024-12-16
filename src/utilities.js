@@ -68,11 +68,10 @@ export const checkBreakpoints = function (item, animationID, gsapContext) {
 };
 
 //utility function to get the clipping direction of items (horizontal or vertical only)
-export const getClipDirection = function (item, attribute, defaultDirection = 'right') {
-  //set defautl direction
-  let clipMask;
+export const getClipDirection = function (attributeValue) {
+  //set default return value to be the attribute value
+  let clipMask = attributeValue;
   //get the clip direction
-  const direction = attr(defaultDirection, item.getAttribute(attribute));
   const clipDirections = {
     left: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
     right: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
@@ -81,18 +80,22 @@ export const getClipDirection = function (item, attribute, defaultDirection = 'r
     full: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
   };
   //check for each possible direction and map it to the correct clipping value
-  if (direction === 'left') {
+  if (attributeValue === 'left') {
     clipMask = clipDirections.left;
   }
-  if (direction === 'right') {
+  if (attributeValue === 'right') {
     clipMask = clipDirections.right;
   }
-  if (direction === 'top') {
+  if (attributeValue === 'top') {
     clipMask = clipDirections.top;
   }
-  if (direction === 'bottom') {
+  if (attributeValue === 'bottom') {
     clipMask = clipDirections.bottom;
   }
+  if (attributeValue === 'full') {
+    clipMask = clipDirections.full;
+  }
+
   return clipMask;
 };
 

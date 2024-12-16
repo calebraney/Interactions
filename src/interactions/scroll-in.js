@@ -154,8 +154,9 @@ export const scrollIn = function (gsapContext) {
   const scrollInLine = function (item) {
     if (!item) return;
     //set clip path directions
-    const clipStart = getClipDirection(item, CLIP_DIRECTION);
-    const clipEnd = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+    const clipAttr = attr('left', item.getAttribute(CLIP_DIRECTION));
+    const clipStart = getClipDirection(clipAttr);
+    const clipEnd = getClipDirection('full');
     //create timeline
     const tl = scrollInTL(item);
     tl.fromTo(
