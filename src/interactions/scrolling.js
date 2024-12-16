@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, attrIfSet, checkBreakpoints } from '../utilities';
 
 export const scrolling = function (gsapContext) {
   //animation ID
@@ -100,39 +100,30 @@ export const scrolling = function (gsapContext) {
       const varsFrom = {};
       const varsTo = {};
 
-      //function to process data attributes and return the correct value if set.
-      const processAttribute = function (attributeName, defaultValue) {
-        const hasAttribute = layer.hasAttribute(attributeName);
-        const attributeValue = attr(defaultValue, layer.getAttribute(attributeName));
-        // if the attribute has the default value return the attribute value
-        // (alternatively, could just include the default value)
-        if (hasAttribute) {
-          return attributeValue;
-        } else {
-          return;
-        }
-      };
       //add properties to vars objects
-      varsFrom.x = processAttribute(X_START, '0%');
-      varsTo.x = processAttribute(X_END, '0%');
-      varsFrom.y = processAttribute(Y_START, '0%');
-      varsTo.y = processAttribute(Y_END, '0%');
-      varsFrom.scale = processAttribute(SCALE_START, 1);
-      varsTo.scale = processAttribute(SCALE_END, 1);
-      varsFrom.width = processAttribute(WIDTH_START, '0%');
-      varsTo.width = processAttribute(WIDTH_END, '0%');
-      varsFrom.height = processAttribute(HEIGHT_START, '0%');
-      varsTo.height = processAttribute(HEIGHT_END, '0%');
-      varsFrom.rotateX = processAttribute(ROTATE_X_START, 0);
-      varsTo.rotateX = processAttribute(ROTATE_X_END, 0);
-      varsFrom.rotateY = processAttribute(ROTATE_Y_START, 0);
-      varsTo.rotateY = processAttribute(ROTATE_Y_END, 0);
-      varsFrom.rotateZ = processAttribute(ROTATE_Z_START, 0);
-      varsTo.rotateZ = processAttribute(ROTATE_Z_END, 0);
-      varsFrom.opacity = processAttribute(OPACITY_START, 0);
-      varsTo.opacity = processAttribute(OPACITY_END, 0);
-      varsFrom.clipPath = processAttribute(CLIP_START, 'string');
-      varsTo.clipPath = processAttribute(CLIP_END, 'string');
+      varsFrom.x = attrIfSet(X_START, '0%');
+      varsTo.x = attrIfSet(X_END, '0%');
+      varsFrom.y = attrIfSet(Y_START, '0%');
+      varsTo.y = attrIfSet(Y_END, '0%');
+      varsFrom.scale = attrIfSet(SCALE_START, 1);
+      varsTo.scale = attrIfSet(SCALE_END, 1);
+      varsFrom.width = attrIfSet(WIDTH_START, '0%');
+      varsTo.width = attrIfSet(WIDTH_END, '0%');
+      varsFrom.height = attrIfSet(HEIGHT_START, '0%');
+      varsTo.height = attrIfSet(HEIGHT_END, '0%');
+      varsFrom.rotateX = attrIfSet(ROTATE_X_START, 0);
+      varsTo.rotateX = attrIfSet(ROTATE_X_END, 0);
+      varsFrom.rotateY = attrIfSet(ROTATE_Y_START, 0);
+      varsTo.rotateY = attrIfSet(ROTATE_Y_END, 0);
+      varsFrom.rotateZ = attrIfSet(ROTATE_Z_START, 0);
+      varsTo.rotateZ = attrIfSet(ROTATE_Z_END, 0);
+      varsFrom.opacity = attrIfSet(OPACITY_START, 0);
+      varsTo.opacity = attrIfSet(OPACITY_END, 0);
+      //get clip path values (and allow keyword names light right, or full)
+      const clipStart = getClipDirection(layer, CLIP_START, 'right');
+      const clipEnd = getClipDirection(layer, CLIP_END, 'full');
+      varsFrom.clipPath = attrIfSet(CLIP_START, clipStart);
+      varsTo.clipPath = attrIfSet(CLIP_END, clipEnd);
 
       // get the position attribute
       const position = attr('<', layer.getAttribute(POSITION));

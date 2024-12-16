@@ -10,6 +10,18 @@ export const attr = function (defaultVal, attrVal) {
   if (!isNaN(attrVal) && defaultValType === 'number') return +attrVal;
   return defaultVal;
 };
+//function to process data attributes and return the correct value if set (or nothing if not set)
+export const attrIfSet = function (attributeName, defaultValue) {
+  const hasAttribute = layer.hasAttribute(attributeName);
+  const attributeValue = attr(defaultValue, layer.getAttribute(attributeName));
+  // if the attribute is not set retun, otherwise update the attribute
+  // (alternatively, could just include the default value)
+  if (hasAttribute) {
+    return attributeValue;
+  } else {
+    return;
+  }
+};
 
 //split text utility
 export const runSplit = function (text, types = 'lines, words') {
@@ -53,6 +65,35 @@ export const checkBreakpoints = function (item, animationID, gsapContext) {
   if (runDesktop === false && isDesktop) return false;
   // if no conditions match
   return true;
+};
+
+//utility function to get the clipping direction of items (horizontal or vertical only)
+export const getClipDirection = function (item, attribute, defaultDirection = 'right') {
+  //set defautl direction
+  let clipMask;
+  //get the clip direction
+  const direction = attr(defaultDirection, item.getAttribute(attribute));
+  const clipDirections = {
+    left: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+    right: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
+    top: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+    bottom: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+    full: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+  };
+  //check for each possible direction and map it to the correct clipping value
+  if (direction === 'left') {
+    clipMask = clipDirections.left;
+  }
+  if (direction === 'right') {
+    clipMask = clipDirections.right;
+  }
+  if (direction === 'top') {
+    clipMask = clipDirections.top;
+  }
+  if (direction === 'bottom') {
+    clipMask = clipDirections.bottom;
+  }
+  return clipMask;
 };
 
 export class ClassWatcher {

@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints, runSplit } from '../utilities';
+import { attr, checkBreakpoints, runSplit, getClipDirection } from '../utilities';
 
 export const scrollIn = function (gsapContext) {
   //animation ID
@@ -121,35 +121,6 @@ export const scrollIn = function (gsapContext) {
     }
   };
 
-  //utility function to get the clipping direction of items (horizontal or vertical only)
-  const getCLipStart = function (item) {
-    //set defautl direction
-    let defaultDirection = 'right';
-    let clipStart;
-    //get the clip direction
-    const direction = attr(defaultDirection, item.getAttribute(CLIP_DIRECTION));
-    const clipDirections = {
-      left: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
-      right: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
-      top: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-      bottom: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
-    };
-    //check for each possible direction and map it to the correct clipping value
-    if (direction === 'left') {
-      clipStart = clipDirections.left;
-    }
-    if (direction === 'right') {
-      clipStart = clipDirections.right;
-    }
-    if (direction === 'top') {
-      clipStart = clipDirections.top;
-    }
-    if (direction === 'bottom') {
-      clipStart = clipDirections.bottom;
-    }
-    return clipStart;
-  };
-
   const scrollInImage = function (item) {
     //item is the image wrap for this animation
     if (!item) return;
@@ -183,7 +154,7 @@ export const scrollIn = function (gsapContext) {
   const scrollInLine = function (item) {
     if (!item) return;
     //set clip path directions
-    const clipStart = getCLipStart(item);
+    const clipStart = getClipDirection(item, CLIP_DIRECTION);
     const clipEnd = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
     //create timeline
     const tl = scrollInTL(item);

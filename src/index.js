@@ -1,9 +1,11 @@
 import { attr } from './utilities';
-import { createSlider } from './interactions/slider';
 import { accordion } from './interactions/accordion';
-import { cursor } from './interactions/cursor';
+import { clickActive } from './interactions/click-active';
+import { createSlider } from './interactions/slider';
 import { countUp } from './interactions/count-up';
+import { cursor } from './interactions/cursor';
 import { hoverActive } from './interactions/hover-active';
+import { initLenis } from './interactions/lenis';
 import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
 import { logoTicker } from './interactions/logo-ticker';
@@ -15,7 +17,6 @@ import { scrolling } from './interactions/scrolling';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
 import { videoPlyr } from './interactions/video-plyr';
-import { initLenis } from './interactions/lenis';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         accordion(gsapContext);
         countUp(gsapContext);
         cursor(gsapContext);
+        clickActive(gsapContext);
         hoverActive(gsapContext);
         mouseOver(gsapContext);
         pageTransition();
