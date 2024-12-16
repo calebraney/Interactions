@@ -1,4 +1,4 @@
-import { attr, attrIfSet, checkBreakpoints } from '../utilities';
+import { attr, attrIfSet, checkBreakpoints, getClipDirection } from '../utilities';
 
 export const scrolling = function (gsapContext) {
   //animation ID
@@ -101,29 +101,29 @@ export const scrolling = function (gsapContext) {
       const varsTo = {};
 
       //add properties to vars objects
-      varsFrom.x = attrIfSet(X_START, '0%');
-      varsTo.x = attrIfSet(X_END, '0%');
-      varsFrom.y = attrIfSet(Y_START, '0%');
-      varsTo.y = attrIfSet(Y_END, '0%');
-      varsFrom.scale = attrIfSet(SCALE_START, 1);
-      varsTo.scale = attrIfSet(SCALE_END, 1);
-      varsFrom.width = attrIfSet(WIDTH_START, '0%');
-      varsTo.width = attrIfSet(WIDTH_END, '0%');
-      varsFrom.height = attrIfSet(HEIGHT_START, '0%');
-      varsTo.height = attrIfSet(HEIGHT_END, '0%');
-      varsFrom.rotateX = attrIfSet(ROTATE_X_START, 0);
-      varsTo.rotateX = attrIfSet(ROTATE_X_END, 0);
-      varsFrom.rotateY = attrIfSet(ROTATE_Y_START, 0);
-      varsTo.rotateY = attrIfSet(ROTATE_Y_END, 0);
-      varsFrom.rotateZ = attrIfSet(ROTATE_Z_START, 0);
-      varsTo.rotateZ = attrIfSet(ROTATE_Z_END, 0);
-      varsFrom.opacity = attrIfSet(OPACITY_START, 0);
-      varsTo.opacity = attrIfSet(OPACITY_END, 0);
+      varsFrom.x = attrIfSet(layer, X_START, '0%');
+      varsTo.x = attrIfSet(layer, X_END, '0%');
+      varsFrom.y = attrIfSet(layer, Y_START, '0%');
+      varsTo.y = attrIfSet(layer, Y_END, '0%');
+      varsFrom.scale = attrIfSet(layer, SCALE_START, 1);
+      varsTo.scale = attrIfSet(layer, SCALE_END, 1);
+      varsFrom.width = attrIfSet(layer, WIDTH_START, '0%');
+      varsTo.width = attrIfSet(layer, WIDTH_END, '0%');
+      varsFrom.height = attrIfSet(layer, HEIGHT_START, '0%');
+      varsTo.height = attrIfSet(layer, HEIGHT_END, '0%');
+      varsFrom.rotateX = attrIfSet(layer, ROTATE_X_START, 0);
+      varsTo.rotateX = attrIfSet(layer, ROTATE_X_END, 0);
+      varsFrom.rotateY = attrIfSet(layer, ROTATE_Y_START, 0);
+      varsTo.rotateY = attrIfSet(layer, ROTATE_Y_END, 0);
+      varsFrom.rotateZ = attrIfSet(layer, ROTATE_Z_START, 0);
+      varsTo.rotateZ = attrIfSet(layer, ROTATE_Z_END, 0);
+      varsFrom.opacity = attrIfSet(layer, OPACITY_START, 0);
+      varsTo.opacity = attrIfSet(layer, OPACITY_END, 0);
       //get clip path values (and allow keyword names light right, or full)
       const clipStart = getClipDirection(layer, CLIP_START, 'right');
       const clipEnd = getClipDirection(layer, CLIP_END, 'full');
-      varsFrom.clipPath = attrIfSet(CLIP_START, clipStart);
-      varsTo.clipPath = attrIfSet(CLIP_END, clipEnd);
+      varsFrom.clipPath = attrIfSet(layer, CLIP_START, clipStart);
+      varsTo.clipPath = attrIfSet(layer, CLIP_END, clipEnd);
 
       // get the position attribute
       const position = attr('<', layer.getAttribute(POSITION));

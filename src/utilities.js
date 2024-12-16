@@ -11,9 +11,9 @@ export const attr = function (defaultVal, attrVal) {
   return defaultVal;
 };
 //function to process data attributes and return the correct value if set (or nothing if not set)
-export const attrIfSet = function (attributeName, defaultValue) {
-  const hasAttribute = layer.hasAttribute(attributeName);
-  const attributeValue = attr(defaultValue, layer.getAttribute(attributeName));
+export const attrIfSet = function (item, attributeName, defaultValue) {
+  const hasAttribute = item.hasAttribute(attributeName);
+  const attributeValue = attr(defaultValue, item.getAttribute(attributeName));
   // if the attribute is not set retun, otherwise update the attribute
   // (alternatively, could just include the default value)
   if (hasAttribute) {
