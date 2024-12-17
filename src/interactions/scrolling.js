@@ -17,6 +17,7 @@ export const scrolling = function (gsapContext) {
   const SCRUB = 'data-ix-scrolling-scrub';
   //tween options
   const POSITION = 'data-ix-scrolling-position'; // sequential by default, use "<" to start tweens together
+  const EASE = 'data-ix-scrolling-ease';
   const X_START = 'data-ix-scrolling-x-start';
   const X_END = 'data-ix-scrolling-x-end';
   const Y_START = 'data-ix-scrolling-y-start';
@@ -35,9 +36,10 @@ export const scrolling = function (gsapContext) {
   const ROTATE_Z_END = 'data-ix-scrolling-rotate-z-end';
   const OPACITY_START = 'data-ix-scrolling-opacity-start';
   const OPACITY_END = 'data-ix-scrolling-opacity-end';
+  const RADIUS_START = 'data-ix-scrolling-radius-start';
+  const RADIUS_END = 'data-ix-scrolling-radius-end';
   const CLIP_START = 'data-ix-scrolling-clip-start';
   const CLIP_END = 'data-ix-scrolling-clip-end';
-  const CLIP_TYPE = 'data-ix-scrolling-clip-type';
 
   const scrollingItems = gsap.utils.toArray(WRAP);
   scrollingItems.forEach((scrollingItem) => {
@@ -60,11 +62,14 @@ export const scrolling = function (gsapContext) {
       scrub: 0.5,
       start: 'top bottom',
       end: 'bottom top',
+      ease: 'none',
     };
     // get custom timeline settings or set them at the default
     tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(START));
     tlSettings.end = attr(tlSettings.end, scrollingItem.getAttribute(END));
     tlSettings.scrub = attr(tlSettings.scrub, scrollingItem.getAttribute(SCRUB));
+    tlSettings.ease = attr(tlSettings.ease, scrollingItem.getAttribute(EASE));
+
     //conditionally update tablet and mobile values
     if (isTablet && scrollingItem.getAttribute(TABLET_START)) {
       tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(TABLET_START));
@@ -89,7 +94,7 @@ export const scrolling = function (gsapContext) {
       },
       defaults: {
         duration: 1,
-        ease: 'none',
+        ease: tlSettings.ease,
       },
     });
     //////////////////////
@@ -119,6 +124,8 @@ export const scrolling = function (gsapContext) {
       varsTo.rotateZ = attrIfSet(layer, ROTATE_Z_END, 0);
       varsFrom.opacity = attrIfSet(layer, OPACITY_START, 0);
       varsTo.opacity = attrIfSet(layer, OPACITY_END, 0);
+      varsFrom.borderRadius = attrIfSet(layer, RADIUS_START, 'string');
+      varsTo.borderRadius = attrIfSet(layer, RADIUS_END, 'string');
       //get clip path values (and allow keyword names light right, or full)
       const clipStart = attrIfSet(layer, CLIP_START, 'left');
       const clipEnd = attrIfSet(layer, CLIP_END, 'full');
@@ -128,6 +135,7 @@ export const scrolling = function (gsapContext) {
 
       // get the position attribute
       const position = attr('<', layer.getAttribute(POSITION));
+      varsTo.ease = attr(layer, EASE, 'none');
 
       //add tween
       let tween = tl.fromTo(layer, varsFrom, varsTo, position);
