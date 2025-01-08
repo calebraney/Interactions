@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       slidesPerView: 'auto',
       loop: true,
     };
+    //apply a module with defaults settings (canc override them using the options object above)
     const modules = {
       navigation: true,
       pagination: false,
