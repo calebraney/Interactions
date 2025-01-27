@@ -74,7 +74,7 @@ export const textScrub = function (gsapContext) {
     splitText = createAnimation();
 
     //function to reset the animation
-    const resentAnimation = function () {
+    const resetAnimation = function () {
       splitText.revert();
       splitText = createAnimation();
     };
@@ -85,7 +85,7 @@ export const textScrub = function (gsapContext) {
     window.addEventListener('resize', function () {
       if (window.innerWidth !== windowWidth) {
         windowWidth = window.innerWidth;
-        resentAnimation();
+        resetAnimation();
       }
     });
   });
