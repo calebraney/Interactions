@@ -1,13 +1,13 @@
 /* NOT MODULAR */
 const tabsAutoplay = function () {
   /*
-    set the timer line to only have full opacity when inside the active class using CSS
-    */
+  set the timer line to only have full opacity when inside the active class using CSS
+  */
   //selectors
   const TAB_MENU = '.quote-tabs_tabs-menu';
   const TAB = '.quote-tabs_tab-link';
   const TIMER_LINE = '.quote-tabs_tab-line-fill';
-  const ACTIVE_CLASS = 'w--current'; // webflow active tab class
+  const ACTIVE_CLASS = 'w--current';
   //animation options
   const TIMER_DURATION = 5;
 
@@ -22,16 +22,17 @@ const tabsAutoplay = function () {
     //set timer and gsap timeline variable
     let timer;
     let userClick = true; //track if the user clicked the tabr
-    let tl = gsap.timeline({});
-    clearInterval(timer);
+    let tl = gsap.timeline({}); //create a gsap timeline
+    clearInterval(timer); // clear the interval of the timer
 
     //timer
     const startTimer = function (tl) {
+      //if timeline is currently running kill it
       if (tl) {
         tl.kill();
+        tl = gsap.timeline({});
       }
-      tl = gsap.timeline({});
-      // console.log(currentTimerLine);
+      // timer is one less than duration to account for first interval
       let time = timerDuration - 1;
       // start gsap animation
       tl.fromTo(
@@ -56,7 +57,7 @@ const tabsAutoplay = function () {
       }, 1000);
     };
 
-    const changeTab = function (nextIndex = undefined, manualClick = false, resetTimer = true) {
+    const changeTab = function (nextIndex = undefined, manualClick = false) {
       //if tab wasn't manually clicked
       if (manualClick === false) {
         //set user click to false
