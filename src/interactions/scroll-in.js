@@ -190,12 +190,12 @@ export const scrollIn = function (gsapContext) {
 
   const scrollInStagger = function (item) {
     if (!item) return;
-    const ease = attr(EASE_LARGE, item.getAttribute(SCROLL_STAGGER));
+    const staggerAmount = attr(EASE_LARGE, item.getAttribute(SCROLL_STAGGER));
     // get the children of the item
     const children = gsap.utils.toArray(item.children);
     if (children.length === 0) return;
     const tl = scrollInTL(item);
-    const tween = defaultTween(children, tl, { stagger: ease });
+    const tween = defaultTween(children, tl, { stagger: staggerAmount });
   };
 
   const scrollInRichText = function (item) {
