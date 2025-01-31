@@ -1,13 +1,14 @@
 import { attr, checkBreakpoints } from '../utilities';
 
-export const logoTicker = function (gsapContext) {
+export const marquee = function (gsapContext) {
   //animation ID
-  const ANIMATION_ID = 'logoticker';
-  const WRAP = '[data-ix-logoticker="wrap"]';
-  const LIST = '[data-ix-logoticker="list"]'; // put on the CMS list wrap element
-  const REVERSE = 'data-ix-logoticker-reverse'; // needs to be set to true if reversed
-  const DURATION = 'data-ix-logoticker-duration';
-  const CHANGE_SPEED_ON_HOVER = 'data-ix-logoticker-accelerate';
+  const ANIMATION_ID = 'marquee';
+  const WRAP = '[data-ix-marquee="wrap"]';
+  const LIST = '[data-ix-marquee="list"]'; // put on the CMS list wrap element
+  const REVERSE = 'data-ix-marquee-reverse'; // needs to be set to true if reversed
+  const DURATION = 'data-ix-marquee-duration';
+  const CHANGE_SPEED_ON_HOVER = 'data-ix-marquee-accelerate';
+  const PAUSE_ON_HOVER = 'data-ix-marquee-hover-pause';
 
   const wraps = document.querySelectorAll(WRAP);
   if (wraps.length === 0) return;
@@ -19,7 +20,8 @@ export const logoTicker = function (gsapContext) {
     const lists = wrap.querySelectorAll(LIST);
     let reverse = attr(false, wrap.getAttribute(REVERSE));
     let duration = attr(30, wrap.getAttribute(DURATION));
-    let accelerate = attr(false, wrap.getAttribute(CHANGE_SPEED_ON_HOVER));
+    let accelerateOnHover = attr(false, wrap.getAttribute(CHANGE_SPEED_ON_HOVER));
+    let pauseOnHover = attr(false, wrap.getAttribute(PAUSE_ON_HOVER));
 
     let direction = 1;
     if (reverse) {
@@ -41,12 +43,20 @@ export const logoTicker = function (gsapContext) {
         duration: duration,
       }
     );
-    if (accelerate) {
+    if (accelerateOnHover) {
       wrap.addEventListener('mouseenter', (event) => {
         tl.timeScale(2);
       });
       wrap.addEventListener('mouseleave', (event) => {
         tl.timeScale(1);
+      });
+    }
+    if (pauseOnHover) {
+      wrap.addEventListener('mouseenter', (event) => {
+        tl.pause();
+      });
+      wrap.addEventListener('mouseleave', (event) => {
+        tl.Play();
       });
     }
   });

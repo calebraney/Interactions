@@ -1,5 +1,5 @@
-import Swiper from 'swiper';
-import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
+// import Swiper from 'swiper';
+// import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 //also import on index.js
 
 //Curently uses the CDN Version of swiper, if you want to integrate swiper you'll need to configure modules manually
