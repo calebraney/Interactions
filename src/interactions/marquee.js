@@ -38,7 +38,6 @@ export const marquee = function (gsapContext) {
     }
     //if duration is set to be dynamic make the duration based on the amount of items and the duration per item
     if (durationDynamic) {
-      console.log(itemCount, durationPerItem);
       duration = itemCount * durationPerItem;
     }
 
