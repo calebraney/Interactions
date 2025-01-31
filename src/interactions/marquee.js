@@ -30,11 +30,15 @@ export const marquee = function (gsapContext) {
     let duration = attr(DEFAULT_DURATION, wrap.getAttribute(DURATION));
     let durationDynamic = attr(false, wrap.getAttribute(DYNAMIC_DURATION));
     let durationPerItem = attr(DEFAULT_DYNAMIC_DURATION, wrap.getAttribute(DURATION_PER_ITEM));
-    // get the list element and then count the amount of items in it
-    const itemCount = lists[0].firstElementChild.childElementCount;
+    // get the amount of items in the wrap
+    let itemCount = lists[0].childElementCount;
+    if (itemCount === 1) {
+      //if there is only one item get the list element inside it and count the amount of elements in that
+      itemCount = lists[0].firstElementChild.childElementCount;
+    }
     //if duration is set to be dynamic make the duration based on the amount of items and the duration per item
     if (durationDynamic) {
-      // console.log(itemCount, durationPerItem);
+      console.log(itemCount, durationPerItem);
       duration = itemCount * durationPerItem;
     }
 
