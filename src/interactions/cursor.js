@@ -19,7 +19,7 @@ can also use pointer to check for non fine pointers
 //   .cursor_component {display: none;}
 // }
 // @media (pointer: fine) {
-//   .cursor_component {display: flex;}
+//   .cursor_component {display: block;}
 // }
 
 export const cursor = function (gsapContext) {
