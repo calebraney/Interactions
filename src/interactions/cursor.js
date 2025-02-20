@@ -3,15 +3,24 @@ import { attr, checkBreakpoints } from '../utilities';
 /*
 CSS to include
 can also use pointer to check for non fine pointers
-@media not all and (pointer: fine) {
 
-@media (hover: none) {
- .cursor {
-    pointer-events: none;
-    display: none;
-  }
-}
-*/
+// /* Cursor - Fade out when not hovering on body */
+// body:hover .cursor_component {opacity:1;}
+// body:has(.cursor_component) {cursor: none;}
+// /*hide default cursor*/
+// body:has(.cursor_component) :is(button, a, input) {cursor: none;}
+// /*cursor hover styles*/
+// .cursor_innner.is-hover .cursor_dot {width: 12px; height: 12px;}
+// .cursor_innner.is-hover .cursor_cricle {width: 24px; height: 24px;}
+// /* Cursor - No pointer events */
+// .cursor_component { pointer-events: none; }
+//  /* Cursor - Hide on touch screens */
+// @media (pointer: coarse) {
+//   .cursor_component {display: none;}
+// }
+// @media (pointer: fine) {
+//   .cursor_component {display: flex;}
+// }
 
 export const cursor = function (gsapContext) {
   //animation ID
