@@ -11,7 +11,7 @@ can also use pointer to check for non fine pointers
 // body:has(.cursor_component) :is(button, a, input) {cursor: none;}
 // /*cursor hover styles*/
 // .cursor_innner.is-hover .cursor_dot {width: 12px; height: 12px;}
-// .cursor_innner.is-hover .cursor_cricle {width: 24px; height: 24px;}
+// .cursor_outer.is-hover .cursor_circle {width: 24px; height: 24px;}
 // /* Cursor - No pointer events */
 // .cursor_component { pointer-events: none; }
 //  /* Cursor - Hide on touch screens */
