@@ -1,7 +1,6 @@
 import { attr } from './utilities';
 import { accordion } from './interactions/accordion';
 import { clickActive } from './interactions/click-active';
-import { createSlider } from './interactions/slider';
 import { countUp } from './interactions/count-up';
 import { cursor } from './interactions/cursor';
 import { hoverActive } from './interactions/hover-active';

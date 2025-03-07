@@ -27,7 +27,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
     //utility function to filter out the players that aren't in lightboxes
     const filterPlayers = function (pagePlayers, pagePlayerComponents) {
       // players = pagePlayers.filter((player) => Boolean(player.closest(LIGHTBOX_COMPONENT)));
-      if (pagePlayerComponents.length === 0 ?? !pagePlayerComponents) return;
+      if (pagePlayerComponents.length === 0 || !pagePlayerComponents) return;
       pagePlayerComponents.forEach((component, index) => {
         const matchingPlayer = pagePlayers[index];
         //if the player component is in a lightbox
@@ -41,7 +41,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
 
     //utility function to find a player based on its lightbox
     const findPlayer = function (lightbox) {
-      if (plyrComponents.length === 0 ?? !plyrComponents) return;
+      if (plyrComponents.length === 0 || !plyrComponents) return;
       function findMatchingVideo(plyrComponents, videoEl) {
         return plyrComponents.findIndex((videoElement) => videoElement === videoEl);
       }

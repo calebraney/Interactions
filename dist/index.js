@@ -3087,6 +3087,15 @@
     if (!isNaN(attrVal) && defaultValType === "number") return +attrVal;
     return defaultVal;
   };
+  var attrIfSet = function(item2, attributeName, defaultValue) {
+    const hasAttribute = item2.hasAttribute(attributeName);
+    const attributeValue = attr(defaultValue, item2.getAttribute(attributeName));
+    if (hasAttribute) {
+      return attributeValue;
+    } else {
+      return;
+    }
+  };
   var runSplit = function(text, types = "lines, words") {
     if (!text) return;
     typeSplit = new SplitType(text, {
@@ -3118,89 +3127,31 @@
     if (runDesktop === false && isDesktop) return false;
     return true;
   };
-
-  // src/interactions/slider.js
-  init_live_reload();
-  var createSlider = function(components, options, modules) {
-    const SLIDER = ".swiper";
-    const NEXT_BUTTON = ".swiper-next";
-    const PREVIOUS_BUTTON = ".swiper-prev";
-    const BULLET_WRAP = ".swiper-bullet-wrapper";
-    const SCROLLBAR = ".swiper-scrollbar";
-    const SCROLLBAR_DRAG = ".swiper-scrollbar-drag";
-    const ACTIVE_CLASS = "is-active";
-    const DISABLED_CLASS = "is-disabled";
-    const swipersArray = [];
-    components.forEach(function(component) {
-      if (!component) return;
-      const slider = component.querySelector(SLIDER);
-      if (!slider) return;
-      const defaultSettings = {
-        speed: 800,
-        spaceBetween: 16,
-        loop: false,
-        centeredSlides: false,
-        allowTouchMove: true,
-        slideActiveClass: ACTIVE_CLASS,
-        slideDuplicateActiveClass: ACTIVE_CLASS
-      };
-      let finalModules = {};
-      if (modules.navigation === true) {
-        const nextButtonEl = component.querySelector(NEXT_BUTTON);
-        const previousButtonEl = component.querySelector(PREVIOUS_BUTTON);
-        const navigationSettings = {
-          navigation: {
-            nextEl: nextButtonEl,
-            prevEl: previousButtonEl,
-            disabledClass: DISABLED_CLASS
-          }
-        };
-        finalModules = { ...finalModules, ...navigationSettings };
-      }
-      if (modules.pagination === true) {
-        const bulletsEl = component.querySelector(BULLET_WRAP);
-        const paginationSettings = {
-          pagination: {
-            type: "bullets",
-            el: bulletsEl,
-            bulletActiveClass: ACTIVE_CLASS,
-            bulletClass: "swiper-bullet",
-            bulletElement: "button",
-            clickable: true
-          }
-        };
-        finalModules = { ...finalModules, ...paginationSettings };
-      }
-      if (modules.scrollbar === true) {
-        const scrollbarEl = component.querySelector(SCROLLBAR);
-        const scrollbarSettings = {
-          scrollbar: {
-            el: scrollbarEl,
-            dragClass: SCROLLBAR_DRAG,
-            draggable: true,
-            dragSize: "auto",
-            //or set in number of pixels
-            snapOnRelease: false
-          }
-        };
-        finalModules = { ...finalModules, ...scrollbarSettings };
-      }
-      if (modules.autoplay === true) {
-        const autoplaySettings = {
-          autoplay: {
-            delay: 3e3,
-            disableOnInteraction: true,
-            pauseOnMouseEnter: false,
-            stopOnLastSlide: true
-          }
-        };
-        finalModules = { ...finalModules, ...autoplaySettings };
-      }
-      const swiperSettings = { ...defaultSettings, ...finalModules, ...options };
-      const swiper = new Swiper(slider, swiperSettings);
-      swipersArray.push(swiper);
-    });
-    return swipersArray;
+  var getClipDirection = function(attributeValue) {
+    let clipMask = attributeValue;
+    const clipDirections = {
+      left: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",
+      right: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
+      top: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+      bottom: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+      full: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+    };
+    if (attributeValue === "left") {
+      clipMask = clipDirections.left;
+    }
+    if (attributeValue === "right") {
+      clipMask = clipDirections.right;
+    }
+    if (attributeValue === "top") {
+      clipMask = clipDirections.top;
+    }
+    if (attributeValue === "bottom") {
+      clipMask = clipDirections.bottom;
+    }
+    if (attributeValue === "full") {
+      clipMask = clipDirections.full;
+    }
+    return clipMask;
   };
 
   // src/interactions/accordion.js
@@ -3301,57 +3252,111 @@
     });
   };
 
-  // src/interactions/cursor.js
+  // src/interactions/click-active.js
   init_live_reload();
-  var cursor = function(gsapContext) {
-    const ANIMATION_ID = "cursor";
-    const WRAP = '[data-ix-cursor="wrap"]';
-    const INNER = '[data-ix-cursor="inner"]';
-    const OUTER = '[data-ix-cursor="outer"]';
-    const DOT = '[data-ix-cursor="dot"]';
-    const HOVER = '[data-ix-cursor="hover"]';
-    const NO_HOVER = '[data-ix-cursor="no-hover"]';
-    const INNER_DELAY = 0.01;
-    const OUTER_DELAY = 0.4;
-    const HOVER_CLASS = "is-hover";
-    const cursorWrap = document.querySelector(WRAP);
-    const cursorInner = document.querySelector(INNER);
-    const cursorOuter = document.querySelector(OUTER);
-    if (!cursorWrap || !cursorInner) return;
-    if ("ontouchstart" in window || navigator.maxTouchPoints) return;
-    let runOnBreakpoint = checkBreakpoints(cursorWrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
-    const cursorHover = function() {
-      const hoverElements = gsap.utils.toArray(`${HOVER}, :is(a, button):not(${NO_HOVER})`);
-      hoverElements.forEach((item2) => {
-        if (!item2 || !cursorInner) return;
-        item2.addEventListener("mouseover", function(e2) {
-          cursorInner.classList.add(HOVER_CLASS);
-        });
-        item2.addEventListener("mouseleave", function(e2) {
-          cursorInner.classList.remove(HOVER_CLASS);
+  var clickActive = function(gsapContext) {
+    const ANIMATION_ID = "clickactive";
+    const WRAP = '[data-ix-clickactive="wrap"]';
+    const TRIGGER = '[data-ix-clickactive="trigger"]';
+    const TARGET = '[data-ix-clickactive="target"]';
+    const ID = "data-ix-clickactive-id";
+    const OPTION_ACTIVE_CLASS = "data-ix-clickactive-class";
+    const OPTION_START_ACTIVE = "data-ix-clickactive-start-active";
+    const OPTION_FIRST_ACTIVE = "data-ix-clickactive-first-active";
+    const OPTION_ONE_ACTIVE = "data-ix-clickactive-one-active";
+    const OPTION_KEEP_ONE_ACTIVE = "data-ix-clickactive-keep-one-active";
+    const INTERACTION_DURATION = 800;
+    const ACTIVE_CLASS = "is-active";
+    const clickActiveList = function(rootElement) {
+      const triggers = Array.from(rootElement.querySelectorAll(TRIGGER));
+      let activeClass2 = ACTIVE_CLASS;
+      let firstOpen = false;
+      let oneActive = false;
+      let keepOneActive2 = false;
+      if (rootElement !== document) {
+        activeClass2 = attr(ACTIVE_CLASS, rootElement.getAttribute(OPTION_ACTIVE_CLASS));
+        firstOpen = attr(false, rootElement.getAttribute(OPTION_FIRST_ACTIVE));
+        oneActive = attr(false, rootElement.getAttribute(OPTION_ONE_ACTIVE));
+        keepOneActive2 = attr(false, rootElement.getAttribute(OPTION_KEEP_ONE_ACTIVE));
+        let runOnBreakpoint = checkBreakpoints(rootElement, ANIMATION_ID, gsapContext);
+        if (runOnBreakpoint === false) return;
+      } else {
+      }
+      const activateItems = function(item2, makeActive = true) {
+        if (!item2) return;
+        let hasTarget = true;
+        const itemID = item2.getAttribute(ID);
+        const targetEl = rootElement.querySelector(`${TARGET}[${ID}="${itemID}"]`);
+        if (!itemID || !targetEl) {
+          hasTarget = false;
+        }
+        if (makeActive) {
+          item2.classList.add(activeClass2);
+          if (hasTarget) {
+            targetEl.classList.add(activeClass2);
+          }
+        } else {
+          item2.classList.remove(activeClass2);
+          if (hasTarget) {
+            targetEl.classList.remove(activeClass2);
+          }
+        }
+      };
+      triggers.forEach((item2) => {
+        if (!item2) return;
+        let startActive = attr(false, item2.getAttribute(OPTION_START_ACTIVE));
+        if (startActive) {
+          activateItems(item2);
+        } else {
+          activateItems(item2, false);
+        }
+        item2.addEventListener("click", function(e2) {
+          let itemIsActive = item2.classList.contains(ACTIVE_CLASS);
+          if (!itemIsActive) {
+            if (oneActive) {
+              triggers.forEach((itemElement) => {
+                if (itemElement === item2) {
+                  activateItems(itemElement);
+                } else {
+                  activateItems(itemElement, false);
+                }
+              });
+            }
+            if (!oneActive) {
+              activateItems(item2);
+            }
+          }
+          if (itemIsActive && !keepOneActive2) {
+            activateItems(item2, false);
+          }
+          if (itemIsActive && keepOneActive2) {
+            const activeItems = triggers.filter(function(item3) {
+              return item3.classList.contains(activeClass2);
+            });
+            if (activeItems.length > 1) {
+              activateItems(item2, false);
+            }
+          }
+          if (gsap.ScrollTrigger !== void 0) {
+            setTimeout(() => {
+              ScrollTrigger.refresh();
+            }, INTERACTION_DURATION);
+          }
         });
       });
+      const firstItem = triggers[0];
+      if (firstOpen) {
+        activateItems(firstItem);
+      }
     };
-    cursorHover();
-    const cursorClick = function() {
-    };
-    cursorClick();
-    const cursorMove = function() {
-      gsap.set(cursorInner, { xPercent: -50, yPercent: -50 });
-      gsap.set(cursorOuter, { xPercent: -50, yPercent: -50 });
-      let innerX = gsap.quickTo(cursorInner, "x", { duration: INNER_DELAY, ease: "non" });
-      let innerY = gsap.quickTo(cursorInner, "y", { duration: INNER_DELAY, ease: "non" });
-      let outerX = gsap.quickTo(cursorOuter, "x", { duration: OUTER_DELAY, ease: "power3" });
-      let outerY = gsap.quickTo(cursorOuter, "y", { duration: OUTER_DELAY, ease: "power3" });
-      window.addEventListener("mousemove", (e2) => {
-        innerX(e2.clientX);
-        innerY(e2.clientY);
-        outerX(e2.clientX);
-        outerY(e2.clientY);
+    const clickWraps = gsap.utils.toArray(WRAP);
+    if (clickWraps.length === 0 || clickWraps === void 0) {
+      clickActiveList(document);
+    } else {
+      clickWraps.forEach((wrap) => {
+        clickActiveList(wrap);
       });
-    };
-    cursorMove();
+    }
   };
 
   // src/interactions/count-up.js
@@ -3491,6 +3496,59 @@
     return parts[1].length;
   }
 
+  // src/interactions/cursor.js
+  init_live_reload();
+  var cursor = function(gsapContext) {
+    const ANIMATION_ID = "cursor";
+    const WRAP = '[data-ix-cursor="wrap"]';
+    const INNER = '[data-ix-cursor="inner"]';
+    const OUTER = '[data-ix-cursor="outer"]';
+    const DOT = '[data-ix-cursor="dot"]';
+    const HOVER = '[data-ix-cursor="hover"]';
+    const NO_HOVER = '[data-ix-cursor="no-hover"]';
+    const INNER_DELAY = 0.01;
+    const OUTER_DELAY = 0.4;
+    const HOVER_CLASS = "is-hover";
+    const cursorWrap = document.querySelector(WRAP);
+    const cursorInner = document.querySelector(INNER);
+    const cursorOuter = document.querySelector(OUTER);
+    if (!cursorWrap || !cursorInner) return;
+    if ("ontouchstart" in window || navigator.maxTouchPoints) return;
+    let runOnBreakpoint = checkBreakpoints(cursorWrap, ANIMATION_ID, gsapContext);
+    if (runOnBreakpoint === false) return;
+    const cursorHover = function() {
+      const hoverElements = gsap.utils.toArray(`${HOVER}, :is(a, button):not(${NO_HOVER})`);
+      hoverElements.forEach((item2) => {
+        if (!item2 || !cursorInner) return;
+        item2.addEventListener("mouseover", function(e2) {
+          cursorInner.classList.add(HOVER_CLASS);
+        });
+        item2.addEventListener("mouseleave", function(e2) {
+          cursorInner.classList.remove(HOVER_CLASS);
+        });
+      });
+    };
+    cursorHover();
+    const cursorClick = function() {
+    };
+    cursorClick();
+    const cursorMove = function() {
+      gsap.set(cursorInner, { xPercent: -50, yPercent: -50 });
+      gsap.set(cursorOuter, { xPercent: -50, yPercent: -50 });
+      let innerX = gsap.quickTo(cursorInner, "x", { duration: INNER_DELAY, ease: "non" });
+      let innerY = gsap.quickTo(cursorInner, "y", { duration: INNER_DELAY, ease: "non" });
+      let outerX = gsap.quickTo(cursorOuter, "x", { duration: OUTER_DELAY, ease: "power3" });
+      let outerY = gsap.quickTo(cursorOuter, "y", { duration: OUTER_DELAY, ease: "power3" });
+      window.addEventListener("mousemove", (e2) => {
+        innerX(e2.clientX);
+        innerY(e2.clientY);
+        outerX(e2.clientX);
+        outerY(e2.clientY);
+      });
+    };
+    cursorMove();
+  };
+
   // src/interactions/hover-active.js
   init_live_reload();
   var hoverActive = function(gsapContext) {
@@ -3553,952 +3611,6 @@
       const body = document.querySelector("body");
       hoverActiveList(body);
     }
-  };
-
-  // src/interactions/lightbox.js
-  init_live_reload();
-  var lightbox = function(gsapContext, pagePlayers, pagePlayerComponents) {
-    const ANIMATION_ID = "lightbox";
-    const LIGHTBOX_WRAP = '[data-ix-lightbox="wrap"]';
-    const LIGHTBOX_COMPONENT = '[data-ix-lightbox="component"]';
-    const LIGHTBOX_TRIGGER = '[data-ix-lightbox="trigger"]';
-    const LIGHTBOX_CLOSE_BTN = '[data-ix-lightbox="close"]';
-    const LIGHTBOX_NEXT_BTN = '[data-ix-lightbox="next"]';
-    const LIGHTBOX_PREVIOUS_BTN = '[data-ix-lightbox="previous"]';
-    const VIDEO_CLASS = ".plyr_component";
-    const NO_SCROLL = "no-scroll";
-    let activeLightbox = false;
-    const activateLightboxes = function(listElement) {
-      const filterPlayers = function(pagePlayers2, pagePlayerComponents2) {
-        pagePlayerComponents2.forEach((component, index) => {
-          const matchingPlayer = pagePlayers2[index];
-          if (Boolean(component.closest(LIGHTBOX_COMPONENT))) {
-            players.push(pagePlayers2[index]);
-            plyrComponents.push(pagePlayerComponents2[index]);
-          }
-        });
-      };
-      const findPlayer = function(lightbox2) {
-        function findMatchingVideo(plyrComponents2, videoEl2) {
-          return plyrComponents2.findIndex((videoElement) => videoElement === videoEl2);
-        }
-        const videoEl = lightbox2.querySelector(VIDEO_CLASS);
-        if (!videoEl) return false;
-        let playerIndex = findMatchingVideo(plyrComponents, videoEl);
-        player = players[playerIndex];
-        return player;
-      };
-      const lightboxTriggers = [...listElement.querySelectorAll(LIGHTBOX_TRIGGER)];
-      const lightboxElements = [];
-      const players = [];
-      const plyrComponents = [];
-      filterPlayers(pagePlayers, pagePlayerComponents);
-      if (lightboxTriggers.length === 0) return;
-      lightboxTriggers.forEach((trigger, index) => {
-        const parent = trigger.parentElement;
-        const lightbox2 = parent.querySelector(LIGHTBOX_COMPONENT);
-        lightboxElements.push(lightbox2);
-        if (!lightbox2) return;
-        let player2 = false;
-        player2 = findPlayer(lightbox2);
-        parent.addEventListener("keydown", (e2) => {
-          if (e2.key === "Enter" && e2.target === trigger) {
-            openModal(lightbox2, player2);
-          }
-          if (e2.key === "Escape" && activeLightbox !== false) {
-            closeModal(lightbox2);
-          }
-        });
-        parent.addEventListener("click", (e2) => {
-          if (e2.target.closest(LIGHTBOX_TRIGGER) !== null) {
-            openModal(lightbox2, player2);
-          } else if (e2.target.closest(LIGHTBOX_CLOSE_BTN) !== null) {
-            closeModal(lightbox2);
-            if (player2) {
-              player2.pause();
-            }
-          } else if (e2.target.closest(LIGHTBOX_NEXT_BTN) !== null) {
-            let nextLightbox = lightboxElements[index + 1];
-            if (index === lightboxElements.length - 1) {
-              nextLightbox = lightboxElements[0];
-            }
-            closeModal(lightbox2);
-            openModal(nextLightbox);
-          } else if (e2.target.closest(LIGHTBOX_PREVIOUS_BTN) !== null) {
-            let previousLightbox = lightboxElements[index - 1];
-            if (index === 0) {
-              previousLightbox = lightboxElements[lightboxElements.length - 1];
-            }
-            closeModal(lightbox2);
-            openModal(previousLightbox);
-          }
-        });
-      });
-      const openModal = function(lightbox2) {
-        if (!lightbox2) return;
-        lightbox2.showModal();
-        body.classList.add(NO_SCROLL);
-        activeLightbox = lightbox2;
-      };
-      const closeModal = function(lightbox2) {
-        if (!lightbox2) return;
-        player = findPlayer(lightbox2);
-        if (player) {
-          player.pause();
-        }
-        lightbox2.close();
-        body.classList.remove(NO_SCROLL);
-        activeLightbox = false;
-      };
-    };
-    const body = document.querySelector("body");
-    const wraps = [...document.querySelectorAll(LIGHTBOX_WRAP)];
-    if (wraps.length > 0) {
-      wraps.forEach((wrap) => {
-        let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-        if (runOnBreakpoint === false) return;
-        activateLightboxes(wrap);
-      });
-    } else {
-      activateLightboxes(body);
-    }
-  };
-
-  // src/interactions/load.js
-  init_live_reload();
-  var load = function(gsapContext) {
-    const ANIMATION_ID = "load";
-    const ATTRIBUTE = "data-ix-load";
-    const HEADING = "heading";
-    const ITEM = "item";
-    const IMAGE = "image";
-    const STAGGER = "stagger";
-    const POSITION = "data-ix-load-position";
-    const DEFAULT_STAGGER = "<0.2";
-    const items = gsap.utils.toArray(`[${ATTRIBUTE}]`);
-    if (items.length === 0) return;
-    const tl = gsap.timeline({
-      paused: true,
-      defaults: {
-        ease: "power1.out",
-        duration: 0.8
-      }
-    });
-    const loadHeading = function(item2) {
-      if (item2.classList.contains("w-richtext")) {
-        item2.style.opacity = "1";
-        item2 = item2.firstChild;
-      }
-      const splitText = runSplit(item2);
-      if (!splitText) return;
-      const position = attr("<", item2.getAttribute(POSITION));
-      tl.set(item2, { opacity: 1 });
-      tl.fromTo(
-        splitText.words,
-        { opacity: 0, y: "50%", rotateX: 45 },
-        { opacity: 1, y: "0%", rotateX: 0, stagger: { each: 0.1, from: "left" } },
-        position
-      );
-    };
-    const loadImage = function(item2) {
-      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-      tl.fromTo(item2, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1 }, position);
-    };
-    const loadItem = function(item2) {
-      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-      tl.fromTo(item2, { opacity: 0, y: "2rem" }, { opacity: 1, y: "0rem" }, position);
-    };
-    const loadStagger = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
-      if (children.length === 0) return;
-      children.forEach((child, index) => {
-        if (index === 0) {
-          item2.style.opacity = 1;
-        }
-        loadItem(child);
-      });
-    };
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      const loadType = item2.getAttribute(ATTRIBUTE);
-      if (loadType === HEADING) {
-        loadHeading(item2);
-      }
-      if (loadType === IMAGE) {
-        loadImage(item2);
-      }
-      if (loadType === ITEM) {
-        loadItem(item2);
-      }
-      if (loadType === STAGGER) {
-        loadStagger(item2);
-      }
-    });
-    tl.play(0);
-    return tl;
-  };
-
-  // src/interactions/logo-ticker.js
-  init_live_reload();
-  var logoTicker = function(gsapContext) {
-    const ANIMATION_ID = "logoticker";
-    const WRAP = '[data-ix-logoticker="wrap"]';
-    const LIST = '[data-ix-logoticker="list"]';
-    const REVERSE = "data-ix-logoticker-reverse";
-    const DURATION = "data-ix-logoticker-duration";
-    const CHANGE_SPEED_ON_HOVER = "data-ix-logoticker-accelerate";
-    const wraps = document.querySelectorAll(WRAP);
-    if (wraps.length === 0) return;
-    wraps.forEach((wrap) => {
-      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      const lists = wrap.querySelectorAll(LIST);
-      let reverse = attr(false, wrap.getAttribute(REVERSE));
-      let duration = attr(30, wrap.getAttribute(DURATION));
-      let accelerate = attr(false, wrap.getAttribute(CHANGE_SPEED_ON_HOVER));
-      let direction = 1;
-      if (reverse) {
-        direction = -1;
-      }
-      let tl = gsap.timeline({
-        repeat: -1,
-        defaults: {
-          ease: "none"
-        }
-      });
-      tl.fromTo(
-        lists,
-        {
-          xPercent: 0
-        },
-        {
-          xPercent: -100 * direction,
-          duration
-        }
-      );
-      if (accelerate) {
-        wrap.addEventListener("mouseenter", (event) => {
-          tl.timeScale(2);
-        });
-        wrap.addEventListener("mouseleave", (event) => {
-          tl.timeScale(1);
-        });
-      }
-    });
-  };
-
-  // src/interactions/mouse-over.js
-  init_live_reload();
-  var mouseOver = function(gsapContext) {
-    const ANIMATION_ID = "mouseover";
-    const WRAP = '[data-ix-mouseover="wrap"]';
-    const LAYER = '[data-ix-mouseover="layer"]';
-    const TARGET = '[data-ix-mouseover="target"]';
-    const DURATION = "data-ix-mouseover-duration";
-    const EASE = "data-ix-mouseover-ease";
-    const MOVE_X = "data-ix-mouseover-move-x";
-    const MOVE_Y = "data-ix-mouseover-move-y";
-    const ROTATE_Z = "data-ix-mouseover-rotate-z";
-    const mouseOverItems = document.querySelectorAll(WRAP);
-    mouseOverItems.forEach((mouseOverItem) => {
-      const layers = mouseOverItem.querySelectorAll(LAYER);
-      if (layers.length === 0) return;
-      let runOnBreakpoint = checkBreakpoints(mouseOverItem, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      let target = mouseOverItem.querySelector(TARGET);
-      if (!target) {
-        target = mouseOverItem;
-      }
-      const mouseMove = function() {
-        let initialProgress = { x: 0.5, y: 0.5 };
-        let progressObject = { x: initialProgress.x, y: initialProgress.y };
-        let duration = attr(0.5, mouseOverItem.getAttribute(DURATION));
-        let ease = attr("power1.out", mouseOverItem.getAttribute(EASE));
-        let cursorXTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-        let cursorYTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
-        layers.forEach((layer) => {
-          let moveX = attr(10, layer.getAttribute(MOVE_X));
-          let moveY = attr(10, layer.getAttribute(MOVE_Y));
-          let rotateZ = attr(0, layer.getAttribute(ROTATE_Z));
-          cursorXTimeline.fromTo(
-            layer,
-            { xPercent: moveX * -1, rotateZ: rotateZ * -1 },
-            { xPercent: moveX, rotateZ },
-            0
-          );
-          cursorYTimeline.fromTo(layer, { yPercent: moveY * -1 }, { yPercent: moveY }, 0);
-        });
-        function setTimelineProgress(xValue, yValue) {
-          gsap.to(progressObject, {
-            x: xValue,
-            y: yValue,
-            ease,
-            duration,
-            onUpdate: () => {
-              cursorXTimeline.progress(progressObject.x);
-              cursorYTimeline.progress(progressObject.y);
-            }
-          });
-        }
-        setTimelineProgress(initialProgress.x, initialProgress.y);
-        target.addEventListener("mousemove", function(e2) {
-          const rect = target.getBoundingClientRect();
-          let mousePercentX = gsap.utils.clamp(
-            0,
-            1,
-            gsap.utils.normalize(0, rect.width, e2.clientX - rect.left)
-          );
-          let mousePercentY = gsap.utils.clamp(
-            0,
-            1,
-            gsap.utils.normalize(0, rect.height, e2.clientY - rect.top)
-          );
-          setTimelineProgress(mousePercentX, mousePercentY);
-        });
-        target.addEventListener("mouseleave", function(e2) {
-          setTimelineProgress(initialProgress.x, initialProgress.y);
-        });
-      };
-      mouseMove();
-    });
-  };
-
-  // src/interactions/page-transition.js
-  init_live_reload();
-  var pageTransition = function() {
-    const ANIMATION_ID = "pagetransition";
-    const WRAP = '[data-ix-pagetransition="wrap"]';
-    const COLUMN = '[data-ix-pagetransition="column"]';
-    const EXCLUDE = "data-ix-pagetransition";
-    const transitionWrap = document.querySelector(WRAP);
-    const transitionColumns = document.querySelectorAll(COLUMN);
-    if (!transitionWrap || transitionColumns.length === 0) return;
-    const tlLoad = gsap.timeline();
-    tlLoad.to(COLUMN, { yPercent: -100, stagger: 0.2 });
-    tlLoad.set(WRAP, { display: "none" });
-    const checkLink = function(link) {
-      if (!link || link.tagName !== "A") {
-        return false;
-      }
-      const hostname = link.hostname;
-      const target = link.target;
-      const href = link.getAttribute("href");
-      const playTransition = attr(true, link.getAttribute(EXCLUDE));
-      if (!hostname || hostname !== window.location.hostname || target && target === "_blank" || !href || href.includes("#") || !playTransition) {
-        return false;
-      } else {
-        return true;
-      }
-    };
-    document.querySelectorAll("a").forEach((link) => {
-      const linkURL = link.getAttribute("href");
-      const playTransition = checkLink(link);
-      if (playTransition) {
-        link.addEventListener("click", function(e2) {
-          e2.preventDefault();
-          const tlClick = gsap.timeline({
-            onComplete: () => setTimeout(() => {
-              window.location.href = linkURL;
-            }, 100)
-          });
-          tlClick.set(WRAP, { display: "flex" });
-          tlClick.fromTo(COLUMN, { yPercent: 100 }, { yPercent: 0, stagger: 0.2 });
-        });
-      }
-    });
-    window.onpageshow = function(event) {
-      if (event.persisted) window.location.reload();
-    };
-  };
-
-  // src/interactions/parallax.js
-  init_live_reload();
-  var parallax = function(gsapContext) {
-    const ANIMATION_ID = "parallax";
-    const WRAP = `[data-ix-parallax="wrap"]`;
-    const SECTION = `[data-ix-parallax="section"]`;
-    const TRIGGER = `[data-ix-parallax="trigger"]`;
-    const TYPE = "data-ix-parallax-type";
-    const AMOUNT = "data-ix-parallax-amount";
-    const parallaxItems = gsap.utils.toArray(WRAP);
-    parallaxItems.forEach((parallaxItem) => {
-      const section = parallaxItem.querySelector(SECTION);
-      const trigger = parallaxItem.querySelector(TRIGGER);
-      if (!parallaxItem || !section || !trigger) return;
-      let animationType = "uncover";
-      animationType = attr("uncover", parallaxItem.getAttribute(TYPE));
-      moveAmount = attr(50, parallaxItem.getAttribute(AMOUNT));
-      let runOnBreakpoint = checkBreakpoints(parallaxItem, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      const settings = {
-        scrub: true,
-        start: "top bottom",
-        end: "top top",
-        moveStart: "-100vh",
-        moveEnd: "0vh"
-      };
-      if (animationType === "cover") {
-        settings.start = "bottom bottom";
-        settings.end = "bottom top";
-        settings.moveStart = "0vh";
-        settings.moveEnd = "100vh";
-      }
-      if (animationType === "parallax") {
-        settings.moveStart = `-${moveAmount}vh`;
-        settings.moveEnd = "0vh";
-      }
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger,
-          markers: false,
-          start: settings.start,
-          end: settings.end,
-          scrub: settings.scrub
-        },
-        defaults: {
-          duration: 1,
-          ease: "none"
-        },
-        onStart: () => {
-          ScrollTrigger.refresh();
-        }
-      });
-      tl.fromTo(
-        section,
-        {
-          y: settings.moveStart
-        },
-        {
-          y: settings.moveEnd
-        }
-      );
-    });
-  };
-
-  // src/interactions/scroll-in.js
-  init_live_reload();
-  var scrollIn = function(gsapContext) {
-    const ANIMATION_ID = "scrollin";
-    const ELEMENT = "data-ix-scrollin";
-    const HEADING = "heading";
-    const ITEM = "item";
-    const CONTAINER = "container";
-    const STAGGER = "stagger";
-    const RICH_TEXT = "rich-text";
-    const IMAGE_WRAP = "image-wrap";
-    const IMAGE = "image";
-    const LINE = "line";
-    const SCROLL_TOGGLE_ACTIONS = "data-ix-scrollin-toggle-actions";
-    const SCROLL_SCRUB = "data-ix-scrollin-scrub";
-    const SCROLL_START = "data-ix-scrollin-start";
-    const SCROLL_END = "data-ix-scrollin-end";
-    const CLIP_DIRECTION = "data-ix-scrollin-direction";
-    const scrollInTL = function(item2) {
-      const settings = {
-        scrub: false,
-        toggleActions: "play none none none",
-        start: "top 90%",
-        end: "top 75%"
-      };
-      settings.toggleActions = attr(settings.toggleActions, item2.getAttribute(SCROLL_TOGGLE_ACTIONS));
-      settings.scrub = attr(settings.scrub, item2.getAttribute(SCROLL_SCRUB));
-      settings.start = attr(settings.start, item2.getAttribute(SCROLL_START));
-      settings.end = attr(settings.end, item2.getAttribute(SCROLL_END));
-      const tl = gsap.timeline({
-        defaults: {
-          duration: 0.6,
-          ease: "power1.out"
-        },
-        scrollTrigger: {
-          trigger: item2,
-          start: settings.start,
-          end: settings.end,
-          toggleActions: settings.toggleActions,
-          scrub: settings.scrub
-        }
-      });
-      return tl;
-    };
-    const defaultTween = function(item2, tl, options = {}) {
-      const varsFrom = {
-        opacity: 0,
-        y: "2rem"
-      };
-      const varsTo = {
-        opacity: 1,
-        y: "0rem"
-      };
-      if (options.stagger === "small") {
-        varsTo.stagger = { each: 0.1, from: "start" };
-      }
-      if (options.stagger === "large") {
-        varsTo.stagger = { each: 0.3, from: "start" };
-      }
-      const tween = tl.fromTo(item2, varsFrom, varsTo);
-      return tween;
-    };
-    const scrollInHeading = function(item2) {
-      if (item2.classList.contains("w-richtext")) {
-        item2 = item2.firstChild;
-      }
-      const splitText = runSplit(item2);
-      if (!splitText) return;
-      const tl = scrollInTL(item2);
-      const tween = defaultTween(splitText.words, tl, { stagger: "small", skew: "large" });
-      tl.eventCallback("onComplete", () => {
-        splitText.revert();
-      });
-    };
-    const scrollInItem = function(item2) {
-      if (!item2) return;
-      if (item2.classList.contains("w-richtext")) {
-        const children = gsap.utils.toArray(item2.children);
-        if (children.length === 0) return;
-        children.forEach((child) => {
-          const tl = scrollInTL(child);
-          const tween = defaultTween(child, tl);
-        });
-      } else {
-        const tl = scrollInTL(item2);
-        const tween = defaultTween(item2, tl);
-      }
-    };
-    const getCLipStart = function(item2) {
-      let defaultDirection = "right";
-      let clipStart;
-      const direction = attr(defaultDirection, item2.getAttribute(CLIP_DIRECTION));
-      const clipDirections = {
-        left: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",
-        right: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
-        top: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        bottom: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)"
-      };
-      if (direction === "left") {
-        clipStart = clipDirections.left;
-      }
-      if (direction === "right") {
-        clipStart = clipDirections.right;
-      }
-      if (direction === "top") {
-        clipStart = clipDirections.top;
-      }
-      if (direction === "bottom") {
-        clipStart = clipDirections.bottom;
-      }
-      return clipStart;
-    };
-    const scrollInImage = function(item2) {
-      if (!item2) return;
-      const child = item2.firstChild;
-      const tl = scrollInTL(item2);
-      tl.fromTo(
-        child,
-        {
-          scale: 1.2
-        },
-        {
-          scale: 1,
-          duration: 1
-        }
-      );
-      tl.fromTo(
-        item2,
-        {
-          scale: 0.9
-        },
-        {
-          scale: 1,
-          duration: 1
-        },
-        "<"
-      );
-    };
-    const scrollInLine = function(item2) {
-      if (!item2) return;
-      const clipStart = getCLipStart(item2);
-      const clipEnd = "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)";
-      const tl = scrollInTL(item2);
-      tl.fromTo(
-        item2,
-        {
-          clipPath: clipStart
-        },
-        {
-          clipPath: clipEnd
-        }
-      );
-    };
-    const scrollInContainer = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
-      if (children.length === 0) return;
-      children.forEach((child) => {
-        const tl = scrollInTL(child);
-        const tween = defaultTween(child, tl);
-      });
-    };
-    const scrollInStagger = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
-      if (children.length === 0) return;
-      const tl = scrollInTL(item2);
-      const tween = defaultTween(children, tl, { stagger: "large" });
-    };
-    const scrollInRichText = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
-      if (children.length === 0) return;
-      children.forEach((child) => {
-        const childTag = child.tagName;
-        if (["H1", "H2", "H3", "H4", "H5", "H6"].includes(childTag)) {
-          scrollInHeading(child);
-        }
-        if (childTag === "FIGURE") {
-          scrollInImage(child);
-        } else {
-          scrollInItem(child);
-        }
-      });
-    };
-    const items = gsap.utils.toArray(`[${ELEMENT}]`);
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      const scrollInType = item2.getAttribute(ELEMENT);
-      if (scrollInType === HEADING) {
-        scrollInHeading(item2);
-      }
-      if (scrollInType === ITEM) {
-        scrollInItem(item2);
-      }
-      if (scrollInType === IMAGE) {
-        scrollInImage(item2);
-      }
-      if (scrollInType === LINE) {
-        scrollInLine(item2);
-      }
-      if (scrollInType === CONTAINER) {
-        scrollInContainer(item2);
-      }
-      if (scrollInType === STAGGER) {
-        scrollInStagger(item2);
-      }
-      if (scrollInType === RICH_TEXT) {
-        scrollInRichText(item2);
-      }
-    });
-  };
-
-  // src/interactions/scrolling.js
-  init_live_reload();
-  var scrolling = function(gsapContext) {
-    const ANIMATION_ID = "scrolling";
-    const WRAP = `[data-ix-scrolling="wrap"]`;
-    const TRIGGER = `[data-ix-scrolling="trigger"]`;
-    const LAYER = '[data-ix-scrolling="layer"]';
-    const START = "data-ix-scrolling-start";
-    const END = "data-ix-scrolling-end";
-    const TABLET_START = "data-ix-scrolling-start-tablet";
-    const TABLET_END = "data-ix-scrolling-end-tablet";
-    const MOBILE_START = "data-ix-scrolling-start-mobile";
-    const MOBILE_END = "data-ix-scrolling-end-mobile";
-    const SCRUB = "data-ix-scrolling-scrub";
-    const POSITION = "data-ix-scrolling-position";
-    const X_START = "data-ix-scrolling-x-start";
-    const X_END = "data-ix-scrolling-x-end";
-    const Y_START = "data-ix-scrolling-y-start";
-    const Y_END = "data-ix-scrolling-y-end";
-    const SCALE_START = "data-ix-scrolling-scale-start";
-    const SCALE_END = "data-ix-scrolling-scale-end";
-    const WIDTH_START = "data-ix-scrolling-width-start";
-    const WIDTH_END = "data-ix-scrolling-width-end";
-    const HEIGHT_START = "data-ix-scrolling-height-start";
-    const HEIGHT_END = "data-ix-scrolling-height-end";
-    const ROTATE_X_START = "data-ix-scrolling-rotate-x-start";
-    const ROTATE_X_END = "data-ix-scrolling-rotate-x-end";
-    const ROTATE_Y_START = "data-ix-scrolling-rotate-y-start";
-    const ROTATE_Y_END = "data-ix-scrolling-rotate-y-end";
-    const ROTATE_Z_START = "data-ix-scrolling-rotate-z-start";
-    const ROTATE_Z_END = "data-ix-scrolling-rotate-z-end";
-    const OPACITY_START = "data-ix-scrolling-opacity-start";
-    const OPACITY_END = "data-ix-scrolling-opacity-end";
-    const CLIP_START = "data-ix-scrolling-clip-start";
-    const CLIP_END = "data-ix-scrolling-clip-end";
-    const CLIP_TYPE = "data-ix-scrolling-clip-type";
-    const scrollingItems = gsap.utils.toArray(WRAP);
-    scrollingItems.forEach((scrollingItem) => {
-      const layers = scrollingItem.querySelectorAll(LAYER);
-      if (!scrollingItem || layers.length === 0) return;
-      let trigger = scrollingItem.querySelector(TRIGGER);
-      if (!trigger) {
-        trigger = scrollingItem;
-      }
-      let runOnBreakpoint = checkBreakpoints(scrollingItem, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
-      const tlSettings = {
-        scrub: 0.5,
-        start: "top bottom",
-        end: "bottom top"
-      };
-      tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(START));
-      tlSettings.end = attr(tlSettings.end, scrollingItem.getAttribute(END));
-      tlSettings.scrub = attr(tlSettings.scrub, scrollingItem.getAttribute(SCRUB));
-      if (isTablet && scrollingItem.getAttribute(TABLET_START)) {
-        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(TABLET_START));
-      }
-      if (isTablet && scrollingItem.getAttribute(TABLET_END)) {
-        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(TABLET_END));
-      }
-      if (isMobile && scrollingItem.getAttribute(MOBILE_START)) {
-        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(MOBILE_START));
-      }
-      if (isMobile && scrollingItem.getAttribute(MOBILE_END)) {
-        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(MOBILE_END));
-      }
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger,
-          start: tlSettings.start,
-          end: tlSettings.end,
-          scrub: tlSettings.scrub,
-          markers: false
-        },
-        defaults: {
-          duration: 1,
-          ease: "none"
-        }
-      });
-      layers.forEach((layer) => {
-        if (!layer) return;
-        const varsFrom = {};
-        const varsTo = {};
-        const processAttribute = function(attributeName, defaultValue) {
-          const hasAttribute = layer.hasAttribute(attributeName);
-          const attributeValue = attr(defaultValue, layer.getAttribute(attributeName));
-          if (hasAttribute) {
-            return attributeValue;
-          } else {
-            return;
-          }
-        };
-        varsFrom.x = processAttribute(X_START, "0%");
-        varsTo.x = processAttribute(X_END, "0%");
-        varsFrom.y = processAttribute(Y_START, "0%");
-        varsTo.y = processAttribute(Y_END, "0%");
-        varsFrom.scale = processAttribute(SCALE_START, 1);
-        varsTo.scale = processAttribute(SCALE_END, 1);
-        varsFrom.width = processAttribute(WIDTH_START, "0%");
-        varsTo.width = processAttribute(WIDTH_END, "0%");
-        varsFrom.height = processAttribute(HEIGHT_START, "0%");
-        varsTo.height = processAttribute(HEIGHT_END, "0%");
-        varsFrom.rotateX = processAttribute(ROTATE_X_START, 0);
-        varsTo.rotateX = processAttribute(ROTATE_X_END, 0);
-        varsFrom.rotateY = processAttribute(ROTATE_Y_START, 0);
-        varsTo.rotateY = processAttribute(ROTATE_Y_END, 0);
-        varsFrom.rotateZ = processAttribute(ROTATE_Z_START, 0);
-        varsTo.rotateZ = processAttribute(ROTATE_Z_END, 0);
-        varsFrom.opacity = processAttribute(OPACITY_START, 0);
-        varsTo.opacity = processAttribute(OPACITY_END, 0);
-        varsFrom.clipPath = processAttribute(CLIP_START, "string");
-        varsTo.clipPath = processAttribute(CLIP_END, "string");
-        const position = attr("<", layer.getAttribute(POSITION));
-        let fromTween = tl.fromTo(layer, varsFrom, varsTo, position);
-      });
-    });
-  };
-
-  // src/interactions/text-scrub.js
-  init_live_reload();
-  var textScrub = function(gsapContext) {
-    const ANIMATION_ID = "textscrub";
-    const ITEM = '[data-ix-textscrub="item"]';
-    const LINE_CLASS = "line-mask";
-    const items = gsap.utils.toArray(ITEM);
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      let splitText;
-      function createAnimation() {
-        const splitText2 = runSplit(item2, "lines");
-        if (!splitText2) return;
-        splitText2.lines.forEach((line) => {
-          const lineMask = document.createElement("div");
-          lineMask.classList.add(LINE_CLASS);
-          line.appendChild(lineMask);
-          let tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: line,
-              start: "top 70%",
-              end: "bottom 70%",
-              scrub: 1.5
-            }
-          });
-          tl.fromTo(
-            lineMask,
-            {
-              width: "100%"
-            },
-            {
-              width: "0%",
-              ease: "power1.out",
-              duration: 1
-            }
-          );
-        });
-        return splitText2;
-      }
-      splitText = createAnimation();
-      const resentAnimation = function() {
-        splitText.revert();
-        splitText = createAnimation();
-      };
-      let windowWidth = window.innerWidth;
-      window.addEventListener("resize", function() {
-        if (window.innerWidth !== windowWidth) {
-          windowWidth = window.innerWidth;
-          resentAnimation();
-        }
-      });
-    });
-  };
-
-  // src/interactions/text-links.js
-  init_live_reload();
-  var textLinks = function(gsapContext) {
-    const ANIMATION_ID = "textlink";
-    const WRAP = '[data-ix-textlink="wrap"]';
-    const FRONT = '[data-ix-textlink="front"]';
-    const BACK = '[data-ix-textlink="back"]';
-    const items = gsap.utils.toArray(WRAP);
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-      const front = item2.querySelector(FRONT);
-      const back = item2.querySelector(BACK);
-      if (!front || !back) return;
-      const tl = gsap.timeline({
-        paused: true,
-        defaults: {
-          duration: 0.4,
-          ease: "power1.out"
-        }
-      });
-      tl.fromTo(
-        front,
-        {
-          y: "200%",
-          rotateZ: 6
-        },
-        {
-          y: "0%",
-          rotateZ: 0
-        }
-      );
-      tl.fromTo(
-        back,
-        {
-          y: "0%",
-          rotateZ: 0
-        },
-        {
-          y: "-200%",
-          rotateZ: -6
-        },
-        0
-      );
-      item2.addEventListener("mouseover", function() {
-        tl.play();
-      });
-      item2.addEventListener("mouseleave", function() {
-        tl.reverse();
-      });
-    });
-  };
-
-  // src/interactions/video-plyr.js
-  init_live_reload();
-  var import_plyr = __toESM(require_plyr_min(), 1);
-  var videoPlyr = function() {
-    const COMPONENT = ".plyr_component";
-    const VIDEO_CLASS = ".plyr_video";
-    const COVER_CLASS = ".plyr_cover";
-    const HIDE_COVER_CLASS = "hide-cover";
-    const PAUSE_TRIGGER_CLASS = ".plyr_pause-trigger";
-    const CONTAIN_CLASS = "contain-video";
-    const settings = {
-      autoplay: false,
-      loop: false,
-      mute: false,
-      hideControls: true
-    };
-    const PLAYING_CLASS = ".plyr--playing";
-    const players = [];
-    const components = [...document.querySelectorAll(COMPONENT)];
-    if (components.length === 0) return;
-    components.forEach((component, index) => {
-      const video = component.querySelector(VIDEO_CLASS);
-      const cover = component.querySelector(COVER_CLASS);
-      const pauseTrigger = component.querySelector(PAUSE_TRIGGER_CLASS);
-      const loopSetting = attr(settings.loop, component.getAttribute("data-player-loop"));
-      let muteSetting = attr(settings.mute, component.getAttribute("data-player-mute"));
-      const showCoverOnPause = attr(false, component.getAttribute("data-player-show-cover-on-pause"));
-      let player2 = new import_plyr.default(video, {
-        controls: ["play", "progress", "current-time", "mute", "fullscreen"],
-        hideControls: settings.hideControls,
-        loop: { active: loopSetting },
-        resetOnEnd: true
-      });
-      players.push(player2);
-      if (cover) {
-        cover.addEventListener("click", () => {
-          player2.play();
-        });
-      }
-      player2.on("ended", (event) => {
-        component.classList.remove(HIDE_COVER_CLASS);
-      });
-      if (showCoverOnPause) {
-        player2.on("pause", (event) => {
-          component.classList.remove(HIDE_COVER_CLASS);
-        });
-      }
-      player2.on("play", (event) => {
-        components.forEach((item2, index2) => {
-          item2.classList.remove(HIDE_COVER_CLASS);
-          if (item2 !== component) {
-            const player3 = players[index2];
-            player3.pause();
-          }
-        });
-        component.classList.add(HIDE_COVER_CLASS);
-        let prevPlayingComponent = document.querySelector(PLAYING_CLASS).closest(COMPONENT);
-        if (prevPlayingComponent && prevPlayingComponent !== component) {
-          prevPlayingComponent.find(PAUSE_TRIGGER_CLASS)[0].click();
-        }
-      });
-      pauseTrigger.addEventListener("click", () => {
-        player2.pause();
-      });
-      player2.on("ended", (event) => {
-        if (player2.fullscreen.active) {
-          player2.fullscreen.exit();
-        }
-      });
-      player2.on("enterfullscreen", (event) => {
-        component.classList.add(CONTAIN_CLASS);
-      });
-      player2.on("exitfullscreen", (event) => {
-        component.classList.remove(CONTAIN_CLASS);
-      });
-    });
-    return [players, components];
   };
 
   // src/interactions/lenis.js
@@ -4755,10 +3867,13 @@
   // src/interactions/lenis.js
   var initLenis = function() {
     const lenis = new Lenis({
-      duration: 1,
-      easing: (t3) => t3 === 1 ? 1 : 1 - Math.pow(2, -10 * t3),
+      duration: 0.5,
+      wheelMultiplier: 0.75,
+      gestureOrientation: "vertical",
+      normalizeWheel: false,
+      smoothTouch: false,
+      easing: (t3) => t3 === 1 ? 1 : 1 - Math.pow(2, -10 * t3)
       // https://easings.net
-      touchMultiplier: 1.5
     });
     function raf(time) {
       lenis.raf(time);
@@ -4773,26 +3888,36 @@
       lenis.raf(time * 1e3);
     });
     gsap.ticker.lagSmoothing(0);
-    function anchorLinks() {
-      const anchorLinks2 = document.querySelectorAll("[scroll-to]");
-      if (anchorLinks2 == null) {
-        return;
-      }
-      anchorLinks2.forEach((item2) => {
-        const targetID = item2.getAttribute("scroll-to");
-        const target = document.getElementById(targetID);
-        if (!target) return;
+    let resizeTimeout;
+    function refreshLenisTimeout(delay = 600) {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        requestAnimationFrame(() => {
+          lenis.resize();
+          console.log("refresh");
+        });
+      }, delay);
+    }
+    function refreshScroll() {
+      const triggers = [...document.querySelectorAll('[data-scroll="refresh"]')];
+      if (triggers.length === 0) return;
+      triggers.forEach((item2) => {
+        if (!item2) return;
         item2.addEventListener("click", (event) => {
-          lenis.scrollTo(target, {
-            duration: 1.85,
-            easing: (t3) => t3 === 1 ? 1 : 1 - Math.pow(2, -10 * t3)
-          });
+          refreshLenisTimeout();
         });
       });
     }
-    anchorLinks();
+    refreshScroll();
+    function refreshScrollOnLazyLoad() {
+      const images = [...document.querySelectorAll("img[loading='lazy']")];
+      if (images.length === 0) return;
+      images.forEach((img) => {
+        img.addEventListener("load", refreshLenisTimeout);
+      });
+    }
     function stopScroll() {
-      const stopScrollLinks = document.querySelectorAll('[scroll="stop"]');
+      const stopScrollLinks = document.querySelectorAll('[data-scroll="stop"]');
       if (stopScrollLinks == null) {
         return;
       }
@@ -4804,7 +3929,7 @@
     }
     stopScroll();
     function startScroll() {
-      const startScrollLinks = document.querySelectorAll('[scroll="start"]');
+      const startScrollLinks = document.querySelectorAll('[data-scroll="start"]');
       if (startScrollLinks == null) {
         return;
       }
@@ -4816,7 +3941,7 @@
     }
     startScroll();
     function toggleScroll() {
-      const toggleScrollLinks = document.querySelectorAll('[scroll="toggle"]');
+      const toggleScrollLinks = document.querySelectorAll('[data-scroll="toggle"]');
       if (toggleScrollLinks == null) {
         return;
       }
@@ -4831,6 +3956,1067 @@
     }
     toggleScroll();
     return lenis;
+  };
+
+  // src/interactions/lightbox.js
+  init_live_reload();
+  var lightbox = function(gsapContext, pagePlayers, pagePlayerComponents) {
+    const ANIMATION_ID = "lightbox";
+    const LIGHTBOX_WRAP = '[data-ix-lightbox="wrap"]';
+    const LIGHTBOX_COMPONENT = '[data-ix-lightbox="component"]';
+    const LIGHTBOX_TRIGGER = '[data-ix-lightbox="trigger"]';
+    const LIGHTBOX_CLOSE_BTN = '[data-ix-lightbox="close"]';
+    const LIGHTBOX_NEXT_BTN = '[data-ix-lightbox="next"]';
+    const LIGHTBOX_PREVIOUS_BTN = '[data-ix-lightbox="previous"]';
+    const VIDEO_CLASS = ".plyr_component";
+    const NO_SCROLL = "no-scroll";
+    let activeLightbox = false;
+    const activateLightboxes = function(listElement) {
+      const filterPlayers = function(pagePlayers2, pagePlayerComponents2) {
+        if (pagePlayerComponents2.length === 0 || !pagePlayerComponents2) return;
+        pagePlayerComponents2.forEach((component, index) => {
+          const matchingPlayer = pagePlayers2[index];
+          if (Boolean(component.closest(LIGHTBOX_COMPONENT))) {
+            players.push(pagePlayers2[index]);
+            plyrComponents.push(pagePlayerComponents2[index]);
+          }
+        });
+      };
+      const findPlayer = function(lightbox2) {
+        if (plyrComponents.length === 0 || !plyrComponents) return;
+        function findMatchingVideo(plyrComponents2, videoEl2) {
+          return plyrComponents2.findIndex((videoElement) => videoElement === videoEl2);
+        }
+        const videoEl = lightbox2.querySelector(VIDEO_CLASS);
+        if (!videoEl) return false;
+        let playerIndex = findMatchingVideo(plyrComponents, videoEl);
+        player = players[playerIndex];
+        return player;
+      };
+      const lightboxTriggers = [...listElement.querySelectorAll(LIGHTBOX_TRIGGER)];
+      const lightboxElements = [];
+      const players = [];
+      const plyrComponents = [];
+      filterPlayers(pagePlayers, pagePlayerComponents);
+      if (lightboxTriggers.length === 0) return;
+      lightboxTriggers.forEach((trigger, index) => {
+        const parent = trigger.parentElement;
+        const lightbox2 = parent.querySelector(LIGHTBOX_COMPONENT);
+        lightboxElements.push(lightbox2);
+        if (!lightbox2) return;
+        let player2 = false;
+        player2 = findPlayer(lightbox2);
+        parent.addEventListener("keydown", (e2) => {
+          if (e2.key === "Enter" && e2.target === trigger) {
+            openModal(lightbox2);
+          }
+          if (e2.key === "Escape" && activeLightbox !== false) {
+            closeModal(lightbox2);
+          }
+        });
+        parent.addEventListener("click", (e2) => {
+          if (e2.target.closest(LIGHTBOX_TRIGGER) !== null) {
+            openModal(lightbox2);
+          } else if (e2.target.closest(LIGHTBOX_CLOSE_BTN) !== null) {
+            closeModal(lightbox2);
+            if (player2) {
+              player2.pause();
+            }
+          } else if (e2.target.closest(LIGHTBOX_NEXT_BTN) !== null) {
+            let nextLightbox = lightboxElements[index + 1];
+            if (index === lightboxElements.length - 1) {
+              nextLightbox = lightboxElements[0];
+            }
+            closeModal(lightbox2);
+            openModal(nextLightbox);
+          } else if (e2.target.closest(LIGHTBOX_PREVIOUS_BTN) !== null) {
+            let previousLightbox = lightboxElements[index - 1];
+            if (index === 0) {
+              previousLightbox = lightboxElements[lightboxElements.length - 1];
+            }
+            closeModal(lightbox2);
+            openModal(previousLightbox);
+          }
+        });
+      });
+      const openModal = function(lightbox2) {
+        if (!lightbox2) return;
+        lightbox2.showModal();
+        body.classList.add(NO_SCROLL);
+        activeLightbox = lightbox2;
+      };
+      const closeModal = function(lightbox2) {
+        if (!lightbox2) return;
+        player = findPlayer(lightbox2);
+        if (player) {
+          player.pause();
+        }
+        lightbox2.close();
+        body.classList.remove(NO_SCROLL);
+        activeLightbox = false;
+      };
+    };
+    const body = document.querySelector("body");
+    const wraps = [...document.querySelectorAll(LIGHTBOX_WRAP)];
+    if (wraps.length > 0) {
+      wraps.forEach((wrap) => {
+        let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+        if (runOnBreakpoint === false) return;
+        activateLightboxes(wrap);
+      });
+    } else {
+      activateLightboxes(body);
+    }
+  };
+
+  // src/interactions/load.js
+  init_live_reload();
+  var load = function(gsapContext) {
+    const ANIMATION_ID = "load";
+    const ATTRIBUTE = "data-ix-load";
+    const HEADING = "heading";
+    const ITEM = "item";
+    const IMAGE = "image";
+    const STAGGER = "stagger";
+    const POSITION = "data-ix-load-position";
+    const DEFAULT_STAGGER = "<0.2";
+    const items = gsap.utils.toArray(`[${ATTRIBUTE}]`);
+    if (items.length === 0) return;
+    const tl = gsap.timeline({
+      paused: true,
+      defaults: {
+        ease: "power1.out",
+        duration: 0.8
+      }
+    });
+    const loadHeading = function(item2) {
+      if (item2.classList.contains("w-richtext")) {
+        item2.style.opacity = "1";
+        item2 = item2.firstChild;
+      }
+      const splitText = runSplit(item2);
+      if (!splitText) return;
+      const position = attr("<", item2.getAttribute(POSITION));
+      tl.set(item2, { opacity: 1 });
+      tl.fromTo(
+        splitText.words,
+        { opacity: 0, y: "50%", rotateX: 45 },
+        { opacity: 1, y: "0%", rotateX: 0, stagger: { each: 0.1, from: "left" } },
+        position
+      );
+    };
+    const loadImage = function(item2) {
+      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
+      tl.fromTo(item2, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1 }, position);
+    };
+    const loadItem = function(item2) {
+      const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
+      tl.fromTo(item2, { opacity: 0, y: "2rem" }, { opacity: 1, y: "0rem" }, position);
+    };
+    const loadStagger = function(item2) {
+      if (!item2) return;
+      const children = gsap.utils.toArray(item2.children);
+      if (children.length === 0) return;
+      children.forEach((child, index) => {
+        if (index === 0) {
+          item2.style.opacity = 1;
+        }
+        loadItem(child);
+      });
+    };
+    items.forEach((item2) => {
+      if (!item2) return;
+      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const loadType = item2.getAttribute(ATTRIBUTE);
+      if (loadType === HEADING) {
+        loadHeading(item2);
+      }
+      if (loadType === IMAGE) {
+        loadImage(item2);
+      }
+      if (loadType === ITEM) {
+        loadItem(item2);
+      }
+      if (loadType === STAGGER) {
+        loadStagger(item2);
+      }
+    });
+    tl.play(0);
+    return tl;
+  };
+
+  // src/interactions/marquee.js
+  init_live_reload();
+  var marquee = function(gsapContext) {
+    const ANIMATION_ID = "marquee";
+    const WRAP = '[data-ix-marquee="wrap"]';
+    const LIST = '[data-ix-marquee="list"]';
+    const REVERSE = "data-ix-marquee-reverse";
+    const DURATION = "data-ix-marquee-duration";
+    const DYNAMIC_DURATION = "data-ix-marquee-duration-dynamic";
+    const DURATION_PER_ITEM = "data-ix-marquee-duration-per-item";
+    const HOVER_EFFECT = "data-ix-marquee-hover";
+    const ACCELERATE_ON_HOVER = "decelerate";
+    const DECELERATE_ON_HOVER = "decelerate";
+    const PAUSE_ON_HOVER = "pause";
+    const DEFAULT_DURATION = 30;
+    const DEFAULT_DYNAMIC_DURATION = 10;
+    const wraps = document.querySelectorAll(WRAP);
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const lists = [...wrap.querySelectorAll(LIST)];
+      let reverse = attr(false, wrap.getAttribute(REVERSE));
+      let duration = attr(DEFAULT_DURATION, wrap.getAttribute(DURATION));
+      let durationDynamic = attr(false, wrap.getAttribute(DYNAMIC_DURATION));
+      let durationPerItem = attr(DEFAULT_DYNAMIC_DURATION, wrap.getAttribute(DURATION_PER_ITEM));
+      let itemCount = lists[0].childElementCount;
+      if (itemCount === 1) {
+        itemCount = lists[0].firstElementChild.childElementCount;
+      }
+      if (durationDynamic) {
+        duration = itemCount * durationPerItem;
+      }
+      let hoverEffect = attr("none", wrap.getAttribute(HOVER_EFFECT));
+      let direction = 1;
+      if (reverse) {
+        direction = -1;
+      }
+      let tl = gsap.timeline({
+        repeat: -1,
+        defaults: {
+          ease: "none"
+        }
+      });
+      tl.fromTo(
+        lists,
+        {
+          xPercent: 0
+        },
+        {
+          xPercent: -100 * direction,
+          duration
+        }
+      );
+      if (hoverEffect === ACCELERATE_ON_HOVER) {
+        wrap.addEventListener("mouseenter", (event) => {
+          tl.timeScale(2);
+        });
+        wrap.addEventListener("mouseleave", (event) => {
+          tl.timeScale(1);
+        });
+      }
+      if (hoverEffect === DECELERATE_ON_HOVER) {
+        wrap.addEventListener("mouseenter", (event) => {
+          tl.timeScale(0.5);
+        });
+        wrap.addEventListener("mouseleave", (event) => {
+          tl.timeScale(1);
+        });
+      }
+      if (hoverEffect === PAUSE_ON_HOVER) {
+        wrap.addEventListener("mouseenter", (event) => {
+          tl.pause();
+        });
+        wrap.addEventListener("mouseleave", (event) => {
+          tl.play();
+        });
+      }
+    });
+  };
+
+  // src/interactions/mouse-over.js
+  init_live_reload();
+  var mouseOver = function(gsapContext) {
+    const ANIMATION_ID = "mouseover";
+    const WRAP = '[data-ix-mouseover="wrap"]';
+    const LAYER = '[data-ix-mouseover="layer"]';
+    const TARGET = '[data-ix-mouseover="target"]';
+    const DURATION = "data-ix-mouseover-duration";
+    const EASE = "data-ix-mouseover-ease";
+    const MOVE_X = "data-ix-mouseover-move-x";
+    const MOVE_Y = "data-ix-mouseover-move-y";
+    const ROTATE_Z = "data-ix-mouseover-rotate-z";
+    const mouseOverItems = document.querySelectorAll(WRAP);
+    mouseOverItems.forEach((mouseOverItem) => {
+      const layers = mouseOverItem.querySelectorAll(LAYER);
+      if (layers.length === 0) return;
+      let runOnBreakpoint = checkBreakpoints(mouseOverItem, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      let target = mouseOverItem.querySelector(TARGET);
+      if (!target) {
+        target = mouseOverItem;
+      }
+      const mouseMove = function() {
+        let initialProgress = { x: 0.5, y: 0.5 };
+        let progressObject = { x: initialProgress.x, y: initialProgress.y };
+        let duration = attr(0.5, mouseOverItem.getAttribute(DURATION));
+        let ease = attr("power1.out", mouseOverItem.getAttribute(EASE));
+        let cursorXTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+        let cursorYTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+        layers.forEach((layer) => {
+          let moveX = attr(10, layer.getAttribute(MOVE_X));
+          let moveY = attr(10, layer.getAttribute(MOVE_Y));
+          let rotateZ = attr(0, layer.getAttribute(ROTATE_Z));
+          cursorXTimeline.fromTo(
+            layer,
+            { xPercent: moveX * -1, rotateZ: rotateZ * -1 },
+            { xPercent: moveX, rotateZ },
+            0
+          );
+          cursorYTimeline.fromTo(layer, { yPercent: moveY * -1 }, { yPercent: moveY }, 0);
+        });
+        function setTimelineProgress(xValue, yValue) {
+          gsap.to(progressObject, {
+            x: xValue,
+            y: yValue,
+            ease,
+            duration,
+            onUpdate: () => {
+              cursorXTimeline.progress(progressObject.x);
+              cursorYTimeline.progress(progressObject.y);
+            }
+          });
+        }
+        setTimelineProgress(initialProgress.x, initialProgress.y);
+        target.addEventListener("mousemove", function(e2) {
+          const rect = target.getBoundingClientRect();
+          let mousePercentX = gsap.utils.clamp(
+            0,
+            1,
+            gsap.utils.normalize(0, rect.width, e2.clientX - rect.left)
+          );
+          let mousePercentY = gsap.utils.clamp(
+            0,
+            1,
+            gsap.utils.normalize(0, rect.height, e2.clientY - rect.top)
+          );
+          setTimelineProgress(mousePercentX, mousePercentY);
+        });
+        target.addEventListener("mouseleave", function(e2) {
+          setTimelineProgress(initialProgress.x, initialProgress.y);
+        });
+      };
+      mouseMove();
+    });
+  };
+
+  // src/interactions/page-transition.js
+  init_live_reload();
+  var pageTransition = function() {
+    const ANIMATION_ID = "pagetransition";
+    const WRAP = '[data-ix-pagetransition="wrap"]';
+    const COLUMN = '[data-ix-pagetransition="column"]';
+    const EXCLUDE = "data-ix-pagetransition";
+    const transitionWrap = document.querySelector(WRAP);
+    const transitionColumns = document.querySelectorAll(COLUMN);
+    if (!transitionWrap || transitionColumns.length === 0) return;
+    const tlLoad = gsap.timeline();
+    tlLoad.to(COLUMN, { yPercent: -100, stagger: 0.2 });
+    tlLoad.set(WRAP, { display: "none" });
+    const checkLink = function(link) {
+      if (!link || link.tagName !== "A") {
+        return false;
+      }
+      const hostname = link.hostname;
+      const target = link.target;
+      const href = link.getAttribute("href");
+      const playTransition = attr(true, link.getAttribute(EXCLUDE));
+      if (!hostname || hostname !== window.location.hostname || target && target === "_blank" || !href || href.includes("#") || !playTransition) {
+        return false;
+      } else {
+        return true;
+      }
+    };
+    document.querySelectorAll("a").forEach((link) => {
+      const linkURL = link.getAttribute("href");
+      const playTransition = checkLink(link);
+      if (playTransition) {
+        link.addEventListener("click", function(e2) {
+          e2.preventDefault();
+          const tlClick = gsap.timeline({
+            onComplete: () => setTimeout(() => {
+              window.location.href = linkURL;
+            }, 100)
+          });
+          tlClick.set(WRAP, { display: "flex" });
+          tlClick.fromTo(COLUMN, { yPercent: 100 }, { yPercent: 0, stagger: 0.2 });
+        });
+      }
+    });
+    window.onpageshow = function(event) {
+      if (event.persisted) window.location.reload();
+    };
+  };
+
+  // src/interactions/parallax.js
+  init_live_reload();
+  var parallax = function(gsapContext) {
+    const ANIMATION_ID = "parallax";
+    const WRAP = `[data-ix-parallax="wrap"]`;
+    const SECTION = `[data-ix-parallax="section"]`;
+    const TRIGGER = `[data-ix-parallax="trigger"]`;
+    const TYPE = "data-ix-parallax-type";
+    const AMOUNT = "data-ix-parallax-amount";
+    const parallaxItems = gsap.utils.toArray(WRAP);
+    parallaxItems.forEach((parallaxItem) => {
+      const section = parallaxItem.querySelector(SECTION);
+      const trigger = parallaxItem.querySelector(TRIGGER);
+      if (!parallaxItem || !section || !trigger) return;
+      let animationType = "uncover";
+      animationType = attr("uncover", parallaxItem.getAttribute(TYPE));
+      moveAmount = attr(50, parallaxItem.getAttribute(AMOUNT));
+      let runOnBreakpoint = checkBreakpoints(parallaxItem, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const settings = {
+        scrub: true,
+        start: "top bottom",
+        end: "top top",
+        moveStart: "-100vh",
+        moveEnd: "0vh"
+      };
+      if (animationType === "cover") {
+        settings.start = "bottom bottom";
+        settings.end = "bottom top";
+        settings.moveStart = "0vh";
+        settings.moveEnd = "100vh";
+      }
+      if (animationType === "parallax") {
+        settings.moveStart = `-${moveAmount}vh`;
+        settings.moveEnd = "0vh";
+      }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger,
+          markers: false,
+          start: settings.start,
+          end: settings.end,
+          scrub: settings.scrub
+        },
+        defaults: {
+          duration: 1,
+          ease: "none"
+        },
+        onStart: () => {
+          ScrollTrigger.refresh();
+        }
+      });
+      tl.fromTo(
+        section,
+        {
+          y: settings.moveStart
+        },
+        {
+          y: settings.moveEnd
+        }
+      );
+    });
+  };
+
+  // src/interactions/scroll-in.js
+  init_live_reload();
+  var scrollIn = function(gsapContext) {
+    const ANIMATION_ID = "scrollin";
+    const ELEMENT = "data-ix-scrollin";
+    const HEADING = "heading";
+    const ITEM = "item";
+    const CONTAINER = "container";
+    const STAGGER = "stagger";
+    const RICH_TEXT = "rich-text";
+    const IMAGE_WRAP = "image-wrap";
+    const IMAGE = "image";
+    const LINE = "line";
+    const SCROLL_TOGGLE_ACTIONS = "data-ix-scrollin-toggle-actions";
+    const SCROLL_SCRUB = "data-ix-scrollin-scrub";
+    const SCROLL_START = "data-ix-scrollin-start";
+    const SCROLL_END = "data-ix-scrollin-end";
+    const CLIP_DIRECTION = "data-ix-scrollin-direction";
+    const SCROLL_STAGGER = "data-ix-scrollin-stagger";
+    const EASE_SMALL = 0.1;
+    const EASE_LARGE = 0.3;
+    const DURATION = 0.6;
+    const EASE = "power1.out";
+    const scrollInTL = function(item2) {
+      const settings = {
+        scrub: false,
+        toggleActions: "play none none none",
+        start: "top 90%",
+        end: "top 75%"
+      };
+      settings.toggleActions = attr(settings.toggleActions, item2.getAttribute(SCROLL_TOGGLE_ACTIONS));
+      settings.scrub = attr(settings.scrub, item2.getAttribute(SCROLL_SCRUB));
+      settings.start = attr(settings.start, item2.getAttribute(SCROLL_START));
+      settings.end = attr(settings.end, item2.getAttribute(SCROLL_END));
+      const tl = gsap.timeline({
+        defaults: {
+          duration: DURATION,
+          ease: EASE
+        },
+        scrollTrigger: {
+          trigger: item2,
+          start: settings.start,
+          end: settings.end,
+          toggleActions: settings.toggleActions,
+          scrub: settings.scrub
+        }
+      });
+      return tl;
+    };
+    const defaultTween = function(item2, tl, options = {}) {
+      const varsFrom = {
+        opacity: 0,
+        y: "2rem"
+      };
+      const varsTo = {
+        opacity: 1,
+        y: "0rem"
+      };
+      if (options.stagger) {
+        varsTo.stagger = { each: options.stagger, from: "start" };
+      }
+      if (options.stagger === "small") {
+        varsTo.stagger = { each: EASE_SMALL, from: "start" };
+      }
+      if (options.stagger === "large") {
+        varsTo.stagger = { each: EASE_LARGE, from: "start" };
+      }
+      const tween = tl.fromTo(item2, varsFrom, varsTo);
+      return tween;
+    };
+    const scrollInHeading = function(item2) {
+      if (item2.classList.contains("w-richtext")) {
+        item2 = item2.firstChild;
+      }
+      const splitText = runSplit(item2);
+      if (!splitText) return;
+      const tl = scrollInTL(item2);
+      const tween = defaultTween(splitText.words, tl, { stagger: "small" });
+      ScrollTrigger.create({
+        trigger: item2,
+        start: "top bottom",
+        end: "bottom top",
+        onLeave: (self2) => splitText.revert()
+      });
+    };
+    const scrollInItem = function(item2) {
+      if (!item2) return;
+      if (item2.classList.contains("w-richtext")) {
+        const children = gsap.utils.toArray(item2.children);
+        if (children.length === 0) return;
+        children.forEach((child) => {
+          const tl = scrollInTL(child);
+          const tween = defaultTween(child, tl);
+        });
+      } else {
+        const tl = scrollInTL(item2);
+        const tween = defaultTween(item2, tl);
+      }
+    };
+    const scrollInImage = function(item2) {
+      if (!item2) return;
+      const child = item2.firstChild;
+      const tl = scrollInTL(item2);
+      tl.fromTo(
+        child,
+        {
+          scale: 1.2
+        },
+        {
+          scale: 1,
+          duration: 1
+        }
+      );
+      tl.fromTo(
+        item2,
+        {
+          scale: 0.9
+        },
+        {
+          scale: 1,
+          duration: 1
+        },
+        "<"
+      );
+    };
+    const scrollInLine = function(item2) {
+      if (!item2) return;
+      const clipAttr = attr("left", item2.getAttribute(CLIP_DIRECTION));
+      const clipStart = getClipDirection(clipAttr);
+      const clipEnd = getClipDirection("full");
+      const tl = scrollInTL(item2);
+      tl.fromTo(
+        item2,
+        {
+          clipPath: clipStart
+        },
+        {
+          clipPath: clipEnd
+        }
+      );
+    };
+    const scrollInContainer = function(item2) {
+      if (!item2) return;
+      const children = gsap.utils.toArray(item2.children);
+      if (children.length === 0) return;
+      children.forEach((child) => {
+        const tl = scrollInTL(child);
+        const tween = defaultTween(child, tl);
+      });
+    };
+    const scrollInStagger = function(item2) {
+      if (!item2) return;
+      const staggerAmount = attr(EASE_LARGE, item2.getAttribute(SCROLL_STAGGER));
+      const children = gsap.utils.toArray(item2.children);
+      if (children.length === 0) return;
+      const tl = scrollInTL(item2);
+      const tween = defaultTween(children, tl, { stagger: staggerAmount });
+    };
+    const scrollInRichText = function(item2) {
+      if (!item2) return;
+      const children = gsap.utils.toArray(item2.children);
+      if (children.length === 0) return;
+      children.forEach((child) => {
+        const childTag = child.tagName;
+        if (["H1", "H2", "H3", "H4", "H5", "H6"].includes(childTag)) {
+          scrollInHeading(child);
+        }
+        if (childTag === "FIGURE") {
+          scrollInImage(child);
+        } else {
+          scrollInItem(child);
+        }
+      });
+    };
+    const items = gsap.utils.toArray(`[${ELEMENT}]`);
+    items.forEach((item2) => {
+      if (!item2) return;
+      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const scrollInType = item2.getAttribute(ELEMENT);
+      if (scrollInType === HEADING) {
+        scrollInHeading(item2);
+      }
+      if (scrollInType === ITEM) {
+        scrollInItem(item2);
+      }
+      if (scrollInType === IMAGE) {
+        scrollInImage(item2);
+      }
+      if (scrollInType === LINE) {
+        scrollInLine(item2);
+      }
+      if (scrollInType === CONTAINER) {
+        scrollInContainer(item2);
+      }
+      if (scrollInType === STAGGER) {
+        scrollInStagger(item2);
+      }
+      if (scrollInType === RICH_TEXT) {
+        scrollInRichText(item2);
+      }
+    });
+  };
+
+  // src/interactions/scrolling.js
+  init_live_reload();
+  var scrolling = function(gsapContext) {
+    const ANIMATION_ID = "scrolling";
+    const WRAP = `[data-ix-scrolling="wrap"]`;
+    const TRIGGER = `[data-ix-scrolling="trigger"]`;
+    const LAYER = '[data-ix-scrolling="layer"]';
+    const START = "data-ix-scrolling-start";
+    const END = "data-ix-scrolling-end";
+    const TABLET_START = "data-ix-scrolling-start-tablet";
+    const TABLET_END = "data-ix-scrolling-end-tablet";
+    const MOBILE_START = "data-ix-scrolling-start-mobile";
+    const MOBILE_END = "data-ix-scrolling-end-mobile";
+    const SCRUB = "data-ix-scrolling-scrub";
+    const POSITION = "data-ix-scrolling-position";
+    const EASE = "data-ix-scrolling-ease";
+    const X_START = "data-ix-scrolling-x-start";
+    const X_END = "data-ix-scrolling-x-end";
+    const Y_START = "data-ix-scrolling-y-start";
+    const Y_END = "data-ix-scrolling-y-end";
+    const SCALE_START = "data-ix-scrolling-scale-start";
+    const SCALE_END = "data-ix-scrolling-scale-end";
+    const SCALE_X_START = "data-ix-scrolling-scale-x-start";
+    const SCALE_X_END = "data-ix-scrolling-scale-x-end";
+    const SCALE_Y_START = "data-ix-scrolling-scale-y-start";
+    const SCALE_Y_END = "data-ix-scrolling-scale-y-end";
+    const WIDTH_START = "data-ix-scrolling-width-start";
+    const WIDTH_END = "data-ix-scrolling-width-end";
+    const HEIGHT_START = "data-ix-scrolling-height-start";
+    const HEIGHT_END = "data-ix-scrolling-height-end";
+    const ROTATE_X_START = "data-ix-scrolling-rotate-x-start";
+    const ROTATE_X_END = "data-ix-scrolling-rotate-x-end";
+    const ROTATE_Y_START = "data-ix-scrolling-rotate-y-start";
+    const ROTATE_Y_END = "data-ix-scrolling-rotate-y-end";
+    const ROTATE_Z_START = "data-ix-scrolling-rotate-z-start";
+    const ROTATE_Z_END = "data-ix-scrolling-rotate-z-end";
+    const OPACITY_START = "data-ix-scrolling-opacity-start";
+    const OPACITY_END = "data-ix-scrolling-opacity-end";
+    const RADIUS_START = "data-ix-scrolling-radius-start";
+    const RADIUS_END = "data-ix-scrolling-radius-end";
+    const CLIP_START = "data-ix-scrolling-clip-start";
+    const CLIP_END = "data-ix-scrolling-clip-end";
+    const scrollingItems = gsap.utils.toArray(WRAP);
+    scrollingItems.forEach((scrollingItem) => {
+      const layers = scrollingItem.querySelectorAll(LAYER);
+      if (!scrollingItem || layers.length === 0) return;
+      let trigger = scrollingItem.querySelector(TRIGGER);
+      if (!trigger) {
+        trigger = scrollingItem;
+      }
+      let runOnBreakpoint = checkBreakpoints(scrollingItem, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
+      const tlSettings = {
+        scrub: 0.5,
+        start: "top bottom",
+        end: "bottom top",
+        ease: "none"
+      };
+      tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(START));
+      tlSettings.end = attr(tlSettings.end, scrollingItem.getAttribute(END));
+      tlSettings.scrub = attr(tlSettings.scrub, scrollingItem.getAttribute(SCRUB));
+      tlSettings.ease = attr(tlSettings.ease, scrollingItem.getAttribute(EASE));
+      if (isTablet && scrollingItem.getAttribute(TABLET_START)) {
+        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(TABLET_START));
+      }
+      if (isTablet && scrollingItem.getAttribute(TABLET_END)) {
+        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(TABLET_END));
+      }
+      if (isMobile && scrollingItem.getAttribute(MOBILE_START)) {
+        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(MOBILE_START));
+      }
+      if (isMobile && scrollingItem.getAttribute(MOBILE_END)) {
+        tlSettings.start = attr(tlSettings.start, scrollingItem.getAttribute(MOBILE_END));
+      }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger,
+          start: tlSettings.start,
+          end: tlSettings.end,
+          scrub: tlSettings.scrub,
+          markers: false
+        },
+        defaults: {
+          duration: 1,
+          ease: tlSettings.ease
+        }
+      });
+      layers.forEach((layer) => {
+        if (!layer) return;
+        const varsFrom = {};
+        const varsTo = {};
+        varsFrom.x = attrIfSet(layer, X_START, "0%");
+        varsTo.x = attrIfSet(layer, X_END, "0%");
+        varsFrom.y = attrIfSet(layer, Y_START, "0%");
+        varsTo.y = attrIfSet(layer, Y_END, "0%");
+        varsFrom.scale = attrIfSet(layer, SCALE_START, 1);
+        varsTo.scale = attrIfSet(layer, SCALE_END, 1);
+        varsFrom.scaleX = attrIfSet(layer, SCALE_X_START, 1);
+        varsTo.scaleX = attrIfSet(layer, SCALE_X_END, 1);
+        varsFrom.scaleY = attrIfSet(layer, SCALE_Y_START, 1);
+        varsTo.scaleY = attrIfSet(layer, SCALE_Y_END, 1);
+        varsFrom.width = attrIfSet(layer, WIDTH_START, "0%");
+        varsTo.width = attrIfSet(layer, WIDTH_END, "0%");
+        varsFrom.height = attrIfSet(layer, HEIGHT_START, "0%");
+        varsTo.height = attrIfSet(layer, HEIGHT_END, "0%");
+        varsFrom.rotateX = attrIfSet(layer, ROTATE_X_START, 0);
+        varsTo.rotateX = attrIfSet(layer, ROTATE_X_END, 0);
+        varsFrom.rotateY = attrIfSet(layer, ROTATE_Y_START, 0);
+        varsTo.rotateY = attrIfSet(layer, ROTATE_Y_END, 0);
+        varsFrom.rotateZ = attrIfSet(layer, ROTATE_Z_START, 0);
+        varsTo.rotateZ = attrIfSet(layer, ROTATE_Z_END, 0);
+        varsFrom.opacity = attrIfSet(layer, OPACITY_START, 0);
+        varsTo.opacity = attrIfSet(layer, OPACITY_END, 0);
+        varsFrom.borderRadius = attrIfSet(layer, RADIUS_START, "string");
+        varsTo.borderRadius = attrIfSet(layer, RADIUS_END, "string");
+        const clipStart = attrIfSet(layer, CLIP_START, "left");
+        const clipEnd = attrIfSet(layer, CLIP_END, "full");
+        varsFrom.clipPath = getClipDirection(clipStart);
+        varsTo.clipPath = getClipDirection(clipEnd);
+        const position = attr("<", layer.getAttribute(POSITION));
+        varsTo.ease = attr(layer, EASE, "none");
+        let tween = tl.fromTo(layer, varsFrom, varsTo, position);
+      });
+    });
+  };
+
+  // src/interactions/slider.js
+  init_live_reload();
+  var createSlider = function(components, options, modules) {
+    const SLIDER = ".swiper";
+    const NEXT_BUTTON = ".swiper-next";
+    const PREVIOUS_BUTTON = ".swiper-prev";
+    const BULLET_WRAP = ".swiper-bullet-wrapper";
+    const SCROLLBAR = ".swiper-scrollbar";
+    const SCROLLBAR_DRAG = ".swiper-scrollbar-drag";
+    const ACTIVE_CLASS = "is-active";
+    const DISABLED_CLASS = "is-disabled";
+    const swipersArray = [];
+    components.forEach(function(component) {
+      if (!component) return;
+      const slider = component.querySelector(SLIDER);
+      if (!slider) return;
+      const defaultSettings = {
+        speed: 800,
+        spaceBetween: 16,
+        loop: false,
+        centeredSlides: false,
+        allowTouchMove: true,
+        slideActiveClass: ACTIVE_CLASS,
+        slideDuplicateActiveClass: ACTIVE_CLASS
+      };
+      let finalModules = {};
+      if (modules.navigation === true) {
+        const nextButtonEl = component.querySelector(NEXT_BUTTON);
+        const previousButtonEl = component.querySelector(PREVIOUS_BUTTON);
+        const navigationSettings = {
+          navigation: {
+            nextEl: nextButtonEl,
+            prevEl: previousButtonEl,
+            disabledClass: DISABLED_CLASS
+          }
+        };
+        finalModules = { ...finalModules, ...navigationSettings };
+      }
+      if (modules.pagination === true) {
+        const bulletsEl = component.querySelector(BULLET_WRAP);
+        const paginationSettings = {
+          pagination: {
+            type: "bullets",
+            el: bulletsEl,
+            bulletActiveClass: ACTIVE_CLASS,
+            bulletClass: "swiper-bullet",
+            bulletElement: "button",
+            clickable: true
+          }
+        };
+        finalModules = { ...finalModules, ...paginationSettings };
+      }
+      if (modules.scrollbar === true) {
+        const scrollbarEl = component.querySelector(SCROLLBAR);
+        const scrollbarSettings = {
+          scrollbar: {
+            el: scrollbarEl,
+            dragClass: SCROLLBAR_DRAG,
+            draggable: true,
+            dragSize: "auto",
+            //or set in number of pixels
+            snapOnRelease: false
+          }
+        };
+        finalModules = { ...finalModules, ...scrollbarSettings };
+      }
+      if (modules.autoplay === true) {
+        const autoplaySettings = {
+          autoplay: {
+            delay: 3e3,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: false,
+            stopOnLastSlide: true
+          }
+        };
+        finalModules = { ...finalModules, ...autoplaySettings };
+      }
+      const swiperSettings = { ...defaultSettings, ...finalModules, ...options };
+      const swiper = new Swiper(slider, swiperSettings);
+      swipersArray.push(swiper);
+    });
+    return swipersArray;
+  };
+
+  // src/interactions/text-scrub.js
+  init_live_reload();
+  var textScrub = function(gsapContext) {
+    const ANIMATION_ID = "textscrub";
+    const ITEM = '[data-ix-textscrub="item"]';
+    const LINE_CLASS = "line-mask";
+    const items = gsap.utils.toArray(ITEM);
+    items.forEach((item2) => {
+      if (!item2) return;
+      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      let splitText;
+      function createAnimation() {
+        const splitText2 = runSplit(item2, "lines");
+        if (!splitText2) return;
+        splitText2.lines.forEach((line) => {
+          const lineMask = document.createElement("div");
+          lineMask.classList.add(LINE_CLASS);
+          line.appendChild(lineMask);
+          let tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: line,
+              start: "top 70%",
+              end: "bottom 70%",
+              scrub: 1.5
+            }
+          });
+          tl.fromTo(
+            lineMask,
+            {
+              width: "100%"
+            },
+            {
+              width: "0%",
+              ease: "power1.out",
+              duration: 1
+            }
+          );
+        });
+        return splitText2;
+      }
+      splitText = createAnimation();
+      const resetAnimation = function() {
+        splitText.revert();
+        splitText = createAnimation();
+      };
+      let windowWidth = window.innerWidth;
+      window.addEventListener("resize", function() {
+        if (window.innerWidth !== windowWidth) {
+          windowWidth = window.innerWidth;
+          resetAnimation();
+        }
+      });
+    });
+  };
+
+  // src/interactions/text-links.js
+  init_live_reload();
+  var textLinks = function(gsapContext) {
+    const ANIMATION_ID = "textlink";
+    const WRAP = '[data-ix-textlink="wrap"]';
+    const FRONT = '[data-ix-textlink="front"]';
+    const BACK = '[data-ix-textlink="back"]';
+    const items = gsap.utils.toArray(WRAP);
+    items.forEach((item2) => {
+      if (!item2) return;
+      let runOnBreakpoint = checkBreakpoints(item2, ANIMATION_ID, gsapContext);
+      if (runOnBreakpoint === false) return;
+      const front = item2.querySelector(FRONT);
+      const back = item2.querySelector(BACK);
+      if (!front || !back) return;
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: {
+          duration: 0.4,
+          ease: "power1.out"
+        }
+      });
+      tl.fromTo(
+        front,
+        {
+          y: "200%",
+          rotateZ: 6
+        },
+        {
+          y: "0%",
+          rotateZ: 0
+        }
+      );
+      tl.fromTo(
+        back,
+        {
+          y: "0%",
+          rotateZ: 0
+        },
+        {
+          y: "-200%",
+          rotateZ: -6
+        },
+        0
+      );
+      item2.addEventListener("mouseover", function() {
+        tl.play();
+      });
+      item2.addEventListener("mouseleave", function() {
+        tl.reverse();
+      });
+    });
+  };
+
+  // src/interactions/video-plyr.js
+  init_live_reload();
+  var import_plyr = __toESM(require_plyr_min(), 1);
+  var videoPlyr = function() {
+    const COMPONENT = ".plyr_component";
+    const VIDEO_CLASS = ".plyr_video";
+    const COVER_CLASS = ".plyr_cover";
+    const HIDE_COVER_CLASS = "hide-cover";
+    const PAUSE_TRIGGER_CLASS = ".plyr_pause-trigger";
+    const CONTAIN_CLASS = "contain-video";
+    const settings = {
+      autoplay: false,
+      loop: false,
+      mute: false,
+      hideControls: true
+    };
+    const PLAYING_CLASS = ".plyr--playing";
+    const players = [];
+    const components = [...document.querySelectorAll(COMPONENT)];
+    if (components.length === 0) return;
+    components.forEach((component, index) => {
+      const video = component.querySelector(VIDEO_CLASS);
+      const cover = component.querySelector(COVER_CLASS);
+      const pauseTrigger = component.querySelector(PAUSE_TRIGGER_CLASS);
+      const loopSetting = attr(settings.loop, component.getAttribute("data-player-loop"));
+      let muteSetting = attr(settings.mute, component.getAttribute("data-player-mute"));
+      const showCoverOnPause = attr(false, component.getAttribute("data-player-show-cover-on-pause"));
+      let player2 = new import_plyr.default(video, {
+        controls: ["play", "progress", "current-time", "mute", "fullscreen"],
+        hideControls: settings.hideControls,
+        loop: { active: loopSetting },
+        resetOnEnd: true
+      });
+      players.push(player2);
+      if (cover) {
+        cover.addEventListener("click", () => {
+          player2.play();
+        });
+      }
+      player2.on("ended", (event) => {
+        component.classList.remove(HIDE_COVER_CLASS);
+      });
+      if (showCoverOnPause) {
+        player2.on("pause", (event) => {
+          component.classList.remove(HIDE_COVER_CLASS);
+        });
+      }
+      player2.on("play", (event) => {
+        components.forEach((item2, index2) => {
+          item2.classList.remove(HIDE_COVER_CLASS);
+          if (item2 !== component) {
+            const player3 = players[index2];
+            player3.pause();
+          }
+        });
+        component.classList.add(HIDE_COVER_CLASS);
+        let prevPlayingComponent = document.querySelector(PLAYING_CLASS).closest(COMPONENT);
+        if (prevPlayingComponent && prevPlayingComponent !== component) {
+          prevPlayingComponent.find(PAUSE_TRIGGER_CLASS)[0].click();
+        }
+      });
+      pauseTrigger.addEventListener("click", () => {
+        player2.pause();
+      });
+      player2.on("ended", (event) => {
+        if (player2.fullscreen.active) {
+          player2.fullscreen.exit();
+        }
+      });
+      player2.on("enterfullscreen", (event) => {
+        component.classList.add(CONTAIN_CLASS);
+      });
+      player2.on("exitfullscreen", (event) => {
+        component.classList.remove(CONTAIN_CLASS);
+      });
+    });
+    return [players, components];
   };
 
   // src/index.js
@@ -4874,6 +5060,7 @@
           accordion(gsapContext);
           countUp(gsapContext);
           cursor(gsapContext);
+          clickActive(gsapContext);
           hoverActive(gsapContext);
           mouseOver(gsapContext);
           pageTransition();
@@ -4882,7 +5069,7 @@
           scrolling(gsapContext);
           textScrub(gsapContext);
           load(gsapContext);
-          logoTicker(gsapContext);
+          marquee(gsapContext);
           textLinks(gsapContext);
           const [players, components] = videoPlyr();
           lightbox(gsapContext, players, components);
