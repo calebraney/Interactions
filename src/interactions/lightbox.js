@@ -1,6 +1,6 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkBreakpoints, startScroll, stopScroll } from '../utilities';
 
-export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents) {
+export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents, lenis) {
   const ANIMATION_ID = 'lightbox';
   //Selectors
   const LIGHTBOX_WRAP = '[data-ix-lightbox="wrap"]'; //a list of lightboxes (to prevent lists from intersecting)
@@ -129,7 +129,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
       if (!lightbox) return;
       lightbox.showModal();
       //   lightboxThumbnails(lightbox, player);
-      body.classList.add(NO_SCROLL);
+      startScroll(lenis);
       activeLightbox = lightbox;
     };
     const closeModal = function (lightbox) {
@@ -139,7 +139,7 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
         player.pause();
       }
       lightbox.close();
-      body.classList.remove(NO_SCROLL);
+      stopScroll(lenis);
       activeLightbox = false;
     };
 

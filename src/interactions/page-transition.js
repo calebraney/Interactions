@@ -1,4 +1,4 @@
-import { attr } from '../utilities';
+import { attr, startScroll, stopScroll } from '../utilities';
 
 /*
 Include this css in the head code
@@ -9,7 +9,7 @@ Include this css in the head code
 </style>
 */
 
-export const pageTransition = function () {
+export const pageTransition = function (lenis) {
   // Animation ID
   const ANIMATION_ID = 'pagetransition';
   // Elements
@@ -69,6 +69,9 @@ export const pageTransition = function () {
         //lenis.stop()
         //gsap timeline
         const tlClick = gsap.timeline({
+          onStart: () => {
+            stopScroll(lenis);
+          },
           onComplete: () =>
             setTimeout(() => {
               window.location.href = linkURL;
