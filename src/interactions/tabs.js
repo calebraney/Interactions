@@ -1,7 +1,7 @@
 import { attr, ClassWatcher } from '../utilities';
 export const tabsAnimation = function () {
   //animation ID
-  const ANIMATION_ID = 'hoveractive';
+  const ANIMATION_ID = 'tabs';
   //elements
   const WRAP = '[data-ix-tabs="wrap"]';
   const TAB_EL = '[data-ix-tabs="el"]';

@@ -3,10 +3,12 @@ const tabsAutoplay = function () {
   /*
   set the timer line to only have full opacity when inside the active class using CSS
   */
+  //animation ID
+  const ANIMATION_ID = 'tabs-auto';
   //selectors
-  const TAB_MENU = '.quote-tabs_tabs-menu';
-  const TAB = '.quote-tabs_tab-link';
-  const TIMER_LINE = '.quote-tabs_tab-line-fill';
+  const TAB_MENU = '[data-ix-tabs-auto="menu"]';
+  const TAB = '[data-ix-tabs-auto="link"]';
+  const TIMER_LINE = '[data-ix-tabs-auto="line"]';
   const ACTIVE_CLASS = 'w--current';
   //animation options
   const TIMER_DURATION = 5;
