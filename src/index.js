@@ -1,4 +1,4 @@
-import { attr } from './utilities';
+import { attr, startScroll, stopScroll } from './utilities';
 import { accordion } from './interactions/accordion';
 import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
       (gsapContext) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
-        lenis = initLenis();
+        // lenis = initLenis();
         accordion(gsapContext);
         countUp(gsapContext);
         cursor(gsapContext);
@@ -83,7 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
         load(gsapContext);
         marquee(gsapContext);
         textLinks(gsapContext);
-        const [players, components] = videoPlyr();
+        //setup video players
+        const [players, components] = [videoPlyr()];
+        //pass the players into the lightbox code
         lightbox(gsapContext, players, components);
 
         //globaally run animations on specific breakpoints
