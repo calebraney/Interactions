@@ -15,7 +15,7 @@ export const marquee = function (gsapContext) {
   const PAUSE_ON_HOVER = 'pause';
   //defaults
   const DEFAULT_DURATION = 30;
-  const DEFAULT_DYNAMIC_DURATION = 10;
+  const DEFAULT_DYNAMIC_DURATION = 5;
 
   //for each wrap
   const wraps = document.querySelectorAll(WRAP);
