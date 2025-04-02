@@ -9,6 +9,7 @@ import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
 import { marquee } from './interactions/marquee';
 import { mouseOver } from './interactions/mouse-over';
+import { modal } from './interactions/modal';
 import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scroll-in';
@@ -68,13 +69,14 @@ document.addEventListener('DOMContentLoaded', function () {
       (gsapContext) => {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
-        // lenis = initLenis();
+        lenis = initLenis();
         accordion(gsapContext);
         countUp(gsapContext);
         cursor(gsapContext);
         clickActive(gsapContext);
         hoverActive(gsapContext);
         mouseOver(gsapContext);
+        modal(gsapContext);
         pageTransition();
         parallax(gsapContext);
         scrollIn(gsapContext);
