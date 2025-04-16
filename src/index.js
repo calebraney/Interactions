@@ -7,6 +7,7 @@ import { hoverActive } from './interactions/hover-active';
 import { initLenis } from './interactions/lenis';
 import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
+import { loop } from './interactions/loop';
 import { marquee } from './interactions/marquee';
 import { mouseOver } from './interactions/mouse-over';
 import { modal } from './interactions/modal';
@@ -83,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         scrolling(gsapContext);
         textScrub(gsapContext);
         load(gsapContext);
+        loop(gsapContext);
         marquee(gsapContext);
         textLinks(gsapContext);
         //setup video players
