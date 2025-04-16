@@ -5,6 +5,7 @@ export const marquee = function (gsapContext) {
   const ANIMATION_ID = 'marquee';
   const WRAP = '[data-ix-marquee="wrap"]';
   const LIST = '[data-ix-marquee="list"]'; // put on the CMS LIST WRAP element (NOT THE LIST)
+  const VERTICAL = 'data-ix-marquee-vertical'; // needs to be set to true if vertical
   const REVERSE = 'data-ix-marquee-reverse'; // needs to be set to true if reversed
   const DURATION = 'data-ix-marquee-duration'; //set a custom duration in seconds
   const DYNAMIC_DURATION = 'data-ix-marquee-duration-dynamic'; // set to true to make the duration dynamic per amount of items
@@ -26,6 +27,7 @@ export const marquee = function (gsapContext) {
     if (runOnBreakpoint === false) return;
 
     const lists = [...wrap.querySelectorAll(LIST)];
+    let vertical = attr(false, wrap.getAttribute(VERTICAL));
     let reverse = attr(false, wrap.getAttribute(REVERSE));
     let duration = attr(DEFAULT_DURATION, wrap.getAttribute(DURATION));
     let durationDynamic = attr(false, wrap.getAttribute(DYNAMIC_DURATION));
@@ -57,9 +59,12 @@ export const marquee = function (gsapContext) {
       lists,
       {
         xPercent: 0,
+        yPercent: 0,
       },
       {
-        xPercent: -100 * direction,
+        // if vertical is true move yPercent, otherwise move x percent
+        xPercent: vertical ? 0 : -100 * direction,
+        yPercent: vertical ? -100 * direction : 0,
         duration: duration,
       }
     );
