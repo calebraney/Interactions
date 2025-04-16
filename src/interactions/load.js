@@ -51,8 +51,8 @@ export const load = function (gsapContext) {
     tl.set(item, { opacity: 1 });
     tl.fromTo(
       splitText.words,
-      { opacity: 0, y: '50%', rotateX: 45 },
-      { opacity: 1, y: '0%', rotateX: 0, stagger: { each: 0.1, from: 'left' } },
+      { opacity: 0, y: '50%' },
+      { opacity: 1, y: '0%', stagger: { each: 0.1, from: 'left' } },
       position
     );
   };
