@@ -4100,8 +4100,8 @@
       tl.set(item2, { opacity: 1 });
       tl.fromTo(
         splitText.words,
-        { opacity: 0, y: "50%", rotateX: 45 },
-        { opacity: 1, y: "0%", rotateX: 0, stagger: { each: 0.1, from: "left" } },
+        { opacity: 0, y: "50%" },
+        { opacity: 1, y: "0%", stagger: { each: 0.1, from: "left" } },
         position
       );
     };
@@ -4239,6 +4239,7 @@
     const ANIMATION_ID = "marquee";
     const WRAP = '[data-ix-marquee="wrap"]';
     const LIST = '[data-ix-marquee="list"]';
+    const VERTICAL = "data-ix-marquee-vertical";
     const REVERSE = "data-ix-marquee-reverse";
     const DURATION = "data-ix-marquee-duration";
     const DYNAMIC_DURATION = "data-ix-marquee-duration-dynamic";
@@ -4255,6 +4256,7 @@
       let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
       if (runOnBreakpoint === false) return;
       const lists = [...wrap.querySelectorAll(LIST)];
+      let vertical = attr(false, wrap.getAttribute(VERTICAL));
       let reverse = attr(false, wrap.getAttribute(REVERSE));
       let duration = attr(DEFAULT_DURATION, wrap.getAttribute(DURATION));
       let durationDynamic = attr(false, wrap.getAttribute(DYNAMIC_DURATION));
@@ -4280,10 +4282,13 @@
       tl.fromTo(
         lists,
         {
-          xPercent: 0
+          xPercent: 0,
+          yPercent: 0
         },
         {
-          xPercent: -100 * direction,
+          // if vertical is true move yPercent, otherwise move x percent
+          xPercent: vertical ? 0 : -100 * direction,
+          yPercent: vertical ? -100 * direction : 0,
           duration
         }
       );
