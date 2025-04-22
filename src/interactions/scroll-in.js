@@ -20,7 +20,7 @@ export const scrollIn = function (gsapContext) {
   const SCROLL_SCRUB = 'data-ix-scrollin-scrub';
   const SCROLL_START = 'data-ix-scrollin-start';
   const SCROLL_END = 'data-ix-scrollin-end';
-  const CLIP_DIRECTION = 'data-ix-scrollin-direction';
+  const CLIP_DIRECTION = 'data-ix-scrollin-clip-direction';
   const SCROLL_STAGGER = 'data-ix-scrollin-stagger';
 
   // DEFAULTS
