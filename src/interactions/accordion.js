@@ -6,7 +6,7 @@ export const accordion = function (gsapContext) {
   //elements
   const WRAP = '[data-ix-accordion="wrap"]';
   const ITEM = '[data-ix-accordion="item"]';
-  const TOP = '[data-ix-accordion="top"]';
+  const OPEN = '[data-ix-accordion="open"]';
   //options
   const OPTION_FIRST_OPEN = 'data-ix-accordion-first-open';
   const OPTION_ONE_ACTIVE = 'data-ix-accordion-one-active';
@@ -66,7 +66,7 @@ export const accordion = function (gsapContext) {
       // Add event listener for when accordion lists are clicked
       list.addEventListener('click', function (e) {
         // check if the clicked element was the top of an accordion and get that accordion
-        const clickedEl = e.target.closest(TOP);
+        const clickedEl = e.target.closest(OPEN);
         if (!clickedEl) return;
         // get all the accordions within this list and the active item
         const clickedItem = clickedEl.closest(ITEM);
