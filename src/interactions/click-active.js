@@ -9,8 +9,8 @@ export const clickActive = function (gsapContext) {
   const TARGET = '[data-ix-clickactive="target"]'; //additional element to activate (needs matching values for the ID attribute)
   const ID = 'data-ix-clickactive-id';
   //option for active class and default class
-  const OPTION_ACTIVE_CLASS = 'data-ix-clickactive-class';
   const OPTION_START_ACTIVE = 'data-ix-clickactive-start-active'; // applied to triggers
+  const OPTION_ACTIVE_CLASS = 'data-ix-clickactive-class'; //aplied to wrap
   const OPTION_FIRST_ACTIVE = 'data-ix-clickactive-first-active'; // applied to wrap
   const OPTION_ONE_ACTIVE = 'data-ix-clickactive-one-active'; // applied to wrap
   const OPTION_KEEP_ONE_ACTIVE = 'data-ix-clickactive-keep-one-active'; // applied to wrap
@@ -27,14 +27,14 @@ export const clickActive = function (gsapContext) {
 
     //set default options
     let activeClass = ACTIVE_CLASS;
-    let firstOpen = false;
+    let firstActive = false;
     let oneActive = false;
     let keepOneActive = false;
     //conditional options to check if the root element is a wrap
     if (rootElement !== document) {
       // set up conditions for the function
       activeClass = attr(ACTIVE_CLASS, rootElement.getAttribute(OPTION_ACTIVE_CLASS));
-      firstOpen = attr(false, rootElement.getAttribute(OPTION_FIRST_ACTIVE));
+      firstActive = attr(false, rootElement.getAttribute(OPTION_FIRST_ACTIVE));
       oneActive = attr(false, rootElement.getAttribute(OPTION_ONE_ACTIVE));
       keepOneActive = attr(false, rootElement.getAttribute(OPTION_KEEP_ONE_ACTIVE));
 
@@ -93,11 +93,11 @@ export const clickActive = function (gsapContext) {
           if (oneActive) {
             // if one active is true loop through each item
             triggers.forEach((itemElement) => {
-              //if item is the current item Open
+              //if item is the current item activate it.
               if (itemElement === item) {
                 activateItems(itemElement);
               }
-              //otherwise remove active class and close
+              //otherwise remove active class and de-activate
               else {
                 activateItems(itemElement, false);
               }
@@ -108,11 +108,11 @@ export const clickActive = function (gsapContext) {
             activateItems(item);
           }
         }
-        // if the current item IS ACTIVE and keep one open is false close it
+        // if the current item IS ACTIVE and keep one active is false close it
         if (itemIsActive && !keepOneActive) {
           activateItems(item, false);
         }
-        // if the current item IS ACTIVE and keep one open is true check how many items are active
+        // if the current item IS ACTIVE and keep one active is true check how many items are active
         if (itemIsActive && keepOneActive) {
           const activeItems = triggers.filter(function (item) {
             return item.classList.contains(activeClass);
@@ -132,10 +132,10 @@ export const clickActive = function (gsapContext) {
       });
     });
 
-    //activate first item if firstOpen is true
+    //activate first item if firstActive is true
     // Needs to happen After each item is processed
     const firstItem = triggers[0];
-    if (firstOpen) {
+    if (firstActive) {
       activateItems(firstItem);
     }
   };
