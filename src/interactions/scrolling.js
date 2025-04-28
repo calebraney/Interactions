@@ -17,6 +17,7 @@ export const scrolling = function (gsapContext) {
   const SCRUB = 'data-ix-scrolling-scrub';
   //tween options
   const POSITION = 'data-ix-scrolling-position'; // sequential by default, use "<" to start tweens together
+  const DURATION = 'data-ix-scrolling-duration';
   const EASE = 'data-ix-scrolling-ease';
   const X_START = 'data-ix-scrolling-x-start';
   const X_END = 'data-ix-scrolling-x-end';
@@ -143,6 +144,8 @@ export const scrolling = function (gsapContext) {
 
       // get the position attribute
       const position = attr('<', layer.getAttribute(POSITION));
+      const duration = attr(1, layer.getAttribute(DURATION));
+
       varsTo.ease = attr(layer, EASE, 'none');
 
       //add tween
