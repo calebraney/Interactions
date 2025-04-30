@@ -72,30 +72,31 @@ document.addEventListener('DOMContentLoaded', function () {
         // let individual instances decide if they are run
         lenis = initLenis();
         accordion(gsapContext);
-        countUp(gsapContext);
-        cursor(gsapContext);
         clickActive(gsapContext);
         hoverActive(gsapContext);
         mouseOver(gsapContext);
         modal(gsapContext);
         pageTransition();
-        parallax(gsapContext);
-        scrollIn(gsapContext);
-        scrolling(gsapContext);
-        textScrub(gsapContext);
         load(gsapContext);
-        loop(gsapContext);
         marquee(gsapContext);
         textLinks(gsapContext);
+
+        if (!reduceMotion) {
+          countUp(gsapContext);
+          loop(gsapContext);
+          textScrub(gsapContext);
+          parallax(gsapContext);
+          scrollIn(gsapContext);
+          scrolling(gsapContext);
+        }
+        //globaally run animations on specific breakpoints
+        if (isDesktop || isTablet) {
+          cursor(gsapContext);
+        }
         //setup video players
         const [players, components] = [videoPlyr()];
         //pass the players into the lightbox code
         lightbox(gsapContext, players, components);
-
-        //globaally run animations on specific breakpoints
-        if (isDesktop || isTablet) {
-          cursor();
-        }
       }
     );
   };
