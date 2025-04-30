@@ -51,7 +51,6 @@ export const attrIfSet = function (item, attributeName, defaultValue) {
 export const runSplit = function (text, types = 'lines, words') {
   if (!text) return;
   let typeSplit = SplitText.create(text, { type: types, autoSplit: true });
-
   return typeSplit;
 };
 
