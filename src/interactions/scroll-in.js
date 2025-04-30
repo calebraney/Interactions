@@ -92,22 +92,19 @@ export const scrollIn = function (gsapContext) {
       item = item.firstChild;
     }
     //split the text
-    const splitText = runSplit(item);
-    if (!splitText) return;
-    //set heading to full opacity (check to see if needed)
-    // item.style.opacity = 1;
-    const tl = scrollInTL(item);
-    const tween = defaultTween(splitText.words, tl, { stagger: 'small' });
-    //add event calleback to revert text on completion
-    // tl.eventCallback('onComplete', () => {
-    //   splitText.revert();
-    // });
-    //revert split text when exiting viewport
-    ScrollTrigger.create({
-      trigger: item,
-      start: 'top bottom',
-      end: 'bottom top',
-      onLeave: (self) => splitText.revert(),
+    SplitText.create(item, {
+      type: 'words', // 'chars, words, lines
+      autoSplit: true, //have it auto adjust based on width
+      mask: true,
+      onSplit(self) {
+        // animation to run for the item
+        const tl = scrollInTL(item);
+        return (tween = defaultTween(self.words, tl, { stagger: 'small' })); //   duration: 1,
+        //   y: 100,
+        //   autoAlpha: 0,
+        //   stagger: 0.2,
+        // });
+      },
     });
   };
 
@@ -190,11 +187,19 @@ export const scrollIn = function (gsapContext) {
 
   const scrollInStagger = function (item) {
     if (!item) return;
+    let parent = item;
+    //check if item is display: 'contents'
+    const style = window.getComputedStyle(item);
+    const display = style.getPropertyValue('display');
+    //if item is display contents base the timeline on the parent element
+    if (display === 'contents') {
+      parent = item.parentElement;
+    }
     const staggerAmount = attr(EASE_LARGE, item.getAttribute(SCROLL_STAGGER));
     // get the children of the item
     const children = gsap.utils.toArray(item.children);
     if (children.length === 0) return;
-    const tl = scrollInTL(item);
+    const tl = scrollInTL(parent);
     const tween = defaultTween(children, tl, { stagger: staggerAmount });
   };
 

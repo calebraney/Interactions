@@ -18,6 +18,7 @@ export const load = function (gsapContext) {
   const HEADING = 'heading';
   const ITEM = 'item';
   const IMAGE = 'image';
+  const LINE = 'line';
   const STAGGER = 'stagger';
   //tween options
   const POSITION = 'data-ix-load-position'; // sequential by default, use "<" to start tweens together
@@ -43,24 +44,41 @@ export const load = function (gsapContext) {
       item.style.opacity = '1';
       item = item.firstChild;
     }
-    //split the text
-    const splitText = runSplit(item);
-    if (!splitText) return;
-    // get the position attribute
+    //get text positions
     const position = attr('<', item.getAttribute(POSITION));
-    tl.set(item, { opacity: 1 });
-    tl.fromTo(
-      splitText.words,
-      { opacity: 0, y: '50%' },
-      { opacity: 1, y: '0%', stagger: { each: 0.1, from: 'left' } },
-      position
-    );
+    // split text and animate it
+    SplitText.create(item, {
+      type: 'lines',
+      autoSplit: false,
+      onSplit: (self) => {
+        return tl.from(
+          self.lines,
+          {
+            y: '2rem',
+            opacity: 0,
+            stagger: 0.1,
+          },
+          position
+        );
+      },
+    });
   };
   //images load tween
   const loadImage = function (item) {
     // get the position attribute or set defautl position
     const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
     tl.fromTo(item, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1 }, position);
+  };
+  //images load tween
+  const loadLine = function (item) {
+    // get the position attribute or set defautl position
+    const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+    tl.fromTo(
+      item,
+      { clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)' },
+      { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' },
+      position
+    );
   };
   //default load tween
   const loadItem = function (item) {
@@ -85,25 +103,62 @@ export const load = function (gsapContext) {
     });
   };
 
+  const loadSimple = function (item) {
+    if (!item) return;
+    tl.fromTo(
+      item,
+      {
+        opacity: 0,
+      },
+      {
+        opacity: 1,
+        ease: 'power1.out',
+        duration: 1.2,
+      },
+      '<'
+    );
+  };
+
   //get all elements and apply animations
+
   items.forEach((item) => {
     if (!item) return;
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
-    //find the type of the scrolling animation
+    //find the type of the load animation
     const loadType = item.getAttribute(ATTRIBUTE);
-    if (loadType === HEADING) {
-      loadHeading(item);
-    }
-    if (loadType === IMAGE) {
-      loadImage(item);
-    }
-    if (loadType === ITEM) {
-      loadItem(item);
-    }
-    if (loadType === STAGGER) {
-      loadStagger(item);
+    //check breakpoints and exit if set to false
+    let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
+    if (runOnBreakpoint === false && item.getAttribute('data-ix-load-run') === 'false') return;
+
+    //create variables from GSAP context
+    let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
+    //if reduce motion is true or run animation is false but the run attribute is true use a simple fade in
+    if (
+      reduceMotion ||
+      (runOnBreakpoint === false && item.getAttribute('data-ix-load-run') === 'true')
+    ) {
+      //simple animation
+      if (loadType === STAGGER) {
+        loadSimple(item.children);
+      } else {
+        loadSimple(item);
+      }
+    } else {
+      //otherwise assign the correct animation to each element type
+      if (loadType === HEADING) {
+        loadHeading(item);
+      }
+      if (loadType === IMAGE) {
+        loadImage(item);
+      }
+      if (loadType === LINE) {
+        loadLine(item);
+      }
+      if (loadType === ITEM) {
+        loadItem(item);
+      }
+      if (loadType === STAGGER) {
+        loadStagger(item);
+      }
     }
   });
 
