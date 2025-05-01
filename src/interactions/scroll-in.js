@@ -99,11 +99,7 @@ export const scrollIn = function (gsapContext) {
       onSplit(self) {
         // animation to run for the item
         const tl = scrollInTL(item);
-        return (tween = defaultTween(self.words, tl, { stagger: 'small' })); //   duration: 1,
-        //   y: 100,
-        //   autoAlpha: 0,
-        //   stagger: 0.2,
-        // });
+        return (tween = defaultTween(self.words, tl, { stagger: 'small' }));
       },
     });
   };
