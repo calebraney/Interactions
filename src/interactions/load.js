@@ -39,11 +39,12 @@ export const load = function (gsapContext) {
 
   //h1 load tween
   const loadHeading = function (item) {
+    //reset items opacity
+    item.style.opacity = '1';
     //check if item is rich text and if it is find the first child and set it to be the heading
     if (item.classList.contains('w-richtext')) {
       item = item.firstChild;
     }
-    item.style.opacity = '1';
     //get text positions
     const position = attr('<', item.getAttribute(POSITION));
     // split text and animate it
@@ -57,6 +58,9 @@ export const load = function (gsapContext) {
             y: '2rem',
             opacity: 0,
             stagger: 0.1,
+            onComplete: () => {
+              self.revert;
+            },
           },
           position
         );
@@ -162,9 +166,10 @@ export const load = function (gsapContext) {
     }
   });
 
-  //Play interaction on page load
-  tl.play(0);
-
+  //Play interaction on font load, or remove it from callback to play immediately
+  document.fonts.ready.then(() => {
+    tl.play(0);
+  });
   // Alternatively use the returned tl to trigger the interaction after transition or image load
   return tl;
 };
