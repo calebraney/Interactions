@@ -96,7 +96,7 @@ export const scrollIn = function (gsapContext) {
     SplitText.create(item, {
       type: 'words', // 'chars, words, lines
       autoSplit: true, //have it auto adjust based on width
-      mask: true,
+      // mask: 'lines',
       onSplit(self) {
         // animation to run for the item
         const tl = scrollInTL(item);
