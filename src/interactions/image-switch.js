@@ -2,6 +2,7 @@ import { checkBreakpoints } from '../utilities';
 
 export const imageSwitch = function (gsapContext) {
   const ANIMATION_ID = 'imageswitch';
+
   const WRAP = '[data-ix-imageswitch="wrap"]';
   const ITEM = '[data-ix-imageswitch="item"]';
   const IMAGE = '[data-ix-imageswitch="image"]';
@@ -23,14 +24,19 @@ export const imageSwitch = function (gsapContext) {
 
     //utility class to activate or de-activate item
     const activateItem = function (index, activate = true) {
+      //get the matching items
       const image = images[index];
+      const item = items[index];
+      const tab = tabLinks[index];
       // const tab = tabLinks[index]
       if (activate) {
         image.classList.add(ACTIVE_CLASS);
-        // tab.classList.add(ACTIVE_CLASS);
+        item.classList.add(ACTIVE_CLASS);
+        tab.classList.add(ACTIVE_CLASS);
       } else {
         image.classList.remove(ACTIVE_CLASS);
-        // tab.classList.remove(ACTIVE_CLASS);
+        item.classList.remove(ACTIVE_CLASS);
+        tab.classList.remove(ACTIVE_CLASS);
       }
     };
     // remove all active classes
@@ -40,7 +46,7 @@ export const imageSwitch = function (gsapContext) {
     // animate each item
     items.forEach((item, index) => {
       const image = images[index];
-      //   const tab = tabLinks[index];
+      const tab = tabLinks[index];
       if (!item || !image) return;
       const imageTL = gsap.timeline({
         scrollTrigger: {
@@ -57,7 +63,7 @@ export const imageSwitch = function (gsapContext) {
             if (index !== items.length - 1) {
               activateItem(index, false);
             }
-            //   tab.classList.remove(ACTIVE_CLASS);
+            tab.classList.remove(ACTIVE_CLASS);
           },
           onEnterBack: () => {
             activateItem(index);
@@ -67,28 +73,23 @@ export const imageSwitch = function (gsapContext) {
             if (index !== 0) {
               activateItem(index, false);
             }
-            //   tab.classList.remove(ACTIVE_CLASS);
+            tab.classList.remove(ACTIVE_CLASS);
           },
         },
       });
     });
 
-    ///  /manage clicking of tab links
-    //   tabLinks.forEach((button) => {
-    //     if (!button) return;
-    //     button.addEventListener('click', (e) => {
-    //       e.preventDefault();
-    //       const clicked = e.target.closest('[data-ix-imageswitch="link"]');
-    //       if (!clicked) return;
-    //       // get the DOM element by the text content (scroll-target value)
-    //       const target = clicked.getAttribute('cr-split-link');
-    //       //click the element with an id matching the target
-    //       const el = wrap.querySelector(`[data-ix-imageswitch="[item]="${target}"`);
-    //       el.scrollIntoView({
-    //         behavior: 'smooth',
-    //         block: 'center',
-    //       });
+    //manage clicking of tab links (button elements)
+    // tabLinks.forEach((link, index) => {
+    //   if (!link) return;
+    //   link.addEventListener('click', (e) => {
+    //     const el = items[index];
+    //     if (!el) return;
+    //     el.scrollIntoView({
+    //       behavior: 'smooth',
+    //       block: 'center',
     //     });
     //   });
+    // });
   });
 };
