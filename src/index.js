@@ -5,6 +5,7 @@ import { countUp } from './interactions/count-up';
 import { cursor } from './interactions/cursor';
 import { hoverActive } from './interactions/hover-active';
 import { initLenis } from './interactions/lenis';
+import { imageSwitch } from './interactions/image-switch';
 import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
 import { loop } from './interactions/loop';
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         clickActive(gsapContext);
         hoverActive(gsapContext);
         mouseOver(gsapContext);
+        imageSwitch(gsapContext);
         modal(gsapContext);
         pageTransition();
         load(gsapContext);
