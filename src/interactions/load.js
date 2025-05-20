@@ -49,9 +49,9 @@ export const load = function (gsapContext) {
     }
     // split text and animate it
     SplitText.create(item, {
-      type: 'lines, words',
+      type: 'lines',
       linesClass: 'line',
-      wordsClass: 'word',
+      // wordsClass: 'word',
       // charsClass: "char",
       autoSplit: true,
       onSplit: (self) => {
