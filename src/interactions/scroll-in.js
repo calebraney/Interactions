@@ -62,11 +62,11 @@ export const scrollIn = function (gsapContext) {
   //resuable timeline creation with option attributes for individual customization per element
   const defaultTween = function (item, tl, options = {}) {
     const varsFrom = {
-      opacity: 0,
+      autoAlpha: 0,
       y: '2rem',
     };
     const varsTo = {
-      opacity: 1,
+      autoAlpha: 1,
       y: '0rem',
     };
     //optional adjustments to the tween
@@ -95,6 +95,9 @@ export const scrollIn = function (gsapContext) {
     //split the text
     SplitText.create(item, {
       type: 'words', // 'chars, words, lines
+      // linesClass: "line",
+      wordsClass: 'word',
+      // charsClass: "char",
       autoSplit: true, //have it auto adjust based on width
       // mask: 'lines',
       onSplit(self) {

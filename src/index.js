@@ -25,14 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
   console.log('Local Script Loaded');
 
-  // register gsap plugins if available
-  if (gsap.ScrollTrigger !== undefined) {
-    gsap.registerPlugin(ScrollTrigger);
-  }
-  if (gsap.Flip !== undefined) {
-    gsap.registerPlugin(Flip);
-  }
-
   //////////////////////////////
   //Global Variables
   let lenis;
@@ -59,6 +51,17 @@ document.addEventListener('DOMContentLoaded', function () {
   //////////////////////////////
   //Control Functions on page load
   const gsapInit = function () {
+    //if gsap isn't found add .gsap-not-found class to document
+    if (typeof window.gsap === 'undefined')
+      document.documentElement.classList.add('gsap-not-found');
+    // register gsap plugins if available
+    if (gsap.ScrollTrigger !== undefined) {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+    if (gsap.Flip !== undefined) {
+      gsap.registerPlugin(Flip);
+    }
+
     let mm = gsap.matchMedia();
     mm.add(
       {
