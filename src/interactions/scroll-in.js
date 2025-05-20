@@ -98,6 +98,7 @@ export const scrollIn = function (gsapContext) {
       // linesClass: "line",
       wordsClass: 'word',
       // charsClass: "char",
+      // mask: 'lines',
       autoSplit: true, //have it auto adjust based on width
       // mask: 'lines',
       onSplit(self) {

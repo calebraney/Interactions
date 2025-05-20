@@ -53,6 +53,7 @@ export const load = function (gsapContext) {
       linesClass: 'line',
       // wordsClass: 'word',
       // charsClass: "char",
+      // mask: 'lines',
       autoSplit: true,
       onSplit: (self) => {
         return tl.from(
