@@ -1,4 +1,4 @@
-import { checkBreakpoints, runSplit } from '../utilities';
+import { checkBreakpoints } from '../utilities';
 
 /*
 CSS
@@ -34,15 +34,20 @@ export const textScrub = function (gsapContext) {
     let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false) return;
     let splitText;
-    //animation functoin
-    function createAnimation() {
-      //split the text
-      const splitText = runSplit(item, 'lines');
-      if (!splitText) return;
+    const lineMasks = [];
+
+    const animateLines = function (self) {
+      //if line masks exist delete them.
+      if (lineMasks.length !== 0) {
+        lineMasks.forEach((line) => {
+          line.remove();
+        });
+      }
       //for each line of text
-      splitText.lines.forEach((line) => {
+      self.lines.forEach((line) => {
         // create a new div element
         const lineMask = document.createElement('div');
+        lineMasks.push(lineMask);
         //give it a class
         lineMask.classList.add(LINE_CLASS);
         // add the new div to a parent
@@ -68,25 +73,23 @@ export const textScrub = function (gsapContext) {
           }
         );
       });
+    };
+
+    //animation functoin
+    function createAnimation() {
+      //split the text
+      const splitText = SplitText.create(item, {
+        type: 'lines',
+        linesClass: 'line',
+        autoSplit: true,
+        onSplit: (self) => {
+          return animateLines(self);
+        },
+      });
+      if (!splitText) return;
 
       return splitText;
     }
     splitText = createAnimation();
-
-    //function to reset the animation
-    const resetAnimation = function () {
-      splitText.revert();
-      splitText = createAnimation();
-    };
-
-    // Update on window resize
-    //force page to reload on resize
-    let windowWidth = window.innerWidth;
-    window.addEventListener('resize', function () {
-      if (window.innerWidth !== windowWidth) {
-        windowWidth = window.innerWidth;
-        resetAnimation();
-      }
-    });
   });
 };
