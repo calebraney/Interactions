@@ -6,6 +6,8 @@ export const countUp = function (gsapContext) {
   const ANIMATION_ID = 'countup';
   //selectors
   const ITEM = '[data-ix-countup="item"]';
+  const TEXT = '[data-ix-countup="text"]';
+
   //options
   const OPTION_START = 'data-ix-countup-start';
   const OPTION_DURATION = 'data-ix-countup-duration';
@@ -17,11 +19,16 @@ export const countUp = function (gsapContext) {
   const items = document.querySelectorAll(ITEM);
   items.forEach((item) => {
     const parent = item.parentElement;
+    let textEl = item;
+    //if an element with the text attribute is inside the
+    if (item.querySelector(TEXT)) {
+      textEl = item.querySelector(TEXT);
+    }
     //check breakpoints and quit function if set on specific breakpoints
     let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false) return;
     //turn the text content into a number and check to make sure it is valid
-    const number = +item.textContent;
+    const number = +textEl.textContent;
     if (!number || Number.isNaN(number)) return;
     //check for decimal points
     decimalPoints = countDecimalPoints(number);
@@ -31,7 +38,7 @@ export const countUp = function (gsapContext) {
     let activeClass = attr(ACTIVE_CLASS, item.getAttribute(OPTION_ACTIVE_CLASS));
 
     //count up function
-    const countUp = new CountUp(item, number, {
+    const countUp = new CountUp(textEl, number, {
       useGrouping: false,
       decimalPlaces: decimalPoints,
       duration: duration,
