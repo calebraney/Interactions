@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
         // let individual instances decide if they are run
         lenis = initLenis();
+        load(gsapContext);
         accordion(gsapContext);
         clickActive(gsapContext);
         hoverActive(gsapContext);
@@ -82,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
         imageSwitch(gsapContext);
         modal(gsapContext);
         pageTransition();
-        load(gsapContext);
         marquee(gsapContext);
         textLinks(gsapContext);
 
