@@ -26,6 +26,7 @@ export const load = function (gsapContext) {
   const POSITION = 'data-ix-load-position'; // sequential by default, use "<" to start tweens together
   const DEFAULT_STAGGER = '<0.2';
   //array of load section timelines
+  let totalDuration = 0;
   let loadTimelines = [];
   //get sections
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
@@ -42,6 +43,7 @@ export const load = function (gsapContext) {
     let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
 
     const tl = gsap.timeline({
+      delay: totalDuration,
       paused: true,
       defaults: {
         ease: 'power1.out',
@@ -174,9 +176,11 @@ export const load = function (gsapContext) {
         }
       }
     });
+    //delay further sections with load based on the duration of the previous one
+    totalDuration = totalDuration + tl.duration() - 0.4;
 
     //Play interaction on font load, or remove it from callback to play immediately
-    tl.play(0);
+    tl.play();
     // was creating issues in firefox
     // document.fonts.ready.then(() => {
     //   tl.play(0);
