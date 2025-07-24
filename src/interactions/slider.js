@@ -15,6 +15,7 @@ export const sliderComponent = function () {
   const MOUSEWHEEL = 'data-ix-slider-mousewheel';
   const FREE_MODE = 'data-ix-slider-free-mode';
   const SLIDE_TO_CLICKED = 'data-ix-slider-slide-to-clicked';
+  const LOOP = 'data-ix-slider-loop';
   const SPEED = 'data-ix-slider-speed';
   const ACTIVE_CLASS = 'is-active';
 
@@ -48,17 +49,19 @@ export const sliderComponent = function () {
     const freeMode = attr(true, swiperElement.getAttribute(FREE_MODE));
     const mousewheel = attr(true, swiperElement.getAttribute(MOUSEWHEEL));
     const slideToClickedSlide = attr(false, swiperElement.getAttribute(SLIDE_TO_CLICKED));
+    const loopMode = attr(false, swiperElement.getAttribute(LOOP));
     const speed = attr(600, swiperElement.getAttribute(SPEED));
 
     //create slider instance
     new Swiper(swiperElement, {
       slidesPerView: 'auto',
       followFinger: followFinger,
-      loopAdditionalSlides: 10,
       freeMode: freeMode,
       slideToClickedSlide: slideToClickedSlide,
       centeredSlides: false,
       autoHeight: false,
+      loop: loopMode,
+      //   loopAdditionalSlides: 0,
       speed: speed,
       mousewheel: {
         enabled: mousewheel,
