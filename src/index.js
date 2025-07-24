@@ -16,7 +16,7 @@ import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
-import { createSlider } from './interactions/slider';
+import { sliderComponent } from './interactions/slider';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
 import { videoPlyr } from './interactions/video-plyr';
@@ -31,22 +31,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //////////////////////////////
   //Slider instances
-  const caseGallerySlider = function () {
-    const COMPONENT = '.case-gallery-slider_component';
-    const components = [...document.querySelectorAll(COMPONENT)];
-    const options = {
-      slidesPerView: 'auto',
-      loop: true,
-    };
-    //apply a module with defaults settings (canc override them using the options object above)
-    const modules = {
-      navigation: true,
-      pagination: false,
-      scrollbar: false,
-      autoplay: false,
-    };
-    const sliders = createSlider(components, options, modules);
-  };
+  // const caseGallerySlider = function () {
+  //   const COMPONENT = '.case-gallery-slider_component';
+  //   const components = [...document.querySelectorAll(COMPONENT)];
+  //   const options = {
+  //     slidesPerView: 'auto',
+  //     loop: true,
+  //   };
+  //   //apply a module with defaults settings (canc override them using the options object above)
+  //   const modules = {
+  //     navigation: true,
+  //     pagination: false,
+  //     scrollbar: false,
+  //     autoplay: false,
+  //   };
+  //   const sliders = createSlider(components, options, modules);
+  // };
 
   //////////////////////////////
   //Control Functions on page load
@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
         pageTransition();
         marquee(gsapContext);
         textLinks(gsapContext);
+        sliderComponent();
 
         if (!reduceMotion) {
           countUp(gsapContext);
