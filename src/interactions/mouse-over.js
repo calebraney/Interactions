@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, attrIfSet, checkBreakpoints } from '../utilities';
 
 export const mouseOver = function (gsapContext) {
   // animation ID
@@ -10,25 +10,34 @@ export const mouseOver = function (gsapContext) {
   //options
   const DURATION = 'data-ix-mouseover-duration';
   const EASE = 'data-ix-mouseover-ease';
-  const MOVE_X = 'data-ix-mouseover-move-x';
-  const MOVE_Y = 'data-ix-mouseover-move-y';
-  const ROTATE_Z = 'data-ix-mouseover-rotate-z';
+
+  const X_MOVE_X = 'data-ix-mouseover-x-move-x';
+  const X_MOVE_Y = 'data-ix-mouseover-x-move-y';
+  const X_ROTATE_Z = 'data-ix-mouseover-x-rotate-z';
+  const X_ROTATE_Y = 'data-ix-mouseover-x-rotate-y';
+  const X_ROTATE_X = 'data-ix-mouseover-x-rotate-x';
+
+  const Y_MOVE_X = 'data-ix-mouseover-y-move-x';
+  const Y_MOVE_Y = 'data-ix-mouseover-y-move-y';
+  const Y_ROTATE_Z = 'data-ix-mouseover-y-rotate-z';
+  const Y_ROTATE_Y = 'data-ix-mouseover-y-rotate-y';
+  const Y_ROTATE_X = 'data-ix-mouseover-y-rotate-x';
 
   // select the items
-  const mouseOverItems = document.querySelectorAll(WRAP);
-  mouseOverItems.forEach((mouseOverItem) => {
-    const layers = mouseOverItem.querySelectorAll(LAYER);
+  const wraps = document.querySelectorAll(WRAP);
+  wraps.forEach((wrap) => {
+    const layers = wrap.querySelectorAll(LAYER);
     // return if items are null
     if (layers.length === 0) return;
 
     //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(mouseOverItem, ANIMATION_ID, gsapContext);
+    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false) return;
 
     // find the target element if one exists, otherwise tge parent is the target
-    let target = mouseOverItem.querySelector(TARGET);
+    let target = wrap.querySelector(TARGET);
     if (!target) {
-      target = mouseOverItem;
+      target = wrap;
     }
 
     //handle mouse movement
@@ -40,30 +49,75 @@ export const mouseOver = function (gsapContext) {
       let initialProgress = { x: 0.5, y: 0.5 };
       let progressObject = { x: initialProgress.x, y: initialProgress.y };
       //create default duration and ease
-      let duration = attr(0.5, mouseOverItem.getAttribute(DURATION));
-      let ease = attr('power1.out', mouseOverItem.getAttribute(EASE));
+      let duration = attr(0.5, wrap.getAttribute(DURATION));
+      let ease = attr('power1.out', wrap.getAttribute(EASE));
       // Create X timeline
       let cursorXTimeline = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
       // Create Y Timeline
       let cursorYTimeline = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
       // For each image add a tween on the timeline
 
+      //utility function to get value pairs from attributes
+      const setVarsForOption = function (layer, attribute, defaultAttr) {
+        let toValue = attrIfSet(layer, attribute, defaultAttr);
+        let fromValue;
+        //if the value is not set return the function.
+        if (toValue === undefined) return [undefined, undefined];
+        //switch values if attribute values starts with a negative
+        if (String(toValue).startsWith('-')) {
+          // if switch values is true make the from value positive
+          if (typeof defaultAttr === 'number') {
+            fromValue = -1 * toValue;
+          }
+          if (typeof defaultAttr === 'string') {
+            fromValue = toValue.slice(1);
+          }
+        }
+        // if switch values is false make the from value negative
+        else {
+          //check the value type
+          if (typeof defaultAttr === 'number') {
+            fromValue = -1 * toValue;
+          }
+          if (typeof defaultAttr === 'string') {
+            fromValue = '-' + toValue;
+          }
+          // console.log('not', toValue, fromValue);
+        }
+        return [fromValue, toValue];
+      };
       //////////////////////
       // Adding tweens
       layers.forEach((layer) => {
+        //create vars objects
+        let xVarsFrom = {};
+        let xVarsTo = {};
+        let yVarsFrom = {};
+        let yVarsTo = {};
         // get custom move amounts or set them at the default of 10%
-        let moveX = attr(10, layer.getAttribute(MOVE_X));
-        let moveY = attr(10, layer.getAttribute(MOVE_Y));
-        let rotateZ = attr(0, layer.getAttribute(ROTATE_Z));
+        // for each from
+        //x axis options
+        [xVarsFrom.x, xVarsTo.x] = setVarsForOption(layer, X_MOVE_X, '10%');
+        [xVarsFrom.y, xVarsTo.y] = setVarsForOption(layer, X_MOVE_Y, '10%');
+        [xVarsFrom.rotateZ, xVarsTo.rotateZ] = setVarsForOption(layer, X_ROTATE_Z, 0);
+        [xVarsFrom.rotateY, xVarsTo.rotateY] = setVarsForOption(layer, X_ROTATE_Y, 0);
+        [xVarsFrom.rotateX, xVarsTo.rotateX] = setVarsForOption(layer, X_ROTATE_X, 0);
+
+        //y axis options
+        [yVarsFrom.y, yVarsTo.y] = setVarsForOption(layer, Y_MOVE_Y, '10%');
+        [yVarsFrom.x, yVarsTo.x] = setVarsForOption(layer, Y_MOVE_X, '10%');
+        [yVarsFrom.rotateZ, yVarsTo.rotateZ] = setVarsForOption(layer, Y_ROTATE_Z, 0);
+        [yVarsFrom.rotateY, yVarsTo.rotateY] = setVarsForOption(layer, Y_ROTATE_Y, 0);
+        [yVarsFrom.rotateX, yVarsTo.rotateX] = setVarsForOption(layer, Y_ROTATE_X, 0);
+
+        //log 4 vars objects
+        // console.log(xVarsFrom, xVarsTo, yVarsFrom, yVarsTo);
+
         // horizontal timeline
-        cursorXTimeline.fromTo(
-          layer,
-          { xPercent: moveX * -1, rotateZ: rotateZ * -1 },
-          { xPercent: moveX, rotateZ: rotateZ },
-          0
-        );
+        cursorXTimeline.fromTo(layer, xVarsFrom, xVarsTo, 0);
         //vertical timeline
-        cursorYTimeline.fromTo(layer, { yPercent: moveY * -1 }, { yPercent: moveY }, 0);
+        cursorYTimeline.fromTo(layer, yVarsFrom, yVarsTo, 0);
+        // console.log(cursorXTimeline, cursorYTimeline);
       });
 
       //////////////////////
