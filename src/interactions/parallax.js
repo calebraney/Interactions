@@ -24,7 +24,6 @@ export const parallax = function (gsapContext) {
     //check breakpoints and quit function if set on specific breakpoints
     let runOnBreakpoint = checkBreakpoints(parallaxItem, ANIMATION_ID, gsapContext);
     if (runOnBreakpoint === false) return;
-
     // animationType = attr('uncover', parallaxItem.getAttribute(TYPE));
     // default GSAP options for uncover animation
     const settings = {
