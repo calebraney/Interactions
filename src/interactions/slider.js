@@ -10,6 +10,8 @@ export const sliderComponent = function () {
   const PREVIOUS = "[data-ix-slider='previous']";
   const PAGINATION = '.slider_bullet_list';
   const PAGINATION_BUTTON = 'slider_bullet_item';
+  const SCROLLBAR = '.slider_scrollbar';
+  const SCROLLBAR_HANDLE = 'slider_scrollbar_handle';
   //options
   const FOLLOW_FINGER = 'data-ix-slider-follow-finger';
   const MOUSEWHEEL = 'data-ix-slider-mousewheel';
@@ -81,6 +83,12 @@ export const sliderComponent = function () {
         bulletClass: `${PAGINATION_BUTTON}`,
         bulletElement: 'button',
         clickable: true,
+      },
+      scrollbar: {
+        el: component.querySelector(SCROLLBAR),
+        draggable: true,
+        dragClass: SCROLLBAR_HANDLE,
+        snapOnRelease: true,
       },
       slideActiveClass: ACTIVE_CLASS,
       slideDuplicateActiveClass: ACTIVE_CLASS,
