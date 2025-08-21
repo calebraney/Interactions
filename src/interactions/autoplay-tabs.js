@@ -1,24 +1,26 @@
-/* NOT MODULAR */
-const tabsAutoplay = function () {
+import { attr, ClassWatcher } from '../utilities';
+export const tabsAutoplay = function () {
   /*
   set the timer line to only have full opacity when inside the active class using CSS
+  .w--current .tab_line {opacity: 1;}
   */
   //animation ID
-  const ANIMATION_ID = 'tabs-auto';
+  const ANIMATION_ID = 'autotabs';
   //selectors
-  const TAB_MENU = '[data-ix-tabs-auto="menu"]';
-  const TAB = '[data-ix-tabs-auto="link"]';
-  const TIMER_LINE = '[data-ix-tabs-auto="line"]';
+  const TAB_MENU = '[data-ix-autotabs="menu"]';
+  const TAB = '[data-ix-autotabs="link"]';
+  const TIMER_LINE = '[data-ix-autotabs="line"]';
   const ACTIVE_CLASS = 'w--current';
+  const DURATION = 'data-ix-autotabs-duration';
   //animation options
-  const TIMER_DURATION = 5;
+  const DEFAULT_DURATION = 5;
 
   const components = [...document.querySelectorAll(TAB_MENU)];
   components.forEach((component) => {
     const tabs = [...component.querySelectorAll(TAB)];
     const timerLines = [...component.querySelectorAll(TIMER_LINE)];
     //get component duration from attribute or set it to the default
-    const timerDuration = TIMER_DURATION;
+    const timerDuration = attr(DEFAULT_DURATION, component.getAttribute(DURATION));
     if (tabs.length === 0) return;
 
     //set timer and gsap timeline variable

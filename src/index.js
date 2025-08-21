@@ -16,6 +16,7 @@ import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
+import { tabsAnimation } from './interactions/tabs';
 import { sliderComponent } from './interactions/slider';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
@@ -86,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         marquee(gsapContext);
         textLinks(gsapContext);
         sliderComponent();
+        tabsAnimation();
 
         if (!reduceMotion) {
           countUp(gsapContext);
