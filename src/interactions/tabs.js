@@ -1,5 +1,5 @@
 import { attr } from '../utilities';
-export const tabsAnimation = function () {
+export const tabs = function () {
   //animation ID
   const ANIMATION_ID = 'tabs';
   //elements
