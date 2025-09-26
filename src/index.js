@@ -1,5 +1,6 @@
 import { attr, startScroll, stopScroll } from './utilities';
 import { accordion } from './interactions/accordion';
+import { banner } from './interactions/banner';
 import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
 import { cursor } from './interactions/cursor';
@@ -14,6 +15,7 @@ import { mouseOver } from './interactions/mouse-over';
 import { modal } from './interactions/modal';
 import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
+import { pathHover } from './interactions/path-hover';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
 import { tabs } from './interactions/tabs';
@@ -78,9 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         lenis = initLenis();
         load(gsapContext);
         accordion(gsapContext);
+        banner(gsapContext);
         clickActive(gsapContext);
         hoverActive(gsapContext);
-        mouseOver(gsapContext);
         imageSwitch(gsapContext);
         modal(gsapContext);
         pageTransition();
@@ -93,9 +95,11 @@ document.addEventListener('DOMContentLoaded', function () {
           countUp(gsapContext);
           loop(gsapContext);
           textScrub(gsapContext);
+          mouseOver(gsapContext);
           parallax(gsapContext);
           scrollIn(gsapContext);
           scrolling(gsapContext);
+          pathHover(gsapContext);
         }
         //globaally run animations on specific breakpoints
         if (isDesktop || isTablet) {
