@@ -4,36 +4,51 @@ export const modal = function (gsapContext, lenis) {
   const ANIMATION_ID = 'modal';
   //Selectors
   const MODAL_WRAP = '[data-ix-modal="wrap"]'; //a modal item
-  const MODAL_TRIGGER = 'data-ix-modal-trigger'; //id of element to trigger modal
-  const MODAL_CLOSE_BTN = '[data-ix-modal="close"]';
+  const MODAL_TRIGGER = 'data-ix-modal-trigger'; //must match
+  const MODAL_CLOSE = '[data-ix-modal="close"]';
   const TIMEOUT = 'data-ix-modal-timeout';
   const MODAL_TRIGGER_DEFAULT = 'blank-id';
-  const DEFAULT_TIMEOUT = 3;
+  const DEFAULT_TIMEOUT = 0;
 
   //global variables
   let activeModal = false;
 
   //Arrays of modal and video player elements
   const modals = [...document.querySelectorAll(MODAL_WRAP)];
+  //get elements with the trigger attribute that are not a modal element
+  const triggers = [...document.querySelectorAll(`[${MODAL_TRIGGER}]:not(${MODAL_WRAP})`)];
 
   if (modals.length === 0) return;
   modals.forEach((modal, index) => {
     //get the parent element of the trigger, and find the modal within that element
-    const closeButtons = [...modal.querySelectorAll(MODAL_CLOSE_BTN)];
+    const closeButtons = [...modal.querySelectorAll(MODAL_CLOSE)];
     const timeout = attr(DEFAULT_TIMEOUT, modal.getAttribute(TIMEOUT));
     const triggerID = attr(MODAL_TRIGGER_DEFAULT, modal.getAttribute(MODAL_TRIGGER));
 
+    function getModalTriggers(modal, triggers) {
+      // 2. Filter triggers that match the modal ID, but exclude the modal itself
+      const modalTriggers = Array.from(triggers).filter((trigger) => {
+        return trigger.getAttribute(MODAL_TRIGGER) === triggerID && trigger !== modal;
+      });
+      // 3. Return the array of matching triggers
+      return modalTriggers;
+    }
+    const modalTriggers = getModalTriggers(modal, triggers);
+
     //if trigger id attribute is not default
     if (triggerID !== MODAL_TRIGGER_DEFAULT) {
-      const trigger = document.querySelector(`#${triggerID}`);
-      //find trigger and open modal on click
-      if (trigger) {
-        trigger.addEventListener('click', (e) => {
-          // Find the closest dialog parent and close it
-          openModal(modal);
+      //if there are no modal triggers
+      if (modalTriggers.length !== 0) {
+        //for each trigger open the modal if it is clicked
+        modalTriggers.forEach((trigger, index) => {
+          trigger.addEventListener('click', (e) => {
+            // Find the closest dialog parent and close it
+            openModal(modal);
+          });
         });
       }
-    } else {
+    }
+    if (timeout !== DEFAULT_TIMEOUT) {
       //otherwise open based on timer
       setTimeout(() => {
         openModal(modal);
@@ -57,7 +72,12 @@ export const modal = function (gsapContext, lenis) {
   });
 
   const openModal = function (modal) {
+    console.log(modal);
     if (!modal) return;
+    //if another modal is open close it.
+    if (activeModal) {
+      closeModal(activeModal);
+    }
     modal.showModal();
     stopScroll(lenis);
     activeModal = modal;

@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         clickActive(gsapContext);
         hoverActive(gsapContext);
         imageSwitch(gsapContext);
-        modal(gsapContext);
+        modal(gsapContext, lenis);
         pageTransition();
         marquee(gsapContext);
         textLinks(gsapContext);
