@@ -5244,7 +5244,6 @@
     const tabWraps = [...document.querySelectorAll(WRAP)];
     if (tabWraps.length === 0) return;
     tabWraps.forEach((tabWrap, componentIndex) => {
-      console.log(tabWrap);
       let loopControls = attr(true, tabWrap.getAttribute(LOOP_CONTROLS));
       let slideTabs = attr(false, tabWrap.getAttribute(SLIDE_TABS));
       let autoplay = attr(0, tabWrap.getAttribute(AUTOPLAY));
