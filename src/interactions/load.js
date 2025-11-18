@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints, runSplit } from '../utilities';
+import { attr, checkBreakpoints, getClipDirection, runSplit } from '../utilities';
 /* CSS in PAGE Head
 
 [data-ix-load="wrap"]:not([data-ix-load-run="false"]) {
@@ -23,7 +23,8 @@ export const load = function (gsapContext) {
   const LINE = 'line';
   const STAGGER = 'stagger';
   //tween options
-  const POSITION = 'data-ix-load-position'; // sequential by default, use "<" to start tweens together
+  const POSITION = 'data-ix-load-position'; // sequential by default, use "<" to start tweens
+  const CLIP_DIRECTION = 'data-ix-load-clip-direction';
   const DEFAULT_STAGGER = '<0.2';
   //array of load section timelines
   let totalDuration = 0;
@@ -97,10 +98,20 @@ export const load = function (gsapContext) {
     const loadLine = function (item) {
       // get the position attribute or set defautl position
       const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+      //get clip direction
+      const clipAttr = attr('left', item.getAttribute(CLIP_DIRECTION));
+      const clipStart = getClipDirection(clipAttr);
+      const clipEnd = getClipDirection('full');
+
+      //create timeline
       tl.fromTo(
         item,
-        { clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)' },
-        { clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' },
+        {
+          clipPath: clipStart,
+        },
+        {
+          clipPath: clipEnd,
+        },
         position
       );
     };
