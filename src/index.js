@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll, copyURL } from './utilities';
+import { attr, copyURL, scrollReset, updaterFooterYear } from './utilities';
 import { accordion } from './interactions/accordion';
 import { banner } from './interactions/banner';
 import { clickActive } from './interactions/click-active';
@@ -109,48 +109,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const [players, components] = [videoPlyr()];
         //pass the players into the lightbox code
         lightbox(gsapContext, players, components);
-
-        //utilities
-        copyURL();
       }
     );
   };
   gsapInit();
 
-  //reset gsap on click of reset triggers
-  const scrollReset = function () {
-    //selector
-    const RESET_EL = '[data-ix-reset]';
-    //time option
-    const RESET_TIME = 'data-ix-reset-time';
-    const resetScrollTriggers = document.querySelectorAll(RESET_EL);
-    resetScrollTriggers.forEach(function (item) {
-      item.addEventListener('click', function (e) {
-        //reset scrolltrigger
-        ScrollTrigger.refresh();
-        //if item has reset timer reset scrolltriggers after timer as well.
-        if (item.hasAttribute(RESET_TIME)) {
-          let time = attr(1000, item.getAttribute(RESET_TIME));
-          //get potential timer reset
-          setTimeout(() => {
-            ScrollTrigger.refresh();
-          }, time);
-        }
-      });
-    });
-  };
+  //utilities
+  copyURL();
   scrollReset();
-
-  const updaterFooterYear = function () {
-    // set the fs-hacks selector
-    const YEAR_SELECTOR = '[data-footer-year]';
-    // get the the span element
-    const yearSpan = document.querySelector(YEAR_SELECTOR);
-    if (!yearSpan) return;
-    // get the current year
-    const currentYear = new Date().getFullYear();
-    // set the year span element's text to the current year
-    yearSpan.innerText = currentYear.toString();
-  };
   updaterFooterYear();
 });
