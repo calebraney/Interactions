@@ -189,3 +189,16 @@ export function getNonContentsChildren(item) {
   processChildren(item);
   return result;
 }
+
+export const copyURL = function () {
+  //get all copy clip elements
+  const elements = [...document.querySelectorAll('[fs-copyclip-text]')];
+  //if the value is set to URL, change the attribute value to the current url.
+  if (elements.length === 0) return;
+  elements.forEach((el) => {
+    const val = el.getAttribute('fs-copyclip-text');
+    if (val === 'url') {
+      el.setAttribute('fs-copyclip-text', window.location.href);
+    }
+  });
+};

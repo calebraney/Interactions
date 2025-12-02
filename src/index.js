@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll } from './utilities';
+import { attr, startScroll, stopScroll, copyURL } from './utilities';
 import { accordion } from './interactions/accordion';
 import { banner } from './interactions/banner';
 import { clickActive } from './interactions/click-active';
@@ -109,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const [players, components] = [videoPlyr()];
         //pass the players into the lightbox code
         lightbox(gsapContext, players, components);
+
+        //utilities
+        copyURL();
       }
     );
   };
