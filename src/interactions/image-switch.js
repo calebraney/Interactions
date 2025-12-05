@@ -22,7 +22,7 @@ export const imageSwitch = function (gsapContext) {
     // for each tab link add an event listener that will scroll to the correct id
     if (items.length === 0 || images.length === 0) return;
 
-    //utility class to activate or de-activate item
+    //utility function to activate or de-activate item
     const activateItem = function (index, activate = true) {
       //get the matching items
       const image = images[index];
