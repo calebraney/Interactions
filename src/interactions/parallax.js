@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkRunProp } from '../utilities';
 
 export const parallax = function (gsapContext) {
   //animation ID
@@ -11,20 +11,20 @@ export const parallax = function (gsapContext) {
   const TYPE = 'data-ix-parallax-type'; //options are uncover, cover, or parallax
   const AMOUNT = 'data-ix-parallax-amount';
 
-  const parallaxItems = gsap.utils.toArray(WRAP);
-  parallaxItems.forEach((parallaxItem) => {
-    const section = parallaxItem.querySelector(SECTION);
-    const trigger = parallaxItem.querySelector(TRIGGER);
-    if (!parallaxItem || !section || !trigger) return;
+  const wraps = gsap.utils.toArray(WRAP);
+  wraps.forEach((wrap) => {
+    const section = wrap.querySelector(SECTION);
+    const trigger = wrap.querySelector(TRIGGER);
+    if (!wrap || !section || !trigger) return;
     //set default animation type
     let animationType = 'uncover';
-    animationType = attr('uncover', parallaxItem.getAttribute(TYPE));
-    moveAmount = attr(50, parallaxItem.getAttribute(AMOUNT));
+    animationType = attr('uncover', wrap.getAttribute(TYPE));
+    moveAmount = attr(50, wrap.getAttribute(AMOUNT));
 
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(parallaxItem, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
-    // animationType = attr('uncover', parallaxItem.getAttribute(TYPE));
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
+    // animationType = attr('uncover', wrap.getAttribute(TYPE));
     // default GSAP options for uncover animation
     const settings = {
       scrub: true,

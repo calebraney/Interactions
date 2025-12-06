@@ -23,6 +23,7 @@ export const startScroll = function (lenis) {
     body.classList.remove(NO_SCROLL_CLASS);
   }
 };
+
 // attribute value checker
 export const attr = function (defaultVal, attrVal) {
   //get the type of the default
@@ -54,37 +55,45 @@ export const runSplit = function (text, types = 'lines, words') {
   return typeSplit;
 };
 
-//check for attributes to stop animation on specific breakpoints
-export const checkBreakpoints = function (item, animationID, gsapContext) {
-  //exit if items aren't found
-  if (!item || !animationID || !gsapContext) {
-    console.error(`GSAP checkBreakpoints Error in ${animationID}`);
-    // if you want this error to stop the interaction return false
-    return;
-  }
-  //create variables from GSAP context
-  let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
+export const checkContainer = function (containerChild, breakpoint, callback, additionalParams) {
+  let containerQuery = 'none';
 
-  //check to see if GSAP context is working
-  if (isMobile === undefined || isTablet === undefined || isDesktop === undefined) {
-    console.error(`GSAP Match Media Conditions Not Defined`);
+  if (breakpoint === 'medium') {
+    containerQuery = '(width < 50em)';
+  } else if (breakpoint === 'small') {
+    containerQuery = '(width < 35em)';
+  } else if (breakpoint === 'xsmall') {
+    containerQuery = '(width < 20em)';
+  }
+  //if no container query is set run the ballback with a match of true.
+  if (containerQuery === 'none') {
+    callback(false, additionalParams);
+  } else {
+    containerChild.observeContainer(containerQuery, (match) => {
+      callback(match, additionalParams);
+
+      //tracking
+      if (match) {
+        console.log(match);
+      } else {
+        console.log(match);
+      }
+    });
+  }
+};
+
+//check for attributes to stop animation on specific breakpoints
+export const checkRunProp = function (item, animationID) {
+  //exit if items aren't found
+  if (!item || !animationID) {
+    console.error(`GSAP check Run Error in ${animationID}`);
     // if you want this error to stop the interaction return false
     return;
   }
-  //breakpoint options
-  const RUN_DESKTOP = `data-ix-${animationID}-desktop`;
-  const RUN_TABLET = `data-ix-${animationID}-tablet`;
-  const RUN_MOBILE = `data-ix-${animationID}-mobile`;
-  const RUN_ALL = `data-ix-${animationID}-run`;
+  const RUN = `data-ix-${animationID}-run`;
   //check breakpoints and quit function if set on specific breakpoints
-  runAll = attr(true, item.getAttribute(RUN_ALL));
-  runMobile = attr(true, item.getAttribute(RUN_MOBILE));
-  runTablet = attr(true, item.getAttribute(RUN_TABLET));
-  runDesktop = attr(true, item.getAttribute(RUN_DESKTOP));
-  if (runAll === false) return false;
-  if (runMobile === false && isMobile) return false;
-  if (runTablet === false && isTablet) return false;
-  if (runDesktop === false && isDesktop) return false;
+  run = attr(true, item.getAttribute(RUN));
+  if (run === false) return false;
   // if no conditions match
   return true;
 };
@@ -121,10 +130,6 @@ export const getClipDirection = function (attributeValue) {
   return clipMask;
 };
 
-/*
-//Example usage
-let classWatcher = new ClassWatcher(item, ITEM_ACTIVE_CLASS, tabActivated, tabDeactivated);
-*/
 export class ClassWatcher {
   constructor(targetNode, classToWatch, classAddedCallback, classRemovedCallback) {
     this.targetNode = targetNode;

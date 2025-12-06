@@ -1,6 +1,6 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkRunProp } from '../utilities';
 
-export const banner = function (gsapContext) {
+export const banner = function () {
   //animation ID
   const ANIMATION_ID = 'banner';
   //selectors
@@ -18,23 +18,27 @@ export const banner = function (gsapContext) {
 
     if (!wrap || !track) return;
 
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    const animation = function () {
+      let start = attr('center 80%', wrap.getAttribute(START));
+      let end = attr('center 20%', wrap.getAttribute(END));
 
-    let start = attr('center 80%', wrap.getAttribute(START));
-    let end = attr('center 20%', wrap.getAttribute(END));
-
-    // create main horizontal scroll timeline
-    let tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: wrap,
-        start: start,
-        end: end,
-        scrub: 1,
-        markers: false,
-      },
-    });
-    tl.to(track, { xPercent: -100, ease: 'none', duration: 1 });
+      // create main horizontal scroll timeline
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrap,
+          start: start,
+          end: end,
+          scrub: 1,
+          markers: false,
+        },
+      });
+      tl.to(track, { xPercent: -100, ease: 'none', duration: 1 });
+    };
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
+    //check container breakpoint and run callback.
+    const breakpoint = attr('none', item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(item, breakpoint, animation);
   });
 };

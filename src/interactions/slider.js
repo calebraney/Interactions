@@ -1,6 +1,6 @@
 import { attr } from '../utilities';
 
-export const sliderComponent = function () {
+export const slider = function () {
   //animation ID
   const ANIMATION_ID = 'slider';
   // hero animation attribute

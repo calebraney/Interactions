@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkRunProp } from '../utilities';
 
 /*
 CSS to include
@@ -22,7 +22,7 @@ can also use pointer to check for non fine pointers
 //   .cursor_component {display: block;}
 // }
 
-export const cursor = function (gsapContext) {
+export const cursor = function () {
   //animation ID
   const ANIMATION_ID = 'cursor';
   //elements
@@ -38,19 +38,25 @@ export const cursor = function (gsapContext) {
   //classes
   const HOVER_CLASS = 'is-hover';
   // select the items
-  const cursorWrap = document.querySelector(WRAP);
+  const wrap = document.querySelector(WRAP);
   const cursorInner = document.querySelector(INNER);
   const cursorOuter = document.querySelector(OUTER);
   // const cursorDot = document.querySelector(DOT);
+  const disableCursor = function () {
+    wrap.style.display = 'none';
+  };
 
   // return if items are null
-  if (!cursorWrap || !cursorInner) return;
-  //check if the device has a touch screen
-  if ('ontouchstart' in window || navigator.maxTouchPoints) return;
+  if (!wrap || !cursorInner) return;
+  //check if the device has a touch screen if it does hide the cursor and return function
+  if ('ontouchstart' in window || navigator.maxTouchPoints) {
+    disableCursor();
+    return;
+  }
 
-  //check breakpoints and quit function if set on specific breakpoints
-  let runOnBreakpoint = checkBreakpoints(cursorWrap, ANIMATION_ID, gsapContext);
-  if (runOnBreakpoint === false) return;
+  //check if the run prop is set to true
+  let runProp = checkRunProp(wrap, ANIMATION_ID);
+  if (runProp === false) return;
 
   const cursorHover = function () {
     // get all links without a no-hover attribute and any other elements with a hover attribute into an array

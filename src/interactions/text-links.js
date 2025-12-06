@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkRunProp } from '../utilities';
 
 export const textLinks = function (gsapContext) {
   //animation ID
@@ -7,16 +7,16 @@ export const textLinks = function (gsapContext) {
   const WRAP = '[data-ix-textlink="wrap"]';
   const FRONT = '[data-ix-textlink="front"]';
   const BACK = '[data-ix-textlink="back"]';
-  //get items
-  const items = gsap.utils.toArray(WRAP);
-  items.forEach((item) => {
-    if (!item) return;
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+  //get wraps
+  const wraps = gsap.utils.toArray(WRAP);
+  wraps.forEach((wrap) => {
+    if (!wrap) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
     //get front and back elements
-    const front = item.querySelector(FRONT);
-    const back = item.querySelector(BACK);
+    const front = wrap.querySelector(FRONT);
+    const back = wrap.querySelector(BACK);
     if (!front || !back) return;
     const tl = gsap.timeline({
       paused: true,
@@ -48,10 +48,10 @@ export const textLinks = function (gsapContext) {
       },
       0
     );
-    item.addEventListener('mouseover', function () {
+    wrap.addEventListener('mouseover', function () {
       tl.play();
     });
-    item.addEventListener('mouseleave', function () {
+    wrap.addEventListener('mouseleave', function () {
       tl.reverse();
     });
   });

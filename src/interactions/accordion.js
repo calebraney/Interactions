@@ -1,6 +1,6 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkRunProp } from '../utilities';
 
-export const accordion = function (gsapContext) {
+export const accordion = function () {
   //animation ID
   const ANIMATION_ID = 'accordion';
   //elements
@@ -47,9 +47,9 @@ export const accordion = function (gsapContext) {
   // event logic
   if (accordionLists.length === 0 || accordionLists === undefined) return;
   accordionLists.forEach((list) => {
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(list, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
     // set up conditions for
     let firstOpen = attr(false, list.getAttribute(OPTION_FIRST_OPEN));
     let oneActive = attr(false, list.getAttribute(OPTION_ONE_ACTIVE));

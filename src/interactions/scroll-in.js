@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints, getNonContentsChildren, getClipDirection } from '../utilities';
+import { attr, checkRunProp, getNonContentsChildren, getClipDirection } from '../utilities';
 
 export const scrollIn = function (gsapContext) {
   //animation ID
@@ -234,9 +234,9 @@ export const scrollIn = function (gsapContext) {
   if (wraps.length === 0) return;
 
   wraps.forEach((wrap) => {
-    //check breakpoints and exit if set to false
-    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false && wrap.getAttribute('data-ix-load-run') === 'false') return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
 
     //get all items within the section
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false"])`)];

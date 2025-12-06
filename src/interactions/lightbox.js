@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints, startScroll, stopScroll } from '../utilities';
+import { attr, checkRunProp, startScroll, stopScroll } from '../utilities';
 
 export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents, lenis) {
   const ANIMATION_ID = 'lightbox';

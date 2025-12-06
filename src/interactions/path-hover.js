@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints } from '../utilities';
+import { attr, checkRunProp } from '../utilities';
 
 export const pathHover = function (gsapContext) {
   //animation ID
@@ -18,9 +18,9 @@ export const pathHover = function (gsapContext) {
 
     if (!wrap || paths.length === 0) return;
 
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
     let duration = attr(1.2, wrap.getAttribute(DURATION));
     let reverse = attr(false, wrap.getAttribute(REVERSE));
 

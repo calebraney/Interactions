@@ -1,6 +1,6 @@
-import { checkBreakpoints, attr } from '../utilities';
+import { checkRunProp, attr } from '../utilities';
 
-export const clickActive = function (gsapContext) {
+export const clickActive = function () {
   //animation ID
   const ANIMATION_ID = 'clickactive';
   //elements
@@ -38,10 +38,9 @@ export const clickActive = function (gsapContext) {
       oneActive = attr(false, rootElement.getAttribute(OPTION_ONE_ACTIVE));
       keepOneActive = attr(false, rootElement.getAttribute(OPTION_KEEP_ONE_ACTIVE));
 
-      //check breakpoints and quit function if set on specific breakpoints
-      let runOnBreakpoint = checkBreakpoints(rootElement, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
-    } else {
+      //check if the run prop is set to true
+      let runProp = checkRunProp(rootElement, ANIMATION_ID);
+      if (runProp === false) return;
     }
 
     //utility function to activate items

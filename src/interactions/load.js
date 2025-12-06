@@ -1,4 +1,4 @@
-import { attr, checkBreakpoints, getClipDirection, runSplit } from '../utilities';
+import { attr, getClipDirection, getNonContentsChildren, checkRunProp } from '../utilities';
 /* CSS in PAGE Head
 
 [data-ix-load="wrap"]:not([data-ix-load-run="false"]) {
@@ -10,7 +10,7 @@ import { attr, checkBreakpoints, getClipDirection, runSplit } from '../utilities
 html:is(.w-editor, .gsap-not-found) :is([data-ix-load-run], [data-ix-load]){visibility: visible;} 
 */
 
-export const load = function (gsapContext) {
+export const load = function (reduceMotion) {
   //animation ID
   const ANIMATION_ID = 'load';
   // hero animation attribute
@@ -32,16 +32,13 @@ export const load = function (gsapContext) {
   //get sections
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
   wraps.forEach((wrap) => {
-    //check breakpoints and exit if set to false
-    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
-
     //get all items within the section
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false"])`)];
     if (items.length === 0) return;
 
-    //create variables from GSAP context
-    let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
+    //check if run is true and exit if set to false
+    let runProp = checkProp(wrap, ANIMATION_ID);
+    if (runProp === false && wrap.getAttribute('data-ix-load-run') === 'false') return;
 
     const tl = gsap.timeline({
       delay: totalDuration,
@@ -126,11 +123,11 @@ export const load = function (gsapContext) {
     const loadStagger = function (item) {
       if (!item) return;
       // gsap.set(item, { autoAlpha: 1 });
-      //set autoAlpha to 1
-      // get the children of the item
-      const children = gsap.utils.toArray(item.children);
+      // get the children of the item  without display contents
+      let children = getNonContentsChildren(item);
       if (children.length === 0) return;
       children.forEach((child, index) => {
+        console.log(child);
         //first item set parent autoAlpha to 1
         if (index === 0) {
           gsap.set(item, { autoAlpha: 1 });
@@ -154,50 +151,54 @@ export const load = function (gsapContext) {
         '<'
       );
     };
-
-    //get all elements and apply animations
-    items.forEach((item) => {
-      if (!item) return;
-      //find the type of the load animation
-      const loadType = item.getAttribute(ATTRIBUTE);
-      //if reduce motion is true or run animation is false but the run attribute is true use a simple fade in
-      if (reduceMotion) {
-        //simple animation
-        if (loadType === STAGGER) {
-          loadSimple(item.children);
+    const animation = function () {
+      //get all elements and apply animations
+      items.forEach((item) => {
+        if (!item) return;
+        //find the type of the load animation
+        const loadType = item.getAttribute(ATTRIBUTE);
+        //if reduce motion is true or run animation is false but the run attribute is true use a simple fade in
+        if (reduceMotion) {
+          //simple animation
+          if (loadType === STAGGER) {
+            loadSimple(item.children);
+          } else {
+            loadSimple(item);
+          }
         } else {
-          loadSimple(item);
+          //otherwise assign the correct animation to each element type
+          if (loadType === HEADING) {
+            loadHeading(item);
+          }
+          if (loadType === IMAGE) {
+            loadImage(item);
+          }
+          if (loadType === LINE) {
+            loadLine(item);
+          }
+          if (loadType === ITEM) {
+            loadItem(item);
+          }
+          if (loadType === STAGGER) {
+            loadStagger(item);
+          }
         }
-      } else {
-        //otherwise assign the correct animation to each element type
-        if (loadType === HEADING) {
-          loadHeading(item);
-        }
-        if (loadType === IMAGE) {
-          loadImage(item);
-        }
-        if (loadType === LINE) {
-          loadLine(item);
-        }
-        if (loadType === ITEM) {
-          loadItem(item);
-        }
-        if (loadType === STAGGER) {
-          loadStagger(item);
-        }
-      }
-    });
-    //delay further sections with load based on the duration of the previous one
-    totalDuration = totalDuration + tl.duration() - 0.4;
+      });
+      //delay further sections with load based on the duration of the previous one
+      totalDuration = totalDuration + tl.duration() - 0.4;
 
-    //Play interaction on font load, or remove it from callback to play immediately
-    tl.play();
-    // was creating issues in firefox
-    // document.fonts.ready.then(() => {
-    //   tl.play(0);
-    // });
-    // push this sections load timeline into array of all load loadTimelines.
-    loadTimelines.push(tl);
+      //Play interaction on font load, or remove it from callback to play immediately
+      tl.play();
+      // was creating issues in firefox
+      // document.fonts.ready.then(() => {
+      //   tl.play(0);
+      // });
+      // push this sections load timeline into array of all load loadTimelines.
+      loadTimelines.push(tl);
+    };
+    //check container breakpoint and run callback.
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(items[0], breakpoint, animation);
   });
   // Optionally retun array of load timelines
   // return loadTimelines

@@ -1,4 +1,4 @@
-import { checkBreakpoints } from '../utilities';
+import { checkRunProp } from '../utilities';
 
 export const imageSwitch = function (gsapContext) {
   const ANIMATION_ID = 'imageswitch';
@@ -11,9 +11,9 @@ export const imageSwitch = function (gsapContext) {
   const wraps = [...document.querySelectorAll(WRAP)];
   if (!wraps.length === 0) return;
   wraps.forEach((wrap) => {
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
     //within each section
     const tabLinks = [...wrap.querySelectorAll(LINK)];
     const items = [...wrap.querySelectorAll(ITEM)];
