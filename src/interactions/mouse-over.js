@@ -1,6 +1,6 @@
-import { attr, attrIfSet, checkBreakpoints } from '../utilities';
+import { attr, attrIfSet, checkRunProp, checkContainer } from '../utilities';
 
-export const mouseOver = function (gsapContext) {
+export const mouseOver = function () {
   // animation ID
   const ANIMATION_ID = 'mouseover';
   //elements
@@ -30,9 +30,9 @@ export const mouseOver = function (gsapContext) {
     // return if items are null
     if (layers.length === 0) return;
 
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
 
     // find the target element if one exists, otherwise tge parent is the target
     let target = wrap.querySelector(TARGET);

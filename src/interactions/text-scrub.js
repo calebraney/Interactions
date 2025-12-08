@@ -1,4 +1,4 @@
-import { checkBreakpoints } from '../utilities';
+import { checkRunProp } from '../utilities';
 
 /*
 CSS
@@ -30,9 +30,9 @@ export const textScrub = function (gsapContext) {
   const items = gsap.utils.toArray(ITEM);
   items.forEach((item) => {
     if (!item) return;
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(item, ANIMATION_ID);
+    if (runProp === false) return;
     let splitText;
     const lineMasks = [];
 

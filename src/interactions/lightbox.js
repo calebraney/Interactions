@@ -1,6 +1,6 @@
-import { attr, checkBreakpoints, startScroll, stopScroll } from '../utilities';
+import { attr, checkRunProp, startScroll, stopScroll } from '../utilities';
 
-export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents, lenis) {
+export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
   const ANIMATION_ID = 'lightbox';
   //Selectors
   const LIGHTBOX_WRAP = '[data-ix-lightbox="wrap"]'; //a list of lightboxes (to prevent lists from intersecting)
@@ -172,8 +172,9 @@ export const lightbox = function (gsapContext, pagePlayers, pagePlayerComponents
   //if wraps exist run on each wrap, otherwise run on the body
   if (wraps.length > 0) {
     wraps.forEach((wrap) => {
-      let runOnBreakpoint = checkBreakpoints(wrap, ANIMATION_ID, gsapContext);
-      if (runOnBreakpoint === false) return;
+      //check if the run prop is set to true
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
       activateLightboxes(wrap);
     });
   } else {

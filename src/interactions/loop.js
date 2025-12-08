@@ -1,4 +1,4 @@
-import { attr, attrIfSet, checkBreakpoints, getClipDirection } from '../utilities';
+import { attr, attrIfSet, checkRunProp, getClipDirection } from '../utilities';
 
 export const loop = function (gsapContext) {
   //animation ID
@@ -43,9 +43,9 @@ export const loop = function (gsapContext) {
   items.forEach((item) => {
     // return if items are null
     if (!item) return;
-    //check breakpoints and quit function if set on specific breakpoints
-    let runOnBreakpoint = checkBreakpoints(item, ANIMATION_ID, gsapContext);
-    if (runOnBreakpoint === false) return;
+    //check if the run prop is set to true
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    if (runProp === false) return;
     //create variables from GSAP context
     let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
 
