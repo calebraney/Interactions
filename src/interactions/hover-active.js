@@ -1,6 +1,6 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkContainer } from '../utilities';
 
-export const hoverActive = function (gsapContext) {
+export const hoverActive = function () {
   //animation ID
   const ANIMATION_ID = 'hoveractive';
   //elements

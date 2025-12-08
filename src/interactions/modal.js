@@ -1,6 +1,6 @@
-import { attr, startScroll, stopScroll } from '../utilities';
+import { attr, startScroll, stopScroll, checkContainer } from '../utilities';
 
-export const modal = function (gsapContext, lenis) {
+export const modal = function (lenis) {
   const ANIMATION_ID = 'modal';
   //Selectors
   const MODAL_WRAP = '[data-ix-modal="wrap"]'; //a modal item

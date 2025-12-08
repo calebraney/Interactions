@@ -1,6 +1,6 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkContainer } from '../utilities';
 
-export const parallax = function (gsapContext) {
+export const parallax = function () {
   //animation ID
   const ANIMATION_ID = 'parallax';
   //elements

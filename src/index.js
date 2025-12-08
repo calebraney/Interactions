@@ -40,25 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let lenis;
 
   //////////////////////////////
-  //Slider instances
-  // const caseGallerySlider = function () {
-  //   const COMPONENT = '.case-gallery-slider_component';
-  //   const components = [...document.querySelectorAll(COMPONENT)];
-  //   const options = {
-  //     slidesPerView: 'auto',
-  //     loop: true,
-  //   };
-  //   //apply a module with defaults settings (canc override them using the options object above)
-  //   const modules = {
-  //     navigation: true,
-  //     pagination: false,
-  //     scrollbar: false,
-  //     autoplay: false,
-  //   };
-  //   const sliders = createSlider(components, options, modules);
-  // };
-
-  //////////////////////////////
   //Control Functions on page load
   const gsapInit = function () {
     //first interactions
@@ -91,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
         //setup video players
         const [players, components] = [videoPlyr()];
         //pass the players into the lightbox code
-        lightbox(gsapContext, players, components);
+        lightbox(players, components);
+        modal(lenis);
       }
     );
     //other interactions
@@ -104,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
     clickActive();
     hoverActive();
     imageSwitch();
-    modal(gsapContext, lenis);
   };
   gsapInit();
 

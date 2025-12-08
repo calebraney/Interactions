@@ -1,4 +1,4 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkContainer } from '../utilities';
 export const horizontal = function () {
   //animation ID
   const ANIMATION_ID = 'horizontal';

@@ -1,6 +1,6 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkContainer } from '../utilities';
 
-export const pathHover = function (gsapContext) {
+export const pathHover = function () {
   //animation ID
   const ANIMATION_ID = 'banner';
   //selectors

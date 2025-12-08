@@ -1,4 +1,4 @@
-import { checkRunProp, attr } from '../utilities';
+import { checkRunProp, attr, checkContainer } from '../utilities';
 
 export const clickActive = function () {
   //animation ID

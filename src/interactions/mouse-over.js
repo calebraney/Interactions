@@ -1,6 +1,6 @@
-import { attr, attrIfSet, checkRunProp } from '../utilities';
+import { attr, attrIfSet, checkRunProp, checkContainer } from '../utilities';
 
-export const mouseOver = function (gsapContext) {
+export const mouseOver = function () {
   // animation ID
   const ANIMATION_ID = 'mouseover';
   //elements

@@ -1,4 +1,10 @@
-import { attr, getClipDirection, getNonContentsChildren, checkRunProp } from '../utilities';
+import {
+  attr,
+  getClipDirection,
+  getNonContentsChildren,
+  checkRunProp,
+  checkContainer,
+} from '../utilities';
 /* CSS in PAGE Head
 
 [data-ix-load="wrap"]:not([data-ix-load-run="false"]) {
@@ -37,7 +43,7 @@ export const load = function (reduceMotion) {
     if (items.length === 0) return;
 
     //check if run is true and exit if set to false
-    let runProp = checkProp(wrap, ANIMATION_ID);
+    let runProp = checkRunProp(wrap, ANIMATION_ID);
     if (runProp === false && wrap.getAttribute('data-ix-load-run') === 'false') return;
 
     const tl = gsap.timeline({

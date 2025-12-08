@@ -56,8 +56,8 @@ export const runSplit = function (text, types = 'lines, words') {
 };
 
 export const checkContainer = function (containerChild, breakpoint, callback, additionalParams) {
-  let containerQuery = 'none';
-
+  let containerQuery = breakpoint;
+  //for breakpoint keywords use global breakpoint values.
   if (breakpoint === 'medium') {
     containerQuery = '(width < 50em)';
   } else if (breakpoint === 'small') {
@@ -69,15 +69,16 @@ export const checkContainer = function (containerChild, breakpoint, callback, ad
   if (containerQuery === 'none') {
     callback(false, additionalParams);
   } else {
+    //make a container query and run the callback function.
     containerChild.observeContainer(containerQuery, (match) => {
       callback(match, additionalParams);
 
-      //tracking
-      if (match) {
-        console.log(match);
-      } else {
-        console.log(match);
-      }
+      // //Breakpoint tracking
+      // if (match) {
+      //   console.log(match, containerChild);
+      // } else {
+      //   console.log(match, containerChild);
+      // }
     });
   }
 };

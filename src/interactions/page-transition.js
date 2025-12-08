@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll } from '../utilities';
+import { attr, startScroll, stopScroll, checkContainer } from '../utilities';
 
 /*
 Include this css in the head code

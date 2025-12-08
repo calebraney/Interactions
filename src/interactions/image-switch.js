@@ -1,4 +1,4 @@
-import { checkRunProp } from '../utilities';
+import { checkRunProp, checkContainer } from '../utilities';
 
 export const imageSwitch = function (gsapContext) {
   const ANIMATION_ID = 'imageswitch';
