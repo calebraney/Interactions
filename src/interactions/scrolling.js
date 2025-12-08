@@ -6,7 +6,7 @@ export const scrolling = function () {
   //elements
   const WRAP = `[data-ix-scrolling="wrap"]`;
   const TRIGGER = `[data-ix-scrolling="trigger"]`;
-  const ITEM = '[data-ix-scrolling="layer"]';
+  const ITEM = '[data-ix-scrolling="item"]';
   //timeline options
   const START = 'data-ix-scrolling-start';
   const END = 'data-ix-scrolling-end';
