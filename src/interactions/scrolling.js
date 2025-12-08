@@ -57,7 +57,6 @@ export const scrolling = function () {
       trigger = wrap;
     }
     const animation = function (smallBreakpoint) {
-      console.log(smallBreakpoint);
       // default GSAP options for animation
       const tlSettings = {
         scrub: 0.5,

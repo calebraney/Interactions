@@ -1,6 +1,6 @@
 import { attr, checkRunProp, checkContainer } from '../utilities';
 
-export const marquee = function (gsapContext) {
+export const marquee = function () {
   //animation ID
   const ANIMATION_ID = 'marquee';
   const WRAP = '[data-ix-marquee="wrap"]';
