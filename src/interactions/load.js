@@ -7,13 +7,12 @@ import {
 } from '../utilities';
 /* CSS in PAGE Head
 
-[data-ix-load="wrap"]:not([data-ix-load-run="false"]) {
+[data-ix-load="wrap"]:not([data-ix-load-run="false"]) :is([data-ix-load]:not([data-ix-load-run="false"]), [data-ix-load="stagger"]:not([data-ix-load-run="false"], > .u-display-contents, > * > .u-display-contents)) {
 	visibility: hidden;
 }
-[data-ix-load="wrap"]:not([data-ix-load-run="false"]) :is([data-ix-load]:not([data-ix-load-run="false"]), [data-ix-load="stagger"]:not([data-ix-load-run="false"])  > *) {
+html:is(.w-editor, .gsap-not-found) [data-ix-load="wrap"]:not([data-ix-load-run="false"]) :is([data-ix-load]:not([data-ix-load-run="false"]), [data-ix-load="stagger"]:not([data-ix-load-run="false"], > .u-display-contents, > * > .u-display-contents)) {
 	visibility: hidden;
 }
-html:is(.w-editor, .gsap-not-found) :is([data-ix-load-run], [data-ix-load]){visibility: visible;} 
 */
 
 export const load = function (reduceMotion) {
