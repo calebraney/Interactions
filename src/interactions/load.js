@@ -107,6 +107,9 @@ export const load = function (reduceMotion) {
       const clipEnd = getClipDirection('full');
 
       //create timeline
+      tl.set(item, {
+        autoAlpha: 1,
+      });
       tl.fromTo(
         item,
         {
