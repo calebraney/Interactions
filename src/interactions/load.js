@@ -135,7 +135,6 @@ export const load = function (reduceMotion) {
       let children = getNonContentsChildren(item);
       if (children.length === 0) return;
       children.forEach((child, index) => {
-        console.log(child);
         //first item set parent autoAlpha to 1
         if (index === 0) {
           gsap.set(item, { autoAlpha: 1 });
