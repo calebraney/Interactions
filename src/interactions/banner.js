@@ -38,7 +38,7 @@ export const banner = function () {
     let runProp = checkRunProp(wrap, ANIMATION_ID);
     if (runProp === false) return;
     //check container breakpoint and run callback.
-    const breakpoint = attr('none', item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
-    checkContainer(item, breakpoint, animation);
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(track, breakpoint, animation);
   });
 };
