@@ -17,6 +17,7 @@ export const accordion = function () {
 
   // utility function to open or close accordions
   const openAccordion = function (item, open = true) {
+    const trigger = item.querySelector(OPEN);
     //get state of items
     // const state = Flip.getState(item, {
     //   props: 'backgroundColor,margin',
@@ -25,8 +26,10 @@ export const accordion = function () {
     // });
     if (open === true) {
       item.classList.add(ACTIVE_CLASS);
+      trigger.setAttribute('aria-expanded', 'true');
     } else {
       item.classList.remove(ACTIVE_CLASS);
+      trigger.setAttribute('aria-expanded', 'false');
     }
     // // animate elements
     // Flip.from(state, {
