@@ -4,6 +4,9 @@ export const tabs = function () {
   const ANIMATION_ID = 'tabs';
   //elements
   const WRAP = '[data-ix-tabs="wrap"]';
+  const CONTENT = '[data-ix-tabs="content"]';
+  const LINKS = '[data-ix-tabs="links"]';
+
   const NEXT_BTN = '[data-ix-tabs="next"]';
   const PREV_BTN = '[data-ix-tabs="previous"]';
   const PLAY_BTN = '[data-ix-tabs="toggle"]';
@@ -37,8 +40,8 @@ export const tabs = function () {
       nextButton = tabWrap.querySelector(`${NEXT_BTN} button`),
       toggleWrap = tabWrap.querySelector(PLAY_BTN),
       toggleButton = tabWrap.querySelector(`${PLAY_BTN} button`),
-      buttonList = tabWrap.querySelector('.tab_button_list'),
-      panelList = tabWrap.querySelector('.tab_content_list'),
+      buttonList = tabWrap.querySelector(LINKS),
+      panelList = tabWrap.querySelector(CONTENT),
       animating = false,
       canPlay = true,
       autoplayTl;
