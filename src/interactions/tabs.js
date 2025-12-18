@@ -57,7 +57,7 @@ export const tabs = function () {
         child = slot.firstElementChild;
       }
     }
-    flattenDisplayContents(buttonList);
+    // flattenDisplayContents(buttonList);
     flattenDisplayContents(panelList);
 
     function removeCMSList(slot) {
@@ -74,7 +74,7 @@ export const tabs = function () {
       });
       staticWrapper.forEach((el) => el.remove());
     }
-    removeCMSList(buttonList);
+    // removeCMSList(buttonList);
     removeCMSList(panelList);
 
     let buttonItems = Array.from(...buttonList);
