@@ -6,6 +6,7 @@ export const tabs = function () {
   const WRAP = '[data-ix-tabs="wrap"]';
   const CONTENT = '[data-ix-tabs="content"]';
   const LINK = '[data-ix-tabs="link"]';
+  const LINKS = '[data-ix-tabs="links"]';
 
   const NEXT_BTN = '[data-ix-tabs="next"]';
   const PREV_BTN = '[data-ix-tabs="previous"]';
@@ -40,8 +41,9 @@ export const tabs = function () {
       nextButton = tabWrap.querySelector(`${NEXT_BTN} button`),
       toggleWrap = tabWrap.querySelector(PLAY_BTN),
       toggleButton = tabWrap.querySelector(`${PLAY_BTN} button`),
-      buttonList = tabWrap.querySelectorAll(LINK),
+      buttons = [...tabWrap.querySelectorAll(LINK)],
       panelList = tabWrap.querySelector(CONTENT),
+      buttonList = tabWrap.querySelector(LINKS),
       animating = false,
       canPlay = true,
       autoplayTl;
@@ -77,7 +79,7 @@ export const tabs = function () {
     // removeCMSList(buttonList);
     removeCMSList(panelList);
 
-    let buttonItems = Array.from(...buttonList);
+    let buttonItems = buttons;
     let panelItems = Array.from(panelList.children);
 
     if (!buttonList || !panelList || !buttonItems.length || !panelItems.length) {
