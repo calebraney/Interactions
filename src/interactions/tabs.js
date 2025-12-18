@@ -77,7 +77,7 @@ export const tabs = function () {
     removeCMSList(buttonList);
     removeCMSList(panelList);
 
-    let buttonItems = Array.from(buttonList);
+    let buttonItems = Array.from(...buttonList);
     let panelItems = Array.from(panelList.children);
 
     if (!buttonList || !panelList || !buttonItems.length || !panelItems.length) {
