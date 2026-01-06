@@ -4,7 +4,7 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
   const ANIMATION_ID = 'lightbox';
   //Selectors
   const LIGHTBOX_WRAP = '[data-ix-lightbox="wrap"]'; //a list of lightboxes (to prevent lists from intersecting)
-  const LIGHTBOX_COMPONENT = '[data-ix-lightbox="component"]'; //lightbox element
+  const LIGHTBOX_COMPONENT = '[data-ix-lightbox="component"]'; //lightbox element (needs to be a child of the trigger element)
   const LIGHTBOX_TRIGGER = '[data-ix-lightbox="trigger"]'; //element to trigger lightbox
   const LIGHTBOX_CLOSE_BTN = '[data-ix-lightbox="close"]';
   const LIGHTBOX_NEXT_BTN = '[data-ix-lightbox="next"]';
@@ -63,7 +63,7 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
     lightboxTriggers.forEach((trigger, index) => {
       //get the parent element of the trigger, and find the lightbox within that element
       const parent = trigger.parentElement;
-      const lightbox = parent.querySelector(LIGHTBOX_COMPONENT);
+      const lightbox = trigger.querySelector(LIGHTBOX_COMPONENT);
       //add parent and lightboxes to the array
       lightboxElements.push(lightbox);
 
