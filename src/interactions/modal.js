@@ -48,8 +48,9 @@ export const modal = function (lenis) {
         });
       }
     }
+    //if the modal timer is not set to 0
     if (timeout !== DEFAULT_TIMEOUT) {
-      //otherwise open based on timer
+      // open based on timer
       setTimeout(() => {
         openModal(modal);
       }, timeout * 1000);
@@ -72,7 +73,7 @@ export const modal = function (lenis) {
   });
 
   const openModal = function (modal) {
-    console.log(modal);
+    // console.log(modal);
     if (!modal) return;
     //if another modal is open close it.
     if (activeModal) {
