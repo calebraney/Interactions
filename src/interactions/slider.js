@@ -10,6 +10,7 @@ export const slider = function () {
   const PREVIOUS = "[data-ix-slider='previous']";
   const PAGINATION = '.slider_bullet_list';
   const PAGINATION_BUTTON = 'slider_bullet_item';
+  const PAGINATION_BUTTON_FILL = 'slider_bullet_item_fill';
   const SCROLLBAR = '.slider_scrollbar';
   const SCROLLBAR_HANDLE = 'slider_scrollbar_handle';
   //options
@@ -19,6 +20,10 @@ export const slider = function () {
   const SLIDE_TO_CLICKED = 'data-ix-slider-slide-to-clicked';
   const LOOP = 'data-ix-slider-loop';
   const SPEED = 'data-ix-slider-speed';
+  const AUTOPLAY = 'data-ix-slider-autoplay';
+  const SHOW_AUTOPLAY_PROGRESS = 'data-ix-slider-show-autoplay-progress';
+
+  const PAGINATION_TYPE = 'data-ix-slider-pagination-type'; //bullets, fraction, progressbar
   const ACTIVE_CLASS = 'is-active';
 
   const sliders = document.querySelectorAll(`${SLIDER}:not(${SLIDER} ${SLIDER})`);
@@ -68,9 +73,12 @@ export const slider = function () {
     const slideToClickedSlide = attr(false, swiperElement.getAttribute(SLIDE_TO_CLICKED));
     const loopMode = attr(false, swiperElement.getAttribute(LOOP));
     const speed = attr(600, swiperElement.getAttribute(SPEED));
+    const autoplay = attr(0, swiperElement.getAttribute(AUTOPLAY)); //autoplay duration in MS
+    const paginationType = attr('bullets', swiperElement.getAttribute(PAGINATION_TYPE)); //bullets, fraction, progressbar
+    const showAutoplayProgress = attr(true, swiperElement.getAttribute(SHOW_AUTOPLAY_PROGRESS));
 
     //create slider instance
-    new Swiper(swiperElement, {
+    const swiper = new Swiper(swiperElement, {
       slidesPerView: 'auto',
       followFinger: followFinger,
       freeMode: freeMode,
@@ -88,16 +96,30 @@ export const slider = function () {
         enabled: true,
         onlyInViewport: true,
       },
+      autoplay: autoplay === 0 ? false : { delay: autoplay * 1000 },
       navigation: {
         nextEl: component.querySelector(NEXT),
         prevEl: component.querySelector(PREVIOUS),
       },
       pagination: {
+        type: paginationType,
         el: component.querySelector(`${PAGINATION}`),
         bulletActiveClass: ACTIVE_CLASS,
         bulletClass: `${PAGINATION_BUTTON}`,
         bulletElement: 'button',
         clickable: true,
+        //version for fraction pagination with utility class
+        renderFraction: function (currentClass, totalClass) {
+          return (
+            '<div class="u-text-style-small"><span class="' +
+            currentClass +
+            '"></span>' +
+            ' of ' +
+            '<span class="' +
+            totalClass +
+            '"></span> </div>'
+          );
+        },
       },
       scrollbar: {
         el: component.querySelector(SCROLLBAR),
@@ -108,5 +130,22 @@ export const slider = function () {
       slideActiveClass: ACTIVE_CLASS,
       slideDuplicateActiveClass: ACTIVE_CLASS,
     });
+    //autoplay progress animation within pagination bullet
+    if (autoplay > 0 && showAutoplayProgress) {
+      const progressTL = gsap.timeline({ paused: false });
+      progressTL.fromTo(
+        component,
+        { '--slider-autoplay-progress': '0%' },
+        {
+          '--slider-autoplay-progress': ' 100%',
+          ease: 'none',
+          duration: autoplay,
+        }
+      );
+      //when slide changes, animate the progress fill
+      swiper.on('slideChange', function () {
+        progressTL.restart();
+      });
+    }
   });
 };
