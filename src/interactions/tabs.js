@@ -156,6 +156,7 @@ export const tabs = function () {
           },
           defaults: { duration: duration, ease: ease },
         });
+        //slider animation
         if (slideTabs) {
           tl.set(currentPanel, { display: 'block', position: 'relative' });
           if (previousPanel)
