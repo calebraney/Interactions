@@ -37,17 +37,16 @@ export const load = function (reduceMotion) {
   //get sections
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
   wraps.forEach((wrap) => {
-    //get all items within the section
-    const items = [
-      ...wrap.querySelectorAll(
-        `[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="False"], [${ATTRIBUTE}-run="false"])`
-      ),
-    ];
+    //get all items within the section that are not set to run false
+    // i makes it case insensitive
+    const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
     if (items.length === 0) return;
 
     //check if run is true and exit if set to false
     let runProp = checkRunProp(wrap, ANIMATION_ID);
-    if (runProp === false && (wrap.getAttribute('data-ix-load-run') === 'False' || 'false')) return;
+    const wrapRunAttribute = wrap.getAttribute('data-ix-load-run')?.toLowerCase();
+
+    if (runProp === false && wrapRunAttribute === 'false') return;
 
     const tl = gsap.timeline({
       delay: totalDuration,
