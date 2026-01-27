@@ -7,10 +7,10 @@ import {
 } from '../utilities';
 /* CSS in PAGE Head
 
-[data-ix-load="wrap"]:not([data-ix-load-run="false"]) :is([data-ix-load]:not([data-ix-load-run="false"]), [data-ix-load="stagger"]:not([data-ix-load-run="false"], > .u-display-contents, > * > .u-display-contents)) {
+[data-ix-load="wrap"]:not([data-ix-load-run="False"]) :is([data-ix-load]:not([data-ix-load-run="False"]), [data-ix-load="stagger"]:not([data-ix-load-run="False"], > .u-display-contents, > * > .u-display-contents)) {
 	visibility: hidden;
 }
-html:is(.w-editor, .gsap-not-found) [data-ix-load="wrap"]:not([data-ix-load-run="false"]) :is([data-ix-load]:not([data-ix-load-run="false"]), [data-ix-load="stagger"]:not([data-ix-load-run="false"], > .u-display-contents, > * > .u-display-contents)) {
+html:is(.w-editor, .gsap-not-found) [data-ix-load="wrap"]:not([data-ix-load-run="False"]) :is([data-ix-load]:not([data-ix-load-run="False"]), [data-ix-load="stagger"]:not([data-ix-load-run="False"], > .u-display-contents, > * > .u-display-contents)) {
 	visibility: hidden;
 }
 */
@@ -38,12 +38,16 @@ export const load = function (reduceMotion) {
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
   wraps.forEach((wrap) => {
     //get all items within the section
-    const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false"])`)];
+    const items = [
+      ...wrap.querySelectorAll(
+        `[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="False"], [${ATTRIBUTE}-run="false"])`
+      ),
+    ];
     if (items.length === 0) return;
 
     //check if run is true and exit if set to false
     let runProp = checkRunProp(wrap, ANIMATION_ID);
-    if (runProp === false && wrap.getAttribute('data-ix-load-run') === 'false') return;
+    if (runProp === false && (wrap.getAttribute('data-ix-load-run') === 'False' || 'false')) return;
 
     const tl = gsap.timeline({
       delay: totalDuration,

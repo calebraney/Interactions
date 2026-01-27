@@ -244,7 +244,11 @@ export const scrollIn = function () {
     if (runProp === false) return;
 
     //get all items within the section
-    const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false"])`)];
+    const items = [
+      ...wrap.querySelectorAll(
+        `[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="False"], [${ATTRIBUTE}-run="false"])`
+      ),
+    ];
     if (items.length === 0) return;
     //function to apply animations
     const animation = function (smallBreakpoint) {
