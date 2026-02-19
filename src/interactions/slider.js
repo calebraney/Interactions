@@ -21,6 +21,7 @@ export const slider = function () {
   const LOOP = 'data-ix-slider-loop';
   const SPEED = 'data-ix-slider-speed';
   const AUTOPLAY = 'data-ix-slider-autoplay';
+  const CENTER_SLIDES = 'data-ix-slider-center-slides';
   const SHOW_AUTOPLAY_PROGRESS = 'data-ix-slider-show-autoplay-progress';
 
   const PAGINATION_TYPE = 'data-ix-slider-pagination-type'; //bullets, fraction, progressbar
@@ -75,15 +76,16 @@ export const slider = function () {
     const speed = attr(600, swiperElement.getAttribute(SPEED));
     const autoplay = attr(0, swiperElement.getAttribute(AUTOPLAY)); //autoplay duration in MS
     const paginationType = attr('bullets', swiperElement.getAttribute(PAGINATION_TYPE)); //bullets, fraction, progressbar
+    const centerSlides = attr(false, swiperElement.getAttribute(CENTER_SLIDES));
     const showAutoplayProgress = attr(true, swiperElement.getAttribute(SHOW_AUTOPLAY_PROGRESS));
-
+    console.log(centerSlides);
     //create slider instance
     const swiper = new Swiper(swiperElement, {
       slidesPerView: 'auto',
       followFinger: followFinger,
       freeMode: freeMode,
       slideToClickedSlide: slideToClickedSlide,
-      centeredSlides: false,
+      centeredSlides: centerSlides,
       autoHeight: false,
       loop: loopMode,
       //   loopAdditionalSlides: 0,
