@@ -114,9 +114,10 @@ export const checkSiteAndPageRun = function (animationID) {
   const siteRunEl = document.querySelector(`[data-ix-${animationID}-site-run]`);
   const siteRun = attr(true, siteRunEl?.getAttribute(`data-ix-${animationID}-site-run`));
 
-  console.log(animationID, 'page run:', pageRun, 'site run:', siteRun);
-  if (pageRun === false) return false;
-  if (siteRun === false) return false;
+  if (pageRun === false || siteRun === false) {
+    document.querySelector('body').setAttribute(`data-ix-${animationID}-site-run`, 'false');
+    return false;
+  }
 
   //Alternate Version that checks CSS variables instead of data attributes
 

@@ -41,11 +41,7 @@ export const load = function (reduceMotion) {
   let loadTimelines = [];
   //check if page run or site run settings are false and exit if so
   let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) {
-    //set site run to false to prevent CSS from hiding elements
-    document.querySelector('body').setAttribute('data-ix-load-site-run', 'false');
-    return;
-  }
+  if (!siteOrPageCancel) return;
 
   //get sections
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
