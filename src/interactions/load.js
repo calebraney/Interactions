@@ -4,14 +4,19 @@ import {
   getNonContentsChildren,
   checkRunProp,
   checkContainer,
+  checkSiteAndPageRun,
 } from '../utilities';
 /* CSS in PAGE Head
-
-[data-ix-load="wrap"]:not([data-ix-load-run="false" i]) :is([data-ix-load]:not([data-ix-load-run="false" i]), [data-ix-load="stagger"]:not([data-ix-load-run="false" i], > .u-display-contents, > * > .u-display-contents)) {
-	visibility: hidden;
-}
-html:is(.w-editor, .gsap-not-found) [data-ix-load="wrap"]:not([data-ix-load-run="false" i]) :is([data-ix-load]:not([data-ix-load-run="false" i]), [data-ix-load="stagger"]:not([data-ix-load-run="false" i], > .u-display-contents, > * > .u-display-contents)) {
-	visibility: hidden;
+body:not([data-ix-load-site-run="false" i]) [data-ix-load="wrap"]:not([data-ix-load-run="false" i]) {
+  & [data-ix-load]:not([data-ix-load-run="false" i], [data-ix-load="stagger"]) {
+    visibility: hidden;
+  }
+  & [data-ix-load="stagger"]:not([data-ix-load-run="false" i]) > *:not(.u-display-contents) {
+    visibility: hidden;
+  }
+  & [data-ix-load="stagger"]:not([data-ix-load-run="false" i]) > .u-display-contents > * {
+    visibility: hidden;
+  }
 }
 */
 
@@ -34,6 +39,14 @@ export const load = function (reduceMotion) {
   //array of load section timelines
   let totalDuration = 0;
   let loadTimelines = [];
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) {
+    //set site run to false to prevent CSS from hiding elements
+    document.querySelector('body').setAttribute('data-ix-load-site-run', 'false');
+    return;
+  }
+
   //get sections
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
   wraps.forEach((wrap) => {
@@ -41,6 +54,7 @@ export const load = function (reduceMotion) {
     // i makes it case insensitive
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
     if (items.length === 0) return;
+    console.log(items.length);
 
     //check if run is true and exit if set to false
     let runProp = checkRunProp(wrap, ANIMATION_ID);

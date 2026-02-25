@@ -99,6 +99,37 @@ export const checkRunProp = function (item, animationID) {
   return true;
 };
 
+//check for attributes to stop animation on specific breakpoints
+export const checkSiteAndPageRun = function (animationID) {
+  //exit if items aren't found
+  if (!animationID) {
+    console.error(`No animationID provided to checkSiteAndPageRun`);
+    return;
+  }
+  //Check if page run is set to false, if so return false to stop interaction
+  const pageRunEl = document.querySelector(`[data-ix-${animationID}-page-run]`);
+  const pageRun = attr(true, pageRunEl?.getAttribute(`data-ix-${animationID}-page-run`));
+
+  //Check if page run is set to false, if so return false to stop interaction
+  const siteRunEl = document.querySelector(`[data-ix-${animationID}-site-run]`);
+  const siteRun = attr(true, siteRunEl?.getAttribute(`data-ix-${animationID}-site-run`));
+
+  console.log(animationID, 'page run:', pageRun, 'site run:', siteRun);
+  if (pageRun === false) return false;
+  if (siteRun === false) return false;
+
+  //Alternate Version that checks CSS variables instead of data attributes
+
+  // // Then check site-level CSS variable
+  // const siteRunVar = window
+  //   .getComputedStyle(document.documentElement)
+  //   .getPropertyValue(`--interactions--${animationID}-run`);
+  // const siteRun = attr(true, siteRunVar);
+  // if (siteRun === false) return false;
+  //If neither are set to false, return true to allow interaction to run
+  return true;
+};
+
 //utility function to get the clipping direction of items (horizontal or vertical only)
 export const getClipDirection = function (attributeValue) {
   //set default return value to be the attribute value

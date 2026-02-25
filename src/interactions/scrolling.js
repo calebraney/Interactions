@@ -1,4 +1,11 @@
-import { attr, attrIfSet, checkRunProp, getClipDirection, checkContainer } from '../utilities';
+import {
+  attr,
+  attrIfSet,
+  checkRunProp,
+  getClipDirection,
+  checkContainer,
+  checkSiteAndPageRun,
+} from '../utilities';
 
 export const scrolling = function () {
   //animation ID
@@ -44,6 +51,10 @@ export const scrolling = function () {
   const RADIUS_END = 'data-ix-scrolling-radius-end';
   const CLIP_START = 'data-ix-scrolling-clip-start';
   const CLIP_END = 'data-ix-scrolling-clip-end';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   const wraps = gsap.utils.toArray(WRAP);
   wraps.forEach((wrap) => {

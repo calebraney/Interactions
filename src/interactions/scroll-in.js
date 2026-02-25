@@ -4,6 +4,7 @@ import {
   getNonContentsChildren,
   getClipDirection,
   checkContainer,
+  checkSiteAndPageRun,
 } from '../utilities';
 
 export const scrollIn = function () {
@@ -36,6 +37,10 @@ export const scrollIn = function () {
   const EASE_LARGE = 0.3;
   const DURATION = 0.6;
   const EASE = 'power1.out';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   //resuable timeline creation with option attributes for individual customization per element
   const scrollInTL = function (item) {
