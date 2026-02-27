@@ -78,7 +78,7 @@ export const slider = function () {
     const paginationType = attr('bullets', swiperElement.getAttribute(PAGINATION_TYPE)); //bullets, fraction, progressbar
     const centerSlides = attr(false, swiperElement.getAttribute(CENTER_SLIDES));
     const showAutoplayProgress = attr(true, swiperElement.getAttribute(SHOW_AUTOPLAY_PROGRESS));
-    console.log(centerSlides);
+
     //create slider instance
     const swiper = new Swiper(swiperElement, {
       slidesPerView: 'auto',

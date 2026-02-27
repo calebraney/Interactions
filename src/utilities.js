@@ -93,7 +93,7 @@ export const checkRunProp = function (item, animationID) {
   }
   const RUN = `data-ix-${animationID}-run`;
   //check breakpoints and quit function if set on specific breakpoints
-  run = attr(true, item.getAttribute(RUN));
+  const run = attr(true, item.getAttribute(RUN));
   if (run === false) return false;
   // if no conditions match
   return true;
@@ -133,9 +133,6 @@ export const checkSiteAndPageRun = function (animationID) {
 
 //utility function to get the clipping direction of items (horizontal or vertical only)
 export const getClipDirection = function (attributeValue) {
-  //set default return value to be the attribute value
-  let clipMask = attributeValue;
-  //get the clip direction
   const clipDirections = {
     left: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
     right: 'polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)',
@@ -143,24 +140,8 @@ export const getClipDirection = function (attributeValue) {
     bottom: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
     full: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
   };
-  //check for each possible direction and map it to the correct clipping value
-  if (attributeValue === 'left') {
-    clipMask = clipDirections.left;
-  }
-  if (attributeValue === 'right') {
-    clipMask = clipDirections.right;
-  }
-  if (attributeValue === 'top') {
-    clipMask = clipDirections.top;
-  }
-  if (attributeValue === 'bottom') {
-    clipMask = clipDirections.bottom;
-  }
-  if (attributeValue === 'full') {
-    clipMask = clipDirections.full;
-  }
-
-  return clipMask;
+  //return the clip direction value if it matches one of the keys in the object, otherwise return the attribute value (to allow for custom clip paths or other values)
+  return clipDirections[attributeValue] || attributeValue;
 };
 
 export class ClassWatcher {

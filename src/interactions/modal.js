@@ -87,6 +87,6 @@ export const modal = function (lenis) {
     if (!modal) return;
     modal.close();
     startScroll(lenis);
-    activemodal = false;
+    activeModal = false;
   };
 };

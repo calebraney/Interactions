@@ -33,7 +33,7 @@ import { videoPlyr } from './interactions/video-plyr';
 
 document.addEventListener('DOMContentLoaded', function () {
   // Comment out for production
-  console.log('Local Script Loaded');
+  // console.log('Local Script Loaded');
 
   //////////////////////////////
   //Global Variables

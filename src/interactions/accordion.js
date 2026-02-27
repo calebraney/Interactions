@@ -101,9 +101,9 @@ export const accordion = function () {
           openAccordion(clickedItem, false);
         }
         // if the current item IS ACTIVE and keep one open is true check how many items are active
-        if (clickedItemAlreadyActive && keepOneActive) {
+        if (clickedItemAlreadyActive && keepOneOpen) {
           const activeItems = items.filter(function (item) {
-            return item.classList.contains(activeClass);
+            return item.classList.contains(ACTIVE_CLASS);
           });
           //if there are more than 1 items active close the current one
           if (activeItems.length > 1) {

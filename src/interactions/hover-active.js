@@ -67,7 +67,7 @@ export const hoverActive = function () {
   //select all the wrap elements
   const wraps = [...document.querySelectorAll(WRAP)];
   //if wraps exist run on each wrap, otherwise run on the body
-  if (wraps.length >= 0) {
+  if (wraps.length > 0) {
     wraps.forEach((wrap) => {
       //check if the run prop is set to true
       let runProp = checkRunProp(wrap, ANIMATION_ID);

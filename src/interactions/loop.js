@@ -1,6 +1,6 @@
 import { attr, attrIfSet, checkRunProp, getClipDirection } from '../utilities';
 
-export const loop = function (gsapContext) {
+export const loop = function () {
   //animation ID
   const ANIMATION_ID = 'loop';
   //elements
@@ -44,10 +44,9 @@ export const loop = function (gsapContext) {
     // return if items are null
     if (!item) return;
     //check if the run prop is set to true
-    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    let runProp = checkRunProp(item, ANIMATION_ID);
     if (runProp === false) return;
     //create variables from GSAP context
-    let { isMobile, isTablet, isDesktop, reduceMotion } = gsapContext.conditions;
 
     //////////////////////
     // Adding tweens

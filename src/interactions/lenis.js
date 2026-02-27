@@ -10,12 +10,6 @@ export const initLenis = function () {
     smoothTouch: false,
     easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // https://easings.net
   });
-  // lenis request animation from
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
 
   // Keep lenis and scrolltrigger in sync
   lenis.on('scroll', () => {
@@ -39,7 +33,6 @@ export const initLenis = function () {
     resizeTimeout = setTimeout(() => {
       requestAnimationFrame(() => {
         lenis.resize(); // Recalculate dimensions inside requestAnimationFrame for smoother transitions
-        console.log('refresh');
       });
     }, delay);
   }

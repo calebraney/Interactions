@@ -86,7 +86,7 @@ export const scrolling = function () {
         tlSettings.start = attr(tlSettings.start, wrap.getAttribute(BREAKPOINT_START));
       }
       if (smallBreakpoint && wrap.getAttribute(BREAKPOINT_END)) {
-        tlSettings.start = attr(tlSettings.start, wrap.getAttribute(BREAKPOINT_END));
+        tlSettings.end = attr(tlSettings.end, wrap.getAttribute(BREAKPOINT_END));
       }
 
       // create timeline

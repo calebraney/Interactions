@@ -9,7 +9,7 @@ export const imageSwitch = function (gsapContext) {
   const LINK = '[data-ix-imageswitch="link"]';
 
   const wraps = [...document.querySelectorAll(WRAP)];
-  if (!wraps.length === 0) return;
+  if (wraps.length === 0) return;
   wraps.forEach((wrap) => {
     //check if the run prop is set to true
     let runProp = checkRunProp(wrap, ANIMATION_ID);

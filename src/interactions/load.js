@@ -50,7 +50,6 @@ export const load = function (reduceMotion) {
     // i makes it case insensitive
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
     if (items.length === 0) return;
-    console.log(items.length);
 
     //check if run is true and exit if set to false
     let runProp = checkRunProp(wrap, ANIMATION_ID);
