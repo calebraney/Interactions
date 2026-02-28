@@ -1,4 +1,4 @@
-import { attr } from '../utilities';
+import { attr, flattenDisplayContents, removeCMSList } from '../utilities';
 
 export const slider = function () {
   //animation ID
@@ -36,35 +36,8 @@ export const slider = function () {
     const swiperWrapper = component.querySelector('.slider_list');
     if (!swiperElement || !swiperWrapper) return;
 
-    //remove display contents children
-    function flattenDisplayContents(slot) {
-      if (!slot) return;
-      let child = slot.firstElementChild;
-      while (child && child.classList.contains('u-display-contents')) {
-        while (child.firstChild) {
-          slot.insertBefore(child.firstChild, child);
-        }
-        slot.removeChild(child);
-        child = slot.firstElementChild;
-      }
-    }
     flattenDisplayContents(swiperWrapper);
 
-    //update cms list structure
-    function removeCMSList(slot) {
-      const dynList = Array.from(slot.children).find((child) =>
-        child.classList.contains('w-dyn-list')
-      );
-      if (!dynList) return;
-      const nestedItems = dynList?.querySelector('.w-dyn-items')?.children;
-      if (!nestedItems) return;
-      const staticWrapper = [...slot.children];
-      [...nestedItems].forEach((el) => {
-        const c = [...el.children].find((c) => !c.classList.contains('w-condition-invisible'));
-        c && slot.appendChild(c);
-      });
-      staticWrapper.forEach((el) => el.remove());
-    }
     removeCMSList(swiperWrapper);
 
     [...swiperWrapper.children].forEach((el) => el.classList.add('swiper-slide'));
@@ -78,7 +51,6 @@ export const slider = function () {
     const paginationType = attr('bullets', swiperElement.getAttribute(PAGINATION_TYPE)); //bullets, fraction, progressbar
     const centerSlides = attr(false, swiperElement.getAttribute(CENTER_SLIDES));
     const showAutoplayProgress = attr(true, swiperElement.getAttribute(SHOW_AUTOPLAY_PROGRESS));
-
     //create slider instance
     const swiper = new Swiper(swiperElement, {
       slidesPerView: 'auto',

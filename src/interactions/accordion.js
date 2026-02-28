@@ -107,7 +107,7 @@ export const accordion = function () {
           });
           //if there are more than 1 items active close the current one
           if (activeItems.length > 1) {
-            openAccordion(item, false);
+            openAccordion(clickedItem, false);
           }
         }
       });

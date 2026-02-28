@@ -2325,9 +2325,9 @@
     if (!isNaN(attrVal) && defaultValType === "number") return +attrVal;
     return defaultVal;
   };
-  var attrIfSet = function(item2, attributeName, defaultValue) {
-    const hasAttribute = item2.hasAttribute(attributeName);
-    const attributeValue = attr(defaultValue, item2.getAttribute(attributeName));
+  var attrIfSet = function(item, attributeName, defaultValue) {
+    const hasAttribute = item.hasAttribute(attributeName);
+    const attributeValue = attr(defaultValue, item.getAttribute(attributeName));
     if (hasAttribute) {
       return attributeValue;
     } else {
@@ -2351,13 +2351,13 @@
       });
     }
   };
-  var checkRunProp = function(item2, animationID) {
-    if (!item2 || !animationID) {
+  var checkRunProp = function(item, animationID) {
+    if (!item || !animationID) {
       console.error(`GSAP check Run Error in ${animationID}`);
       return;
     }
     const RUN = `data-ix-${animationID}-run`;
-    const run = attr(true, item2.getAttribute(RUN));
+    const run = attr(true, item.getAttribute(RUN));
     if (run === false) return false;
     return true;
   };
@@ -2386,8 +2386,8 @@
     };
     return clipDirections[attributeValue] || attributeValue;
   };
-  function getNonContentsChildren(item2) {
-    if (!item2 || !(item2 instanceof Element)) return [];
+  function getNonContentsChildren(item) {
+    if (!item || !(item instanceof Element)) return [];
     const result = [];
     function processChildren(parent) {
       const children = Array.from(parent.children);
@@ -2400,7 +2400,7 @@
         }
       }
     }
-    processChildren(item2);
+    processChildren(item);
     return result;
   }
   var copyURL = function() {
@@ -2417,11 +2417,11 @@
     const RESET_EL = "[data-ix-reset]";
     const RESET_TIME = "data-ix-reset-time";
     const resetScrollTriggers = document.querySelectorAll(RESET_EL);
-    resetScrollTriggers.forEach(function(item2) {
-      item2.addEventListener("click", function(e) {
+    resetScrollTriggers.forEach(function(item) {
+      item.addEventListener("click", function(e) {
         ScrollTrigger.refresh();
-        if (item2.hasAttribute(RESET_TIME)) {
-          let time = attr(1e3, item2.getAttribute(RESET_TIME));
+        if (item.hasAttribute(RESET_TIME)) {
+          let time = attr(1e3, item.getAttribute(RESET_TIME));
           setTimeout(() => {
             ScrollTrigger.refresh();
           }, time);
@@ -2435,6 +2435,64 @@
     if (!yearSpan) return;
     const currentYear = (/* @__PURE__ */ new Date()).getFullYear();
     yearSpan.innerText = currentYear.toString();
+  };
+  var getAttrConfig = function(element, prefix, defaults) {
+    const config = {};
+    for (const [key, defaultVal] of Object.entries(defaults)) {
+      const attrName = `data-ix-${prefix}-${key}`;
+      config[key] = attr(defaultVal, element.getAttribute(attrName));
+    }
+    return config;
+  };
+  var buildFromToVars = function(item, prefix) {
+    const PROPERTY_MAP = [
+      ["x", "x", "0%"],
+      ["y", "y", "0%"],
+      ["scale", "scale", 1],
+      ["scaleX", "scale-x", 1],
+      ["scaleY", "scale-y", 1],
+      ["width", "width", "0%"],
+      ["height", "height", "0%"],
+      ["rotateX", "rotate-x", 0],
+      ["rotateY", "rotate-y", 0],
+      ["rotateZ", "rotate-z", 0],
+      ["opacity", "opacity", 0],
+      ["borderRadius", "radius", "string"]
+    ];
+    const varsFrom = {};
+    const varsTo = {};
+    PROPERTY_MAP.forEach(([gsapProp, attrSuffix, defaultVal]) => {
+      varsFrom[gsapProp] = attrIfSet(item, `data-ix-${prefix}-${attrSuffix}-start`, defaultVal);
+      varsTo[gsapProp] = attrIfSet(item, `data-ix-${prefix}-${attrSuffix}-end`, defaultVal);
+    });
+    const clipStart = attrIfSet(item, `data-ix-${prefix}-clip-start`, "left");
+    const clipEnd = attrIfSet(item, `data-ix-${prefix}-clip-end`, "full");
+    varsFrom.clipPath = getClipDirection(clipStart);
+    varsTo.clipPath = getClipDirection(clipEnd);
+    return { varsFrom, varsTo };
+  };
+  var flattenDisplayContents = function(slot) {
+    if (!slot) return;
+    let child = slot.firstElementChild;
+    while (child && child.classList.contains("u-display-contents")) {
+      while (child.firstChild) {
+        slot.insertBefore(child.firstChild, child);
+      }
+      slot.removeChild(child);
+      child = slot.firstElementChild;
+    }
+  };
+  var removeCMSList = function(slot) {
+    const dynList = Array.from(slot.children).find((child) => child.classList.contains("w-dyn-list"));
+    if (!dynList) return;
+    const nestedItems = dynList?.querySelector(".w-dyn-items")?.children;
+    if (!nestedItems) return;
+    const staticWrapper = [...slot.children];
+    [...nestedItems].forEach((el) => {
+      const c = [...el.children].find((c2) => !c2.classList.contains("w-condition-invisible"));
+      c && slot.appendChild(c);
+    });
+    staticWrapper.forEach((el) => el.remove());
   };
 
   // src/interactions/accordion.js
@@ -2450,13 +2508,13 @@
     const OPTION_HOVER_OPEN = "data-ix-accordion-hover";
     const ACTIVE_CLASS = "is-active";
     const wraps = [...document.querySelectorAll(WRAP)];
-    const openAccordion = function(item2, open = true) {
-      const trigger = item2.querySelector(OPEN);
+    const openAccordion = function(item, open = true) {
+      const trigger = item.querySelector(OPEN);
       if (open === true) {
-        item2.classList.add(ACTIVE_CLASS);
+        item.classList.add(ACTIVE_CLASS);
         trigger.setAttribute("aria-expanded", "true");
       } else {
-        item2.classList.remove(ACTIVE_CLASS);
+        item.classList.remove(ACTIVE_CLASS);
         trigger.setAttribute("aria-expanded", "false");
       }
     };
@@ -2482,11 +2540,11 @@
           let clickedItemAlreadyActive = clickedItem.classList.contains(ACTIVE_CLASS);
           if (!clickedItemAlreadyActive) {
             if (oneActive) {
-              items.forEach((item2) => {
-                if (item2 === clickedItem) {
-                  openAccordion(item2);
+              items.forEach((item) => {
+                if (item === clickedItem) {
+                  openAccordion(item);
                 } else {
-                  openAccordion(item2, false);
+                  openAccordion(item, false);
                 }
               });
             }
@@ -2498,22 +2556,22 @@
             openAccordion(clickedItem, false);
           }
           if (clickedItemAlreadyActive && keepOneOpen) {
-            const activeItems = items.filter(function(item2) {
-              return item2.classList.contains(ACTIVE_CLASS);
+            const activeItems = items.filter(function(item) {
+              return item.classList.contains(ACTIVE_CLASS);
             });
             if (activeItems.length > 1) {
-              openAccordion(item, false);
+              openAccordion(clickedItem, false);
             }
           }
         });
       }
       if (hoverOnly) {
-        items.forEach((item2) => {
-          item2.addEventListener("mouseover", function() {
-            openAccordion(item2);
+        items.forEach((item) => {
+          item.addEventListener("mouseover", function() {
+            openAccordion(item);
           });
-          item2.addEventListener("mouseout", function() {
-            openAccordion(item2, false);
+          item.addEventListener("mouseout", function() {
+            openAccordion(item, false);
           });
         });
       }
@@ -2582,40 +2640,40 @@
         let runProp = checkRunProp(rootElement, ANIMATION_ID);
         if (runProp === false) return;
       }
-      const activateItems = function(item2, makeActive = true) {
-        if (!item2) return;
+      const activateItems = function(item, makeActive = true) {
+        if (!item) return;
         let hasTarget = true;
-        const itemID = item2.getAttribute(ID);
+        const itemID = item.getAttribute(ID);
         const targetEl = rootElement.querySelector(`${TARGET}[${ID}="${itemID}"]`);
         if (!itemID || !targetEl) {
           hasTarget = false;
         }
         if (makeActive) {
-          item2.classList.add(activeClass);
+          item.classList.add(activeClass);
           if (hasTarget) {
             targetEl.classList.add(activeClass);
           }
         } else {
-          item2.classList.remove(activeClass);
+          item.classList.remove(activeClass);
           if (hasTarget) {
             targetEl.classList.remove(activeClass);
           }
         }
       };
-      triggers.forEach((item2) => {
-        if (!item2) return;
-        let startActive = attr(false, item2.getAttribute(OPTION_START_ACTIVE));
+      triggers.forEach((item) => {
+        if (!item) return;
+        let startActive = attr(false, item.getAttribute(OPTION_START_ACTIVE));
         if (startActive) {
-          activateItems(item2);
+          activateItems(item);
         } else {
-          activateItems(item2, false);
+          activateItems(item, false);
         }
-        item2.addEventListener("click", function(e) {
-          let itemIsActive = item2.classList.contains(ACTIVE_CLASS);
+        item.addEventListener("click", function(e) {
+          let itemIsActive = item.classList.contains(ACTIVE_CLASS);
           if (!itemIsActive) {
             if (oneActive) {
               triggers.forEach((itemElement) => {
-                if (itemElement === item2) {
+                if (itemElement === item) {
                   activateItems(itemElement);
                 } else {
                   activateItems(itemElement, false);
@@ -2623,18 +2681,18 @@
               });
             }
             if (!oneActive) {
-              activateItems(item2);
+              activateItems(item);
             }
           }
           if (itemIsActive && !keepOneActive) {
-            activateItems(item2, false);
+            activateItems(item, false);
           }
           if (itemIsActive && keepOneActive) {
-            const activeItems = triggers.filter(function(item3) {
-              return item3.classList.contains(activeClass);
+            const activeItems = triggers.filter(function(item2) {
+              return item2.classList.contains(activeClass);
             });
             if (activeItems.length > 1) {
-              activateItems(item2, false);
+              activateItems(item, false);
             }
           }
           if (gsap.ScrollTrigger !== void 0) {
@@ -2756,19 +2814,19 @@
     const OPTION_ACTIVE_CLASS = "data-ix-countup-active";
     const ACTIVE_CLASS = "is-active";
     const items = document.querySelectorAll(ITEM);
-    items.forEach((item2) => {
+    items.forEach((item) => {
       const animation = function() {
-        const parent = item2.parentElement;
-        let textEl = item2;
-        if (item2.querySelector(TEXT)) {
-          textEl = item2.querySelector(TEXT);
+        const parent = item.parentElement;
+        let textEl = item;
+        if (item.querySelector(TEXT)) {
+          textEl = item.querySelector(TEXT);
         }
         const number = +textEl.textContent;
         if (!number || Number.isNaN(number)) return;
         decimalPoints = countDecimalPoints(number);
-        let duration = attr(2.5, item2.getAttribute(OPTION_DURATION));
-        let start = attr("top bottom", item2.getAttribute(OPTION_START));
-        let activeClass = attr(ACTIVE_CLASS, item2.getAttribute(OPTION_ACTIVE_CLASS));
+        let duration = attr(2.5, item.getAttribute(OPTION_DURATION));
+        let start = attr("top bottom", item.getAttribute(OPTION_START));
+        let activeClass = attr(ACTIVE_CLASS, item.getAttribute(OPTION_ACTIVE_CLASS));
         const countUp2 = new i(textEl, number, {
           useGrouping: false,
           decimalPlaces: decimalPoints,
@@ -2776,7 +2834,7 @@
         });
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: item2,
+            trigger: item,
             start,
             end: "top 10%",
             scrub: true,
@@ -2790,10 +2848,10 @@
           }
         });
       };
-      let runProp = checkRunProp(item2, ANIMATION_ID);
+      let runProp = checkRunProp(item, ANIMATION_ID);
       if (runProp === false) return;
-      const breakpoint = attr("none", item2.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
-      checkContainer(item2, breakpoint, animation);
+      const breakpoint = attr("none", item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(item, breakpoint, animation);
     });
   };
   function countDecimalPoints(number) {
@@ -2823,21 +2881,21 @@
       const children = [...listElement.querySelectorAll(TRIGGER)];
       let activeClass = attr(ACTIVE_CLASS, listElement.getAttribute(OPTION_ACTIVE_CLASS));
       let keepActive = attr(false, listElement.getAttribute(OPTION_KEEP_ACTIVE));
-      function activateItem(item2, activate = true) {
+      function activateItem(item, activate = true) {
         let hasTarget = true;
-        activeClass = attr(activeClass, item2.getAttribute(OPTION_ACTIVE_CLASS));
-        const itemID = item2.getAttribute(ID);
+        activeClass = attr(activeClass, item.getAttribute(OPTION_ACTIVE_CLASS));
+        const itemID = item.getAttribute(ID);
         const targetEl = listElement.querySelector(`${TARGET}[${ID}="${itemID}"]`);
         if (!itemID || !targetEl) {
           hasTarget = false;
         }
         if (activate) {
-          item2.classList.add(activeClass);
+          item.classList.add(activeClass);
           if (hasTarget) {
             targetEl.classList.add(activeClass);
           }
         } else {
-          item2.classList.remove(activeClass);
+          item.classList.remove(activeClass);
           if (hasTarget) {
             targetEl.classList.remove(activeClass);
           }
@@ -3976,9 +4034,9 @@
     function refreshScroll() {
       const triggers = [...document.querySelectorAll('[data-scroll="refresh"]')];
       if (triggers.length === 0) return;
-      triggers.forEach((item2) => {
-        if (!item2) return;
-        item2.addEventListener("click", (event) => {
+      triggers.forEach((item) => {
+        if (!item) return;
+        item.addEventListener("click", (event) => {
           refreshLenisTimeout();
         });
       });
@@ -3996,8 +4054,8 @@
       if (stopScrollLinks == null) {
         return;
       }
-      stopScrollLinks.forEach((item2) => {
-        item2.addEventListener("click", (event) => {
+      stopScrollLinks.forEach((item) => {
+        item.addEventListener("click", (event) => {
           lenis.stop();
         });
       });
@@ -4008,8 +4066,8 @@
       if (startScrollLinks == null) {
         return;
       }
-      startScrollLinks.forEach((item2) => {
-        item2.addEventListener("click", (event) => {
+      startScrollLinks.forEach((item) => {
+        item.addEventListener("click", (event) => {
           lenis.start();
         });
       });
@@ -4020,9 +4078,9 @@
       if (toggleScrollLinks == null) {
         return;
       }
-      toggleScrollLinks.forEach((item2) => {
+      toggleScrollLinks.forEach((item) => {
         let stopScroll3 = false;
-        item2.addEventListener("click", (event) => {
+        item.addEventListener("click", (event) => {
           stopScroll3 = !stopScroll3;
           if (stopScroll3) lenis.stop();
           else lenis.start();
@@ -4053,27 +4111,27 @@
       if (items.length === 0 || images.length === 0) return;
       const activateItem = function(index, activate = true) {
         const image = images[index];
-        const item2 = items[index];
+        const item = items[index];
         const tab = tabLinks[index];
         if (activate) {
           image.classList.add(ACTIVE_CLASS);
-          item2.classList.add(ACTIVE_CLASS);
+          item.classList.add(ACTIVE_CLASS);
           tab.classList.add(ACTIVE_CLASS);
         } else {
           image.classList.remove(ACTIVE_CLASS);
-          item2.classList.remove(ACTIVE_CLASS);
+          item.classList.remove(ACTIVE_CLASS);
           tab.classList.remove(ACTIVE_CLASS);
         }
       };
-      images.forEach((item2) => item2.classList.remove(ACTIVE_CLASS));
+      images.forEach((item) => item.classList.remove(ACTIVE_CLASS));
       activateItem(0);
-      items.forEach((item2, index) => {
+      items.forEach((item, index) => {
         const image = images[index];
         const tab = tabLinks[index];
-        if (!item2 || !image) return;
+        if (!item || !image) return;
         const imageTL = gsap.timeline({
           scrollTrigger: {
-            trigger: item2,
+            trigger: item,
             start: "top center",
             end: "bottom center",
             markers: false,
@@ -4249,13 +4307,13 @@
       tl.set(wrap, {
         autoAlpha: 1
       });
-      const loadHeading = function(item2) {
-        gsap.set(item2, { autoAlpha: 1 });
-        const position = attr(0, item2.getAttribute(POSITION));
-        if (item2.classList.contains("w-richtext")) {
-          item2 = item2.children;
+      const loadHeading = function(item) {
+        gsap.set(item, { autoAlpha: 1 });
+        const position = attr(0, item.getAttribute(POSITION));
+        if (item.classList.contains("w-richtext")) {
+          item = item.children;
         }
-        SplitText.create(item2, {
+        SplitText.create(item, {
           type: "words",
           // linesClass: 'line',
           wordsClass: "word",
@@ -4276,20 +4334,20 @@
           }
         });
       };
-      const loadImage = function(item2) {
-        const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-        tl.fromTo(item2, { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 1, scale: 1 }, position);
+      const loadImage = function(item) {
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+        tl.fromTo(item, { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 1, scale: 1 }, position);
       };
-      const loadLine = function(item2) {
-        const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-        const clipAttr = attr("left", item2.getAttribute(CLIP_DIRECTION));
+      const loadLine = function(item) {
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+        const clipAttr = attr("left", item.getAttribute(CLIP_DIRECTION));
         const clipStart = getClipDirection(clipAttr);
         const clipEnd = getClipDirection("full");
-        tl.set(item2, {
+        tl.set(item, {
           autoAlpha: 1
         });
         tl.fromTo(
-          item2,
+          item,
           {
             clipPath: clipStart
           },
@@ -4299,25 +4357,25 @@
           position
         );
       };
-      const loadItem = function(item2) {
-        const position = attr(DEFAULT_STAGGER, item2.getAttribute(POSITION));
-        tl.fromTo(item2, { autoAlpha: 0, y: "2rem" }, { autoAlpha: 1, y: "0rem" }, position);
+      const loadItem = function(item) {
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+        tl.fromTo(item, { autoAlpha: 0, y: "2rem" }, { autoAlpha: 1, y: "0rem" }, position);
       };
-      const loadStagger = function(item2) {
-        if (!item2) return;
-        let children = getNonContentsChildren(item2);
+      const loadStagger = function(item) {
+        if (!item) return;
+        let children = getNonContentsChildren(item);
         if (children.length === 0) return;
         children.forEach((child, index) => {
           if (index === 0) {
-            gsap.set(item2, { autoAlpha: 1 });
+            gsap.set(item, { autoAlpha: 1 });
           }
           loadItem(child);
         });
       };
-      const loadSimple = function(item2) {
-        if (!item2) return;
+      const loadSimple = function(item) {
+        if (!item) return;
         tl.fromTo(
-          item2,
+          item,
           {
             autoAlpha: 0
           },
@@ -4330,30 +4388,30 @@
         );
       };
       const animation = function() {
-        items.forEach((item2) => {
-          if (!item2) return;
-          const loadType = item2.getAttribute(ATTRIBUTE);
+        items.forEach((item) => {
+          if (!item) return;
+          const loadType = item.getAttribute(ATTRIBUTE);
           if (reduceMotion) {
             if (loadType === STAGGER) {
-              loadSimple(item2.children);
+              loadSimple(item.children);
             } else {
-              loadSimple(item2);
+              loadSimple(item);
             }
           } else {
             if (loadType === HEADING) {
-              loadHeading(item2);
+              loadHeading(item);
             }
             if (loadType === IMAGE) {
-              loadImage(item2);
+              loadImage(item);
             }
             if (loadType === LINE) {
-              loadLine(item2);
+              loadLine(item);
             }
             if (loadType === ITEM) {
-              loadItem(item2);
+              loadItem(item);
             }
             if (loadType === STAGGER) {
-              loadStagger(item2);
+              loadStagger(item);
             }
           }
         });
@@ -4371,84 +4429,24 @@
   var loop = function() {
     const ANIMATION_ID = "loop";
     const ITEM = `[data-ix-loop="item"]`;
-    const EASE = "data-ix-loop-ease";
-    const DELAY = "data-ix-loop-delay";
-    const REPEAT_DELAY = "data-ix-loop-repeat-delay";
-    const YOYO = "data-ix-loop-yoyo";
-    const DURATION = "data-ix-loop-duration";
-    const X_START = "data-ix-loop-x-start";
-    const X_END = "data-ix-loop-x-end";
-    const Y_START = "data-ix-loop-y-start";
-    const Y_END = "data-ix-loop-y-end";
-    const SCALE_START = "data-ix-loop-scale-start";
-    const SCALE_END = "data-ix-loop-scale-end";
-    const SCALE_X_START = "data-ix-loop-scale-x-start";
-    const SCALE_X_END = "data-ix-loop-scale-x-end";
-    const SCALE_Y_START = "data-ix-loop-scale-y-start";
-    const SCALE_Y_END = "data-ix-loop-scale-y-end";
-    const WIDTH_START = "data-ix-loop-width-start";
-    const WIDTH_END = "data-ix-loop-width-end";
-    const HEIGHT_START = "data-ix-loop-height-start";
-    const HEIGHT_END = "data-ix-loop-height-end";
-    const ROTATE_X_START = "data-ix-loop-rotate-x-start";
-    const ROTATE_X_END = "data-ix-loop-rotate-x-end";
-    const ROTATE_Y_START = "data-ix-loop-rotate-y-start";
-    const ROTATE_Y_END = "data-ix-loop-rotate-y-end";
-    const ROTATE_Z_START = "data-ix-loop-rotate-z-start";
-    const ROTATE_Z_END = "data-ix-loop-rotate-z-end";
-    const OPACITY_START = "data-ix-loop-opacity-start";
-    const OPACITY_END = "data-ix-loop-opacity-end";
-    const RADIUS_START = "data-ix-loop-radius-start";
-    const RADIUS_END = "data-ix-loop-radius-end";
-    const CLIP_START = "data-ix-loop-clip-start";
-    const CLIP_END = "data-ix-loop-clip-end";
     const items = [...document.querySelectorAll(ITEM)];
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runProp = checkRunProp(item2, ANIMATION_ID);
+    items.forEach((item) => {
+      if (!item) return;
+      let runProp = checkRunProp(item, ANIMATION_ID);
       if (runProp === false) return;
-      const varsFrom = {};
-      const varsTo = { duration: 5 };
       let tl = gsap.timeline({
         defaults: {
           repeat: -1,
           ease: "none"
         }
       });
-      varsTo.yoyo = attrIfSet(item2, YOYO, false);
-      varsTo.delay = attrIfSet(item2, DELAY, 0);
-      varsTo.repeatDelay = attrIfSet(item2, REPEAT_DELAY, 0);
-      varsTo.duration = attrIfSet(item2, DURATION, 1);
-      varsTo.ease = attrIfSet(item2, EASE, "none");
-      varsFrom.x = attrIfSet(item2, X_START, "0%");
-      varsTo.x = attrIfSet(item2, X_END, "0%");
-      varsFrom.y = attrIfSet(item2, Y_START, "0%");
-      varsTo.y = attrIfSet(item2, Y_END, "0%");
-      varsFrom.scale = attrIfSet(item2, SCALE_START, 1);
-      varsTo.scale = attrIfSet(item2, SCALE_END, 1);
-      varsFrom.scaleX = attrIfSet(item2, SCALE_X_START, 1);
-      varsTo.scaleX = attrIfSet(item2, SCALE_X_END, 1);
-      varsFrom.scaleY = attrIfSet(item2, SCALE_Y_START, 1);
-      varsTo.scaleY = attrIfSet(item2, SCALE_Y_END, 1);
-      varsFrom.width = attrIfSet(item2, WIDTH_START, "0%");
-      varsTo.width = attrIfSet(item2, WIDTH_END, "0%");
-      varsFrom.height = attrIfSet(item2, HEIGHT_START, "0%");
-      varsTo.height = attrIfSet(item2, HEIGHT_END, "0%");
-      varsFrom.rotateX = attrIfSet(item2, ROTATE_X_START, 0);
-      varsTo.rotateX = attrIfSet(item2, ROTATE_X_END, 0);
-      varsFrom.rotateY = attrIfSet(item2, ROTATE_Y_START, 0);
-      varsTo.rotateY = attrIfSet(item2, ROTATE_Y_END, 0);
-      varsFrom.rotateZ = attrIfSet(item2, ROTATE_Z_START, 0);
-      varsTo.rotateZ = attrIfSet(item2, ROTATE_Z_END, 0);
-      varsFrom.opacity = attrIfSet(item2, OPACITY_START, 0);
-      varsTo.opacity = attrIfSet(item2, OPACITY_END, 0);
-      varsFrom.borderRadius = attrIfSet(item2, RADIUS_START, "string");
-      varsTo.borderRadius = attrIfSet(item2, RADIUS_END, "string");
-      const clipStart = attrIfSet(item2, CLIP_START, "left");
-      const clipEnd = attrIfSet(item2, CLIP_END, "full");
-      varsFrom.clipPath = getClipDirection(clipStart);
-      varsTo.clipPath = getClipDirection(clipEnd);
-      let tween2 = tl.fromTo(item2, varsFrom, varsTo);
+      const { varsFrom, varsTo } = buildFromToVars(item, "loop");
+      varsTo.yoyo = attrIfSet(item, "data-ix-loop-yoyo", false);
+      varsTo.delay = attrIfSet(item, "data-ix-loop-delay", 0);
+      varsTo.repeatDelay = attrIfSet(item, "data-ix-loop-repeat-delay", 0);
+      varsTo.duration = attrIfSet(item, "data-ix-loop-duration", 1);
+      varsTo.ease = attrIfSet(item, "data-ix-loop-ease", "none");
+      let tween2 = tl.fromTo(item, varsFrom, varsTo);
     });
   };
 
@@ -4696,8 +4694,8 @@
           closeModal(modal2);
         }
       });
-      closeButtons.forEach((item2) => {
-        item2.addEventListener("click", (e) => {
+      closeButtons.forEach((item) => {
+        item.addEventListener("click", (e) => {
           closeModal(modal2);
         });
       });
@@ -4911,24 +4909,24 @@
     const EASE = "power1.out";
     let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
     if (!siteOrPageCancel) return;
-    const scrollInTL = function(item2) {
+    const scrollInTL = function(item) {
       const settings = {
         scrub: false,
         toggleActions: "play none none none",
         start: "top 90%",
         end: "top 75%"
       };
-      settings.toggleActions = attr(settings.toggleActions, item2.getAttribute(SCROLL_TOGGLE_ACTIONS));
-      settings.scrub = attr(settings.scrub, item2.getAttribute(SCROLL_SCRUB));
-      settings.start = attr(settings.start, item2.getAttribute(SCROLL_START));
-      settings.end = attr(settings.end, item2.getAttribute(SCROLL_END));
+      settings.toggleActions = attr(settings.toggleActions, item.getAttribute(SCROLL_TOGGLE_ACTIONS));
+      settings.scrub = attr(settings.scrub, item.getAttribute(SCROLL_SCRUB));
+      settings.start = attr(settings.start, item.getAttribute(SCROLL_START));
+      settings.end = attr(settings.end, item.getAttribute(SCROLL_END));
       const tl = gsap.timeline({
         defaults: {
           duration: DURATION,
           ease: EASE
         },
         scrollTrigger: {
-          trigger: item2,
+          trigger: item,
           start: settings.start,
           end: settings.end,
           toggleActions: settings.toggleActions,
@@ -4937,7 +4935,7 @@
       });
       return tl;
     };
-    const defaultTween = function(item2, tl, options = {}) {
+    const defaultTween = function(item, tl, options = {}) {
       const varsFrom = {
         autoAlpha: 0,
         y: "2rem"
@@ -4955,14 +4953,14 @@
       if (options.stagger === "large") {
         varsTo.stagger = { each: EASE_LARGE, from: "start" };
       }
-      const tween2 = tl.fromTo(item2, varsFrom, varsTo);
+      const tween2 = tl.fromTo(item, varsFrom, varsTo);
       return tween2;
     };
-    const scrollInHeading = function(item2) {
-      if (item2.classList.contains("w-richtext")) {
-        item2 = item2.firstChild;
+    const scrollInHeading = function(item) {
+      if (item.classList.contains("w-richtext")) {
+        item = item.firstChild;
       }
-      SplitText.create(item2, {
+      SplitText.create(item, {
         type: "words",
         // 'chars, words, lines
         // linesClass: "line",
@@ -4973,7 +4971,7 @@
         //have it auto adjust based on width
         // mask: 'lines',
         onSplit(self2) {
-          const tl = scrollInTL(item2);
+          const tl = scrollInTL(item);
           tween = defaultTween(self2.words, tl, { stagger: "small" });
           const revertText = function(self3) {
             self3.revert();
@@ -4983,26 +4981,26 @@
         }
       });
     };
-    const scrollInItem = function(item2) {
-      if (!item2) return;
-      if (item2.classList.contains("w-richtext")) {
-        const children = gsap.utils.toArray(item2.children);
+    const scrollInItem = function(item) {
+      if (!item) return;
+      if (item.classList.contains("w-richtext")) {
+        const children = gsap.utils.toArray(item.children);
         if (children.length === 0) return;
         children.forEach((child) => {
           const tl = scrollInTL(child);
           const tween2 = defaultTween(child, tl);
         });
       } else {
-        const tl = scrollInTL(item2);
-        const tween2 = defaultTween(item2, tl);
+        const tl = scrollInTL(item);
+        const tween2 = defaultTween(item, tl);
       }
     };
-    const scrollInImage = function(item2) {
-      if (!item2) return;
-      const parent = item2.parentElement;
-      const tl = scrollInTL(item2);
+    const scrollInImage = function(item) {
+      if (!item) return;
+      const parent = item.parentElement;
+      const tl = scrollInTL(item);
       tl.fromTo(
-        item2,
+        item,
         {
           scale: 1.2
         },
@@ -5023,14 +5021,14 @@
         "<"
       );
     };
-    const scrollInLine = function(item2) {
-      if (!item2) return;
-      const clipAttr = attr("left", item2.getAttribute(CLIP_DIRECTION));
+    const scrollInLine = function(item) {
+      if (!item) return;
+      const clipAttr = attr("left", item.getAttribute(CLIP_DIRECTION));
       const clipStart = getClipDirection(clipAttr);
       const clipEnd = getClipDirection("full");
-      const tl = scrollInTL(item2);
+      const tl = scrollInTL(item);
       tl.fromTo(
-        item2,
+        item,
         {
           clipPath: clipStart
         },
@@ -5039,26 +5037,26 @@
         }
       );
     };
-    const scrollInContainer = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
+    const scrollInContainer = function(item) {
+      if (!item) return;
+      const children = gsap.utils.toArray(item.children);
       if (children.length === 0) return;
       children.forEach((child) => {
         const tl = scrollInTL(child);
         const tween2 = defaultTween(child, tl);
       });
     };
-    const scrollInStagger = function(item2) {
-      if (!item2) return;
-      const staggerAmount = attr(EASE_LARGE, item2.getAttribute(SCROLL_STAGGER));
-      let children = getNonContentsChildren(item2);
+    const scrollInStagger = function(item) {
+      if (!item) return;
+      const staggerAmount = attr(EASE_LARGE, item.getAttribute(SCROLL_STAGGER));
+      let children = getNonContentsChildren(item);
       if (children.length === 0) return;
-      const tl = scrollInTL(item2);
+      const tl = scrollInTL(item);
       const tween2 = defaultTween(children, tl, { stagger: staggerAmount });
     };
-    const scrollInRichText = function(item2) {
-      if (!item2) return;
-      const children = gsap.utils.toArray(item2.children);
+    const scrollInRichText = function(item) {
+      if (!item) return;
+      const children = gsap.utils.toArray(item.children);
       if (children.length === 0) return;
       children.forEach((child) => {
         const childTag = child.tagName;
@@ -5080,29 +5078,29 @@
       const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
       if (items.length === 0) return;
       const animation = function(smallBreakpoint) {
-        items.forEach((item2) => {
-          if (!item2) return;
-          const scrollInType = item2.getAttribute(ELEMENT);
+        items.forEach((item) => {
+          if (!item) return;
+          const scrollInType = item.getAttribute(ELEMENT);
           if (scrollInType === HEADING) {
-            scrollInHeading(item2);
+            scrollInHeading(item);
           }
           if (scrollInType === ITEM) {
-            scrollInItem(item2);
+            scrollInItem(item);
           }
           if (scrollInType === IMAGE) {
-            scrollInImage(item2);
+            scrollInImage(item);
           }
           if (scrollInType === LINE) {
-            scrollInLine(item2);
+            scrollInLine(item);
           }
           if (scrollInType === CONTAINER) {
-            scrollInContainer(item2);
+            scrollInContainer(item);
           }
           if (scrollInType === STAGGER) {
-            scrollInStagger(item2);
+            scrollInStagger(item);
           }
           if (scrollInType === RICH_TEXT) {
-            scrollInRichText(item2);
+            scrollInRichText(item);
           }
         });
       };
@@ -5117,41 +5115,11 @@
     const WRAP = `[data-ix-scrolling="wrap"]`;
     const TRIGGER = `[data-ix-scrolling="trigger"]`;
     const ITEM = '[data-ix-scrolling="item"]';
-    const START = "data-ix-scrolling-start";
-    const END = "data-ix-scrolling-end";
-    const BREAKPOINT = "data-ix-scrolling-breakpoint";
-    const BREAKPOINT_START = "data-ix-scrolling-start-breakpoint";
-    const BREAKPOINT_END = "data-ix-scrolling-end-breakpoint";
-    const SCRUB = "data-ix-scrolling-scrub";
     const POSITION = "data-ix-scrolling-position";
     const DURATION = "data-ix-scrolling-duration";
     const EASE = "data-ix-scrolling-ease";
-    const X_START = "data-ix-scrolling-x-start";
-    const X_END = "data-ix-scrolling-x-end";
-    const Y_START = "data-ix-scrolling-y-start";
-    const Y_END = "data-ix-scrolling-y-end";
-    const SCALE_START = "data-ix-scrolling-scale-start";
-    const SCALE_END = "data-ix-scrolling-scale-end";
-    const SCALE_X_START = "data-ix-scrolling-scale-x-start";
-    const SCALE_X_END = "data-ix-scrolling-scale-x-end";
-    const SCALE_Y_START = "data-ix-scrolling-scale-y-start";
-    const SCALE_Y_END = "data-ix-scrolling-scale-y-end";
-    const WIDTH_START = "data-ix-scrolling-width-start";
-    const WIDTH_END = "data-ix-scrolling-width-end";
-    const HEIGHT_START = "data-ix-scrolling-height-start";
-    const HEIGHT_END = "data-ix-scrolling-height-end";
-    const ROTATE_X_START = "data-ix-scrolling-rotate-x-start";
-    const ROTATE_X_END = "data-ix-scrolling-rotate-x-end";
-    const ROTATE_Y_START = "data-ix-scrolling-rotate-y-start";
-    const ROTATE_Y_END = "data-ix-scrolling-rotate-y-end";
-    const ROTATE_Z_START = "data-ix-scrolling-rotate-z-start";
-    const ROTATE_Z_END = "data-ix-scrolling-rotate-z-end";
-    const OPACITY_START = "data-ix-scrolling-opacity-start";
-    const OPACITY_END = "data-ix-scrolling-opacity-end";
-    const RADIUS_START = "data-ix-scrolling-radius-start";
-    const RADIUS_END = "data-ix-scrolling-radius-end";
-    const CLIP_START = "data-ix-scrolling-clip-start";
-    const CLIP_END = "data-ix-scrolling-clip-end";
+    const BREAKPOINT_START = "data-ix-scrolling-start-breakpoint";
+    const BREAKPOINT_END = "data-ix-scrolling-end-breakpoint";
     let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
     if (!siteOrPageCancel) return;
     const wraps = gsap.utils.toArray(WRAP);
@@ -5163,16 +5131,12 @@
         trigger = wrap;
       }
       const animation = function(smallBreakpoint) {
-        const tlSettings = {
+        const tlSettings = getAttrConfig(wrap, "scrolling", {
           scrub: 0.5,
           start: "top bottom",
           end: "bottom top",
           ease: "none"
-        };
-        tlSettings.start = attr(tlSettings.start, wrap.getAttribute(START));
-        tlSettings.end = attr(tlSettings.end, wrap.getAttribute(END));
-        tlSettings.scrub = attr(tlSettings.scrub, wrap.getAttribute(SCRUB));
-        tlSettings.ease = attr(tlSettings.ease, wrap.getAttribute(EASE));
+        });
         if (smallBreakpoint && wrap.getAttribute(BREAKPOINT_START)) {
           tlSettings.start = attr(tlSettings.start, wrap.getAttribute(BREAKPOINT_START));
         }
@@ -5192,42 +5156,13 @@
             ease: tlSettings.ease
           }
         });
-        items.forEach((item2) => {
-          if (!item2) return;
-          const varsFrom = {};
-          const varsTo = {};
-          varsFrom.x = attrIfSet(item2, X_START, "0%");
-          varsTo.x = attrIfSet(item2, X_END, "0%");
-          varsFrom.y = attrIfSet(item2, Y_START, "0%");
-          varsTo.y = attrIfSet(item2, Y_END, "0%");
-          varsFrom.scale = attrIfSet(item2, SCALE_START, 1);
-          varsTo.scale = attrIfSet(item2, SCALE_END, 1);
-          varsFrom.scaleX = attrIfSet(item2, SCALE_X_START, 1);
-          varsTo.scaleX = attrIfSet(item2, SCALE_X_END, 1);
-          varsFrom.scaleY = attrIfSet(item2, SCALE_Y_START, 1);
-          varsTo.scaleY = attrIfSet(item2, SCALE_Y_END, 1);
-          varsFrom.width = attrIfSet(item2, WIDTH_START, "0%");
-          varsTo.width = attrIfSet(item2, WIDTH_END, "0%");
-          varsFrom.height = attrIfSet(item2, HEIGHT_START, "0%");
-          varsTo.height = attrIfSet(item2, HEIGHT_END, "0%");
-          varsFrom.rotateX = attrIfSet(item2, ROTATE_X_START, 0);
-          varsTo.rotateX = attrIfSet(item2, ROTATE_X_END, 0);
-          varsFrom.rotateY = attrIfSet(item2, ROTATE_Y_START, 0);
-          varsTo.rotateY = attrIfSet(item2, ROTATE_Y_END, 0);
-          varsFrom.rotateZ = attrIfSet(item2, ROTATE_Z_START, 0);
-          varsTo.rotateZ = attrIfSet(item2, ROTATE_Z_END, 0);
-          varsFrom.opacity = attrIfSet(item2, OPACITY_START, 0);
-          varsTo.opacity = attrIfSet(item2, OPACITY_END, 0);
-          varsFrom.borderRadius = attrIfSet(item2, RADIUS_START, "string");
-          varsTo.borderRadius = attrIfSet(item2, RADIUS_END, "string");
-          const clipStart = attrIfSet(item2, CLIP_START, "left");
-          const clipEnd = attrIfSet(item2, CLIP_END, "full");
-          varsFrom.clipPath = getClipDirection(clipStart);
-          varsTo.clipPath = getClipDirection(clipEnd);
-          const position = attr("<", item2.getAttribute(POSITION));
-          varsTo.duration = attr(1, item2.getAttribute(DURATION));
-          varsTo.ease = attr(item2, EASE, "none");
-          let tween2 = tl.fromTo(item2, varsFrom, varsTo, position);
+        items.forEach((item) => {
+          if (!item) return;
+          const { varsFrom, varsTo } = buildFromToVars(item, "scrolling");
+          const position = attr("<", item.getAttribute(POSITION));
+          varsTo.duration = attr(1, item.getAttribute(DURATION));
+          varsTo.ease = attr("none", item.getAttribute(EASE));
+          let tween2 = tl.fromTo(item, varsFrom, varsTo, position);
         });
       };
       let runProp = checkRunProp(wrap, ANIMATION_ID);
@@ -5267,32 +5202,7 @@
       let autoplayVideos = attr(false, tabWrap.getAttribute(AUTOPLAYVIDEOS));
       let ease = attr("power1.out", tabWrap.getAttribute(EASE));
       let previousButton = tabWrap.querySelector(`${PREV_BTN} button`), nextButton = tabWrap.querySelector(`${NEXT_BTN} button`), toggleWrap = tabWrap.querySelector(PLAY_BTN), toggleButton = tabWrap.querySelector(`${PLAY_BTN} button`), buttons = [...tabWrap.querySelectorAll(LINK)], panelList = tabWrap.querySelector(CONTENT), buttonList = tabWrap.querySelector(LINKS), animating = false, canPlay = true, autoplayTl;
-      function flattenDisplayContents(slot) {
-        if (!slot) return;
-        let child = slot.firstElementChild;
-        while (child && child.classList.contains("u-display-contents")) {
-          while (child.firstChild) {
-            slot.insertBefore(child.firstChild, child);
-          }
-          slot.removeChild(child);
-          child = slot.firstElementChild;
-        }
-      }
       flattenDisplayContents(panelList);
-      function removeCMSList(slot) {
-        const dynList = Array.from(slot.children).find(
-          (child) => child.classList.contains("w-dyn-list")
-        );
-        if (!dynList) return;
-        const nestedItems = dynList?.querySelector(".w-dyn-items")?.children;
-        if (!nestedItems) return;
-        const staticWrapper = [...slot.children];
-        [...nestedItems].forEach((el) => {
-          const c = [...el.children].find((c2) => !c2.classList.contains("w-condition-invisible"));
-          c && slot.appendChild(c);
-        });
-        staticWrapper.forEach((el) => el.remove());
-      }
       removeCMSList(panelList);
       let buttonItems = buttons;
       let panelItems = Array.from(panelList.children);
@@ -5505,32 +5415,7 @@
       const swiperElement = component.querySelector(".slider_element");
       const swiperWrapper = component.querySelector(".slider_list");
       if (!swiperElement || !swiperWrapper) return;
-      function flattenDisplayContents(slot) {
-        if (!slot) return;
-        let child = slot.firstElementChild;
-        while (child && child.classList.contains("u-display-contents")) {
-          while (child.firstChild) {
-            slot.insertBefore(child.firstChild, child);
-          }
-          slot.removeChild(child);
-          child = slot.firstElementChild;
-        }
-      }
       flattenDisplayContents(swiperWrapper);
-      function removeCMSList(slot) {
-        const dynList = Array.from(slot.children).find(
-          (child) => child.classList.contains("w-dyn-list")
-        );
-        if (!dynList) return;
-        const nestedItems = dynList?.querySelector(".w-dyn-items")?.children;
-        if (!nestedItems) return;
-        const staticWrapper = [...slot.children];
-        [...nestedItems].forEach((el) => {
-          const c = [...el.children].find((c2) => !c2.classList.contains("w-condition-invisible"));
-          c && slot.appendChild(c);
-        });
-        staticWrapper.forEach((el) => el.remove());
-      }
       removeCMSList(swiperWrapper);
       [...swiperWrapper.children].forEach((el) => el.classList.add("swiper-slide"));
       const followFinger = attr(true, swiperElement.getAttribute(FOLLOW_FINGER));
@@ -5612,9 +5497,9 @@
     const ITEM = '[data-ix-textscrub="item"]';
     const LINE_CLASS = "line-mask";
     const items = gsap.utils.toArray(ITEM);
-    items.forEach((item2) => {
-      if (!item2) return;
-      let runProp = checkRunProp(item2, ANIMATION_ID);
+    items.forEach((item) => {
+      if (!item) return;
+      let runProp = checkRunProp(item, ANIMATION_ID);
       if (runProp === false) return;
       let splitText;
       const lineMasks = [];
@@ -5651,7 +5536,7 @@
         });
       };
       function createAnimation() {
-        const splitText2 = SplitText.create(item2, {
+        const splitText2 = SplitText.create(item, {
           type: "lines",
           linesClass: "line",
           autoSplit: true,
@@ -5768,9 +5653,9 @@
         });
       }
       player2.on("play", (event) => {
-        components.forEach((item2, index2) => {
-          item2.classList.remove(HIDE_COVER_CLASS);
-          if (item2 !== component) {
+        components.forEach((item, index2) => {
+          item.classList.remove(HIDE_COVER_CLASS);
+          if (item !== component) {
             const player3 = players[index2];
             player3.pause();
           }

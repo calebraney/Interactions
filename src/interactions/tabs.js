@@ -1,4 +1,4 @@
-import { attr } from '../utilities';
+import { attr, flattenDisplayContents, removeCMSList } from '../utilities';
 export const tabs = function () {
   //animation ID
   const ANIMATION_ID = 'tabs';
@@ -48,34 +48,9 @@ export const tabs = function () {
       canPlay = true,
       autoplayTl;
 
-    function flattenDisplayContents(slot) {
-      if (!slot) return;
-      let child = slot.firstElementChild;
-      while (child && child.classList.contains('u-display-contents')) {
-        while (child.firstChild) {
-          slot.insertBefore(child.firstChild, child);
-        }
-        slot.removeChild(child);
-        child = slot.firstElementChild;
-      }
-    }
     // flattenDisplayContents(buttonList);
     flattenDisplayContents(panelList);
 
-    function removeCMSList(slot) {
-      const dynList = Array.from(slot.children).find((child) =>
-        child.classList.contains('w-dyn-list')
-      );
-      if (!dynList) return;
-      const nestedItems = dynList?.querySelector('.w-dyn-items')?.children;
-      if (!nestedItems) return;
-      const staticWrapper = [...slot.children];
-      [...nestedItems].forEach((el) => {
-        const c = [...el.children].find((c) => !c.classList.contains('w-condition-invisible'));
-        c && slot.appendChild(c);
-      });
-      staticWrapper.forEach((el) => el.remove());
-    }
     // removeCMSList(buttonList);
     removeCMSList(panelList);
 

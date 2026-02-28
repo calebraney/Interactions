@@ -10,8 +10,7 @@ export const initLenis = function () {
     smoothTouch: false,
     easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // https://easings.net
   });
-
-  // Keep lenis and scrolltrigger in sync
+  // Keep lenis and scrolltrigger in sync using a single gsap ticker source
   lenis.on('scroll', () => {
     if (!ScrollTrigger) return;
     ScrollTrigger.update();
@@ -32,7 +31,7 @@ export const initLenis = function () {
     clearTimeout(resizeTimeout); // Cancel previous resize calls
     resizeTimeout = setTimeout(() => {
       requestAnimationFrame(() => {
-        lenis.resize(); // Recalculate dimensions inside requestAnimationFrame for smoother transitions
+        lenis.resize();
       });
     }, delay);
   }
