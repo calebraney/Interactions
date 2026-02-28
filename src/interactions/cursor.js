@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 /*
 CSS to include
@@ -37,6 +37,11 @@ export const cursor = function () {
   const OUTER_DELAY = 0.4;
   //classes
   const HOVER_CLASS = 'is-hover';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
+
   // select the items
   const wrap = document.querySelector(WRAP);
   const cursorInner = document.querySelector(INNER);

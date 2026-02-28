@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const banner = function () {
   //animation ID
@@ -9,6 +9,10 @@ export const banner = function () {
   //options
   const START = 'data-ix-banner-start';
   const END = 'data-ix-banner-end';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   //elements
   const wraps = [...document.querySelectorAll(WRAP)];

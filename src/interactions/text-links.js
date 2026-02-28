@@ -1,4 +1,4 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
 
 export const textLinks = function (gsapContext) {
   //animation ID
@@ -7,6 +7,11 @@ export const textLinks = function (gsapContext) {
   const WRAP = '[data-ix-textlink="wrap"]';
   const FRONT = '[data-ix-textlink="front"]';
   const BACK = '[data-ix-textlink="back"]';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
+
   //get wraps
   const wraps = gsap.utils.toArray(WRAP);
   wraps.forEach((wrap) => {

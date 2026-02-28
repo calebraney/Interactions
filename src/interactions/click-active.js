@@ -1,4 +1,4 @@
-import { checkRunProp, attr, checkContainer } from '../utilities';
+import { checkRunProp, attr, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const clickActive = function () {
   //animation ID
@@ -18,6 +18,10 @@ export const clickActive = function () {
   const INTERACTION_DURATION = 800;
 
   const ACTIVE_CLASS = 'is-active';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   // functionality function that handles all of the event listeners and logic
   //is triggered below either on each wrap element or within the document itself if no wrap is found

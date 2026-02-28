@@ -1,10 +1,14 @@
-import { attrIfSet, checkRunProp, buildFromToVars } from '../utilities';
+import { attrIfSet, checkRunProp, buildFromToVars, checkSiteAndPageRun } from '../utilities';
 
 export const loop = function () {
   //animation ID
   const ANIMATION_ID = 'loop';
   //elements
   const ITEM = `[data-ix-loop="item"]`;
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   const items = [...document.querySelectorAll(ITEM)];
   items.forEach((item) => {

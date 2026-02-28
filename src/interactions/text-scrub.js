@@ -1,4 +1,4 @@
-import { checkRunProp } from '../utilities';
+import { checkRunProp, checkSiteAndPageRun } from '../utilities';
 
 /*
 CSS
@@ -26,6 +26,11 @@ export const textScrub = function (gsapContext) {
   const ITEM = '[data-ix-textscrub="item"]';
   //options
   const LINE_CLASS = 'line-mask';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
+
   //element selector
   const items = gsap.utils.toArray(ITEM);
   items.forEach((item) => {

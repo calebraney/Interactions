@@ -1,5 +1,5 @@
 import { CountUp } from 'countup.js';
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const countUp = function () {
   //animation ID
@@ -14,6 +14,10 @@ export const countUp = function () {
   const OPTION_ACTIVE_CLASS = 'data-ix-countup-active';
   //classes
   const ACTIVE_CLASS = 'is-active';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   //elements
   const items = document.querySelectorAll(ITEM);

@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll, checkContainer } from '../utilities';
+import { attr, startScroll, stopScroll, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 /*
 Include this css in the head code
@@ -22,6 +22,10 @@ export const pageTransition = function (lenis) {
   const transitionWrap = document.querySelector(WRAP);
   const transitionColumns = document.querySelectorAll(COLUMN);
   if (!transitionWrap || transitionColumns.length === 0) return;
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   // Page load animation
   const tlLoad = gsap.timeline();

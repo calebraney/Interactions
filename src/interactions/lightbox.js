@@ -1,4 +1,4 @@
-import { attr, checkRunProp, startScroll, stopScroll } from '../utilities';
+import { attr, checkRunProp, startScroll, stopScroll, checkSiteAndPageRun } from '../utilities';
 
 export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
   const ANIMATION_ID = 'lightbox';
@@ -21,6 +21,10 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
   const NO_SCROLL = 'no-scroll';
   //global variables
   let activeLightbox = false;
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   //function to activate lightboxes
   const activateLightboxes = function (listElement) {

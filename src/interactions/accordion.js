@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const accordion = function () {
   //animation ID
@@ -13,8 +13,12 @@ export const accordion = function () {
   const OPTION_KEEP_ONE_OPEN = 'data-ix-accordion-keep-one-open';
   const OPTION_HOVER_OPEN = 'data-ix-accordion-hover';
   const ACTIVE_CLASS = 'is-active';
-  const wraps = [...document.querySelectorAll(WRAP)];
 
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
+
+  const wraps = [...document.querySelectorAll(WRAP)];
   // utility function to open or close accordions
   const openAccordion = function (item, open = true) {
     const trigger = item.querySelector(OPEN);

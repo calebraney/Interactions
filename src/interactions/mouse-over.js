@@ -1,4 +1,4 @@
-import { attr, attrIfSet, checkRunProp, checkContainer } from '../utilities';
+import { attr, attrIfSet, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const mouseOver = function () {
   // animation ID
@@ -22,6 +22,10 @@ export const mouseOver = function () {
   const Y_ROTATE_Z = 'data-ix-mouseover-y-rotate-z';
   const Y_ROTATE_Y = 'data-ix-mouseover-y-rotate-y';
   const Y_ROTATE_X = 'data-ix-mouseover-y-rotate-x';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   // select the items
   const wraps = document.querySelectorAll(WRAP);

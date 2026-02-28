@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const parallax = function () {
   //animation ID
@@ -10,6 +10,10 @@ export const parallax = function () {
   //options
   const TYPE = 'data-ix-parallax-type'; //options are uncover, cover, or parallax
   const AMOUNT = 'data-ix-parallax-amount';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   const wraps = gsap.utils.toArray(WRAP);
   wraps.forEach((wrap) => {

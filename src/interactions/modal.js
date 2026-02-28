@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll, checkContainer } from '../utilities';
+import { attr, startScroll, stopScroll, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const modal = function (lenis) {
   const ANIMATION_ID = 'modal';
@@ -12,6 +12,10 @@ export const modal = function (lenis) {
 
   //global variables
   let activeModal = false;
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   //Arrays of modal and video player elements
   const modals = [...document.querySelectorAll(MODAL_WRAP)];

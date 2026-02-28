@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const pathHover = function () {
   //animation ID
@@ -9,6 +9,10 @@ export const pathHover = function () {
   //options
   const DURATION = 'data-ix-pathhover-duration';
   const REVERSE = 'data-ix-pathhover-reverse';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   //elements
   const wraps = document.querySelectorAll(WRAP);

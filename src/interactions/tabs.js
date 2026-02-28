@@ -1,4 +1,4 @@
-import { attr, flattenDisplayContents, removeCMSList } from '../utilities';
+import { attr, flattenDisplayContents, removeCMSList, checkSiteAndPageRun } from '../utilities';
 export const tabs = function () {
   //animation ID
   const ANIMATION_ID = 'tabs';

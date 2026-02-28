@@ -1,7 +1,14 @@
 //Setup
 import Lenis from 'lenis';
+import { checkSiteAndPageRun } from '../utilities';
 
 export const initLenis = function () {
+  const ANIMATION_ID = 'lenis';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
+
   const lenis = new Lenis({
     duration: 0.5,
     wheelMultiplier: 0.75,

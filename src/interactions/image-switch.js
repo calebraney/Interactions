@@ -1,4 +1,4 @@
-import { checkRunProp, checkContainer } from '../utilities';
+import { checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 export const imageSwitch = function (gsapContext) {
   const ANIMATION_ID = 'imageswitch';
@@ -7,6 +7,10 @@ export const imageSwitch = function (gsapContext) {
   const ITEM = '[data-ix-imageswitch="item"]';
   const IMAGE = '[data-ix-imageswitch="image"]';
   const LINK = '[data-ix-imageswitch="link"]';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   const wraps = [...document.querySelectorAll(WRAP)];
   if (wraps.length === 0) return;
