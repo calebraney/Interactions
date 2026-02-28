@@ -4898,9 +4898,10 @@
           prefixEl.setAttribute("aria-hidden", "true");
           item.appendChild(prefixEl);
         }
+        const EXTRA_TICKS = [1, 3, 6, 10, 15];
         const columns = [];
         const targetDigits = targetString.replace("-", "");
-        const startDigits = startString.replace("-", "");
+        let digitColumnIndex = 0;
         for (let i2 = 0; i2 < targetDigits.length; i2++) {
           const char = targetDigits[i2];
           if (isNaN(parseInt(char))) {
@@ -4911,19 +4912,25 @@
             item.appendChild(sep);
             continue;
           }
+          const targetDigit = parseInt(char);
+          const extraTicks = EXTRA_TICKS[Math.min(digitColumnIndex, EXTRA_TICKS.length - 1)];
+          const numCycles = Math.max(0, Math.ceil((extraTicks - targetDigit) / 10));
+          const targetIndex = numCycles * 10 + targetDigit;
+          const startIndex = targetIndex - extraTicks;
           const column = document.createElement("span");
           column.classList.add(COLUMN_CLASS);
           column.setAttribute("aria-hidden", "true");
-          for (let d = 0; d <= 9; d++) {
-            const digitEl = document.createElement("span");
-            digitEl.classList.add(DIGIT_CLASS);
-            digitEl.textContent = d;
-            column.appendChild(digitEl);
+          for (let cycle = 0; cycle <= numCycles; cycle++) {
+            for (let d = 0; d <= 9; d++) {
+              const digitEl = document.createElement("span");
+              digitEl.classList.add(DIGIT_CLASS);
+              digitEl.textContent = d;
+              column.appendChild(digitEl);
+            }
           }
           item.appendChild(column);
-          const targetDigit = parseInt(char);
-          const startDigit = i2 < startDigits.length ? parseInt(startDigits[i2]) || 0 : 0;
-          columns.push({ element: column, targetDigit, startDigit });
+          columns.push({ element: column, targetIndex, startIndex });
+          digitColumnIndex++;
         }
         if (suffix) {
           const suffixEl = document.createElement("span");
@@ -4935,8 +4942,8 @@
         if (columns.length === 0) return;
         const firstDigitEl = columns[0].element.querySelector(`.${DIGIT_CLASS}`);
         const digitHeight = firstDigitEl.offsetHeight;
-        columns.forEach(({ element, startDigit }) => {
-          gsap.set(element, { y: -startDigit * digitHeight });
+        columns.forEach(({ element, startIndex }) => {
+          gsap.set(element, { y: -startIndex * digitHeight });
         });
         const animateColumns = function() {
           const tl = gsap.timeline({
@@ -4944,8 +4951,8 @@
               item.classList.add(activeClass);
             }
           });
-          columns.forEach(({ element, targetDigit }, index) => {
-            const targetY = -targetDigit * digitHeight;
+          columns.forEach(({ element, targetIndex }, index) => {
+            const targetY = -targetIndex * digitHeight;
             let position;
             if (direction === "down") {
               position = (columns.length - 1 - index) * stagger;

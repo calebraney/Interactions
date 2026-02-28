@@ -128,10 +128,13 @@ export const numberTicker = function () {
       }
 
       // Build digit columns for the target number
-      // Each digit gets a vertical column of 0-9 that scrolls to the correct position
+      // Each digit gets a vertical column of repeated 0-9 cycles that scrolls to the correct position.
+      // Each column spins through a position-dependent number of extra digits before landing,
+      // ensuring animation always occurs even when the target digit is 0.
+      const EXTRA_TICKS = [1, 3, 6, 10, 15]; // extra digits to travel per column position (left to right)
       const columns = [];
       const targetDigits = targetString.replace('-', '');
-      const startDigits = startString.replace('-', '');
+      let digitColumnIndex = 0; // tracks only digit columns (excludes separators)
 
       for (let i = 0; i < targetDigits.length; i++) {
         const char = targetDigits[i];
@@ -146,25 +149,33 @@ export const numberTicker = function () {
           continue;
         }
 
-        // Create a column with digits 0–9 stacked vertically
+        const targetDigit = parseInt(char);
+        const extraTicks = EXTRA_TICKS[Math.min(digitColumnIndex, EXTRA_TICKS.length - 1)];
+
+        // Number of full 0-9 cycles needed so targetIndex - extraTicks >= 0
+        const numCycles = Math.max(0, Math.ceil((extraTicks - targetDigit) / 10));
+        // targetIndex is the position of the final digit in the column
+        const targetIndex = numCycles * 10 + targetDigit;
+        // startIndex is exactly extraTicks before the target — travel is always exactly extraTicks
+        const startIndex = targetIndex - extraTicks;
+
+        // Create a column with (numCycles + 1) full sets of 0–9 stacked vertically
         const column = document.createElement('span');
         column.classList.add(COLUMN_CLASS);
         column.setAttribute('aria-hidden', 'true');
 
-        for (let d = 0; d <= 9; d++) {
-          const digitEl = document.createElement('span');
-          digitEl.classList.add(DIGIT_CLASS);
-          digitEl.textContent = d;
-          column.appendChild(digitEl);
+        for (let cycle = 0; cycle <= numCycles; cycle++) {
+          for (let d = 0; d <= 9; d++) {
+            const digitEl = document.createElement('span');
+            digitEl.classList.add(DIGIT_CLASS);
+            digitEl.textContent = d;
+            column.appendChild(digitEl);
+          }
         }
 
         item.appendChild(column);
-
-        // Store the target digit and starting digit for this column
-        const targetDigit = parseInt(char);
-        const startDigit = i < startDigits.length ? parseInt(startDigits[i]) || 0 : 0;
-
-        columns.push({ element: column, targetDigit, startDigit });
+        columns.push({ element: column, targetIndex, startIndex });
+        digitColumnIndex++;
       }
 
       // Add suffix as a static separator
@@ -182,9 +193,9 @@ export const numberTicker = function () {
       const firstDigitEl = columns[0].element.querySelector(`.${DIGIT_CLASS}`);
       const digitHeight = firstDigitEl.offsetHeight;
 
-      // Set each column to its starting digit position
-      columns.forEach(({ element, startDigit }) => {
-        gsap.set(element, { y: -startDigit * digitHeight });
+      // Set each column to its starting position
+      columns.forEach(({ element, startIndex }) => {
+        gsap.set(element, { y: -startIndex * digitHeight });
       });
 
       // Create the animation
@@ -195,8 +206,8 @@ export const numberTicker = function () {
           },
         });
 
-        columns.forEach(({ element, targetDigit }, index) => {
-          const targetY = -targetDigit * digitHeight;
+        columns.forEach(({ element, targetIndex }, index) => {
+          const targetY = -targetIndex * digitHeight;
 
           // Calculate the stagger position for this column
           // Rightmost digits animate first for a "counting" feel (like an odometer)
