@@ -1,4 +1,4 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
 
 export const magnetic = function () {
   //animation ID
@@ -18,6 +18,10 @@ export const magnetic = function () {
   const ACTIVE_CLASS = 'data-ix-magnetic-active-class'; // class added while the cursor is inside the wrap
   const HOVER_SCALE = 'data-ix-magnetic-hover-scale'; // optional scale on hover (default 1, set to e.g. 1.05)
 
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
+
   // Select all wraps
   const wraps = [...document.querySelectorAll(WRAP)];
   if (wraps.length === 0) return;
@@ -36,7 +40,7 @@ export const magnetic = function () {
     let strength = attr(0.3, wrap.getAttribute(STRENGTH));
     let innerStrength = attr(0.5, wrap.getAttribute(INNER_STRENGTH));
     let duration = attr(0.4, wrap.getAttribute(DURATION));
-    let ease = attr('power2.out', wrap.getAttribute(EASE));
+    let ease = attr('power1.out', wrap.getAttribute(EASE));
     let returnDuration = attr(0.6, wrap.getAttribute(RETURN_DURATION));
     let returnEase = attr('elastic.out(1.2, 0.5)', wrap.getAttribute(RETURN_EASE));
     let activeClass = attr('is-active', wrap.getAttribute(ACTIVE_CLASS));

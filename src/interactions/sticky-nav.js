@@ -1,4 +1,4 @@
-import { attr, checkRunProp } from '../utilities';
+import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
 
 /*
 CSS to include in page head:
@@ -29,6 +29,10 @@ export const stickyNav = function () {
   const HIDDEN_CLASS = 'data-ix-stickynav-hidden-class'; // class added when nav is hidden (default 'is-hidden')
   const START_HIDDEN = 'data-ix-stickynav-start-hidden'; // if true, nav starts hidden and appears on first scroll-up (default false)
   const HIDE_OFFSET = 'data-ix-stickynav-hide-offset'; // px from top before hide behavior activates (default 100)
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   const wraps = [...document.querySelectorAll(WRAP)];
   if (wraps.length === 0) return;

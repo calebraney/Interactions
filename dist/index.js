@@ -4469,6 +4469,90 @@
     });
   };
 
+  // src/interactions/magnetic.js
+  init_live_reload();
+  var magnetic = function() {
+    const ANIMATION_ID = "magnetic";
+    const WRAP = '[data-ix-magnetic="wrap"]';
+    const TRIGGER = '[data-ix-magnetic="trigger"]';
+    const TARGET = '[data-ix-magnetic="target"]';
+    const INNER = '[data-ix-magnetic="inner"]';
+    const STRENGTH = "data-ix-magnetic-strength";
+    const INNER_STRENGTH = "data-ix-magnetic-inner-strength";
+    const DURATION = "data-ix-magnetic-duration";
+    const EASE = "data-ix-magnetic-ease";
+    const RETURN_DURATION = "data-ix-magnetic-return-duration";
+    const RETURN_EASE = "data-ix-magnetic-return-ease";
+    const ACTIVE_CLASS = "data-ix-magnetic-active-class";
+    const HOVER_SCALE = "data-ix-magnetic-hover-scale";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      if (!wrap) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      if ("ontouchstart" in window || navigator.maxTouchPoints) return;
+      let strength = attr(0.3, wrap.getAttribute(STRENGTH));
+      let innerStrength = attr(0.5, wrap.getAttribute(INNER_STRENGTH));
+      let duration = attr(0.4, wrap.getAttribute(DURATION));
+      let ease = attr("power1.out", wrap.getAttribute(EASE));
+      let returnDuration = attr(0.6, wrap.getAttribute(RETURN_DURATION));
+      let returnEase = attr("elastic.out(1.2, 0.5)", wrap.getAttribute(RETURN_EASE));
+      let activeClass = attr("is-active", wrap.getAttribute(ACTIVE_CLASS));
+      let hoverScale = attr(1, wrap.getAttribute(HOVER_SCALE));
+      const trigger = wrap.querySelector(TRIGGER) || wrap;
+      const target = wrap.querySelector(TARGET) || wrap;
+      const inner = wrap.querySelector(INNER);
+      trigger.addEventListener("mousemove", function(e) {
+        const rect = trigger.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left - rect.width / 2;
+        const offsetY = e.clientY - rect.top - rect.height / 2;
+        gsap.to(target, {
+          x: offsetX * strength,
+          y: offsetY * strength,
+          scale: hoverScale,
+          duration,
+          ease,
+          overwrite: "auto"
+        });
+        if (inner) {
+          gsap.to(inner, {
+            x: offsetX * innerStrength,
+            y: offsetY * innerStrength,
+            duration,
+            ease,
+            overwrite: "auto"
+          });
+        }
+      });
+      trigger.addEventListener("mouseenter", function() {
+        wrap.classList.add(activeClass);
+      });
+      trigger.addEventListener("mouseleave", function() {
+        wrap.classList.remove(activeClass);
+        gsap.to(target, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: returnDuration,
+          ease: returnEase,
+          overwrite: "auto"
+        });
+        if (inner) {
+          gsap.to(inner, {
+            x: 0,
+            y: 0,
+            duration: returnDuration,
+            ease: returnEase,
+            overwrite: "auto"
+          });
+        }
+      });
+    });
+  };
+
   // src/interactions/marquee.js
   init_live_reload();
   var marquee = function() {
@@ -4740,6 +4824,163 @@
       startScroll(lenis);
       activeModal = false;
     };
+  };
+
+  // src/interactions/number-ticker.js
+  init_live_reload();
+  var numberTicker = function() {
+    const ANIMATION_ID = "ticker";
+    const ITEM = '[data-ix-ticker="item"]';
+    const DURATION = "data-ix-ticker-duration";
+    const STAGGER = "data-ix-ticker-stagger";
+    const EASE = "data-ix-ticker-ease";
+    const DIRECTION = "data-ix-ticker-direction";
+    const START = "data-ix-ticker-start";
+    const TRIGGER_TYPE = "data-ix-ticker-trigger";
+    const START_FROM = "data-ix-ticker-start-from";
+    const ACTIVE_CLASS = "data-ix-ticker-active-class";
+    const USE_GROUPING = "data-ix-ticker-use-grouping";
+    const COLUMN_CLASS = "ticker_column";
+    const DIGIT_CLASS = "ticker_digit";
+    const SEPARATOR_CLASS = "ticker_separator";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const items = [...document.querySelectorAll(ITEM)];
+    if (items.length === 0) return;
+    items.forEach((item) => {
+      if (!item) return;
+      let runProp = checkRunProp(item, ANIMATION_ID);
+      if (runProp === false) return;
+      const animation = function() {
+        let duration = attr(1.5, item.getAttribute(DURATION));
+        let stagger = attr(0.1, item.getAttribute(STAGGER));
+        let ease = attr("power2.out", item.getAttribute(EASE));
+        let direction = attr("down", item.getAttribute(DIRECTION));
+        let start = attr("top 90%", item.getAttribute(START));
+        let triggerType = attr("scroll", item.getAttribute(TRIGGER_TYPE));
+        let startFrom = attr(0, item.getAttribute(START_FROM));
+        let activeClass = attr("is-active", item.getAttribute(ACTIVE_CLASS));
+        let useGrouping = attr(true, item.getAttribute(USE_GROUPING));
+        const rawText = item.textContent.trim();
+        const cleanedText = rawText.replace(/[,\s]/g, "");
+        const targetNumber = parseFloat(cleanedText);
+        if (isNaN(targetNumber)) return;
+        const decimalParts = cleanedText.split(".");
+        const decimalPlaces = decimalParts.length > 1 ? decimalParts[1].length : 0;
+        const formatNumber = function(num) {
+          let formatted;
+          if (decimalPlaces > 0) {
+            formatted = Math.abs(num).toFixed(decimalPlaces);
+          } else {
+            formatted = Math.abs(Math.round(num)).toString();
+          }
+          if (useGrouping) {
+            const parts = formatted.split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            formatted = parts.join(".");
+          }
+          if (num < 0) {
+            formatted = "-" + formatted;
+          }
+          return formatted;
+        };
+        const targetString = formatNumber(targetNumber);
+        const startString = formatNumber(startFrom);
+        const numberMatch = rawText.match(/^([^0-9\-]*)([\-]?[\d,.\s]+)([^0-9]*)$/);
+        const prefix = numberMatch ? numberMatch[1] : "";
+        const suffix = numberMatch ? numberMatch[3] : "";
+        item.textContent = "";
+        item.setAttribute("aria-label", rawText);
+        if (prefix) {
+          const prefixEl = document.createElement("span");
+          prefixEl.classList.add(SEPARATOR_CLASS);
+          prefixEl.textContent = prefix;
+          prefixEl.setAttribute("aria-hidden", "true");
+          item.appendChild(prefixEl);
+        }
+        const columns = [];
+        const targetDigits = targetString.replace("-", "");
+        const startDigits = startString.replace("-", "");
+        for (let i2 = 0; i2 < targetDigits.length; i2++) {
+          const char = targetDigits[i2];
+          if (isNaN(parseInt(char))) {
+            const sep = document.createElement("span");
+            sep.classList.add(SEPARATOR_CLASS);
+            sep.textContent = char;
+            sep.setAttribute("aria-hidden", "true");
+            item.appendChild(sep);
+            continue;
+          }
+          const column = document.createElement("span");
+          column.classList.add(COLUMN_CLASS);
+          column.setAttribute("aria-hidden", "true");
+          for (let d = 0; d <= 9; d++) {
+            const digitEl = document.createElement("span");
+            digitEl.classList.add(DIGIT_CLASS);
+            digitEl.textContent = d;
+            column.appendChild(digitEl);
+          }
+          item.appendChild(column);
+          const targetDigit = parseInt(char);
+          const startDigit = i2 < startDigits.length ? parseInt(startDigits[i2]) || 0 : 0;
+          columns.push({ element: column, targetDigit, startDigit });
+        }
+        if (suffix) {
+          const suffixEl = document.createElement("span");
+          suffixEl.classList.add(SEPARATOR_CLASS);
+          suffixEl.textContent = suffix;
+          suffixEl.setAttribute("aria-hidden", "true");
+          item.appendChild(suffixEl);
+        }
+        if (columns.length === 0) return;
+        const firstDigitEl = columns[0].element.querySelector(`.${DIGIT_CLASS}`);
+        const digitHeight = firstDigitEl.offsetHeight;
+        columns.forEach(({ element, startDigit }) => {
+          gsap.set(element, { y: -startDigit * digitHeight });
+        });
+        const animateColumns = function() {
+          const tl = gsap.timeline({
+            onComplete: () => {
+              item.classList.add(activeClass);
+            }
+          });
+          columns.forEach(({ element, targetDigit }, index) => {
+            const targetY = -targetDigit * digitHeight;
+            let position;
+            if (direction === "down") {
+              position = (columns.length - 1 - index) * stagger;
+            } else {
+              position = index * stagger;
+            }
+            tl.to(
+              element,
+              {
+                y: targetY,
+                duration,
+                ease
+              },
+              position
+            );
+          });
+          return tl;
+        };
+        if (triggerType === "load") {
+          animateColumns();
+        } else {
+          ScrollTrigger.create({
+            trigger: item,
+            start,
+            once: true,
+            // only play once
+            onEnter: () => {
+              animateColumns();
+            }
+          });
+        }
+      };
+      const breakpoint = attr("none", item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(item, breakpoint, animation);
+    });
   };
 
   // src/interactions/page-transition.js
@@ -5200,6 +5441,211 @@
       if (runProp === false) return;
       const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
       checkContainer(items[0], breakpoint, animation);
+    });
+  };
+
+  // src/interactions/scroll-progress.js
+  init_live_reload();
+  var scrollProgress = function() {
+    const ANIMATION_ID = "scrollprogress";
+    const WRAP = '[data-ix-scrollprogress="wrap"]';
+    const BAR = '[data-ix-scrollprogress="bar"]';
+    const TRIGGER = '[data-ix-scrollprogress="trigger"]';
+    const SCOPE = "data-ix-scrollprogress-scope";
+    const AXIS = "data-ix-scrollprogress-axis";
+    const EASE = "data-ix-scrollprogress-ease";
+    const SCRUB = "data-ix-scrollprogress-scrub";
+    const START = "data-ix-scrollprogress-start";
+    const END = "data-ix-scrollprogress-end";
+    const POSITION = "data-ix-scrollprogress-position";
+    const ACTIVE_CLASS = "data-ix-scrollprogress-active-class";
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      const bar = wrap.querySelector(BAR);
+      if (!wrap || !bar) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const animation = function() {
+        let scope = attr("page", wrap.getAttribute(SCOPE));
+        let axis = attr("x", wrap.getAttribute(AXIS));
+        let ease = attr("none", wrap.getAttribute(EASE));
+        let scrub = attr(0.3, wrap.getAttribute(SCRUB));
+        let activeClass = attr("is-active", wrap.getAttribute(ACTIVE_CLASS));
+        let trigger;
+        if (scope === "page") {
+          trigger = document.body;
+        } else {
+          trigger = wrap.querySelector(`${TRIGGER}`) || wrap;
+        }
+        let start, end;
+        if (scope === "page") {
+          start = attr("top top", wrap.getAttribute(START));
+          end = attr("bottom bottom", wrap.getAttribute(END));
+        } else {
+          start = attr("top bottom", wrap.getAttribute(START));
+          end = attr("bottom top", wrap.getAttribute(END));
+        }
+        const scaleFrom = axis === "y" ? { scaleY: 0 } : { scaleX: 0 };
+        const scaleTo = axis === "y" ? { scaleY: 1 } : { scaleX: 1 };
+        if (axis === "y") {
+          gsap.set(bar, { transformOrigin: "center bottom" });
+        } else {
+          gsap.set(bar, { transformOrigin: "left center" });
+        }
+        let position = attr("relative", wrap.getAttribute(POSITION));
+        let tl = gsap.timeline({
+          scrollTrigger: {
+            trigger,
+            start,
+            end,
+            scrub,
+            pin: position === "fixed" ? wrap : false,
+            onEnter: () => {
+              wrap.classList.add(activeClass);
+            },
+            onLeave: () => {
+              wrap.classList.remove(activeClass);
+            },
+            onEnterBack: () => {
+              wrap.classList.add(activeClass);
+            },
+            onLeaveBack: () => {
+              wrap.classList.remove(activeClass);
+            }
+          }
+        });
+        tl.fromTo(bar, { ...scaleFrom, ease }, { ...scaleTo, ease, duration: 1 });
+      };
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(bar, breakpoint, animation);
+    });
+  };
+
+  // src/interactions/sticky-nav.js
+  init_live_reload();
+  var stickyNav = function() {
+    const ANIMATION_ID = "stickynav";
+    const WRAP = '[data-ix-stickynav="wrap"]';
+    const HERO = '[data-ix-stickynav="hero"]';
+    const HIDE_ON = "data-ix-stickynav-hide-on";
+    const DURATION = "data-ix-stickynav-duration";
+    const EASE = "data-ix-stickynav-ease";
+    const SCROLL_THRESHOLD = "data-ix-stickynav-threshold";
+    const BG_ACTIVE = "data-ix-stickynav-bg-active";
+    const HIDDEN_CLASS = "data-ix-stickynav-hidden-class";
+    const START_HIDDEN = "data-ix-stickynav-start-hidden";
+    const HIDE_OFFSET = "data-ix-stickynav-hide-offset";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      if (!wrap) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      let hideOn = attr("scroll-down", wrap.getAttribute(HIDE_ON));
+      let duration = attr(0.3, wrap.getAttribute(DURATION));
+      let ease = attr("power2.out", wrap.getAttribute(EASE));
+      let scrollThreshold = attr(50, wrap.getAttribute(SCROLL_THRESHOLD));
+      let bgActiveClass = attr("is-scrolled", wrap.getAttribute(BG_ACTIVE));
+      let hiddenClass = attr("is-hidden", wrap.getAttribute(HIDDEN_CLASS));
+      let startHidden = attr(false, wrap.getAttribute(START_HIDDEN));
+      let hideOffset = attr(100, wrap.getAttribute(HIDE_OFFSET));
+      const navHeight = wrap.offsetHeight;
+      let isHidden = startHidden;
+      let isScrolled = false;
+      if (startHidden) {
+        gsap.set(wrap, { yPercent: -100 });
+        wrap.classList.add(hiddenClass);
+      }
+      const showNav = function() {
+        if (!isHidden) return;
+        isHidden = false;
+        wrap.classList.remove(hiddenClass);
+        gsap.to(wrap, {
+          yPercent: 0,
+          duration,
+          ease,
+          overwrite: "auto"
+        });
+      };
+      const hideNav = function() {
+        if (isHidden) return;
+        isHidden = true;
+        wrap.classList.add(hiddenClass);
+        gsap.to(wrap, {
+          yPercent: -100,
+          duration,
+          ease,
+          overwrite: "auto"
+        });
+      };
+      if (hideOn !== "none") {
+        ScrollTrigger.create({
+          start: 0,
+          end: "max",
+          onUpdate: (self2) => {
+            const scrollY = self2.scroll();
+            if (scrollY < hideOffset) {
+              showNav();
+              return;
+            }
+            const direction = self2.direction;
+            const velocity = Math.abs(self2.getVelocity());
+            if (velocity < scrollThreshold) return;
+            if (hideOn === "scroll-down") {
+              if (direction === 1) {
+                hideNav();
+              } else {
+                showNav();
+              }
+            } else if (hideOn === "scroll-up") {
+              if (direction === 1) {
+                showNav();
+              } else {
+                hideNav();
+              }
+            }
+          }
+        });
+      }
+      const hero = document.querySelector(HERO);
+      if (hero) {
+        ScrollTrigger.create({
+          trigger: hero,
+          start: "bottom top",
+          onEnter: () => {
+            if (!isScrolled) {
+              isScrolled = true;
+              wrap.classList.add(bgActiveClass);
+            }
+          },
+          onLeaveBack: () => {
+            if (isScrolled) {
+              isScrolled = false;
+              wrap.classList.remove(bgActiveClass);
+            }
+          }
+        });
+      } else {
+        ScrollTrigger.create({
+          start: navHeight,
+          end: "max",
+          onEnter: () => {
+            if (!isScrolled) {
+              isScrolled = true;
+              wrap.classList.add(bgActiveClass);
+            }
+          },
+          onLeaveBack: () => {
+            if (isScrolled) {
+              isScrolled = false;
+              wrap.classList.remove(bgActiveClass);
+            }
+          }
+        });
+      }
     });
   };
 
@@ -5746,6 +6192,9 @@
             scrollIn();
             scrolling();
             pathHover();
+            scrollProgress();
+            numberTicker();
+            magnetic();
           }
           const [players, components] = [videoPlyr()];
           lightbox(players, components);
@@ -5761,6 +6210,7 @@
       clickActive();
       hoverActive();
       imageSwitch();
+      stickyNav();
     };
     gsapInit();
     copyURL();

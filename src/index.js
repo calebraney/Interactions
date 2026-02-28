@@ -17,14 +17,18 @@ import { imageSwitch } from './interactions/image-switch';
 import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
 import { loop } from './interactions/loop';
+import { magnetic } from './interactions/magnetic';
 import { marquee } from './interactions/marquee';
 import { mouseOver } from './interactions/mouse-over';
 import { modal } from './interactions/modal';
+import { numberTicker } from './interactions/number-ticker';
 import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { pathHover } from './interactions/path-hover';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
+import { scrollProgress } from './interactions/scroll-progress';
+import { stickyNav } from './interactions/sticky-nav';
 import { tabs } from './interactions/tabs';
 import { slider } from './interactions/slider';
 import { textScrub } from './interactions/text-scrub';
@@ -68,6 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
           scrollIn();
           scrolling();
           pathHover();
+          scrollProgress();
+          numberTicker();
+          magnetic();
         }
         //setup video players
         const [players, components] = [videoPlyr()];
@@ -86,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     clickActive();
     hoverActive();
     imageSwitch();
+    stickyNav();
   };
   gsapInit();
 

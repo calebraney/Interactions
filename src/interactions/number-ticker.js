@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer } from '../utilities';
+import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
 
 /*
 CSS to include in page head:
@@ -46,6 +46,10 @@ export const numberTicker = function () {
   const COLUMN_CLASS = 'ticker_column';
   const DIGIT_CLASS = 'ticker_digit';
   const SEPARATOR_CLASS = 'ticker_separator';
+
+  //check if page run or site run settings are false and exit if so
+  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+  if (!siteOrPageCancel) return;
 
   const items = [...document.querySelectorAll(ITEM)];
   if (items.length === 0) return;
