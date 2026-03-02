@@ -1,31 +1,18 @@
 import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
 
-/*
-CSS to include in page head:
-
-<style>
-  [data-ix-stickynav="wrap"] {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999;
-  }
-</style>
-*/
-
 export const stickyNav = function () {
   //animation ID
   const ANIMATION_ID = 'stickynav';
   //elements
   const WRAP = '[data-ix-stickynav="wrap"]'; // the nav element (should be position: fixed or sticky)
-  const HERO = '[data-ix-stickynav="hero"]'; // optional hero section — nav becomes opaque after scrolling past this
+  const HERO = '[data-ix-stickynav="hero"]'; // optional hero section — falls back to <main>, then a fixed scroll distance
   //options
   const HIDE_ON = 'data-ix-stickynav-hide-on'; // "scroll-down" (default), "scroll-up", or "none"
   const DURATION = 'data-ix-stickynav-duration'; // animation duration for show/hide (default 0.3)
   const EASE = 'data-ix-stickynav-ease'; // easing for show/hide (default 'power2.out')
   const SCROLL_THRESHOLD = 'data-ix-stickynav-threshold'; // minimum px scrolled in a direction before triggering (default 50)
   const BG_ACTIVE = 'data-ix-stickynav-bg-active'; // class added to nav after scrolling past hero (default 'is-scrolled')
+  const HERO_BG_END = 'data-ix-stickynav-bg-end'; // ScrollTrigger end point that triggers the background class — e.g. 'bottom top' or '+=100' (default 'bottom top')
   const HIDDEN_CLASS = 'data-ix-stickynav-hidden-class'; // class added when nav is hidden (default 'is-hidden')
   const START_HIDDEN = 'data-ix-stickynav-start-hidden'; // if true, nav starts hidden and appears on first scroll-up (default false)
   const HIDE_OFFSET = 'data-ix-stickynav-hide-offset'; // px from top before hide behavior activates (default 100)
@@ -53,6 +40,7 @@ export const stickyNav = function () {
     let hiddenClass = attr('is-hidden', wrap.getAttribute(HIDDEN_CLASS));
     let startHidden = attr(false, wrap.getAttribute(START_HIDDEN));
     let hideOffset = attr(100, wrap.getAttribute(HIDE_OFFSET));
+    let bgEnd = attr('+=500', wrap.getAttribute(HERO_BG_END)); //either a certain pixel amount or when the hero reaches a certain point in the viewport
 
     // Get the nav height for the hide transform
     const navHeight = wrap.offsetHeight;
@@ -135,20 +123,25 @@ export const stickyNav = function () {
 
     //////////////////////////////
     // Background change after scrolling past hero
-    const hero = document.querySelector(HERO);
-    if (hero) {
+    // Priority: [data-ix-stickynav="hero"] → <main> → fixed scroll distance
+    const triggerEl = document.querySelector(HERO);
+    if (triggerEl) {
+      // start is always 'top top' (trigger element's top at the viewport top) — this is the reference point.
+      // the background class toggles when the end point is crossed, so the trigger position
+      // (e.g. 'bottom top', '+=100') is set independently via the bgEnd option.
       ScrollTrigger.create({
-        trigger: hero,
-        start: 'bottom top',
-        onEnter: () => {
-          // Scrolled past the hero — add the background class
+        trigger: triggerEl,
+        start: 'top top',
+        end: bgEnd,
+        onLeave: () => {
+          // scrolled past the end point — add the background class
           if (!isScrolled) {
             isScrolled = true;
             wrap.classList.add(bgActiveClass);
           }
         },
-        onLeaveBack: () => {
-          // Scrolled back above the hero — remove the background class
+        onEnterBack: () => {
+          // scrolled back above the end point — remove the background class
           if (isScrolled) {
             isScrolled = false;
             wrap.classList.remove(bgActiveClass);
@@ -156,18 +149,17 @@ export const stickyNav = function () {
         },
       });
     } else {
-      // If no hero element, use a simple scroll distance to toggle the background class
-      // Default: add the class after scrolling down more than the nav's own height
+      // No trigger element found — toggle based on a fixed scroll distance (nav height from top)
       ScrollTrigger.create({
-        start: navHeight,
-        end: 'max',
-        onEnter: () => {
+        start: 0,
+        end: navHeight,
+        onLeave: () => {
           if (!isScrolled) {
             isScrolled = true;
             wrap.classList.add(bgActiveClass);
           }
         },
-        onLeaveBack: () => {
+        onEnterBack: () => {
           if (isScrolled) {
             isScrolled = false;
             wrap.classList.remove(bgActiveClass);

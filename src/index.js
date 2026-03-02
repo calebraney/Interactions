@@ -21,7 +21,6 @@ import { magnetic } from './interactions/magnetic';
 import { marquee } from './interactions/marquee';
 import { mouseOver } from './interactions/mouse-over';
 import { modal } from './interactions/modal';
-import { numberTicker } from './interactions/number-ticker';
 import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { pathHover } from './interactions/path-hover';
@@ -73,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
           scrolling();
           pathHover();
           scrollProgress();
-          numberTicker();
           magnetic();
         }
         //setup video players

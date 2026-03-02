@@ -24,7 +24,6 @@ export const scrollProgress = function () {
   const SCRUB = 'data-ix-scrollprogress-scrub';
   const START = 'data-ix-scrollprogress-start';
   const END = 'data-ix-scrollprogress-end';
-  const POSITION = 'data-ix-scrollprogress-position'; // "fixed" to pin the bar, "relative" for inline
   const ACTIVE_CLASS = 'data-ix-scrollprogress-active-class'; // class added to wrap while scrolltrigger is active
 
   const wraps = [...document.querySelectorAll(WRAP)];
@@ -71,17 +70,6 @@ export const scrollProgress = function () {
       const scaleFrom = axis === 'y' ? { scaleY: 0 } : { scaleX: 0 };
       const scaleTo = axis === 'y' ? { scaleY: 1 } : { scaleX: 1 };
 
-      // Set the correct transform origin based on axis
-      // x axis: grows left to right, y axis: grows bottom to top
-      if (axis === 'y') {
-        gsap.set(bar, { transformOrigin: 'center bottom' });
-      } else {
-        gsap.set(bar, { transformOrigin: 'left center' });
-      }
-
-      // Check for fixed position — if set, pin the bar's wrap during scroll
-      let position = attr('relative', wrap.getAttribute(POSITION));
-
       // Create scroll-linked timeline
       let tl = gsap.timeline({
         scrollTrigger: {
@@ -89,7 +77,6 @@ export const scrollProgress = function () {
           start: start,
           end: end,
           scrub: scrub,
-          pin: position === 'fixed' ? wrap : false,
           onEnter: () => {
             wrap.classList.add(activeClass);
           },
