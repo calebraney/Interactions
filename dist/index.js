@@ -4572,7 +4572,7 @@
       if ("ontouchstart" in window || navigator.maxTouchPoints) return;
       let strength = attr(0.3, wrap.getAttribute(STRENGTH));
       let innerStrength = attr(0.5, wrap.getAttribute(INNER_STRENGTH));
-      let duration = attr(0.4, wrap.getAttribute(DURATION));
+      let duration = attr(0.6, wrap.getAttribute(DURATION));
       let ease = attr("power1.out", wrap.getAttribute(EASE));
       let returnDuration = attr(0.6, wrap.getAttribute(RETURN_DURATION));
       let returnEase = attr("elastic.out(1.2, 0.5)", wrap.getAttribute(RETURN_EASE));
