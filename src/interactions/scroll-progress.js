@@ -1,15 +1,5 @@
 import { attr, checkRunProp, checkContainer, getAttrConfig } from '../utilities';
 
-/*
-CSS to include in page head:
-
-<style>
-  [data-ix-scrollprogress="bar"] {
-    transform-origin: left center;
-  }
-</style>
-*/
-
 export const scrollProgress = function () {
   //animation ID
   const ANIMATION_ID = 'scrollprogress';
