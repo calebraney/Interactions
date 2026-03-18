@@ -1,2 +1,6133 @@
-(()=>{var Oi=Object.create;var vt=Object.defineProperty;var _i=Object.getOwnPropertyDescriptor;var Ri=Object.getOwnPropertyNames;var Mi=Object.getPrototypeOf,Di=Object.prototype.hasOwnProperty;var qi=(n,c,d)=>c in n?vt(n,c,{enumerable:!0,configurable:!0,writable:!0,value:d}):n[c]=d;var $i=(n,c)=>()=>(c||n((c={exports:{}}).exports,c),c.exports);var Hi=(n,c,d,p)=>{if(c&&typeof c=="object"||typeof c=="function")for(let h of Ri(c))!Di.call(n,h)&&h!==d&&vt(n,h,{get:()=>c[h],enumerable:!(p=_i(c,h))||p.enumerable});return n};var Ui=(n,c,d)=>(d=n!=null?Oi(Mi(n)):{},Hi(c||!n||!n.__esModule?vt(d,"default",{value:n,enumerable:!0}):d,n));var z=(n,c,d)=>qi(n,typeof c!="symbol"?c+"":c,d);var fi=$i((Tt,At)=>{typeof navigator=="object"&&function(n,c){typeof Tt=="object"&&typeof At<"u"?At.exports=c():typeof define=="function"&&define.amd?define("Plyr",c):(n=typeof globalThis<"u"?globalThis:n||self).Plyr=c()}(Tt,function(){"use strict";function n(e,i,t){return(i=function(s){var o=function(r,l){if(typeof r!="object"||r===null)return r;var u=r[Symbol.toPrimitive];if(u!==void 0){var m=u.call(r,l||"default");if(typeof m!="object")return m;throw new TypeError("@@toPrimitive must return a primitive value.")}return(l==="string"?String:Number)(r)}(s,"string");return typeof o=="symbol"?o:String(o)}(i))in e?Object.defineProperty(e,i,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[i]=t,e}function c(e,i){for(var t=0;t<i.length;t++){var s=i[t];s.enumerable=s.enumerable||!1,s.configurable=!0,"value"in s&&(s.writable=!0),Object.defineProperty(e,s.key,s)}}function d(e,i,t){return i in e?Object.defineProperty(e,i,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[i]=t,e}function p(e,i){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(e);i&&(s=s.filter(function(o){return Object.getOwnPropertyDescriptor(e,o).enumerable})),t.push.apply(t,s)}return t}function h(e){for(var i=1;i<arguments.length;i++){var t=arguments[i]!=null?arguments[i]:{};i%2?p(Object(t),!0).forEach(function(s){d(e,s,t[s])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):p(Object(t)).forEach(function(s){Object.defineProperty(e,s,Object.getOwnPropertyDescriptor(t,s))})}return e}var C={addCSS:!0,thumbWidth:15,watch:!0},I=function(e){return e!=null?e.constructor:null},x=function(e,i){return!!(e&&i&&e instanceof i)},S=function(e){return e==null},M=function(e){return I(e)===Object},v=function(e){return I(e)===String},T=function(e){return Array.isArray(e)},f=function(e){return x(e,NodeList)},b={nullOrUndefined:S,object:M,number:function(e){return I(e)===Number&&!Number.isNaN(e)},string:v,boolean:function(e){return I(e)===Boolean},function:function(e){return I(e)===Function},array:T,nodeList:f,element:function(e){return x(e,Element)},event:function(e){return x(e,Event)},empty:function(e){return S(e)||(v(e)||T(e)||f(e))&&!e.length||M(e)&&!Object.keys(e).length}};function A(e,i){if(1>i){var t=function(s){var o="".concat(s).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);return o?Math.max(0,(o[1]?o[1].length:0)-(o[2]?+o[2]:0)):0}(i);return parseFloat(e.toFixed(t))}return Math.round(e/i)*i}var R=function(){function e(i,t){(function(s,o){if(!(s instanceof o))throw new TypeError("Cannot call a class as a function")})(this,e),b.element(i)?this.element=i:b.string(i)&&(this.element=document.querySelector(i)),b.element(this.element)&&b.empty(this.element.rangeTouch)&&(this.config=h({},C,{},t),this.init())}return function(i,t,s){t&&c(i.prototype,t),s&&c(i,s)}(e,[{key:"init",value:function(){e.enabled&&(this.config.addCSS&&(this.element.style.userSelect="none",this.element.style.webKitUserSelect="none",this.element.style.touchAction="manipulation"),this.listeners(!0),this.element.rangeTouch=this)}},{key:"destroy",value:function(){e.enabled&&(this.config.addCSS&&(this.element.style.userSelect="",this.element.style.webKitUserSelect="",this.element.style.touchAction=""),this.listeners(!1),this.element.rangeTouch=null)}},{key:"listeners",value:function(i){var t=this,s=i?"addEventListener":"removeEventListener";["touchstart","touchmove","touchend"].forEach(function(o){t.element[s](o,function(r){return t.set(r)},!1)})}},{key:"get",value:function(i){if(!e.enabled||!b.event(i))return null;var t,s=i.target,o=i.changedTouches[0],r=parseFloat(s.getAttribute("min"))||0,l=parseFloat(s.getAttribute("max"))||100,u=parseFloat(s.getAttribute("step"))||1,m=s.getBoundingClientRect(),E=100/m.width*(this.config.thumbWidth/2)/100;return 0>(t=100/m.width*(o.clientX-m.left))?t=0:100<t&&(t=100),50>t?t-=(100-2*t)*E:50<t&&(t+=2*(t-50)*E),r+A(t/100*(l-r),u)}},{key:"set",value:function(i){e.enabled&&b.event(i)&&!i.target.disabled&&(i.preventDefault(),i.target.value=this.get(i),function(t,s){if(t&&s){var o=new Event(s,{bubbles:!0});t.dispatchEvent(o)}}(i.target,i.type==="touchend"?"change":"input"))}}],[{key:"setup",value:function(i){var t=1<arguments.length&&arguments[1]!==void 0?arguments[1]:{},s=null;if(b.empty(i)||b.string(i)?s=Array.from(document.querySelectorAll(b.string(i)?i:'input[type="range"]')):b.element(i)?s=[i]:b.nodeList(i)?s=Array.from(i):b.array(i)&&(s=i.filter(b.element)),b.empty(s))return null;var o=h({},C,{},t);if(b.string(i)&&o.watch){var r=new MutationObserver(function(l){Array.from(l).forEach(function(u){Array.from(u.addedNodes).forEach(function(m){b.element(m)&&function(E,F){return function(){return Array.from(document.querySelectorAll(F)).includes(this)}.call(E,F)}(m,i)&&new e(m,o)})})});r.observe(document.body,{childList:!0,subtree:!0})}return s.map(function(l){return new e(l,t)})}},{key:"enabled",get:function(){return"ontouchstart"in document.documentElement}}]),e}();let k=e=>e!=null?e.constructor:null,w=(e,i)=>!!(e&&i&&e instanceof i),N=e=>e==null,Y=e=>k(e)===Object,H=e=>k(e)===String,q=e=>typeof e=="function",B=e=>Array.isArray(e),O=e=>w(e,NodeList),K=e=>N(e)||(H(e)||B(e)||O(e))&&!e.length||Y(e)&&!Object.keys(e).length;var a={nullOrUndefined:N,object:Y,number:e=>k(e)===Number&&!Number.isNaN(e),string:H,boolean:e=>k(e)===Boolean,function:q,array:B,weakMap:e=>w(e,WeakMap),nodeList:O,element:e=>e!==null&&typeof e=="object"&&e.nodeType===1&&typeof e.style=="object"&&typeof e.ownerDocument=="object",textNode:e=>k(e)===Text,event:e=>w(e,Event),keyboardEvent:e=>w(e,KeyboardEvent),cue:e=>w(e,window.TextTrackCue)||w(e,window.VTTCue),track:e=>w(e,TextTrack)||!N(e)&&H(e.kind),promise:e=>w(e,Promise)&&q(e.then),url:e=>{if(w(e,window.URL))return!0;if(!H(e))return!1;let i=e;e.startsWith("http://")&&e.startsWith("https://")||(i=`http://${e}`);try{return!K(new URL(i).hostname)}catch{return!1}},empty:K};let G=(()=>{let e=document.createElement("span"),i={WebkitTransition:"webkitTransitionEnd",MozTransition:"transitionend",OTransition:"oTransitionEnd otransitionend",transition:"transitionend"},t=Object.keys(i).find(s=>e.style[s]!==void 0);return!!a.string(t)&&i[t]})();function W(e,i){setTimeout(()=>{try{e.hidden=!0,e.offsetHeight,e.hidden=!1}catch{}},i)}var X={isIE:!!window.document.documentMode,isEdge:/Edge/g.test(navigator.userAgent),isWebKit:"WebkitAppearance"in document.documentElement.style&&!/Edge/g.test(navigator.userAgent),isIPhone:/iPhone|iPod/gi.test(navigator.userAgent)&&navigator.maxTouchPoints>1,isIPadOS:navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1,isIos:/iPad|iPhone|iPod/gi.test(navigator.userAgent)&&navigator.maxTouchPoints>1};function P(e,i){return i.split(".").reduce((t,s)=>t&&t[s],e)}function V(e={},...i){if(!i.length)return e;let t=i.shift();return a.object(t)?(Object.keys(t).forEach(s=>{a.object(t[s])?(Object.keys(e).includes(s)||Object.assign(e,{[s]:{}}),V(e[s],t[s])):Object.assign(e,{[s]:t[s]})}),V(e,...i)):e}function L(e,i){let t=e.length?e:[e];Array.from(t).reverse().forEach((s,o)=>{let r=o>0?i.cloneNode(!0):i,l=s.parentNode,u=s.nextSibling;r.appendChild(s),u?l.insertBefore(r,u):l.appendChild(r)})}function J(e,i){a.element(e)&&!a.empty(i)&&Object.entries(i).filter(([,t])=>!a.nullOrUndefined(t)).forEach(([t,s])=>e.setAttribute(t,s))}function y(e,i,t){let s=document.createElement(e);return a.object(i)&&J(s,i),a.string(t)&&(s.innerText=t),s}function $(e,i,t,s){a.element(i)&&i.appendChild(y(e,t,s))}function U(e){a.nodeList(e)||a.array(e)?Array.from(e).forEach(U):a.element(e)&&a.element(e.parentNode)&&e.parentNode.removeChild(e)}function ee(e){if(!a.element(e))return;let{length:i}=e.childNodes;for(;i>0;)e.removeChild(e.lastChild),i-=1}function ce(e,i){return a.element(i)&&a.element(i.parentNode)&&a.element(e)?(i.parentNode.replaceChild(e,i),e):null}function me(e,i){if(!a.string(e)||a.empty(e))return{};let t={},s=V({},i);return e.split(",").forEach(o=>{let r=o.trim(),l=r.replace(".",""),u=r.replace(/[[\]]/g,"").split("="),[m]=u,E=u.length>1?u[1].replace(/["']/g,""):"";switch(r.charAt(0)){case".":a.string(s.class)?t.class=`${s.class} ${l}`:t.class=l;break;case"#":t.id=r.replace("#","");break;case"[":t[m]=E}}),V(s,t)}function ve(e,i){if(!a.element(e))return;let t=i;a.boolean(t)||(t=!e.hidden),e.hidden=t}function ne(e,i,t){if(a.nodeList(e))return Array.from(e).map(s=>ne(s,i,t));if(a.element(e)){let s="toggle";return t!==void 0&&(s=t?"add":"remove"),e.classList[s](i),e.classList.contains(i)}return!1}function te(e,i){return a.element(e)&&e.classList.contains(i)}function ye(e,i){let{prototype:t}=Element;return(t.matches||t.webkitMatchesSelector||t.mozMatchesSelector||t.msMatchesSelector||function(){return Array.from(document.querySelectorAll(i)).includes(this)}).call(e,i)}function Te(e){return this.elements.container.querySelectorAll(e)}function ue(e){return this.elements.container.querySelector(e)}function oe(e=null,i=!1){a.element(e)&&e.focus({preventScroll:!0,focusVisible:i})}let Pe={"audio/ogg":"vorbis","audio/wav":"1","video/webm":"vp8, vorbis","video/mp4":"avc1.42E01E, mp4a.40.2","video/ogg":"theora"},be={audio:"canPlayType"in document.createElement("audio"),video:"canPlayType"in document.createElement("video"),check(e,i){let t=be[e]||i!=="html5";return{api:t,ui:t&&be.rangeInput}},pip:!(X.isIPhone||!a.function(y("video").webkitSetPresentationMode)&&(!document.pictureInPictureEnabled||y("video").disablePictureInPicture)),airplay:a.function(window.WebKitPlaybackTargetAvailabilityEvent),playsinline:"playsInline"in document.createElement("video"),mime(e){if(a.empty(e))return!1;let[i]=e.split("/"),t=e;if(!this.isHTML5||i!==this.type)return!1;Object.keys(Pe).includes(t)&&(t+=`; codecs="${Pe[e]}"`);try{return!!(t&&this.media.canPlayType(t).replace(/no/,""))}catch{return!1}},textTracks:"textTracks"in document.createElement("video"),rangeInput:(()=>{let e=document.createElement("input");return e.type="range",e.type==="range"})(),touch:"ontouchstart"in document.documentElement,transitions:G!==!1,reducedMotion:"matchMedia"in window&&window.matchMedia("(prefers-reduced-motion)").matches},ge=(()=>{let e=!1;try{let i=Object.defineProperty({},"passive",{get:()=>(e=!0,null)});window.addEventListener("test",null,i),window.removeEventListener("test",null,i)}catch{}return e})();function ke(e,i,t,s=!1,o=!0,r=!1){if(!e||!("addEventListener"in e)||a.empty(i)||!a.function(t))return;let l=i.split(" "),u=r;ge&&(u={passive:o,capture:r}),l.forEach(m=>{this&&this.eventListeners&&s&&this.eventListeners.push({element:e,type:m,callback:t,options:u}),e[s?"addEventListener":"removeEventListener"](m,t,u)})}function ae(e,i="",t,s=!0,o=!1){ke.call(this,e,i,t,!0,s,o)}function Xe(e,i="",t,s=!0,o=!1){ke.call(this,e,i,t,!1,s,o)}function $e(e,i="",t,s=!0,o=!1){let r=(...l)=>{Xe(e,i,r,s,o),t.apply(this,l)};ke.call(this,e,i,r,!0,s,o)}function Q(e,i="",t=!1,s={}){if(!a.element(e)||a.empty(i))return;let o=new CustomEvent(i,{bubbles:t,detail:{...s,plyr:this}});e.dispatchEvent(o)}function nt(){this&&this.eventListeners&&(this.eventListeners.forEach(e=>{let{element:i,type:t,callback:s,options:o}=e;i.removeEventListener(t,s,o)}),this.eventListeners=[])}function Et(){return new Promise(e=>this.ready?setTimeout(e,0):ae.call(this,this.elements.container,"ready",e)).then(()=>{})}function Ne(e){a.promise(e)&&e.then(null,()=>{})}function Qe(e){return a.array(e)?e.filter((i,t)=>e.indexOf(i)===t):e}function Ee(e,i){return a.array(e)&&e.length?e.reduce((t,s)=>Math.abs(s-i)<Math.abs(t-i)?s:t):null}function xe(e){return!(!window||!window.CSS)&&window.CSS.supports(e)}let Me=[[1,1],[4,3],[3,4],[5,4],[4,5],[3,2],[2,3],[16,10],[10,16],[16,9],[9,16],[21,9],[9,21],[32,9],[9,32]].reduce((e,[i,t])=>({...e,[i/t]:[i,t]}),{});function je(e){return a.array(e)||a.string(e)&&e.includes(":")?(a.array(e)?e:e.split(":")).map(Number).every(a.number):!1}function Ue(e){if(!a.array(e)||!e.every(a.number))return null;let[i,t]=e,s=(r,l)=>l===0?r:s(l,r%l),o=s(i,t);return[i/o,t/o]}function He(e){let i=s=>je(s)?s.split(":").map(Number):null,t=i(e);if(t===null&&(t=i(this.config.ratio)),t===null&&!a.empty(this.embed)&&a.array(this.embed.ratio)&&({ratio:t}=this.embed),t===null&&this.isHTML5){let{videoWidth:s,videoHeight:o}=this.media;t=[s,o]}return Ue(t)}function Be(e){if(!this.isVideo)return{};let{wrapper:i}=this.elements,t=He.call(this,e);if(!a.array(t))return{};let[s,o]=Ue(t),r=100/s*o;if(xe(`aspect-ratio: ${s}/${o}`)?i.style.aspectRatio=`${s}/${o}`:i.style.paddingBottom=`${r}%`,this.isVimeo&&!this.config.vimeo.premium&&this.supported.ui){let l=100/this.media.offsetWidth*parseInt(window.getComputedStyle(this.media).paddingBottom,10),u=(l-r)/(l/50);this.fullscreen.active?i.style.paddingBottom=null:this.media.style.transform=`translateY(-${u}%)`}else this.isHTML5&&i.classList.add(this.config.classNames.videoFixedRatio);return{padding:r,ratio:t}}function ze(e,i,t=.05){let s=e/i,o=Ee(Object.keys(Me),s);return Math.abs(o-s)<=t?Me[o]:[e,i]}let Ie={getSources(){return this.isHTML5?Array.from(this.media.querySelectorAll("source")).filter(e=>{let i=e.getAttribute("type");return!!a.empty(i)||be.mime.call(this,i)}):[]},getQualityOptions(){return this.config.quality.forced?this.config.quality.options:Ie.getSources.call(this).map(e=>Number(e.getAttribute("size"))).filter(Boolean)},setup(){if(!this.isHTML5)return;let e=this;e.options.speed=e.config.speed.options,a.empty(this.config.ratio)||Be.call(e),Object.defineProperty(e.media,"quality",{get(){let i=Ie.getSources.call(e).find(t=>t.getAttribute("src")===e.source);return i&&Number(i.getAttribute("size"))},set(i){if(e.quality!==i){if(e.config.quality.forced&&a.function(e.config.quality.onChange))e.config.quality.onChange(i);else{let t=Ie.getSources.call(e).find(m=>Number(m.getAttribute("size"))===i);if(!t)return;let{currentTime:s,paused:o,preload:r,readyState:l,playbackRate:u}=e.media;e.media.src=t.getAttribute("src"),(r!=="none"||l)&&(e.once("loadedmetadata",()=>{e.speed=u,e.currentTime=s,o||Ne(e.play())}),e.media.load())}Q.call(e,e.media,"qualitychange",!1,{quality:i})}}})},cancelRequests(){this.isHTML5&&(U(Ie.getSources.call(this)),this.media.setAttribute("src",this.config.blankVideo),this.media.load(),this.debug.log("Cancelled network requests"))}};function Ke(e,...i){return a.empty(e)?e:e.toString().replace(/{(\d+)}/g,(t,s)=>i[s].toString())}let Ve=(e="",i="",t="")=>e.replace(new RegExp(i.toString().replace(/([.*+?^=!:${}()|[\]/\\])/g,"\\$1"),"g"),t.toString()),St=(e="")=>e.toString().replace(/\w\S*/g,i=>i.charAt(0).toUpperCase()+i.slice(1).toLowerCase());function vi(e=""){let i=e.toString();return i=function(t=""){let s=t.toString();return s=Ve(s,"-"," "),s=Ve(s,"_"," "),s=St(s),Ve(s," ","")}(i),i.charAt(0).toLowerCase()+i.slice(1)}function Ti(e){let i=document.createElement("div");return i.appendChild(e),i.innerHTML}let wt={pip:"PIP",airplay:"AirPlay",html5:"HTML5",vimeo:"Vimeo",youtube:"YouTube"},Le={get(e="",i={}){if(a.empty(e)||a.empty(i))return"";let t=P(i.i18n,e);if(a.empty(t))return Object.keys(wt).includes(e)?wt[e]:"";let s={"{seektime}":i.seekTime,"{title}":i.title};return Object.entries(s).forEach(([o,r])=>{t=Ve(t,o,r)}),t}};class Je{constructor(i){n(this,"get",t=>{if(!Je.supported||!this.enabled)return null;let s=window.localStorage.getItem(this.key);if(a.empty(s))return null;let o=JSON.parse(s);return a.string(t)&&t.length?o[t]:o}),n(this,"set",t=>{if(!Je.supported||!this.enabled||!a.object(t))return;let s=this.get();a.empty(s)&&(s={}),V(s,t);try{window.localStorage.setItem(this.key,JSON.stringify(s))}catch{}}),this.enabled=i.config.storage.enabled,this.key=i.config.storage.key}static get supported(){try{if(!("localStorage"in window))return!1;let i="___test";return window.localStorage.setItem(i,i),window.localStorage.removeItem(i),!0}catch{return!1}}}function et(e,i="text"){return new Promise((t,s)=>{try{let o=new XMLHttpRequest;if(!("withCredentials"in o))return;o.addEventListener("load",()=>{if(i==="text")try{t(JSON.parse(o.responseText))}catch{t(o.responseText)}else t(o.response)}),o.addEventListener("error",()=>{throw new Error(o.status)}),o.open("GET",e,!0),o.responseType=i,o.send()}catch(o){s(o)}})}function kt(e,i){if(!a.string(e))return;let t="cache",s=a.string(i),o=!1,r=()=>document.getElementById(i)!==null,l=(u,m)=>{u.innerHTML=m,s&&r()||document.body.insertAdjacentElement("afterbegin",u)};if(!s||!r()){let u=Je.supported,m=document.createElement("div");if(m.setAttribute("hidden",""),s&&m.setAttribute("id",i),u){let E=window.localStorage.getItem(`${t}-${i}`);if(o=E!==null,o){let F=JSON.parse(E);l(m,F.content)}}et(e).then(E=>{if(!a.empty(E)){if(u)try{window.localStorage.setItem(`${t}-${i}`,JSON.stringify({content:E}))}catch{}l(m,E)}}).catch(()=>{})}}let Ct=e=>Math.trunc(e/60/60%60,10),Ai=e=>Math.trunc(e/60%60,10),Ei=e=>Math.trunc(e%60,10);function ot(e=0,i=!1,t=!1){if(!a.number(e))return ot(void 0,i,t);let s=u=>`0${u}`.slice(-2),o=Ct(e),r=Ai(e),l=Ei(e);return o=i||o>0?`${o}:`:"",`${t&&e>0?"-":""}${o}${s(r)}:${s(l)}`}let D={getIconUrl(){let e=new URL(this.config.iconUrl,window.location),i=window.location.host?window.location.host:window.top.location.host,t=e.host!==i||X.isIE&&!window.svg4everybody;return{url:this.config.iconUrl,cors:t}},findElements(){try{return this.elements.controls=ue.call(this,this.config.selectors.controls.wrapper),this.elements.buttons={play:Te.call(this,this.config.selectors.buttons.play),pause:ue.call(this,this.config.selectors.buttons.pause),restart:ue.call(this,this.config.selectors.buttons.restart),rewind:ue.call(this,this.config.selectors.buttons.rewind),fastForward:ue.call(this,this.config.selectors.buttons.fastForward),mute:ue.call(this,this.config.selectors.buttons.mute),pip:ue.call(this,this.config.selectors.buttons.pip),airplay:ue.call(this,this.config.selectors.buttons.airplay),settings:ue.call(this,this.config.selectors.buttons.settings),captions:ue.call(this,this.config.selectors.buttons.captions),fullscreen:ue.call(this,this.config.selectors.buttons.fullscreen)},this.elements.progress=ue.call(this,this.config.selectors.progress),this.elements.inputs={seek:ue.call(this,this.config.selectors.inputs.seek),volume:ue.call(this,this.config.selectors.inputs.volume)},this.elements.display={buffer:ue.call(this,this.config.selectors.display.buffer),currentTime:ue.call(this,this.config.selectors.display.currentTime),duration:ue.call(this,this.config.selectors.display.duration)},a.element(this.elements.progress)&&(this.elements.display.seekTooltip=this.elements.progress.querySelector(`.${this.config.classNames.tooltip}`)),!0}catch(e){return this.debug.warn("It looks like there is a problem with your custom controls HTML",e),this.toggleNativeControls(!0),!1}},createIcon(e,i){let t="http://www.w3.org/2000/svg",s=D.getIconUrl.call(this),o=`${s.cors?"":s.url}#${this.config.iconPrefix}`,r=document.createElementNS(t,"svg");J(r,V(i,{"aria-hidden":"true",focusable:"false"}));let l=document.createElementNS(t,"use"),u=`${o}-${e}`;return"href"in l&&l.setAttributeNS("http://www.w3.org/1999/xlink","href",u),l.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href",u),r.appendChild(l),r},createLabel(e,i={}){let t=Le.get(e,this.config);return y("span",{...i,class:[i.class,this.config.classNames.hidden].filter(Boolean).join(" ")},t)},createBadge(e){if(a.empty(e))return null;let i=y("span",{class:this.config.classNames.menu.value});return i.appendChild(y("span",{class:this.config.classNames.menu.badge},e)),i},createButton(e,i){let t=V({},i),s=vi(e),o={element:"button",toggle:!1,label:null,icon:null,labelPressed:null,iconPressed:null};switch(["element","icon","label"].forEach(l=>{Object.keys(t).includes(l)&&(o[l]=t[l],delete t[l])}),o.element!=="button"||Object.keys(t).includes("type")||(t.type="button"),Object.keys(t).includes("class")?t.class.split(" ").some(l=>l===this.config.classNames.control)||V(t,{class:`${t.class} ${this.config.classNames.control}`}):t.class=this.config.classNames.control,e){case"play":o.toggle=!0,o.label="play",o.labelPressed="pause",o.icon="play",o.iconPressed="pause";break;case"mute":o.toggle=!0,o.label="mute",o.labelPressed="unmute",o.icon="volume",o.iconPressed="muted";break;case"captions":o.toggle=!0,o.label="enableCaptions",o.labelPressed="disableCaptions",o.icon="captions-off",o.iconPressed="captions-on";break;case"fullscreen":o.toggle=!0,o.label="enterFullscreen",o.labelPressed="exitFullscreen",o.icon="enter-fullscreen",o.iconPressed="exit-fullscreen";break;case"play-large":t.class+=` ${this.config.classNames.control}--overlaid`,s="play",o.label="play",o.icon="play";break;default:a.empty(o.label)&&(o.label=s),a.empty(o.icon)&&(o.icon=e)}let r=y(o.element);return o.toggle?(r.appendChild(D.createIcon.call(this,o.iconPressed,{class:"icon--pressed"})),r.appendChild(D.createIcon.call(this,o.icon,{class:"icon--not-pressed"})),r.appendChild(D.createLabel.call(this,o.labelPressed,{class:"label--pressed"})),r.appendChild(D.createLabel.call(this,o.label,{class:"label--not-pressed"}))):(r.appendChild(D.createIcon.call(this,o.icon)),r.appendChild(D.createLabel.call(this,o.label))),V(t,me(this.config.selectors.buttons[s],t)),J(r,t),s==="play"?(a.array(this.elements.buttons[s])||(this.elements.buttons[s]=[]),this.elements.buttons[s].push(r)):this.elements.buttons[s]=r,r},createRange(e,i){let t=y("input",V(me(this.config.selectors.inputs[e]),{type:"range",min:0,max:100,step:.01,value:0,autocomplete:"off",role:"slider","aria-label":Le.get(e,this.config),"aria-valuemin":0,"aria-valuemax":100,"aria-valuenow":0},i));return this.elements.inputs[e]=t,D.updateRangeFill.call(this,t),R.setup(t),t},createProgress(e,i){let t=y("progress",V(me(this.config.selectors.display[e]),{min:0,max:100,value:0,role:"progressbar","aria-hidden":!0},i));if(e!=="volume"){t.appendChild(y("span",null,"0"));let s={played:"played",buffer:"buffered"}[e],o=s?Le.get(s,this.config):"";t.innerText=`% ${o.toLowerCase()}`}return this.elements.display[e]=t,t},createTime(e,i){let t=me(this.config.selectors.display[e],i),s=y("div",V(t,{class:`${t.class?t.class:""} ${this.config.classNames.display.time} `.trim(),"aria-label":Le.get(e,this.config),role:"timer"}),"00:00");return this.elements.display[e]=s,s},bindMenuItemShortcuts(e,i){ae.call(this,e,"keydown keyup",t=>{if(![" ","ArrowUp","ArrowDown","ArrowRight"].includes(t.key)||(t.preventDefault(),t.stopPropagation(),t.type==="keydown"))return;let s=ye(e,'[role="menuitemradio"]');if(!s&&[" ","ArrowRight"].includes(t.key))D.showMenuPanel.call(this,i,!0);else{let o;t.key!==" "&&(t.key==="ArrowDown"||s&&t.key==="ArrowRight"?(o=e.nextElementSibling,a.element(o)||(o=e.parentNode.firstElementChild)):(o=e.previousElementSibling,a.element(o)||(o=e.parentNode.lastElementChild)),oe.call(this,o,!0))}},!1),ae.call(this,e,"keyup",t=>{t.key==="Return"&&D.focusFirstMenuItem.call(this,null,!0)})},createMenuItem({value:e,list:i,type:t,title:s,badge:o=null,checked:r=!1}){let l=me(this.config.selectors.inputs[t]),u=y("button",V(l,{type:"button",role:"menuitemradio",class:`${this.config.classNames.control} ${l.class?l.class:""}`.trim(),"aria-checked":r,value:e})),m=y("span");m.innerHTML=s,a.element(o)&&m.appendChild(o),u.appendChild(m),Object.defineProperty(u,"checked",{enumerable:!0,get:()=>u.getAttribute("aria-checked")==="true",set(E){E&&Array.from(u.parentNode.children).filter(F=>ye(F,'[role="menuitemradio"]')).forEach(F=>F.setAttribute("aria-checked","false")),u.setAttribute("aria-checked",E?"true":"false")}}),this.listeners.bind(u,"click keyup",E=>{if(!a.keyboardEvent(E)||E.key===" "){switch(E.preventDefault(),E.stopPropagation(),u.checked=!0,t){case"language":this.currentTrack=Number(e);break;case"quality":this.quality=e;break;case"speed":this.speed=parseFloat(e)}D.showMenuPanel.call(this,"home",a.keyboardEvent(E))}},t,!1),D.bindMenuItemShortcuts.call(this,u,t),i.appendChild(u)},formatTime(e=0,i=!1){return a.number(e)?ot(e,Ct(this.duration)>0,i):e},updateTimeDisplay(e=null,i=0,t=!1){a.element(e)&&a.number(i)&&(e.innerText=D.formatTime(i,t))},updateVolume(){this.supported.ui&&(a.element(this.elements.inputs.volume)&&D.setRange.call(this,this.elements.inputs.volume,this.muted?0:this.volume),a.element(this.elements.buttons.mute)&&(this.elements.buttons.mute.pressed=this.muted||this.volume===0))},setRange(e,i=0){a.element(e)&&(e.value=i,D.updateRangeFill.call(this,e))},updateProgress(e){if(!this.supported.ui||!a.event(e))return;let i=0,t=(r,l)=>{let u=a.number(l)?l:0,m=a.element(r)?r:this.elements.display.buffer;if(a.element(m)){m.value=u;let E=m.getElementsByTagName("span")[0];a.element(E)&&(E.childNodes[0].nodeValue=u)}};if(e)switch(e.type){case"timeupdate":case"seeking":case"seeked":s=this.currentTime,o=this.duration,i=s===0||o===0||Number.isNaN(s)||Number.isNaN(o)?0:(s/o*100).toFixed(2),e.type==="timeupdate"&&D.setRange.call(this,this.elements.inputs.seek,i);break;case"playing":case"progress":t(this.elements.display.buffer,100*this.buffered)}var s,o},updateRangeFill(e){let i=a.event(e)?e.target:e;if(a.element(i)&&i.getAttribute("type")==="range"){if(ye(i,this.config.selectors.inputs.seek)){i.setAttribute("aria-valuenow",this.currentTime);let t=D.formatTime(this.currentTime),s=D.formatTime(this.duration),o=Le.get("seekLabel",this.config);i.setAttribute("aria-valuetext",o.replace("{currentTime}",t).replace("{duration}",s))}else if(ye(i,this.config.selectors.inputs.volume)){let t=100*i.value;i.setAttribute("aria-valuenow",t),i.setAttribute("aria-valuetext",`${t.toFixed(1)}%`)}else i.setAttribute("aria-valuenow",i.value);(X.isWebKit||X.isIPadOS)&&i.style.setProperty("--value",i.value/i.max*100+"%")}},updateSeekTooltip(e){var i,t;if(!this.config.tooltips.seek||!a.element(this.elements.inputs.seek)||!a.element(this.elements.display.seekTooltip)||this.duration===0)return;let s=this.elements.display.seekTooltip,o=`${this.config.classNames.tooltip}--visible`,r=F=>ne(s,o,F);if(this.touch)return void r(!1);let l=0,u=this.elements.progress.getBoundingClientRect();if(a.event(e))l=100/u.width*(e.pageX-u.left);else{if(!te(s,o))return;l=parseFloat(s.style.left,10)}l<0?l=0:l>100&&(l=100);let m=this.duration/100*l;s.innerText=D.formatTime(m);let E=(i=this.config.markers)===null||i===void 0||(t=i.points)===null||t===void 0?void 0:t.find(({time:F})=>F===Math.round(m));E&&s.insertAdjacentHTML("afterbegin",`${E.label}<br>`),s.style.left=`${l}%`,a.event(e)&&["mouseenter","mouseleave"].includes(e.type)&&r(e.type==="mouseenter")},timeUpdate(e){let i=!a.element(this.elements.display.duration)&&this.config.invertTime;D.updateTimeDisplay.call(this,this.elements.display.currentTime,i?this.duration-this.currentTime:this.currentTime,i),e&&e.type==="timeupdate"&&this.media.seeking||D.updateProgress.call(this,e)},durationUpdate(){if(!this.supported.ui||!this.config.invertTime&&this.currentTime)return;if(this.duration>=2**32)return ve(this.elements.display.currentTime,!0),void ve(this.elements.progress,!0);a.element(this.elements.inputs.seek)&&this.elements.inputs.seek.setAttribute("aria-valuemax",this.duration);let e=a.element(this.elements.display.duration);!e&&this.config.displayDuration&&this.paused&&D.updateTimeDisplay.call(this,this.elements.display.currentTime,this.duration),e&&D.updateTimeDisplay.call(this,this.elements.display.duration,this.duration),this.config.markers.enabled&&D.setMarkers.call(this),D.updateSeekTooltip.call(this)},toggleMenuButton(e,i){ve(this.elements.settings.buttons[e],!i)},updateSetting(e,i,t){let s=this.elements.settings.panels[e],o=null,r=i;if(e==="captions")o=this.currentTrack;else{if(o=a.empty(t)?this[e]:t,a.empty(o)&&(o=this.config[e].default),!a.empty(this.options[e])&&!this.options[e].includes(o))return void this.debug.warn(`Unsupported value of '${o}' for ${e}`);if(!this.config[e].options.includes(o))return void this.debug.warn(`Disabled value of '${o}' for ${e}`)}if(a.element(r)||(r=s&&s.querySelector('[role="menu"]')),!a.element(r))return;this.elements.settings.buttons[e].querySelector(`.${this.config.classNames.menu.value}`).innerHTML=D.getLabel.call(this,e,o);let l=r&&r.querySelector(`[value="${o}"]`);a.element(l)&&(l.checked=!0)},getLabel(e,i){switch(e){case"speed":return i===1?Le.get("normal",this.config):`${i}&times;`;case"quality":if(a.number(i)){let t=Le.get(`qualityLabel.${i}`,this.config);return t.length?t:`${i}p`}return St(i);case"captions":return fe.getLabel.call(this);default:return null}},setQualityMenu(e){if(!a.element(this.elements.settings.panels.quality))return;let i="quality",t=this.elements.settings.panels.quality.querySelector('[role="menu"]');a.array(e)&&(this.options.quality=Qe(e).filter(r=>this.config.quality.options.includes(r)));let s=!a.empty(this.options.quality)&&this.options.quality.length>1;if(D.toggleMenuButton.call(this,i,s),ee(t),D.checkMenu.call(this),!s)return;let o=r=>{let l=Le.get(`qualityBadge.${r}`,this.config);return l.length?D.createBadge.call(this,l):null};this.options.quality.sort((r,l)=>{let u=this.config.quality.options;return u.indexOf(r)>u.indexOf(l)?1:-1}).forEach(r=>{D.createMenuItem.call(this,{value:r,list:t,type:i,title:D.getLabel.call(this,"quality",r),badge:o(r)})}),D.updateSetting.call(this,i,t)},setCaptionsMenu(){if(!a.element(this.elements.settings.panels.captions))return;let e="captions",i=this.elements.settings.panels.captions.querySelector('[role="menu"]'),t=fe.getTracks.call(this),s=!!t.length;if(D.toggleMenuButton.call(this,e,s),ee(i),D.checkMenu.call(this),!s)return;let o=t.map((r,l)=>({value:l,checked:this.captions.toggled&&this.currentTrack===l,title:fe.getLabel.call(this,r),badge:r.language&&D.createBadge.call(this,r.language.toUpperCase()),list:i,type:"language"}));o.unshift({value:-1,checked:!this.captions.toggled,title:Le.get("disabled",this.config),list:i,type:"language"}),o.forEach(D.createMenuItem.bind(this)),D.updateSetting.call(this,e,i)},setSpeedMenu(){if(!a.element(this.elements.settings.panels.speed))return;let e="speed",i=this.elements.settings.panels.speed.querySelector('[role="menu"]');this.options.speed=this.options.speed.filter(s=>s>=this.minimumSpeed&&s<=this.maximumSpeed);let t=!a.empty(this.options.speed)&&this.options.speed.length>1;D.toggleMenuButton.call(this,e,t),ee(i),D.checkMenu.call(this),t&&(this.options.speed.forEach(s=>{D.createMenuItem.call(this,{value:s,list:i,type:e,title:D.getLabel.call(this,"speed",s)})}),D.updateSetting.call(this,e,i))},checkMenu(){let{buttons:e}=this.elements.settings,i=!a.empty(e)&&Object.values(e).some(t=>!t.hidden);ve(this.elements.settings.menu,!i)},focusFirstMenuItem(e,i=!1){if(this.elements.settings.popup.hidden)return;let t=e;a.element(t)||(t=Object.values(this.elements.settings.panels).find(o=>!o.hidden));let s=t.querySelector('[role^="menuitem"]');oe.call(this,s,i)},toggleMenu(e){let{popup:i}=this.elements.settings,t=this.elements.buttons.settings;if(!a.element(i)||!a.element(t))return;let{hidden:s}=i,o=s;if(a.boolean(e))o=e;else if(a.keyboardEvent(e)&&e.key==="Escape")o=!1;else if(a.event(e)){let r=a.function(e.composedPath)?e.composedPath()[0]:e.target,l=i.contains(r);if(l||!l&&e.target!==t&&o)return}t.setAttribute("aria-expanded",o),ve(i,!o),ne(this.elements.container,this.config.classNames.menu.open,o),o&&a.keyboardEvent(e)?D.focusFirstMenuItem.call(this,null,!0):o||s||oe.call(this,t,a.keyboardEvent(e))},getMenuSize(e){let i=e.cloneNode(!0);i.style.position="absolute",i.style.opacity=0,i.removeAttribute("hidden"),e.parentNode.appendChild(i);let t=i.scrollWidth,s=i.scrollHeight;return U(i),{width:t,height:s}},showMenuPanel(e="",i=!1){let t=this.elements.container.querySelector(`#plyr-settings-${this.id}-${e}`);if(!a.element(t))return;let s=t.parentNode,o=Array.from(s.children).find(r=>!r.hidden);if(be.transitions&&!be.reducedMotion){s.style.width=`${o.scrollWidth}px`,s.style.height=`${o.scrollHeight}px`;let r=D.getMenuSize.call(this,t),l=u=>{u.target===s&&["width","height"].includes(u.propertyName)&&(s.style.width="",s.style.height="",Xe.call(this,s,G,l))};ae.call(this,s,G,l),s.style.width=`${r.width}px`,s.style.height=`${r.height}px`}ve(o,!0),ve(t,!1),D.focusFirstMenuItem.call(this,t,i)},setDownloadUrl(){let e=this.elements.buttons.download;a.element(e)&&e.setAttribute("href",this.download)},create(e){let{bindMenuItemShortcuts:i,createButton:t,createProgress:s,createRange:o,createTime:r,setQualityMenu:l,setSpeedMenu:u,showMenuPanel:m}=D;this.elements.controls=null,a.array(this.config.controls)&&this.config.controls.includes("play-large")&&this.elements.container.appendChild(t.call(this,"play-large"));let E=y("div",me(this.config.selectors.controls.wrapper));this.elements.controls=E;let F={class:"plyr__controls__item"};return Qe(a.array(this.config.controls)?this.config.controls:[]).forEach(Z=>{if(Z==="restart"&&E.appendChild(t.call(this,"restart",F)),Z==="rewind"&&E.appendChild(t.call(this,"rewind",F)),Z==="play"&&E.appendChild(t.call(this,"play",F)),Z==="fast-forward"&&E.appendChild(t.call(this,"fast-forward",F)),Z==="progress"){let _=y("div",{class:`${F.class} plyr__progress__container`}),ie=y("div",me(this.config.selectors.progress));if(ie.appendChild(o.call(this,"seek",{id:`plyr-seek-${e.id}`})),ie.appendChild(s.call(this,"buffer")),this.config.tooltips.seek){let he=y("span",{class:this.config.classNames.tooltip},"00:00");ie.appendChild(he),this.elements.display.seekTooltip=he}this.elements.progress=ie,_.appendChild(this.elements.progress),E.appendChild(_)}if(Z==="current-time"&&E.appendChild(r.call(this,"currentTime",F)),Z==="duration"&&E.appendChild(r.call(this,"duration",F)),Z==="mute"||Z==="volume"){let{volume:_}=this.elements;if(a.element(_)&&E.contains(_)||(_=y("div",V({},F,{class:`${F.class} plyr__volume`.trim()})),this.elements.volume=_,E.appendChild(_)),Z==="mute"&&_.appendChild(t.call(this,"mute")),Z==="volume"&&!X.isIos&&!X.isIPadOS){let ie={max:1,step:.05,value:this.config.volume};_.appendChild(o.call(this,"volume",V(ie,{id:`plyr-volume-${e.id}`})))}}if(Z==="captions"&&E.appendChild(t.call(this,"captions",F)),Z==="settings"&&!a.empty(this.config.settings)){let _=y("div",V({},F,{class:`${F.class} plyr__menu`.trim(),hidden:""}));_.appendChild(t.call(this,"settings",{"aria-haspopup":!0,"aria-controls":`plyr-settings-${e.id}`,"aria-expanded":!1}));let ie=y("div",{class:"plyr__menu__container",id:`plyr-settings-${e.id}`,hidden:""}),he=y("div"),pe=y("div",{id:`plyr-settings-${e.id}-home`}),Se=y("div",{role:"menu"});pe.appendChild(Se),he.appendChild(pe),this.elements.settings.panels.home=pe,this.config.settings.forEach(le=>{let we=y("button",V(me(this.config.selectors.buttons.settings),{type:"button",class:`${this.config.classNames.control} ${this.config.classNames.control}--forward`,role:"menuitem","aria-haspopup":!0,hidden:""}));i.call(this,we,le),ae.call(this,we,"click",()=>{m.call(this,le,!1)});let j=y("span",null,Le.get(le,this.config)),de=y("span",{class:this.config.classNames.menu.value});de.innerHTML=e[le],j.appendChild(de),we.appendChild(j),Se.appendChild(we);let Ce=y("div",{id:`plyr-settings-${e.id}-${le}`,hidden:""}),Oe=y("button",{type:"button",class:`${this.config.classNames.control} ${this.config.classNames.control}--back`});Oe.appendChild(y("span",{"aria-hidden":!0},Le.get(le,this.config))),Oe.appendChild(y("span",{class:this.config.classNames.hidden},Le.get("menuBack",this.config))),ae.call(this,Ce,"keydown",qe=>{qe.key==="ArrowLeft"&&(qe.preventDefault(),qe.stopPropagation(),m.call(this,"home",!0))},!1),ae.call(this,Oe,"click",()=>{m.call(this,"home",!1)}),Ce.appendChild(Oe),Ce.appendChild(y("div",{role:"menu"})),he.appendChild(Ce),this.elements.settings.buttons[le]=we,this.elements.settings.panels[le]=Ce}),ie.appendChild(he),_.appendChild(ie),E.appendChild(_),this.elements.settings.popup=ie,this.elements.settings.menu=_}if(Z==="pip"&&be.pip&&E.appendChild(t.call(this,"pip",F)),Z==="airplay"&&be.airplay&&E.appendChild(t.call(this,"airplay",F)),Z==="download"){let _=V({},F,{element:"a",href:this.download,target:"_blank"});this.isHTML5&&(_.download="");let{download:ie}=this.config.urls;!a.url(ie)&&this.isEmbed&&V(_,{icon:`logo-${this.provider}`,label:this.provider}),E.appendChild(t.call(this,"download",_))}Z==="fullscreen"&&E.appendChild(t.call(this,"fullscreen",F))}),this.isHTML5&&l.call(this,Ie.getQualityOptions.call(this)),u.call(this),E},inject(){if(this.config.loadSprite){let o=D.getIconUrl.call(this);o.cors&&kt(o.url,"sprite-plyr")}this.id=Math.floor(1e4*Math.random());let e=null;this.elements.controls=null;let i={id:this.id,seektime:this.config.seekTime,title:this.config.title},t=!0;a.function(this.config.controls)&&(this.config.controls=this.config.controls.call(this,i)),this.config.controls||(this.config.controls=[]),a.element(this.config.controls)||a.string(this.config.controls)?e=this.config.controls:(e=D.create.call(this,{id:this.id,seektime:this.config.seekTime,speed:this.speed,quality:this.quality,captions:fe.getLabel.call(this)}),t=!1);let s;if(t&&a.string(this.config.controls)&&(e=(o=>{let r=o;return Object.entries(i).forEach(([l,u])=>{r=Ve(r,`{${l}}`,u)}),r})(e)),a.string(this.config.selectors.controls.container)&&(s=document.querySelector(this.config.selectors.controls.container)),a.element(s)||(s=this.elements.container),s[a.element(e)?"insertAdjacentElement":"insertAdjacentHTML"]("afterbegin",e),a.element(this.elements.controls)||D.findElements.call(this),!a.empty(this.elements.buttons)){let o=r=>{let l=this.config.classNames.controlPressed;r.setAttribute("aria-pressed","false"),Object.defineProperty(r,"pressed",{configurable:!0,enumerable:!0,get:()=>te(r,l),set(u=!1){ne(r,l,u),r.setAttribute("aria-pressed",u?"true":"false")}})};Object.values(this.elements.buttons).filter(Boolean).forEach(r=>{a.array(r)||a.nodeList(r)?Array.from(r).filter(Boolean).forEach(o):o(r)})}if(X.isEdge&&W(s),this.config.tooltips.controls){let{classNames:o,selectors:r}=this.config,l=`${r.controls.wrapper} ${r.labels} .${o.hidden}`,u=Te.call(this,l);Array.from(u).forEach(m=>{ne(m,this.config.classNames.hidden,!1),ne(m,this.config.classNames.tooltip,!0)})}},setMediaMetadata(){try{"mediaSession"in navigator&&(navigator.mediaSession.metadata=new window.MediaMetadata({title:this.config.mediaMetadata.title,artist:this.config.mediaMetadata.artist,album:this.config.mediaMetadata.album,artwork:this.config.mediaMetadata.artwork}))}catch{}},setMarkers(){var e,i;if(!this.duration||this.elements.markers)return;let t=(e=this.config.markers)===null||e===void 0||(i=e.points)===null||i===void 0?void 0:i.filter(({time:m})=>m>0&&m<this.duration);if(t==null||!t.length)return;let s=document.createDocumentFragment(),o=document.createDocumentFragment(),r=null,l=`${this.config.classNames.tooltip}--visible`,u=m=>ne(r,l,m);t.forEach(m=>{let E=y("span",{class:this.config.classNames.marker},""),F=m.time/this.duration*100+"%";r&&(E.addEventListener("mouseenter",()=>{m.label||(r.style.left=F,r.innerHTML=m.label,u(!0))}),E.addEventListener("mouseleave",()=>{u(!1)})),E.addEventListener("click",()=>{this.currentTime=m.time}),E.style.left=F,o.appendChild(E)}),s.appendChild(o),this.config.tooltips.seek||(r=y("span",{class:this.config.classNames.tooltip},""),s.appendChild(r)),this.elements.markers={points:o,tip:r},this.elements.progress.appendChild(s)}};function xt(e,i=!0){let t=e;if(i){let s=document.createElement("a");s.href=t,t=s.href}try{return new URL(t)}catch{return null}}function Lt(e){let i=new URLSearchParams;return a.object(e)&&Object.entries(e).forEach(([t,s])=>{i.set(t,s)}),i}let fe={setup(){if(!this.supported.ui)return;if(!this.isVideo||this.isYouTube||this.isHTML5&&!be.textTracks)return void(a.array(this.config.controls)&&this.config.controls.includes("settings")&&this.config.settings.includes("captions")&&D.setCaptionsMenu.call(this));var e,i;if(a.element(this.elements.captions)||(this.elements.captions=y("div",me(this.config.selectors.captions)),this.elements.captions.setAttribute("dir","auto"),e=this.elements.captions,i=this.elements.wrapper,a.element(e)&&a.element(i)&&i.parentNode.insertBefore(e,i.nextSibling)),X.isIE&&window.URL){let r=this.media.querySelectorAll("track");Array.from(r).forEach(l=>{let u=l.getAttribute("src"),m=xt(u);m!==null&&m.hostname!==window.location.href.hostname&&["http:","https:"].includes(m.protocol)&&et(u,"blob").then(E=>{l.setAttribute("src",window.URL.createObjectURL(E))}).catch(()=>{U(l)})})}let t=Qe((navigator.languages||[navigator.language||navigator.userLanguage||"en"]).map(r=>r.split("-")[0])),s=(this.storage.get("language")||this.config.captions.language||"auto").toLowerCase();s==="auto"&&([s]=t);let o=this.storage.get("captions");if(a.boolean(o)||({active:o}=this.config.captions),Object.assign(this.captions,{toggled:!1,active:o,language:s,languages:t}),this.isHTML5){let r=this.config.captions.update?"addtrack removetrack":"removetrack";ae.call(this,this.media.textTracks,r,fe.update.bind(this))}setTimeout(fe.update.bind(this),0)},update(){let e=fe.getTracks.call(this,!0),{active:i,language:t,meta:s,currentTrackNode:o}=this.captions,r=!!e.find(l=>l.language===t);this.isHTML5&&this.isVideo&&e.filter(l=>!s.get(l)).forEach(l=>{this.debug.log("Track added",l),s.set(l,{default:l.mode==="showing"}),l.mode==="showing"&&(l.mode="hidden"),ae.call(this,l,"cuechange",()=>fe.updateCues.call(this))}),(r&&this.language!==t||!e.includes(o))&&(fe.setLanguage.call(this,t),fe.toggle.call(this,i&&r)),this.elements&&ne(this.elements.container,this.config.classNames.captions.enabled,!a.empty(e)),a.array(this.config.controls)&&this.config.controls.includes("settings")&&this.config.settings.includes("captions")&&D.setCaptionsMenu.call(this)},toggle(e,i=!0){if(!this.supported.ui)return;let{toggled:t}=this.captions,s=this.config.classNames.captions.active,o=a.nullOrUndefined(e)?!t:e;if(o!==t){if(i||(this.captions.active=o,this.storage.set({captions:o})),!this.language&&o&&!i){let r=fe.getTracks.call(this),l=fe.findTrack.call(this,[this.captions.language,...this.captions.languages],!0);return this.captions.language=l.language,void fe.set.call(this,r.indexOf(l))}this.elements.buttons.captions&&(this.elements.buttons.captions.pressed=o),ne(this.elements.container,s,o),this.captions.toggled=o,D.updateSetting.call(this,"captions"),Q.call(this,this.media,o?"captionsenabled":"captionsdisabled")}setTimeout(()=>{o&&this.captions.toggled&&(this.captions.currentTrackNode.mode="hidden")})},set(e,i=!0){let t=fe.getTracks.call(this);if(e!==-1)if(a.number(e))if(e in t){if(this.captions.currentTrack!==e){this.captions.currentTrack=e;let s=t[e],{language:o}=s||{};this.captions.currentTrackNode=s,D.updateSetting.call(this,"captions"),i||(this.captions.language=o,this.storage.set({language:o})),this.isVimeo&&this.embed.enableTextTrack(o),Q.call(this,this.media,"languagechange")}fe.toggle.call(this,!0,i),this.isHTML5&&this.isVideo&&fe.updateCues.call(this)}else this.debug.warn("Track not found",e);else this.debug.warn("Invalid caption argument",e);else fe.toggle.call(this,!1,i)},setLanguage(e,i=!0){if(!a.string(e))return void this.debug.warn("Invalid language argument",e);let t=e.toLowerCase();this.captions.language=t;let s=fe.getTracks.call(this),o=fe.findTrack.call(this,[t]);fe.set.call(this,s.indexOf(o),i)},getTracks(e=!1){return Array.from((this.media||{}).textTracks||[]).filter(i=>!this.isHTML5||e||this.captions.meta.has(i)).filter(i=>["captions","subtitles"].includes(i.kind))},findTrack(e,i=!1){let t=fe.getTracks.call(this),s=l=>Number((this.captions.meta.get(l)||{}).default),o=Array.from(t).sort((l,u)=>s(u)-s(l)),r;return e.every(l=>(r=o.find(u=>u.language===l),!r)),r||(i?o[0]:void 0)},getCurrentTrack(){return fe.getTracks.call(this)[this.currentTrack]},getLabel(e){let i=e;return!a.track(i)&&be.textTracks&&this.captions.toggled&&(i=fe.getCurrentTrack.call(this)),a.track(i)?a.empty(i.label)?a.empty(i.language)?Le.get("enabled",this.config):e.language.toUpperCase():i.label:Le.get("disabled",this.config)},updateCues(e){if(!this.supported.ui)return;if(!a.element(this.elements.captions))return void this.debug.warn("No captions element to render to");if(!a.nullOrUndefined(e)&&!Array.isArray(e))return void this.debug.warn("updateCues: Invalid input",e);let i=e;if(!i){let s=fe.getCurrentTrack.call(this);i=Array.from((s||{}).activeCues||[]).map(o=>o.getCueAsHTML()).map(Ti)}let t=i.map(s=>s.trim()).join(`
-`);if(t!==this.elements.captions.innerHTML){ee(this.elements.captions);let s=y("span",me(this.config.selectors.caption));s.innerHTML=t,this.elements.captions.appendChild(s),Q.call(this,this.media,"cuechange")}}},Pt={enabled:!0,title:"",debug:!1,autoplay:!1,autopause:!0,playsinline:!0,seekTime:10,volume:1,muted:!1,duration:null,displayDuration:!0,invertTime:!0,toggleInvert:!0,ratio:null,clickToPlay:!0,hideControls:!0,resetOnEnd:!1,disableContextMenu:!0,loadSprite:!0,iconPrefix:"plyr",iconUrl:"https://cdn.plyr.io/3.7.8/plyr.svg",blankVideo:"https://cdn.plyr.io/static/blank.mp4",quality:{default:576,options:[4320,2880,2160,1440,1080,720,576,480,360,240],forced:!1,onChange:null},loop:{active:!1},speed:{selected:1,options:[.5,.75,1,1.25,1.5,1.75,2,4]},keyboard:{focused:!0,global:!1},tooltips:{controls:!1,seek:!0},captions:{active:!1,language:"auto",update:!1},fullscreen:{enabled:!0,fallback:!0,iosNative:!1},storage:{enabled:!0,key:"plyr"},controls:["play-large","play","progress","current-time","mute","volume","captions","settings","pip","airplay","fullscreen"],settings:["captions","quality","speed"],i18n:{restart:"Restart",rewind:"Rewind {seektime}s",play:"Play",pause:"Pause",fastForward:"Forward {seektime}s",seek:"Seek",seekLabel:"{currentTime} of {duration}",played:"Played",buffered:"Buffered",currentTime:"Current time",duration:"Duration",volume:"Volume",mute:"Mute",unmute:"Unmute",enableCaptions:"Enable captions",disableCaptions:"Disable captions",download:"Download",enterFullscreen:"Enter fullscreen",exitFullscreen:"Exit fullscreen",frameTitle:"Player for {title}",captions:"Captions",settings:"Settings",pip:"PIP",menuBack:"Go back to previous menu",speed:"Speed",normal:"Normal",quality:"Quality",loop:"Loop",start:"Start",end:"End",all:"All",reset:"Reset",disabled:"Disabled",enabled:"Enabled",advertisement:"Ad",qualityBadge:{2160:"4K",1440:"HD",1080:"HD",720:"HD",576:"SD",480:"SD"}},urls:{download:null,vimeo:{sdk:"https://player.vimeo.com/api/player.js",iframe:"https://player.vimeo.com/video/{0}?{1}",api:"https://vimeo.com/api/oembed.json?url={0}"},youtube:{sdk:"https://www.youtube.com/iframe_api",api:"https://noembed.com/embed?url=https://www.youtube.com/watch?v={0}"},googleIMA:{sdk:"https://imasdk.googleapis.com/js/sdkloader/ima3.js"}},listeners:{seek:null,play:null,pause:null,restart:null,rewind:null,fastForward:null,mute:null,volume:null,captions:null,download:null,fullscreen:null,pip:null,airplay:null,speed:null,quality:null,loop:null,language:null},events:["ended","progress","stalled","playing","waiting","canplay","canplaythrough","loadstart","loadeddata","loadedmetadata","timeupdate","volumechange","play","pause","error","seeking","seeked","emptied","ratechange","cuechange","download","enterfullscreen","exitfullscreen","captionsenabled","captionsdisabled","languagechange","controlshidden","controlsshown","ready","statechange","qualitychange","adsloaded","adscontentpause","adscontentresume","adstarted","adsmidpoint","adscomplete","adsallcomplete","adsimpression","adsclick"],selectors:{editable:"input, textarea, select, [contenteditable]",container:".plyr",controls:{container:null,wrapper:".plyr__controls"},labels:"[data-plyr]",buttons:{play:'[data-plyr="play"]',pause:'[data-plyr="pause"]',restart:'[data-plyr="restart"]',rewind:'[data-plyr="rewind"]',fastForward:'[data-plyr="fast-forward"]',mute:'[data-plyr="mute"]',captions:'[data-plyr="captions"]',download:'[data-plyr="download"]',fullscreen:'[data-plyr="fullscreen"]',pip:'[data-plyr="pip"]',airplay:'[data-plyr="airplay"]',settings:'[data-plyr="settings"]',loop:'[data-plyr="loop"]'},inputs:{seek:'[data-plyr="seek"]',volume:'[data-plyr="volume"]',speed:'[data-plyr="speed"]',language:'[data-plyr="language"]',quality:'[data-plyr="quality"]'},display:{currentTime:".plyr__time--current",duration:".plyr__time--duration",buffer:".plyr__progress__buffer",loop:".plyr__progress__loop",volume:".plyr__volume--display"},progress:".plyr__progress",captions:".plyr__captions",caption:".plyr__caption"},classNames:{type:"plyr--{0}",provider:"plyr--{0}",video:"plyr__video-wrapper",embed:"plyr__video-embed",videoFixedRatio:"plyr__video-wrapper--fixed-ratio",embedContainer:"plyr__video-embed__container",poster:"plyr__poster",posterEnabled:"plyr__poster-enabled",ads:"plyr__ads",control:"plyr__control",controlPressed:"plyr__control--pressed",playing:"plyr--playing",paused:"plyr--paused",stopped:"plyr--stopped",loading:"plyr--loading",hover:"plyr--hover",tooltip:"plyr__tooltip",cues:"plyr__cues",marker:"plyr__progress__marker",hidden:"plyr__sr-only",hideControls:"plyr--hide-controls",isTouch:"plyr--is-touch",uiSupported:"plyr--full-ui",noTransition:"plyr--no-transition",display:{time:"plyr__time"},menu:{value:"plyr__menu__value",badge:"plyr__badge",open:"plyr--menu-open"},captions:{enabled:"plyr--captions-enabled",active:"plyr--captions-active"},fullscreen:{enabled:"plyr--fullscreen-enabled",fallback:"plyr--fullscreen-fallback"},pip:{supported:"plyr--pip-supported",active:"plyr--pip-active"},airplay:{supported:"plyr--airplay-supported",active:"plyr--airplay-active"},previewThumbnails:{thumbContainer:"plyr__preview-thumb",thumbContainerShown:"plyr__preview-thumb--is-shown",imageContainer:"plyr__preview-thumb__image-container",timeContainer:"plyr__preview-thumb__time-container",scrubbingContainer:"plyr__preview-scrubbing",scrubbingContainerShown:"plyr__preview-scrubbing--is-shown"}},attributes:{embed:{provider:"data-plyr-provider",id:"data-plyr-embed-id",hash:"data-plyr-embed-hash"}},ads:{enabled:!1,publisherId:"",tagUrl:""},previewThumbnails:{enabled:!1,src:""},vimeo:{byline:!1,portrait:!1,title:!1,speed:!0,transparent:!1,customControls:!0,referrerPolicy:null,premium:!1},youtube:{rel:0,showinfo:0,iv_load_policy:3,modestbranding:1,customControls:!0,noCookie:!1},mediaMetadata:{title:"",artist:"",album:"",artwork:[]},markers:{enabled:!1,points:[]}},It="picture-in-picture",Si="inline",We={html5:"html5",youtube:"youtube",vimeo:"vimeo"},wi="audio",Nt="video",mt=()=>{};class ki{constructor(i=!1){this.enabled=window.console&&i,this.enabled&&this.log("Debugging enabled")}get log(){return this.enabled?Function.prototype.bind.call(console.log,console):mt}get warn(){return this.enabled?Function.prototype.bind.call(console.warn,console):mt}get error(){return this.enabled?Function.prototype.bind.call(console.error,console):mt}}class De{constructor(i){n(this,"onChange",()=>{if(!this.supported)return;let t=this.player.elements.buttons.fullscreen;a.element(t)&&(t.pressed=this.active);let s=this.target===this.player.media?this.target:this.player.elements.container;Q.call(this.player,s,this.active?"enterfullscreen":"exitfullscreen",!0)}),n(this,"toggleFallback",(t=!1)=>{if(t?this.scrollPosition={x:window.scrollX??0,y:window.scrollY??0}:window.scrollTo(this.scrollPosition.x,this.scrollPosition.y),document.body.style.overflow=t?"hidden":"",ne(this.target,this.player.config.classNames.fullscreen.fallback,t),X.isIos){let s=document.head.querySelector('meta[name="viewport"]'),o="viewport-fit=cover";s||(s=document.createElement("meta"),s.setAttribute("name","viewport"));let r=a.string(s.content)&&s.content.includes(o);t?(this.cleanupViewport=!r,r||(s.content+=`,${o}`)):this.cleanupViewport&&(s.content=s.content.split(",").filter(l=>l.trim()!==o).join(","))}this.onChange()}),n(this,"trapFocus",t=>{if(X.isIos||X.isIPadOS||!this.active||t.key!=="Tab")return;let s=document.activeElement,o=Te.call(this.player,"a[href], button:not(:disabled), input:not(:disabled), [tabindex]"),[r]=o,l=o[o.length-1];s!==l||t.shiftKey?s===r&&t.shiftKey&&(l.focus(),t.preventDefault()):(r.focus(),t.preventDefault())}),n(this,"update",()=>{if(this.supported){let t;t=this.forceFallback?"Fallback (forced)":De.nativeSupported?"Native":"Fallback",this.player.debug.log(`${t} fullscreen enabled`)}else this.player.debug.log("Fullscreen not supported and fallback disabled");ne(this.player.elements.container,this.player.config.classNames.fullscreen.enabled,this.supported)}),n(this,"enter",()=>{this.supported&&(X.isIos&&this.player.config.fullscreen.iosNative?this.player.isVimeo?this.player.embed.requestFullscreen():this.target.webkitEnterFullscreen():!De.nativeSupported||this.forceFallback?this.toggleFallback(!0):this.prefix?a.empty(this.prefix)||this.target[`${this.prefix}Request${this.property}`]():this.target.requestFullscreen({navigationUI:"hide"}))}),n(this,"exit",()=>{if(this.supported)if(X.isIos&&this.player.config.fullscreen.iosNative)this.player.isVimeo?this.player.embed.exitFullscreen():this.target.webkitEnterFullscreen(),Ne(this.player.play());else if(!De.nativeSupported||this.forceFallback)this.toggleFallback(!1);else if(this.prefix){if(!a.empty(this.prefix)){let t=this.prefix==="moz"?"Cancel":"Exit";document[`${this.prefix}${t}${this.property}`]()}}else(document.cancelFullScreen||document.exitFullscreen).call(document)}),n(this,"toggle",()=>{this.active?this.exit():this.enter()}),this.player=i,this.prefix=De.prefix,this.property=De.property,this.scrollPosition={x:0,y:0},this.forceFallback=i.config.fullscreen.fallback==="force",this.player.elements.fullscreen=i.config.fullscreen.container&&function(t,s){let{prototype:o}=Element;return(o.closest||function(){let r=this;do{if(ye.matches(r,s))return r;r=r.parentElement||r.parentNode}while(r!==null&&r.nodeType===1);return null}).call(t,s)}(this.player.elements.container,i.config.fullscreen.container),ae.call(this.player,document,this.prefix==="ms"?"MSFullscreenChange":`${this.prefix}fullscreenchange`,()=>{this.onChange()}),ae.call(this.player,this.player.elements.container,"dblclick",t=>{a.element(this.player.elements.controls)&&this.player.elements.controls.contains(t.target)||this.player.listeners.proxy(t,this.toggle,"fullscreen")}),ae.call(this,this.player.elements.container,"keydown",t=>this.trapFocus(t)),this.update()}static get nativeSupported(){return!!(document.fullscreenEnabled||document.webkitFullscreenEnabled||document.mozFullScreenEnabled||document.msFullscreenEnabled)}get useNative(){return De.nativeSupported&&!this.forceFallback}static get prefix(){if(a.function(document.exitFullscreen))return"";let i="";return["webkit","moz","ms"].some(t=>!(!a.function(document[`${t}ExitFullscreen`])&&!a.function(document[`${t}CancelFullScreen`]))&&(i=t,!0)),i}static get property(){return this.prefix==="moz"?"FullScreen":"Fullscreen"}get supported(){return[this.player.config.fullscreen.enabled,this.player.isVideo,De.nativeSupported||this.player.config.fullscreen.fallback,!this.player.isYouTube||De.nativeSupported||!X.isIos||this.player.config.playsinline&&!this.player.config.fullscreen.iosNative].every(Boolean)}get active(){if(!this.supported)return!1;if(!De.nativeSupported||this.forceFallback)return te(this.target,this.player.config.classNames.fullscreen.fallback);let i=this.prefix?this.target.getRootNode()[`${this.prefix}${this.property}Element`]:this.target.getRootNode().fullscreenElement;return i&&i.shadowRoot?i===this.target.getRootNode().host:i===this.target}get target(){return X.isIos&&this.player.config.fullscreen.iosNative?this.player.media:this.player.elements.fullscreen??this.player.elements.container}}function rt(e,i=1){return new Promise((t,s)=>{let o=new Image,r=()=>{delete o.onload,delete o.onerror,(o.naturalWidth>=i?t:s)(o)};Object.assign(o,{onload:r,onerror:r,src:e})})}let Ae={addStyleHook(){ne(this.elements.container,this.config.selectors.container.replace(".",""),!0),ne(this.elements.container,this.config.classNames.uiSupported,this.supported.ui)},toggleNativeControls(e=!1){e&&this.isHTML5?this.media.setAttribute("controls",""):this.media.removeAttribute("controls")},build(){if(this.listeners.media(),!this.supported.ui)return this.debug.warn(`Basic support only for ${this.provider} ${this.type}`),void Ae.toggleNativeControls.call(this,!0);a.element(this.elements.controls)||(D.inject.call(this),this.listeners.controls()),Ae.toggleNativeControls.call(this),this.isHTML5&&fe.setup.call(this),this.volume=null,this.muted=null,this.loop=null,this.quality=null,this.speed=null,D.updateVolume.call(this),D.timeUpdate.call(this),D.durationUpdate.call(this),Ae.checkPlaying.call(this),ne(this.elements.container,this.config.classNames.pip.supported,be.pip&&this.isHTML5&&this.isVideo),ne(this.elements.container,this.config.classNames.airplay.supported,be.airplay&&this.isHTML5),ne(this.elements.container,this.config.classNames.isTouch,this.touch),this.ready=!0,setTimeout(()=>{Q.call(this,this.media,"ready")},0),Ae.setTitle.call(this),this.poster&&Ae.setPoster.call(this,this.poster,!1).catch(()=>{}),this.config.duration&&D.durationUpdate.call(this),this.config.mediaMetadata&&D.setMediaMetadata.call(this)},setTitle(){let e=Le.get("play",this.config);if(a.string(this.config.title)&&!a.empty(this.config.title)&&(e+=`, ${this.config.title}`),Array.from(this.elements.buttons.play||[]).forEach(i=>{i.setAttribute("aria-label",e)}),this.isEmbed){let i=ue.call(this,"iframe");if(!a.element(i))return;let t=a.empty(this.config.title)?"video":this.config.title,s=Le.get("frameTitle",this.config);i.setAttribute("title",s.replace("{title}",t))}},togglePoster(e){ne(this.elements.container,this.config.classNames.posterEnabled,e)},setPoster(e,i=!0){return i&&this.poster?Promise.reject(new Error("Poster already set")):(this.media.setAttribute("data-poster",e),this.elements.poster.removeAttribute("hidden"),Et.call(this).then(()=>rt(e)).catch(t=>{throw e===this.poster&&Ae.togglePoster.call(this,!1),t}).then(()=>{if(e!==this.poster)throw new Error("setPoster cancelled by later call to setPoster")}).then(()=>(Object.assign(this.elements.poster.style,{backgroundImage:`url('${e}')`,backgroundSize:""}),Ae.togglePoster.call(this,!0),e)))},checkPlaying(e){ne(this.elements.container,this.config.classNames.playing,this.playing),ne(this.elements.container,this.config.classNames.paused,this.paused),ne(this.elements.container,this.config.classNames.stopped,this.stopped),Array.from(this.elements.buttons.play||[]).forEach(i=>{Object.assign(i,{pressed:this.playing}),i.setAttribute("aria-label",Le.get(this.playing?"pause":"play",this.config))}),a.event(e)&&e.type==="timeupdate"||Ae.toggleControls.call(this)},checkLoading(e){this.loading=["stalled","waiting"].includes(e.type),clearTimeout(this.timers.loading),this.timers.loading=setTimeout(()=>{ne(this.elements.container,this.config.classNames.loading,this.loading),Ae.toggleControls.call(this)},this.loading?250:0)},toggleControls(e){let{controls:i}=this.elements;if(i&&this.config.hideControls){let t=this.touch&&this.lastSeekTime+2e3>Date.now();this.toggleControls(!!(e||this.loading||this.paused||i.pressed||i.hover||t))}},migrateStyles(){Object.values({...this.media.style}).filter(e=>!a.empty(e)&&a.string(e)&&e.startsWith("--plyr")).forEach(e=>{this.elements.container.style.setProperty(e,this.media.style.getPropertyValue(e)),this.media.style.removeProperty(e)}),a.empty(this.media.style)&&this.media.removeAttribute("style")}};class Ci{constructor(i){n(this,"firstTouch",()=>{let{player:t}=this,{elements:s}=t;t.touch=!0,ne(s.container,t.config.classNames.isTouch,!0)}),n(this,"global",(t=!0)=>{let{player:s}=this;s.config.keyboard.global&&ke.call(s,window,"keydown keyup",this.handleKey,t,!1),ke.call(s,document.body,"click",this.toggleMenu,t),$e.call(s,document.body,"touchstart",this.firstTouch)}),n(this,"container",()=>{let{player:t}=this,{config:s,elements:o,timers:r}=t;!s.keyboard.global&&s.keyboard.focused&&ae.call(t,o.container,"keydown keyup",this.handleKey,!1),ae.call(t,o.container,"mousemove mouseleave touchstart touchmove enterfullscreen exitfullscreen",m=>{let{controls:E}=o;E&&m.type==="enterfullscreen"&&(E.pressed=!1,E.hover=!1);let F=0;["touchstart","touchmove","mousemove"].includes(m.type)&&(Ae.toggleControls.call(t,!0),F=t.touch?3e3:2e3),clearTimeout(r.controls),r.controls=setTimeout(()=>Ae.toggleControls.call(t,!1),F)});let l=()=>{if(!t.isVimeo||t.config.vimeo.premium)return;let m=o.wrapper,{active:E}=t.fullscreen,[F,Z]=He.call(t),_=xe(`aspect-ratio: ${F} / ${Z}`);if(!E)return void(_?(m.style.width=null,m.style.height=null):(m.style.maxWidth=null,m.style.margin=null));let[ie,he]=[Math.max(document.documentElement.clientWidth||0,window.innerWidth||0),Math.max(document.documentElement.clientHeight||0,window.innerHeight||0)],pe=ie/he>F/Z;_?(m.style.width=pe?"auto":"100%",m.style.height=pe?"100%":"auto"):(m.style.maxWidth=pe?he/Z*F+"px":null,m.style.margin=pe?"0 auto":null)},u=()=>{clearTimeout(r.resized),r.resized=setTimeout(l,50)};ae.call(t,o.container,"enterfullscreen exitfullscreen",m=>{let{target:E}=t.fullscreen;E===o.container&&(!t.isEmbed&&a.empty(t.config.ratio)||(l(),(m.type==="enterfullscreen"?ae:Xe).call(t,window,"resize",u)))})}),n(this,"media",()=>{let{player:t}=this,{elements:s}=t;if(ae.call(t,t.media,"timeupdate seeking seeked",r=>D.timeUpdate.call(t,r)),ae.call(t,t.media,"durationchange loadeddata loadedmetadata",r=>D.durationUpdate.call(t,r)),ae.call(t,t.media,"ended",()=>{t.isHTML5&&t.isVideo&&t.config.resetOnEnd&&(t.restart(),t.pause())}),ae.call(t,t.media,"progress playing seeking seeked",r=>D.updateProgress.call(t,r)),ae.call(t,t.media,"volumechange",r=>D.updateVolume.call(t,r)),ae.call(t,t.media,"playing play pause ended emptied timeupdate",r=>Ae.checkPlaying.call(t,r)),ae.call(t,t.media,"waiting canplay seeked playing",r=>Ae.checkLoading.call(t,r)),t.supported.ui&&t.config.clickToPlay&&!t.isAudio){let r=ue.call(t,`.${t.config.classNames.video}`);if(!a.element(r))return;ae.call(t,s.container,"click",l=>{([s.container,r].includes(l.target)||r.contains(l.target))&&(t.touch&&t.config.hideControls||(t.ended?(this.proxy(l,t.restart,"restart"),this.proxy(l,()=>{Ne(t.play())},"play")):this.proxy(l,()=>{Ne(t.togglePlay())},"play")))})}t.supported.ui&&t.config.disableContextMenu&&ae.call(t,s.wrapper,"contextmenu",r=>{r.preventDefault()},!1),ae.call(t,t.media,"volumechange",()=>{t.storage.set({volume:t.volume,muted:t.muted})}),ae.call(t,t.media,"ratechange",()=>{D.updateSetting.call(t,"speed"),t.storage.set({speed:t.speed})}),ae.call(t,t.media,"qualitychange",r=>{D.updateSetting.call(t,"quality",null,r.detail.quality)}),ae.call(t,t.media,"ready qualitychange",()=>{D.setDownloadUrl.call(t)});let o=t.config.events.concat(["keyup","keydown"]).join(" ");ae.call(t,t.media,o,r=>{let{detail:l={}}=r;r.type==="error"&&(l=t.media.error),Q.call(t,s.container,r.type,!0,l)})}),n(this,"proxy",(t,s,o)=>{let{player:r}=this,l=r.config.listeners[o],u=!0;a.function(l)&&(u=l.call(r,t)),u!==!1&&a.function(s)&&s.call(r,t)}),n(this,"bind",(t,s,o,r,l=!0)=>{let{player:u}=this,m=u.config.listeners[r],E=a.function(m);ae.call(u,t,s,F=>this.proxy(F,o,r),l&&!E)}),n(this,"controls",()=>{let{player:t}=this,{elements:s}=t,o=X.isIE?"change":"input";if(s.buttons.play&&Array.from(s.buttons.play).forEach(r=>{this.bind(r,"click",()=>{Ne(t.togglePlay())},"play")}),this.bind(s.buttons.restart,"click",t.restart,"restart"),this.bind(s.buttons.rewind,"click",()=>{t.lastSeekTime=Date.now(),t.rewind()},"rewind"),this.bind(s.buttons.fastForward,"click",()=>{t.lastSeekTime=Date.now(),t.forward()},"fastForward"),this.bind(s.buttons.mute,"click",()=>{t.muted=!t.muted},"mute"),this.bind(s.buttons.captions,"click",()=>t.toggleCaptions()),this.bind(s.buttons.download,"click",()=>{Q.call(t,t.media,"download")},"download"),this.bind(s.buttons.fullscreen,"click",()=>{t.fullscreen.toggle()},"fullscreen"),this.bind(s.buttons.pip,"click",()=>{t.pip="toggle"},"pip"),this.bind(s.buttons.airplay,"click",t.airplay,"airplay"),this.bind(s.buttons.settings,"click",r=>{r.stopPropagation(),r.preventDefault(),D.toggleMenu.call(t,r)},null,!1),this.bind(s.buttons.settings,"keyup",r=>{[" ","Enter"].includes(r.key)&&(r.key!=="Enter"?(r.preventDefault(),r.stopPropagation(),D.toggleMenu.call(t,r)):D.focusFirstMenuItem.call(t,null,!0))},null,!1),this.bind(s.settings.menu,"keydown",r=>{r.key==="Escape"&&D.toggleMenu.call(t,r)}),this.bind(s.inputs.seek,"mousedown mousemove",r=>{let l=s.progress.getBoundingClientRect(),u=100/l.width*(r.pageX-l.left);r.currentTarget.setAttribute("seek-value",u)}),this.bind(s.inputs.seek,"mousedown mouseup keydown keyup touchstart touchend",r=>{let l=r.currentTarget,u="play-on-seeked";if(a.keyboardEvent(r)&&!["ArrowLeft","ArrowRight"].includes(r.key))return;t.lastSeekTime=Date.now();let m=l.hasAttribute(u),E=["mouseup","touchend","keyup"].includes(r.type);m&&E?(l.removeAttribute(u),Ne(t.play())):!E&&t.playing&&(l.setAttribute(u,""),t.pause())}),X.isIos){let r=Te.call(t,'input[type="range"]');Array.from(r).forEach(l=>this.bind(l,o,u=>W(u.target)))}this.bind(s.inputs.seek,o,r=>{let l=r.currentTarget,u=l.getAttribute("seek-value");a.empty(u)&&(u=l.value),l.removeAttribute("seek-value"),t.currentTime=u/l.max*t.duration},"seek"),this.bind(s.progress,"mouseenter mouseleave mousemove",r=>D.updateSeekTooltip.call(t,r)),this.bind(s.progress,"mousemove touchmove",r=>{let{previewThumbnails:l}=t;l&&l.loaded&&l.startMove(r)}),this.bind(s.progress,"mouseleave touchend click",()=>{let{previewThumbnails:r}=t;r&&r.loaded&&r.endMove(!1,!0)}),this.bind(s.progress,"mousedown touchstart",r=>{let{previewThumbnails:l}=t;l&&l.loaded&&l.startScrubbing(r)}),this.bind(s.progress,"mouseup touchend",r=>{let{previewThumbnails:l}=t;l&&l.loaded&&l.endScrubbing(r)}),X.isWebKit&&Array.from(Te.call(t,'input[type="range"]')).forEach(r=>{this.bind(r,"input",l=>D.updateRangeFill.call(t,l.target))}),t.config.toggleInvert&&!a.element(s.display.duration)&&this.bind(s.display.currentTime,"click",()=>{t.currentTime!==0&&(t.config.invertTime=!t.config.invertTime,D.timeUpdate.call(t))}),this.bind(s.inputs.volume,o,r=>{t.volume=r.target.value},"volume"),this.bind(s.controls,"mouseenter mouseleave",r=>{s.controls.hover=!t.touch&&r.type==="mouseenter"}),s.fullscreen&&Array.from(s.fullscreen.children).filter(r=>!r.contains(s.container)).forEach(r=>{this.bind(r,"mouseenter mouseleave",l=>{s.controls&&(s.controls.hover=!t.touch&&l.type==="mouseenter")})}),this.bind(s.controls,"mousedown mouseup touchstart touchend touchcancel",r=>{s.controls.pressed=["mousedown","touchstart"].includes(r.type)}),this.bind(s.controls,"focusin",()=>{let{config:r,timers:l}=t;ne(s.controls,r.classNames.noTransition,!0),Ae.toggleControls.call(t,!0),setTimeout(()=>{ne(s.controls,r.classNames.noTransition,!1)},0);let u=this.touch?3e3:4e3;clearTimeout(l.controls),l.controls=setTimeout(()=>Ae.toggleControls.call(t,!1),u)}),this.bind(s.inputs.volume,"wheel",r=>{let l=r.webkitDirectionInvertedFromDevice,[u,m]=[r.deltaX,-r.deltaY].map(Z=>l?-Z:Z),E=Math.sign(Math.abs(u)>Math.abs(m)?u:m);t.increaseVolume(E/50);let{volume:F}=t.media;(E===1&&F<1||E===-1&&F>0)&&r.preventDefault()},"volume",!1)}),this.player=i,this.lastKey=null,this.focusTimer=null,this.lastKeyDown=null,this.handleKey=this.handleKey.bind(this),this.toggleMenu=this.toggleMenu.bind(this),this.firstTouch=this.firstTouch.bind(this)}handleKey(i){let{player:t}=this,{elements:s}=t,{key:o,type:r,altKey:l,ctrlKey:u,metaKey:m,shiftKey:E}=i,F=r==="keydown",Z=F&&o===this.lastKey;if(!(l||u||m||E)&&o){if(F){let ie=document.activeElement;if(a.element(ie)){let{editable:he}=t.config.selectors,{seek:pe}=s.inputs;if(ie!==pe&&ye(ie,he)||i.key===" "&&ye(ie,'button, [role^="menuitem"]'))return}switch([" ","ArrowLeft","ArrowUp","ArrowRight","ArrowDown","0","1","2","3","4","5","6","7","8","9","c","f","k","l","m"].includes(o)&&(i.preventDefault(),i.stopPropagation()),o){case"0":case"1":case"2":case"3":case"4":case"5":case"6":case"7":case"8":case"9":Z||(_=parseInt(o,10),t.currentTime=t.duration/10*_);break;case" ":case"k":Z||Ne(t.togglePlay());break;case"ArrowUp":t.increaseVolume(.1);break;case"ArrowDown":t.decreaseVolume(.1);break;case"m":Z||(t.muted=!t.muted);break;case"ArrowRight":t.forward();break;case"ArrowLeft":t.rewind();break;case"f":t.fullscreen.toggle();break;case"c":Z||t.toggleCaptions();break;case"l":t.loop=!t.loop}o==="Escape"&&!t.fullscreen.usingNative&&t.fullscreen.active&&t.fullscreen.toggle(),this.lastKey=o}else this.lastKey=null;var _}}toggleMenu(i){D.toggleMenu.call(this.player,i)}}typeof globalThis<"u"||typeof window<"u"||(typeof global<"u"?global:typeof self<"u");var xi=function(e,i){return e(i={exports:{}},i.exports),i.exports}(function(e,i){e.exports=function(){var t=function(){},s={},o={},r={};function l(_,ie){_=_.push?_:[_];var he,pe,Se,le=[],we=_.length,j=we;for(he=function(de,Ce){Ce.length&&le.push(de),--j||ie(le)};we--;)pe=_[we],(Se=o[pe])?he(pe,Se):(r[pe]=r[pe]||[]).push(he)}function u(_,ie){if(_){var he=r[_];if(o[_]=ie,he)for(;he.length;)he[0](_,ie),he.splice(0,1)}}function m(_,ie){_.call&&(_={success:_}),ie.length?(_.error||t)(ie):(_.success||t)(_)}function E(_,ie,he,pe){var Se,le,we=document,j=he.async,de=(he.numRetries||0)+1,Ce=he.before||t,Oe=_.replace(/[\?|#].*$/,""),qe=_.replace(/^(css|img)!/,"");pe=pe||0,/(^css!|\.css$)/.test(Oe)?((le=we.createElement("link")).rel="stylesheet",le.href=qe,(Se="hideFocus"in le)&&le.relList&&(Se=0,le.rel="preload",le.as="style")):/(^img!|\.(png|gif|jpg|svg|webp)$)/.test(Oe)?(le=we.createElement("img")).src=qe:((le=we.createElement("script")).src=_,le.async=j===void 0||j),le.onload=le.onerror=le.onbeforeload=function(Fe){var lt=Fe.type[0];if(Se)try{le.sheet.cssText.length||(lt="e")}catch(Ni){Ni.code!=18&&(lt="e")}if(lt=="e"){if((pe+=1)<de)return E(_,ie,he,pe)}else if(le.rel=="preload"&&le.as=="style")return le.rel="stylesheet";ie(_,lt,Fe.defaultPrevented)},Ce(_,le)!==!1&&we.head.appendChild(le)}function F(_,ie,he){var pe,Se,le=(_=_.push?_:[_]).length,we=le,j=[];for(pe=function(de,Ce,Oe){if(Ce=="e"&&j.push(de),Ce=="b"){if(!Oe)return;j.push(de)}--le||ie(j)},Se=0;Se<we;Se++)E(_[Se],pe,he)}function Z(_,ie,he){var pe,Se;if(ie&&ie.trim&&(pe=ie),Se=(pe?he:ie)||{},pe){if(pe in s)throw"LoadJS";s[pe]=!0}function le(we,j){F(_,function(de){m(Se,de),we&&m({success:we,error:j},de),u(pe,de)},Se)}if(Se.returnPromise)return new Promise(le);le()}return Z.ready=function(_,ie){return l(_,function(he){m(ie,he)}),Z},Z.done=function(_){u(_,[])},Z.reset=function(){s={},o={},r={}},Z.isDefined=function(_){return _ in s},Z}()});function gt(e){return new Promise((i,t)=>{xi(e,{success:i,error:t})})}function tt(e){e&&!this.embed.hasPlayed&&(this.embed.hasPlayed=!0),this.media.paused===e&&(this.media.paused=!e,Q.call(this,this.media,e?"play":"pause"))}let ft={setup(){let e=this;ne(e.elements.wrapper,e.config.classNames.embed,!0),e.options.speed=e.config.speed.options,Be.call(e),a.object(window.Vimeo)?ft.ready.call(e):gt(e.config.urls.vimeo.sdk).then(()=>{ft.ready.call(e)}).catch(i=>{e.debug.warn("Vimeo SDK (player.js) failed to load",i)})},ready(){let e=this,i=e.config.vimeo,{premium:t,referrerPolicy:s,...o}=i,r=e.media.getAttribute("src"),l="";a.empty(r)?(r=e.media.getAttribute(e.config.attributes.embed.id),l=e.media.getAttribute(e.config.attributes.embed.hash)):l=function(j){let de=j.match(/^.*(vimeo.com\/|video\/)(\d+)(\?.*&*h=|\/)+([\d,a-f]+)/);return de&&de.length===5?de[4]:null}(r);let u=l?{h:l}:{};t&&Object.assign(o,{controls:!1,sidedock:!1});let m=Lt({loop:e.config.loop.active,autoplay:e.autoplay,muted:e.muted,gesture:"media",playsinline:e.config.playsinline,...u,...o}),E=(F=r,a.empty(F)?null:a.number(Number(F))?F:F.match(/^.*(vimeo.com\/|video\/)(\d+).*/)?RegExp.$2:F);var F;let Z=y("iframe"),_=Ke(e.config.urls.vimeo.iframe,E,m);if(Z.setAttribute("src",_),Z.setAttribute("allowfullscreen",""),Z.setAttribute("allow",["autoplay","fullscreen","picture-in-picture","encrypted-media","accelerometer","gyroscope"].join("; ")),a.empty(s)||Z.setAttribute("referrerPolicy",s),t||!i.customControls)Z.setAttribute("data-poster",e.poster),e.media=ce(Z,e.media);else{let j=y("div",{class:e.config.classNames.embedContainer,"data-poster":e.poster});j.appendChild(Z),e.media=ce(j,e.media)}i.customControls||et(Ke(e.config.urls.vimeo.api,_)).then(j=>{!a.empty(j)&&j.thumbnail_url&&Ae.setPoster.call(e,j.thumbnail_url).catch(()=>{})}),e.embed=new window.Vimeo.Player(Z,{autopause:e.config.autopause,muted:e.muted}),e.media.paused=!0,e.media.currentTime=0,e.supported.ui&&e.embed.disableTextTrack(),e.media.play=()=>(tt.call(e,!0),e.embed.play()),e.media.pause=()=>(tt.call(e,!1),e.embed.pause()),e.media.stop=()=>{e.pause(),e.currentTime=0};let{currentTime:ie}=e.media;Object.defineProperty(e.media,"currentTime",{get:()=>ie,set(j){let{embed:de,media:Ce,paused:Oe,volume:qe}=e,Fe=Oe&&!de.hasPlayed;Ce.seeking=!0,Q.call(e,Ce,"seeking"),Promise.resolve(Fe&&de.setVolume(0)).then(()=>de.setCurrentTime(j)).then(()=>Fe&&de.pause()).then(()=>Fe&&de.setVolume(qe)).catch(()=>{})}});let he=e.config.speed.selected;Object.defineProperty(e.media,"playbackRate",{get:()=>he,set(j){e.embed.setPlaybackRate(j).then(()=>{he=j,Q.call(e,e.media,"ratechange")}).catch(()=>{e.options.speed=[1]})}});let{volume:pe}=e.config;Object.defineProperty(e.media,"volume",{get:()=>pe,set(j){e.embed.setVolume(j).then(()=>{pe=j,Q.call(e,e.media,"volumechange")})}});let{muted:Se}=e.config;Object.defineProperty(e.media,"muted",{get:()=>Se,set(j){let de=!!a.boolean(j)&&j;e.embed.setMuted(!!de||e.config.muted).then(()=>{Se=de,Q.call(e,e.media,"volumechange")})}});let le,{loop:we}=e.config;Object.defineProperty(e.media,"loop",{get:()=>we,set(j){let de=a.boolean(j)?j:e.config.loop.active;e.embed.setLoop(de).then(()=>{we=de})}}),e.embed.getVideoUrl().then(j=>{le=j,D.setDownloadUrl.call(e)}).catch(j=>{this.debug.warn(j)}),Object.defineProperty(e.media,"currentSrc",{get:()=>le}),Object.defineProperty(e.media,"ended",{get:()=>e.currentTime===e.duration}),Promise.all([e.embed.getVideoWidth(),e.embed.getVideoHeight()]).then(j=>{let[de,Ce]=j;e.embed.ratio=ze(de,Ce),Be.call(this)}),e.embed.setAutopause(e.config.autopause).then(j=>{e.config.autopause=j}),e.embed.getVideoTitle().then(j=>{e.config.title=j,Ae.setTitle.call(this)}),e.embed.getCurrentTime().then(j=>{ie=j,Q.call(e,e.media,"timeupdate")}),e.embed.getDuration().then(j=>{e.media.duration=j,Q.call(e,e.media,"durationchange")}),e.embed.getTextTracks().then(j=>{e.media.textTracks=j,fe.setup.call(e)}),e.embed.on("cuechange",({cues:j=[]})=>{let de=j.map(Ce=>function(Oe){let qe=document.createDocumentFragment(),Fe=document.createElement("div");return qe.appendChild(Fe),Fe.innerHTML=Oe,qe.firstChild.innerText}(Ce.text));fe.updateCues.call(e,de)}),e.embed.on("loaded",()=>{e.embed.getPaused().then(j=>{tt.call(e,!j),j||Q.call(e,e.media,"playing")}),a.element(e.embed.element)&&e.supported.ui&&e.embed.element.setAttribute("tabindex",-1)}),e.embed.on("bufferstart",()=>{Q.call(e,e.media,"waiting")}),e.embed.on("bufferend",()=>{Q.call(e,e.media,"playing")}),e.embed.on("play",()=>{tt.call(e,!0),Q.call(e,e.media,"playing")}),e.embed.on("pause",()=>{tt.call(e,!1)}),e.embed.on("timeupdate",j=>{e.media.seeking=!1,ie=j.seconds,Q.call(e,e.media,"timeupdate")}),e.embed.on("progress",j=>{e.media.buffered=j.percent,Q.call(e,e.media,"progress"),parseInt(j.percent,10)===1&&Q.call(e,e.media,"canplaythrough"),e.embed.getDuration().then(de=>{de!==e.media.duration&&(e.media.duration=de,Q.call(e,e.media,"durationchange"))})}),e.embed.on("seeked",()=>{e.media.seeking=!1,Q.call(e,e.media,"seeked")}),e.embed.on("ended",()=>{e.media.paused=!0,Q.call(e,e.media,"ended")}),e.embed.on("error",j=>{e.media.error=j,Q.call(e,e.media,"error")}),i.customControls&&setTimeout(()=>Ae.build.call(e),0)}};function it(e){e&&!this.embed.hasPlayed&&(this.embed.hasPlayed=!0),this.media.paused===e&&(this.media.paused=!e,Q.call(this,this.media,e?"play":"pause"))}function Li(e){return e.noCookie?"https://www.youtube-nocookie.com":window.location.protocol==="http:"?"http://www.youtube.com":void 0}let at={setup(){if(ne(this.elements.wrapper,this.config.classNames.embed,!0),a.object(window.YT)&&a.function(window.YT.Player))at.ready.call(this);else{let e=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=()=>{a.function(e)&&e(),at.ready.call(this)},gt(this.config.urls.youtube.sdk).catch(i=>{this.debug.warn("YouTube API failed to load",i)})}},getTitle(e){et(Ke(this.config.urls.youtube.api,e)).then(i=>{if(a.object(i)){let{title:t,height:s,width:o}=i;this.config.title=t,Ae.setTitle.call(this),this.embed.ratio=ze(o,s)}Be.call(this)}).catch(()=>{Be.call(this)})},ready(){let e=this,i=e.config.youtube,t=e.media&&e.media.getAttribute("id");if(!a.empty(t)&&t.startsWith("youtube-"))return;let s=e.media.getAttribute("src");a.empty(s)&&(s=e.media.getAttribute(this.config.attributes.embed.id));let o=(r=s,a.empty(r)?null:r.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/)?RegExp.$2:r);var r;let l=y("div",{id:`${e.provider}-${Math.floor(1e4*Math.random())}`,"data-poster":i.customControls?e.poster:void 0});if(e.media=ce(l,e.media),i.customControls){let u=m=>`https://i.ytimg.com/vi/${o}/${m}default.jpg`;rt(u("maxres"),121).catch(()=>rt(u("sd"),121)).catch(()=>rt(u("hq"))).then(m=>Ae.setPoster.call(e,m.src)).then(m=>{m.includes("maxres")||(e.elements.poster.style.backgroundSize="cover")}).catch(()=>{})}e.embed=new window.YT.Player(e.media,{videoId:o,host:Li(i),playerVars:V({},{autoplay:e.config.autoplay?1:0,hl:e.config.hl,controls:e.supported.ui&&i.customControls?0:1,disablekb:1,playsinline:e.config.playsinline&&!e.config.fullscreen.iosNative?1:0,cc_load_policy:e.captions.active?1:0,cc_lang_pref:e.config.captions.language,widget_referrer:window?window.location.href:null},i),events:{onError(u){if(!e.media.error){let m=u.data,E={2:"The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.",5:"The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.",100:"The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.",101:"The owner of the requested video does not allow it to be played in embedded players.",150:"The owner of the requested video does not allow it to be played in embedded players."}[m]||"An unknown error occurred";e.media.error={code:m,message:E},Q.call(e,e.media,"error")}},onPlaybackRateChange(u){let m=u.target;e.media.playbackRate=m.getPlaybackRate(),Q.call(e,e.media,"ratechange")},onReady(u){if(a.function(e.media.play))return;let m=u.target;at.getTitle.call(e,o),e.media.play=()=>{it.call(e,!0),m.playVideo()},e.media.pause=()=>{it.call(e,!1),m.pauseVideo()},e.media.stop=()=>{m.stopVideo()},e.media.duration=m.getDuration(),e.media.paused=!0,e.media.currentTime=0,Object.defineProperty(e.media,"currentTime",{get:()=>Number(m.getCurrentTime()),set(_){e.paused&&!e.embed.hasPlayed&&e.embed.mute(),e.media.seeking=!0,Q.call(e,e.media,"seeking"),m.seekTo(_)}}),Object.defineProperty(e.media,"playbackRate",{get:()=>m.getPlaybackRate(),set(_){m.setPlaybackRate(_)}});let{volume:E}=e.config;Object.defineProperty(e.media,"volume",{get:()=>E,set(_){E=_,m.setVolume(100*E),Q.call(e,e.media,"volumechange")}});let{muted:F}=e.config;Object.defineProperty(e.media,"muted",{get:()=>F,set(_){let ie=a.boolean(_)?_:F;F=ie,m[ie?"mute":"unMute"](),m.setVolume(100*E),Q.call(e,e.media,"volumechange")}}),Object.defineProperty(e.media,"currentSrc",{get:()=>m.getVideoUrl()}),Object.defineProperty(e.media,"ended",{get:()=>e.currentTime===e.duration});let Z=m.getAvailablePlaybackRates();e.options.speed=Z.filter(_=>e.config.speed.options.includes(_)),e.supported.ui&&i.customControls&&e.media.setAttribute("tabindex",-1),Q.call(e,e.media,"timeupdate"),Q.call(e,e.media,"durationchange"),clearInterval(e.timers.buffering),e.timers.buffering=setInterval(()=>{e.media.buffered=m.getVideoLoadedFraction(),(e.media.lastBuffered===null||e.media.lastBuffered<e.media.buffered)&&Q.call(e,e.media,"progress"),e.media.lastBuffered=e.media.buffered,e.media.buffered===1&&(clearInterval(e.timers.buffering),Q.call(e,e.media,"canplaythrough"))},200),i.customControls&&setTimeout(()=>Ae.build.call(e),50)},onStateChange(u){let m=u.target;switch(clearInterval(e.timers.playing),e.media.seeking&&[1,2].includes(u.data)&&(e.media.seeking=!1,Q.call(e,e.media,"seeked")),u.data){case-1:Q.call(e,e.media,"timeupdate"),e.media.buffered=m.getVideoLoadedFraction(),Q.call(e,e.media,"progress");break;case 0:it.call(e,!1),e.media.loop?(m.stopVideo(),m.playVideo()):Q.call(e,e.media,"ended");break;case 1:i.customControls&&!e.config.autoplay&&e.media.paused&&!e.embed.hasPlayed?e.media.pause():(it.call(e,!0),Q.call(e,e.media,"playing"),e.timers.playing=setInterval(()=>{Q.call(e,e.media,"timeupdate")},50),e.media.duration!==m.getDuration()&&(e.media.duration=m.getDuration(),Q.call(e,e.media,"durationchange")));break;case 2:e.muted||e.embed.unMute(),it.call(e,!1);break;case 3:Q.call(e,e.media,"waiting")}Q.call(e,e.elements.container,"statechange",!1,{code:u.data})}}})}},Ot={setup(){this.media?(ne(this.elements.container,this.config.classNames.type.replace("{0}",this.type),!0),ne(this.elements.container,this.config.classNames.provider.replace("{0}",this.provider),!0),this.isEmbed&&ne(this.elements.container,this.config.classNames.type.replace("{0}","video"),!0),this.isVideo&&(this.elements.wrapper=y("div",{class:this.config.classNames.video}),L(this.media,this.elements.wrapper),this.elements.poster=y("div",{class:this.config.classNames.poster}),this.elements.wrapper.appendChild(this.elements.poster)),this.isHTML5?Ie.setup.call(this):this.isYouTube?at.setup.call(this):this.isVimeo&&ft.setup.call(this)):this.debug.warn("No media element found!")}};class Pi{constructor(i){n(this,"load",()=>{this.enabled&&(a.object(window.google)&&a.object(window.google.ima)?this.ready():gt(this.player.config.urls.googleIMA.sdk).then(()=>{this.ready()}).catch(()=>{this.trigger("error",new Error("Google IMA SDK failed to load"))}))}),n(this,"ready",()=>{var t;this.enabled||((t=this).manager&&t.manager.destroy(),t.elements.displayContainer&&t.elements.displayContainer.destroy(),t.elements.container.remove()),this.startSafetyTimer(12e3,"ready()"),this.managerPromise.then(()=>{this.clearSafetyTimer("onAdsManagerLoaded()")}),this.listeners(),this.setupIMA()}),n(this,"setupIMA",()=>{this.elements.container=y("div",{class:this.player.config.classNames.ads}),this.player.elements.container.appendChild(this.elements.container),google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.ENABLED),google.ima.settings.setLocale(this.player.config.ads.language),google.ima.settings.setDisableCustomPlaybackForIOS10Plus(this.player.config.playsinline),this.elements.displayContainer=new google.ima.AdDisplayContainer(this.elements.container,this.player.media),this.loader=new google.ima.AdsLoader(this.elements.displayContainer),this.loader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,t=>this.onAdsManagerLoaded(t),!1),this.loader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR,t=>this.onAdError(t),!1),this.requestAds()}),n(this,"requestAds",()=>{let{container:t}=this.player.elements;try{let s=new google.ima.AdsRequest;s.adTagUrl=this.tagUrl,s.linearAdSlotWidth=t.offsetWidth,s.linearAdSlotHeight=t.offsetHeight,s.nonLinearAdSlotWidth=t.offsetWidth,s.nonLinearAdSlotHeight=t.offsetHeight,s.forceNonLinearFullSlot=!1,s.setAdWillPlayMuted(!this.player.muted),this.loader.requestAds(s)}catch(s){this.onAdError(s)}}),n(this,"pollCountdown",(t=!1)=>{if(!t)return clearInterval(this.countdownTimer),void this.elements.container.removeAttribute("data-badge-text");this.countdownTimer=setInterval(()=>{let s=ot(Math.max(this.manager.getRemainingTime(),0)),o=`${Le.get("advertisement",this.player.config)} - ${s}`;this.elements.container.setAttribute("data-badge-text",o)},100)}),n(this,"onAdsManagerLoaded",t=>{if(!this.enabled)return;let s=new google.ima.AdsRenderingSettings;s.restoreCustomPlaybackStateOnAdBreakComplete=!0,s.enablePreloading=!0,this.manager=t.getAdsManager(this.player,s),this.cuePoints=this.manager.getCuePoints(),this.manager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR,o=>this.onAdError(o)),Object.keys(google.ima.AdEvent.Type).forEach(o=>{this.manager.addEventListener(google.ima.AdEvent.Type[o],r=>this.onAdEvent(r))}),this.trigger("loaded")}),n(this,"addCuePoints",()=>{a.empty(this.cuePoints)||this.cuePoints.forEach(t=>{if(t!==0&&t!==-1&&t<this.player.duration){let s=this.player.elements.progress;if(a.element(s)){let o=100/this.player.duration*t,r=y("span",{class:this.player.config.classNames.cues});r.style.left=`${o.toString()}%`,s.appendChild(r)}}})}),n(this,"onAdEvent",t=>{let{container:s}=this.player.elements,o=t.getAd(),r=t.getAdData();switch((l=>{Q.call(this.player,this.player.media,`ads${l.replace(/_/g,"").toLowerCase()}`)})(t.type),t.type){case google.ima.AdEvent.Type.LOADED:this.trigger("loaded"),this.pollCountdown(!0),o.isLinear()||(o.width=s.offsetWidth,o.height=s.offsetHeight);break;case google.ima.AdEvent.Type.STARTED:this.manager.setVolume(this.player.volume);break;case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:this.player.ended?this.loadAds():this.loader.contentComplete();break;case google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED:this.pauseContent();break;case google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED:this.pollCountdown(),this.resumeContent();break;case google.ima.AdEvent.Type.LOG:r.adError&&this.player.debug.warn(`Non-fatal ad error: ${r.adError.getMessage()}`)}}),n(this,"onAdError",t=>{this.cancel(),this.player.debug.warn("Ads error",t)}),n(this,"listeners",()=>{let{container:t}=this.player.elements,s;this.player.on("canplay",()=>{this.addCuePoints()}),this.player.on("ended",()=>{this.loader.contentComplete()}),this.player.on("timeupdate",()=>{s=this.player.currentTime}),this.player.on("seeked",()=>{let o=this.player.currentTime;a.empty(this.cuePoints)||this.cuePoints.forEach((r,l)=>{s<r&&r<o&&(this.manager.discardAdBreak(),this.cuePoints.splice(l,1))})}),window.addEventListener("resize",()=>{this.manager&&this.manager.resize(t.offsetWidth,t.offsetHeight,google.ima.ViewMode.NORMAL)})}),n(this,"play",()=>{let{container:t}=this.player.elements;this.managerPromise||this.resumeContent(),this.managerPromise.then(()=>{this.manager.setVolume(this.player.volume),this.elements.displayContainer.initialize();try{this.initialized||(this.manager.init(t.offsetWidth,t.offsetHeight,google.ima.ViewMode.NORMAL),this.manager.start()),this.initialized=!0}catch(s){this.onAdError(s)}}).catch(()=>{})}),n(this,"resumeContent",()=>{this.elements.container.style.zIndex="",this.playing=!1,Ne(this.player.media.play())}),n(this,"pauseContent",()=>{this.elements.container.style.zIndex=3,this.playing=!0,this.player.media.pause()}),n(this,"cancel",()=>{this.initialized&&this.resumeContent(),this.trigger("error"),this.loadAds()}),n(this,"loadAds",()=>{this.managerPromise.then(()=>{this.manager&&this.manager.destroy(),this.managerPromise=new Promise(t=>{this.on("loaded",t),this.player.debug.log(this.manager)}),this.initialized=!1,this.requestAds()}).catch(()=>{})}),n(this,"trigger",(t,...s)=>{let o=this.events[t];a.array(o)&&o.forEach(r=>{a.function(r)&&r.apply(this,s)})}),n(this,"on",(t,s)=>(a.array(this.events[t])||(this.events[t]=[]),this.events[t].push(s),this)),n(this,"startSafetyTimer",(t,s)=>{this.player.debug.log(`Safety timer invoked from: ${s}`),this.safetyTimer=setTimeout(()=>{this.cancel(),this.clearSafetyTimer("startSafetyTimer()")},t)}),n(this,"clearSafetyTimer",t=>{a.nullOrUndefined(this.safetyTimer)||(this.player.debug.log(`Safety timer cleared from: ${t}`),clearTimeout(this.safetyTimer),this.safetyTimer=null)}),this.player=i,this.config=i.config.ads,this.playing=!1,this.initialized=!1,this.elements={container:null,displayContainer:null},this.manager=null,this.loader=null,this.cuePoints=null,this.events={},this.safetyTimer=null,this.countdownTimer=null,this.managerPromise=new Promise((t,s)=>{this.on("loaded",t),this.on("error",s)}),this.load()}get enabled(){let{config:i}=this;return this.player.isHTML5&&this.player.isVideo&&i.enabled&&(!a.empty(i.publisherId)||a.url(i.tagUrl))}get tagUrl(){let{config:i}=this;return a.url(i.tagUrl)?i.tagUrl:`https://go.aniview.com/api/adserver6/vast/?${Lt({AV_PUBLISHERID:"58c25bb0073ef448b1087ad6",AV_CHANNELID:"5a0458dc28a06145e4519d21",AV_URL:window.location.hostname,cb:Date.now(),AV_WIDTH:640,AV_HEIGHT:480,AV_CDIM2:i.publisherId})}`}}function _t(e=0,i=0,t=255){return Math.min(Math.max(e,i),t)}let Ii=e=>{let i=[];return e.split(/\r\n\r\n|\n\n|\r\r/).forEach(t=>{let s={};t.split(/\r\n|\n|\r/).forEach(o=>{if(a.number(s.startTime)){if(!a.empty(o.trim())&&a.empty(s.text)){let r=o.trim().split("#xywh=");[s.text]=r,r[1]&&([s.x,s.y,s.w,s.h]=r[1].split(","))}}else{let r=o.match(/([0-9]{2})?:?([0-9]{2}):([0-9]{2}).([0-9]{2,3})( ?--> ?)([0-9]{2})?:?([0-9]{2}):([0-9]{2}).([0-9]{2,3})/);r&&(s.startTime=60*Number(r[1]||0)*60+60*Number(r[2])+Number(r[3])+ +`0.${r[4]}`,s.endTime=60*Number(r[6]||0)*60+60*Number(r[7])+Number(r[8])+ +`0.${r[9]}`)}}),s.text&&i.push(s)}),i},Rt=(e,i)=>{let t={};return e>i.width/i.height?(t.width=i.width,t.height=1/e*i.width):(t.height=i.height,t.width=e*i.height),t};class yt{constructor(i){n(this,"load",()=>{this.player.elements.display.seekTooltip&&(this.player.elements.display.seekTooltip.hidden=this.enabled),this.enabled&&this.getThumbnails().then(()=>{this.enabled&&(this.render(),this.determineContainerAutoSizing(),this.listeners(),this.loaded=!0)})}),n(this,"getThumbnails",()=>new Promise(t=>{let{src:s}=this.player.config.previewThumbnails;if(a.empty(s))throw new Error("Missing previewThumbnails.src config attribute");let o=()=>{this.thumbnails.sort((r,l)=>r.height-l.height),this.player.debug.log("Preview thumbnails",this.thumbnails),t()};if(a.function(s))s(r=>{this.thumbnails=r,o()});else{let r=(a.string(s)?[s]:s).map(l=>this.getThumbnail(l));Promise.all(r).then(o)}})),n(this,"getThumbnail",t=>new Promise(s=>{et(t).then(o=>{let r={frames:Ii(o),height:null,urlPrefix:""};r.frames[0].text.startsWith("/")||r.frames[0].text.startsWith("http://")||r.frames[0].text.startsWith("https://")||(r.urlPrefix=t.substring(0,t.lastIndexOf("/")+1));let l=new Image;l.onload=()=>{r.height=l.naturalHeight,r.width=l.naturalWidth,this.thumbnails.push(r),s()},l.src=r.urlPrefix+r.frames[0].text})})),n(this,"startMove",t=>{if(this.loaded&&a.event(t)&&["touchmove","mousemove"].includes(t.type)&&this.player.media.duration){if(t.type==="touchmove")this.seekTime=this.player.media.duration*(this.player.elements.inputs.seek.value/100);else{var s,o;let r=this.player.elements.progress.getBoundingClientRect(),l=100/r.width*(t.pageX-r.left);this.seekTime=this.player.media.duration*(l/100),this.seekTime<0&&(this.seekTime=0),this.seekTime>this.player.media.duration-1&&(this.seekTime=this.player.media.duration-1),this.mousePosX=t.pageX,this.elements.thumb.time.innerText=ot(this.seekTime);let u=(s=this.player.config.markers)===null||s===void 0||(o=s.points)===null||o===void 0?void 0:o.find(({time:m})=>m===Math.round(this.seekTime));u&&this.elements.thumb.time.insertAdjacentHTML("afterbegin",`${u.label}<br>`)}this.showImageAtCurrentTime()}}),n(this,"endMove",()=>{this.toggleThumbContainer(!1,!0)}),n(this,"startScrubbing",t=>{(a.nullOrUndefined(t.button)||t.button===!1||t.button===0)&&(this.mouseDown=!0,this.player.media.duration&&(this.toggleScrubbingContainer(!0),this.toggleThumbContainer(!1,!0),this.showImageAtCurrentTime()))}),n(this,"endScrubbing",()=>{this.mouseDown=!1,Math.ceil(this.lastTime)===Math.ceil(this.player.media.currentTime)?this.toggleScrubbingContainer(!1):$e.call(this.player,this.player.media,"timeupdate",()=>{this.mouseDown||this.toggleScrubbingContainer(!1)})}),n(this,"listeners",()=>{this.player.on("play",()=>{this.toggleThumbContainer(!1,!0)}),this.player.on("seeked",()=>{this.toggleThumbContainer(!1)}),this.player.on("timeupdate",()=>{this.lastTime=this.player.media.currentTime})}),n(this,"render",()=>{this.elements.thumb.container=y("div",{class:this.player.config.classNames.previewThumbnails.thumbContainer}),this.elements.thumb.imageContainer=y("div",{class:this.player.config.classNames.previewThumbnails.imageContainer}),this.elements.thumb.container.appendChild(this.elements.thumb.imageContainer);let t=y("div",{class:this.player.config.classNames.previewThumbnails.timeContainer});this.elements.thumb.time=y("span",{},"00:00"),t.appendChild(this.elements.thumb.time),this.elements.thumb.imageContainer.appendChild(t),a.element(this.player.elements.progress)&&this.player.elements.progress.appendChild(this.elements.thumb.container),this.elements.scrubbing.container=y("div",{class:this.player.config.classNames.previewThumbnails.scrubbingContainer}),this.player.elements.wrapper.appendChild(this.elements.scrubbing.container)}),n(this,"destroy",()=>{this.elements.thumb.container&&this.elements.thumb.container.remove(),this.elements.scrubbing.container&&this.elements.scrubbing.container.remove()}),n(this,"showImageAtCurrentTime",()=>{this.mouseDown?this.setScrubbingContainerSize():this.setThumbContainerSizeAndPos();let t=this.thumbnails[0].frames.findIndex(r=>this.seekTime>=r.startTime&&this.seekTime<=r.endTime),s=t>=0,o=0;this.mouseDown||this.toggleThumbContainer(s),s&&(this.thumbnails.forEach((r,l)=>{this.loadedImages.includes(r.frames[t].text)&&(o=l)}),t!==this.showingThumb&&(this.showingThumb=t,this.loadImage(o)))}),n(this,"loadImage",(t=0)=>{let s=this.showingThumb,o=this.thumbnails[t],{urlPrefix:r}=o,l=o.frames[s],u=o.frames[s].text,m=r+u;if(this.currentImageElement&&this.currentImageElement.dataset.filename===u)this.showImage(this.currentImageElement,l,t,s,u,!1),this.currentImageElement.dataset.index=s,this.removeOldImages(this.currentImageElement);else{this.loadingImage&&this.usingSprites&&(this.loadingImage.onload=null);let E=new Image;E.src=m,E.dataset.index=s,E.dataset.filename=u,this.showingThumbFilename=u,this.player.debug.log(`Loading image: ${m}`),E.onload=()=>this.showImage(E,l,t,s,u,!0),this.loadingImage=E,this.removeOldImages(E)}}),n(this,"showImage",(t,s,o,r,l,u=!0)=>{this.player.debug.log(`Showing thumb: ${l}. num: ${r}. qual: ${o}. newimg: ${u}`),this.setImageSizeAndOffset(t,s),u&&(this.currentImageContainer.appendChild(t),this.currentImageElement=t,this.loadedImages.includes(l)||this.loadedImages.push(l)),this.preloadNearby(r,!0).then(this.preloadNearby(r,!1)).then(this.getHigherQuality(o,t,s,l))}),n(this,"removeOldImages",t=>{Array.from(this.currentImageContainer.children).forEach(s=>{if(s.tagName.toLowerCase()!=="img")return;let o=this.usingSprites?500:1e3;if(s.dataset.index!==t.dataset.index&&!s.dataset.deleting){s.dataset.deleting=!0;let{currentImageContainer:r}=this;setTimeout(()=>{r.removeChild(s),this.player.debug.log(`Removing thumb: ${s.dataset.filename}`)},o)}})}),n(this,"preloadNearby",(t,s=!0)=>new Promise(o=>{setTimeout(()=>{let r=this.thumbnails[0].frames[t].text;if(this.showingThumbFilename===r){let l;l=s?this.thumbnails[0].frames.slice(t):this.thumbnails[0].frames.slice(0,t).reverse();let u=!1;l.forEach(m=>{let E=m.text;if(E!==r&&!this.loadedImages.includes(E)){u=!0,this.player.debug.log(`Preloading thumb filename: ${E}`);let{urlPrefix:F}=this.thumbnails[0],Z=F+E,_=new Image;_.src=Z,_.onload=()=>{this.player.debug.log(`Preloaded thumb filename: ${E}`),this.loadedImages.includes(E)||this.loadedImages.push(E),o()}}}),u||o()}},300)})),n(this,"getHigherQuality",(t,s,o,r)=>{if(t<this.thumbnails.length-1){let l=s.naturalHeight;this.usingSprites&&(l=o.h),l<this.thumbContainerHeight&&setTimeout(()=>{this.showingThumbFilename===r&&(this.player.debug.log(`Showing higher quality thumb for: ${r}`),this.loadImage(t+1))},300)}}),n(this,"toggleThumbContainer",(t=!1,s=!1)=>{let o=this.player.config.classNames.previewThumbnails.thumbContainerShown;this.elements.thumb.container.classList.toggle(o,t),!t&&s&&(this.showingThumb=null,this.showingThumbFilename=null)}),n(this,"toggleScrubbingContainer",(t=!1)=>{let s=this.player.config.classNames.previewThumbnails.scrubbingContainerShown;this.elements.scrubbing.container.classList.toggle(s,t),t||(this.showingThumb=null,this.showingThumbFilename=null)}),n(this,"determineContainerAutoSizing",()=>{(this.elements.thumb.imageContainer.clientHeight>20||this.elements.thumb.imageContainer.clientWidth>20)&&(this.sizeSpecifiedInCSS=!0)}),n(this,"setThumbContainerSizeAndPos",()=>{let{imageContainer:t}=this.elements.thumb;if(this.sizeSpecifiedInCSS){if(t.clientHeight>20&&t.clientWidth<20){let s=Math.floor(t.clientHeight*this.thumbAspectRatio);t.style.width=`${s}px`}else if(t.clientHeight<20&&t.clientWidth>20){let s=Math.floor(t.clientWidth/this.thumbAspectRatio);t.style.height=`${s}px`}}else{let s=Math.floor(this.thumbContainerHeight*this.thumbAspectRatio);t.style.height=`${this.thumbContainerHeight}px`,t.style.width=`${s}px`}this.setThumbContainerPos()}),n(this,"setThumbContainerPos",()=>{let t=this.player.elements.progress.getBoundingClientRect(),s=this.player.elements.container.getBoundingClientRect(),{container:o}=this.elements.thumb,r=s.left-t.left+10,l=s.right-t.left-o.clientWidth-10,u=this.mousePosX-t.left-o.clientWidth/2,m=_t(u,r,l);o.style.left=`${m}px`,o.style.setProperty("--preview-arrow-offset",u-m+"px")}),n(this,"setScrubbingContainerSize",()=>{let{width:t,height:s}=Rt(this.thumbAspectRatio,{width:this.player.media.clientWidth,height:this.player.media.clientHeight});this.elements.scrubbing.container.style.width=`${t}px`,this.elements.scrubbing.container.style.height=`${s}px`}),n(this,"setImageSizeAndOffset",(t,s)=>{if(!this.usingSprites)return;let o=this.thumbContainerHeight/s.h;t.style.height=t.naturalHeight*o+"px",t.style.width=t.naturalWidth*o+"px",t.style.left=`-${s.x*o}px`,t.style.top=`-${s.y*o}px`}),this.player=i,this.thumbnails=[],this.loaded=!1,this.lastMouseMoveTime=Date.now(),this.mouseDown=!1,this.loadedImages=[],this.elements={thumb:{},scrubbing:{}},this.load()}get enabled(){return this.player.isHTML5&&this.player.isVideo&&this.player.config.previewThumbnails.enabled}get currentImageContainer(){return this.mouseDown?this.elements.scrubbing.container:this.elements.thumb.imageContainer}get usingSprites(){return Object.keys(this.thumbnails[0].frames[0]).includes("w")}get thumbAspectRatio(){return this.usingSprites?this.thumbnails[0].frames[0].w/this.thumbnails[0].frames[0].h:this.thumbnails[0].width/this.thumbnails[0].height}get thumbContainerHeight(){if(this.mouseDown){let{height:i}=Rt(this.thumbAspectRatio,{width:this.player.media.clientWidth,height:this.player.media.clientHeight});return i}return this.sizeSpecifiedInCSS?this.elements.thumb.imageContainer.clientHeight:Math.floor(this.player.media.clientWidth/this.thumbAspectRatio/4)}get currentImageElement(){return this.mouseDown?this.currentScrubbingImageElement:this.currentThumbnailImageElement}set currentImageElement(i){this.mouseDown?this.currentScrubbingImageElement=i:this.currentThumbnailImageElement=i}}let bt={insertElements(e,i){a.string(i)?$(e,this.media,{src:i}):a.array(i)&&i.forEach(t=>{$(e,this.media,t)})},change(e){P(e,"sources.length")?(Ie.cancelRequests.call(this),this.destroy.call(this,()=>{this.options.quality=[],U(this.media),this.media=null,a.element(this.elements.container)&&this.elements.container.removeAttribute("class");let{sources:i,type:t}=e,[{provider:s=We.html5,src:o}]=i,r=s==="html5"?t:"div",l=s==="html5"?{}:{src:o};Object.assign(this,{provider:s,type:t,supported:be.check(t,s,this.config.playsinline),media:y(r,l)}),this.elements.container.appendChild(this.media),a.boolean(e.autoplay)&&(this.config.autoplay=e.autoplay),this.isHTML5&&(this.config.crossorigin&&this.media.setAttribute("crossorigin",""),this.config.autoplay&&this.media.setAttribute("autoplay",""),a.empty(e.poster)||(this.poster=e.poster),this.config.loop.active&&this.media.setAttribute("loop",""),this.config.muted&&this.media.setAttribute("muted",""),this.config.playsinline&&this.media.setAttribute("playsinline","")),Ae.addStyleHook.call(this),this.isHTML5&&bt.insertElements.call(this,"source",i),this.config.title=e.title,Ot.setup.call(this),this.isHTML5&&Object.keys(e).includes("tracks")&&bt.insertElements.call(this,"track",e.tracks),(this.isHTML5||this.isEmbed&&!this.supported.ui)&&Ae.build.call(this),this.isHTML5&&this.media.load(),a.empty(e.previewThumbnails)||(Object.assign(this.config.previewThumbnails,e.previewThumbnails),this.previewThumbnails&&this.previewThumbnails.loaded&&(this.previewThumbnails.destroy(),this.previewThumbnails=null),this.config.previewThumbnails.enabled&&(this.previewThumbnails=new yt(this))),this.fullscreen.update()},!0)):this.debug.warn("Invalid source format")}};class st{constructor(i,t){if(n(this,"play",()=>a.function(this.media.play)?(this.ads&&this.ads.enabled&&this.ads.managerPromise.then(()=>this.ads.play()).catch(()=>Ne(this.media.play())),this.media.play()):null),n(this,"pause",()=>this.playing&&a.function(this.media.pause)?this.media.pause():null),n(this,"togglePlay",u=>(a.boolean(u)?u:!this.playing)?this.play():this.pause()),n(this,"stop",()=>{this.isHTML5?(this.pause(),this.restart()):a.function(this.media.stop)&&this.media.stop()}),n(this,"restart",()=>{this.currentTime=0}),n(this,"rewind",u=>{this.currentTime-=a.number(u)?u:this.config.seekTime}),n(this,"forward",u=>{this.currentTime+=a.number(u)?u:this.config.seekTime}),n(this,"increaseVolume",u=>{let m=this.media.muted?0:this.volume;this.volume=m+(a.number(u)?u:0)}),n(this,"decreaseVolume",u=>{this.increaseVolume(-u)}),n(this,"airplay",()=>{be.airplay&&this.media.webkitShowPlaybackTargetPicker()}),n(this,"toggleControls",u=>{if(this.supported.ui&&!this.isAudio){let m=te(this.elements.container,this.config.classNames.hideControls),E=u===void 0?void 0:!u,F=ne(this.elements.container,this.config.classNames.hideControls,E);if(F&&a.array(this.config.controls)&&this.config.controls.includes("settings")&&!a.empty(this.config.settings)&&D.toggleMenu.call(this,!1),F!==m){let Z=F?"controlshidden":"controlsshown";Q.call(this,this.media,Z)}return!F}return!1}),n(this,"on",(u,m)=>{ae.call(this,this.elements.container,u,m)}),n(this,"once",(u,m)=>{$e.call(this,this.elements.container,u,m)}),n(this,"off",(u,m)=>{Xe(this.elements.container,u,m)}),n(this,"destroy",(u,m=!1)=>{if(!this.ready)return;let E=()=>{document.body.style.overflow="",this.embed=null,m?(Object.keys(this.elements).length&&(U(this.elements.buttons.play),U(this.elements.captions),U(this.elements.controls),U(this.elements.wrapper),this.elements.buttons.play=null,this.elements.captions=null,this.elements.controls=null,this.elements.wrapper=null),a.function(u)&&u()):(nt.call(this),Ie.cancelRequests.call(this),ce(this.elements.original,this.elements.container),Q.call(this,this.elements.original,"destroyed",!0),a.function(u)&&u.call(this.elements.original),this.ready=!1,setTimeout(()=>{this.elements=null,this.media=null},200))};this.stop(),clearTimeout(this.timers.loading),clearTimeout(this.timers.controls),clearTimeout(this.timers.resized),this.isHTML5?(Ae.toggleNativeControls.call(this,!0),E()):this.isYouTube?(clearInterval(this.timers.buffering),clearInterval(this.timers.playing),this.embed!==null&&a.function(this.embed.destroy)&&this.embed.destroy(),E()):this.isVimeo&&(this.embed!==null&&this.embed.unload().then(E),setTimeout(E,200))}),n(this,"supports",u=>be.mime.call(this,u)),this.timers={},this.ready=!1,this.loading=!1,this.failed=!1,this.touch=be.touch,this.media=i,a.string(this.media)&&(this.media=document.querySelectorAll(this.media)),(window.jQuery&&this.media instanceof jQuery||a.nodeList(this.media)||a.array(this.media))&&(this.media=this.media[0]),this.config=V({},Pt,st.defaults,t||{},(()=>{try{return JSON.parse(this.media.getAttribute("data-plyr-config"))}catch{return{}}})()),this.elements={container:null,fullscreen:null,captions:null,buttons:{},display:{},progress:{},inputs:{},settings:{popup:null,menu:null,panels:{},buttons:{}}},this.captions={active:null,currentTrack:-1,meta:new WeakMap},this.fullscreen={active:!1},this.options={speed:[],quality:[]},this.debug=new ki(this.config.debug),this.debug.log("Config",this.config),this.debug.log("Support",be),a.nullOrUndefined(this.media)||!a.element(this.media))return void this.debug.error("Setup failed: no suitable element passed");if(this.media.plyr)return void this.debug.warn("Target already setup");if(!this.config.enabled)return void this.debug.error("Setup failed: disabled by config");if(!be.check().api)return void this.debug.error("Setup failed: no support");let s=this.media.cloneNode(!0);s.autoplay=!1,this.elements.original=s;let o=this.media.tagName.toLowerCase(),r=null,l=null;switch(o){case"div":if(r=this.media.querySelector("iframe"),a.element(r)){if(l=xt(r.getAttribute("src")),this.provider=function(u){return/^(https?:\/\/)?(www\.)?(youtube\.com|youtube-nocookie\.com|youtu\.?be)\/.+$/.test(u)?We.youtube:/^https?:\/\/player.vimeo.com\/video\/\d{0,9}(?=\b|\/)/.test(u)?We.vimeo:null}(l.toString()),this.elements.container=this.media,this.media=r,this.elements.container.className="",l.search.length){let u=["1","true"];u.includes(l.searchParams.get("autoplay"))&&(this.config.autoplay=!0),u.includes(l.searchParams.get("loop"))&&(this.config.loop.active=!0),this.isYouTube?(this.config.playsinline=u.includes(l.searchParams.get("playsinline")),this.config.youtube.hl=l.searchParams.get("hl")):this.config.playsinline=!0}}else this.provider=this.media.getAttribute(this.config.attributes.embed.provider),this.media.removeAttribute(this.config.attributes.embed.provider);if(a.empty(this.provider)||!Object.values(We).includes(this.provider))return void this.debug.error("Setup failed: Invalid provider");this.type=Nt;break;case"video":case"audio":this.type=o,this.provider=We.html5,this.media.hasAttribute("crossorigin")&&(this.config.crossorigin=!0),this.media.hasAttribute("autoplay")&&(this.config.autoplay=!0),(this.media.hasAttribute("playsinline")||this.media.hasAttribute("webkit-playsinline"))&&(this.config.playsinline=!0),this.media.hasAttribute("muted")&&(this.config.muted=!0),this.media.hasAttribute("loop")&&(this.config.loop.active=!0);break;default:return void this.debug.error("Setup failed: unsupported type")}this.supported=be.check(this.type,this.provider),this.supported.api?(this.eventListeners=[],this.listeners=new Ci(this),this.storage=new Je(this),this.media.plyr=this,a.element(this.elements.container)||(this.elements.container=y("div"),L(this.media,this.elements.container)),Ae.migrateStyles.call(this),Ae.addStyleHook.call(this),Ot.setup.call(this),this.config.debug&&ae.call(this,this.elements.container,this.config.events.join(" "),u=>{this.debug.log(`event: ${u.type}`)}),this.fullscreen=new De(this),(this.isHTML5||this.isEmbed&&!this.supported.ui)&&Ae.build.call(this),this.listeners.container(),this.listeners.global(),this.config.ads.enabled&&(this.ads=new Pi(this)),this.isHTML5&&this.config.autoplay&&this.once("canplay",()=>Ne(this.play())),this.lastSeekTime=0,this.config.previewThumbnails.enabled&&(this.previewThumbnails=new yt(this))):this.debug.error("Setup failed: no support")}get isHTML5(){return this.provider===We.html5}get isEmbed(){return this.isYouTube||this.isVimeo}get isYouTube(){return this.provider===We.youtube}get isVimeo(){return this.provider===We.vimeo}get isVideo(){return this.type===Nt}get isAudio(){return this.type===wi}get playing(){return!!(this.ready&&!this.paused&&!this.ended)}get paused(){return!!this.media.paused}get stopped(){return!!(this.paused&&this.currentTime===0)}get ended(){return!!this.media.ended}set currentTime(i){if(!this.duration)return;let t=a.number(i)&&i>0;this.media.currentTime=t?Math.min(i,this.duration):0,this.debug.log(`Seeking to ${this.currentTime} seconds`)}get currentTime(){return Number(this.media.currentTime)}get buffered(){let{buffered:i}=this.media;return a.number(i)?i:i&&i.length&&this.duration>0?i.end(0)/this.duration:0}get seeking(){return!!this.media.seeking}get duration(){let i=parseFloat(this.config.duration),t=(this.media||{}).duration,s=a.number(t)&&t!==1/0?t:0;return i||s}set volume(i){let t=i;a.string(t)&&(t=Number(t)),a.number(t)||(t=this.storage.get("volume")),a.number(t)||({volume:t}=this.config),t>1&&(t=1),t<0&&(t=0),this.config.volume=t,this.media.volume=t,!a.empty(i)&&this.muted&&t>0&&(this.muted=!1)}get volume(){return Number(this.media.volume)}set muted(i){let t=i;a.boolean(t)||(t=this.storage.get("muted")),a.boolean(t)||(t=this.config.muted),this.config.muted=t,this.media.muted=t}get muted(){return!!this.media.muted}get hasAudio(){return!this.isHTML5||!!this.isAudio||!!this.media.mozHasAudio||!!this.media.webkitAudioDecodedByteCount||!!(this.media.audioTracks&&this.media.audioTracks.length)}set speed(i){let t=null;a.number(i)&&(t=i),a.number(t)||(t=this.storage.get("speed")),a.number(t)||(t=this.config.speed.selected);let{minimumSpeed:s,maximumSpeed:o}=this;t=_t(t,s,o),this.config.speed.selected=t,setTimeout(()=>{this.media&&(this.media.playbackRate=t)},0)}get speed(){return Number(this.media.playbackRate)}get minimumSpeed(){return this.isYouTube?Math.min(...this.options.speed):this.isVimeo?.5:.0625}get maximumSpeed(){return this.isYouTube?Math.max(...this.options.speed):this.isVimeo?2:16}set quality(i){let t=this.config.quality,s=this.options.quality;if(!s.length)return;let o=[!a.empty(i)&&Number(i),this.storage.get("quality"),t.selected,t.default].find(a.number),r=!0;if(!s.includes(o)){let l=Ee(s,o);this.debug.warn(`Unsupported quality option: ${o}, using ${l} instead`),o=l,r=!1}t.selected=o,this.media.quality=o,r&&this.storage.set({quality:o})}get quality(){return this.media.quality}set loop(i){let t=a.boolean(i)?i:this.config.loop.active;this.config.loop.active=t,this.media.loop=t}get loop(){return!!this.media.loop}set source(i){bt.change.call(this,i)}get source(){return this.media.currentSrc}get download(){let{download:i}=this.config.urls;return a.url(i)?i:this.source}set download(i){a.url(i)&&(this.config.urls.download=i,D.setDownloadUrl.call(this))}set poster(i){this.isVideo?Ae.setPoster.call(this,i,!1).catch(()=>{}):this.debug.warn("Poster can only be set for video")}get poster(){return this.isVideo?this.media.getAttribute("poster")||this.media.getAttribute("data-poster"):null}get ratio(){if(!this.isVideo)return null;let i=Ue(He.call(this));return a.array(i)?i.join(":"):i}set ratio(i){this.isVideo?a.string(i)&&je(i)?(this.config.ratio=Ue(i),Be.call(this)):this.debug.error(`Invalid aspect ratio specified (${i})`):this.debug.warn("Aspect ratio can only be set for video")}set autoplay(i){this.config.autoplay=a.boolean(i)?i:this.config.autoplay}get autoplay(){return!!this.config.autoplay}toggleCaptions(i){fe.toggle.call(this,i,!1)}set currentTrack(i){fe.set.call(this,i,!1),fe.setup.call(this)}get currentTrack(){let{toggled:i,currentTrack:t}=this.captions;return i?t:-1}set language(i){fe.setLanguage.call(this,i,!1)}get language(){return(fe.getCurrentTrack.call(this)||{}).language}set pip(i){if(!be.pip)return;let t=a.boolean(i)?i:!this.pip;a.function(this.media.webkitSetPresentationMode)&&this.media.webkitSetPresentationMode(t?It:Si),a.function(this.media.requestPictureInPicture)&&(!this.pip&&t?this.media.requestPictureInPicture():this.pip&&!t&&document.exitPictureInPicture())}get pip(){return be.pip?a.empty(this.media.webkitPresentationMode)?this.media===document.pictureInPictureElement:this.media.webkitPresentationMode===It:null}setPreviewThumbnails(i){this.previewThumbnails&&this.previewThumbnails.loaded&&(this.previewThumbnails.destroy(),this.previewThumbnails=null),Object.assign(this.config.previewThumbnails,i),this.config.previewThumbnails.enabled&&(this.previewThumbnails=new yt(this))}static supported(i,t){return be.check(i,t)}static loadSprite(i,t){return kt(i,t)}static setup(i,t={}){let s=null;return a.string(i)?s=Array.from(document.querySelectorAll(i)):a.nodeList(i)?s=Array.from(i):a.array(i)&&(s=i.filter(a.element)),a.empty(s)?null:s.map(o=>new st(o,t))}}var Mt;return st.defaults=(Mt=Pt,JSON.parse(JSON.stringify(Mt))),st})});var Ze=function(n){n?n.stop():document.querySelector("body").classList.add("no-scroll")},ct=function(n){n?n.start():document.querySelector("body").classList.remove("no-scroll")},g=function(n,c){let d=typeof n;return typeof c!="string"||c.trim()===""?n:c?.toLowerCase()==="true"&&d==="boolean"?!0:c?.toLowerCase()==="false"&&d==="boolean"?!1:isNaN(c)&&d==="string"?c:!isNaN(c)&&d==="number"?+c:n},_e=function(n,c,d){let p=n.hasAttribute(c),h=g(d,n.getAttribute(c));if(p)return h};var Re=function(n,c,d,p){let h=c;c==="medium"?h="(width < 50em)":c==="small"?h="(width < 35em)":c==="xsmall"&&(h="(width < 20em)"),h==="none"?d(!1,p):n.observeContainer(h,C=>{d(C,p)})},re=function(n,c){if(!n||!c){console.error(`GSAP check Run Error in ${c}`);return}let d=`data-ix-${c}-run`;return g(!0,n.getAttribute(d))!==!1},se=function(n){if(!n){console.error("No animationID provided to checkSiteAndPageRun");return}let c=document.querySelector(`[data-ix-${n}-page-run]`),d=g(!0,c?.getAttribute(`data-ix-${n}-page-run`)),p=document.querySelector(`[data-ix-${n}-site-run]`),h=g(!0,p?.getAttribute(`data-ix-${n}-site-run`));return d===!1||h===!1?(document.querySelector("body").setAttribute(`data-ix-${n}-site-run`,"false"),!1):!0},Ye=function(n){return{left:"polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",right:"polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",top:"polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",bottom:"polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",full:"polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"}[n]||n};function ut(n){if(!n||!(n instanceof Element))return[];let c=[];function d(p){let h=Array.from(p.children);for(let C of h)window.getComputedStyle(C).display==="contents"?d(C):c.push(C)}return d(n),c}var Dt=function(){let n=[...document.querySelectorAll("[fs-copyclip-text]")];n.length!==0&&n.forEach(c=>{c.getAttribute("fs-copyclip-text")==="url"&&c.setAttribute("fs-copyclip-text",window.location.href)})},qt=function(){let n="[data-ix-reset]",c="data-ix-reset-time";document.querySelectorAll(n).forEach(function(p){p.addEventListener("click",function(h){if(ScrollTrigger.refresh(),p.hasAttribute(c)){let C=g(1e3,p.getAttribute(c));setTimeout(()=>{ScrollTrigger.refresh()},C)}})})},$t=function(){let c=document.querySelector("[data-footer-year]");if(!c)return;let d=new Date().getFullYear();c.innerText=d.toString()},Ht=function(n,c,d){let p={};for(let[h,C]of Object.entries(d)){let I=`data-ix-${c}-${h}`;p[h]=g(C,n.getAttribute(I))}return p},dt=function(n,c){let d=[["x","x","0%"],["y","y","0%"],["scale","scale",1],["scaleX","scale-x",1],["scaleY","scale-y",1],["width","width","0%"],["height","height","0%"],["rotateX","rotate-x",0],["rotateY","rotate-y",0],["rotateZ","rotate-z",0],["opacity","opacity",0],["borderRadius","radius","string"]],p={},h={};d.forEach(([x,S,M])=>{p[x]=_e(n,`data-ix-${c}-${S}-start`,M),h[x]=_e(n,`data-ix-${c}-${S}-end`,M)});let C=_e(n,`data-ix-${c}-clip-start`,"left"),I=_e(n,`data-ix-${c}-clip-end`,"full");return p.clipPath=Ye(C),h.clipPath=Ye(I),{varsFrom:p,varsTo:h}},ht=function(n){if(!n)return;let c=n.firstElementChild;for(;c&&c.classList.contains("u-display-contents");){for(;c.firstChild;)n.insertBefore(c.firstChild,c);n.removeChild(c),c=n.firstElementChild}},pt=function(n){let c=Array.from(n.children).find(h=>h.classList.contains("w-dyn-list"));if(!c)return;let d=c?.querySelector(".w-dyn-items")?.children;if(!d)return;let p=[...n.children];[...d].forEach(h=>{let C=[...h.children].find(I=>!I.classList.contains("w-condition-invisible"));C&&n.appendChild(C)}),p.forEach(h=>h.remove())};var Ut=function(){let n="accordion",c='[data-ix-accordion="wrap"]',d='[data-ix-accordion="item"]',p='[data-ix-accordion="open"]',h="data-ix-accordion-first-open",C="data-ix-accordion-one-active",I="data-ix-accordion-keep-one-open",x="data-ix-accordion-hover",S="is-active";if(!se(n))return;let v=[...document.querySelectorAll(c)],T=function(f,b=!0){let A=f.querySelector(p);b===!0?(f.classList.add(S),A.setAttribute("aria-expanded","true")):(f.classList.remove(S),A.setAttribute("aria-expanded","false"))};v.length===0||v===void 0||v.forEach(f=>{if(re(f,n)===!1)return;let A=g(!1,f.getAttribute(h)),R=g(!1,f.getAttribute(C)),k=g(!1,f.getAttribute(I)),w=g(!1,f.getAttribute(x)),N=[...f.querySelectorAll(d)];if(N.length===0)return;let Y=N[0];A&&T(Y),w||f.addEventListener("click",function(H){let q=H.target.closest(p);if(!q)return;let B=q.closest(d),O=B.classList.contains(S);O||(R&&N.forEach(K=>{K===B?T(K):T(K,!1)}),R||T(B)),O&&!k&&T(B,!1),O&&k&&N.filter(function(a){return a.classList.contains(S)}).length>1&&T(B,!1)}),w&&N.forEach(H=>{H.addEventListener("mouseover",function(){T(H)}),H.addEventListener("mouseout",function(){T(H,!1)})})})};var Vt=function(){let n="banner",c='[data-ix-banner="wrap"]',d='[data-ix-banner="track"]',p="data-ix-banner-start",h="data-ix-banner-end";if(!se(n))return;[...document.querySelectorAll(c)].forEach(x=>{let S=x.querySelector(d);if(!x||!S)return;let M=function(){let f=g("center 80%",x.getAttribute(p)),b=g("center 20%",x.getAttribute(h));gsap.timeline({scrollTrigger:{trigger:x,start:f,end:b,scrub:1,markers:!1}}).to(S,{xPercent:-100,ease:"none",duration:1})};if(re(x,n)===!1)return;let T=g("none",x.getAttribute(`data-ix-${n}-breakpoint`));Re(S,T,M)})};var Ft=function(){let n="clickactive",c='[data-ix-clickactive="wrap"]',d='[data-ix-clickactive="trigger"]',p='[data-ix-clickactive="target"]',h="data-ix-clickactive-id",C="data-ix-clickactive-start-active",I="data-ix-clickactive-class",x="data-ix-clickactive-first-active",S="data-ix-clickactive-one-active",M="data-ix-clickactive-keep-one-active",T="is-active";if(!se(n))return;let b=function(R){let k=Array.from(R.querySelectorAll(d)),w=T,N=!1,Y=!1,H=!1;if(R!==document&&(w=g(T,R.getAttribute(I)),N=g(!1,R.getAttribute(x)),Y=g(!1,R.getAttribute(S)),H=g(!1,R.getAttribute(M)),re(R,n)===!1))return;let q=function(O,K=!0){if(!O)return;let a=!0,G=O.getAttribute(h),W=R.querySelector(`${p}[${h}="${G}"]`);(!G||!W)&&(a=!1),K?(O.classList.add(w),a&&W.classList.add(w)):(O.classList.remove(w),a&&W.classList.remove(w))};k.forEach(O=>{if(!O)return;g(!1,O.getAttribute(C))?q(O):q(O,!1),O.addEventListener("click",function(a){let G=O.classList.contains(T);G||(Y&&k.forEach(W=>{W===O?q(W):q(W,!1)}),Y||q(O)),G&&!H&&q(O,!1),G&&H&&k.filter(function(X){return X.classList.contains(w)}).length>1&&q(O,!1),gsap.ScrollTrigger!==void 0&&setTimeout(()=>{ScrollTrigger.refresh()},800)})});let B=k[0];N&&q(B)},A=gsap.utils.toArray(c);A.length===0||A===void 0?b(document):A.forEach(R=>{b(R)})};var jt=function(){let n="countup",c='[data-ix-countup="item"]',d='[data-ix-countup="text"]',p="data-ix-countup-type",h="data-ix-countup-duration",C="data-ix-countup-start",I="data-ix-countup-active",x="data-ix-countup-trigger",S="data-ix-countup-stagger",M="data-ix-countup-ease",v="data-ix-countup-direction",T="data-ix-countup-use-grouping",f="ticker_column",b="ticker_digit",A="ticker_separator",R="count",k="scroll",w="is-active",Y="top bottom",H="power3.out",B="top 90%",K="power2.out",a="down";if(!se(n))return;let X=function(L,{duration:J,start:y,activeClass:$,triggerType:U}){let ee=L.parentElement,ce=L.querySelector(d)||L,ve=ce.textContent.trim().replace(/,/g,""),ne=parseFloat(ve);if(!ne||isNaN(ne))return;let te=ve.split("."),ye=te.length>1?te[1].length:0,Te=function(oe){return ye>0?oe.toFixed(ye):Math.round(oe).toString()};ce.textContent=Te(0);let ue=function(){let oe={value:0};gsap.to(oe,{value:ne,duration:J,ease:H,onUpdate:function(){ce.textContent=Te(oe.value)},onComplete:function(){ce.textContent=Te(ne)}}),ee.classList.add($),setTimeout(()=>{ee.classList.remove($)},J*1e3)};U==="load"?ue():gsap.timeline({scrollTrigger:{trigger:L,start:y,end:"top 10%",scrub:!0,onEnter:ue}})},P=function(L,{duration:J,start:y,activeClass:$,triggerType:U}){let ee=g(.1,L.getAttribute(S)),ce=g(K,L.getAttribute(M)),me=g(a,L.getAttribute(v)),ve=g(!0,L.getAttribute(T)),te=(L.querySelector(d)||L).textContent.trim(),ye=te.replace(/[,\s]/g,""),Te=parseFloat(ye);if(isNaN(Te))return;let ue=ye.split("."),oe=ue.length>1?ue[1].length:0,be=function(Ee){let xe;if(oe>0?xe=Math.abs(Ee).toFixed(oe):xe=Math.abs(Math.round(Ee)).toString(),ve){let Me=xe.split(".");Me[0]=Me[0].replace(/\B(?=(\d{3})+(?!\d))/g,","),xe=Me.join(".")}return Ee<0&&(xe="-"+xe),xe}(Te),ge=te.match(/^([^0-9\-]*)([\-]?[\d,.\s]+)([^0-9]*)$/),ke=ge?ge[1]:"",ae=ge?ge[3]:"";if(L.textContent="",L.setAttribute("aria-label",te),ke){let Ee=document.createElement("span");Ee.classList.add(A),Ee.textContent=ke,Ee.setAttribute("aria-hidden","true"),L.appendChild(Ee)}let Xe=[1,3,6,10,15],$e=[],Q=be.replace("-",""),nt=0;for(let Ee=0;Ee<Q.length;Ee++){let xe=Q[Ee];if(isNaN(parseInt(xe))){let Ie=document.createElement("span");Ie.classList.add(A),Ie.textContent=xe,Ie.setAttribute("aria-hidden","true"),L.appendChild(Ie);continue}let Me=parseInt(xe),je=Xe[Math.min(nt,Xe.length-1)],Ue=Math.max(0,Math.ceil((je-Me)/10)),He=Ue*10+Me,Be=He-je,ze=document.createElement("span");ze.classList.add(f),ze.setAttribute("aria-hidden","true");for(let Ie=0;Ie<=Ue;Ie++)for(let Ke=0;Ke<=9;Ke++){let Ve=document.createElement("span");Ve.classList.add(b),Ve.textContent=Ke,ze.appendChild(Ve)}L.appendChild(ze),$e.push({element:ze,targetIndex:He,startIndex:Be}),nt++}if(ae){let Ee=document.createElement("span");Ee.classList.add(A),Ee.textContent=ae,Ee.setAttribute("aria-hidden","true"),L.appendChild(Ee)}if($e.length===0)return;let Ne=$e[0].element.querySelector(`.${b}`).offsetHeight;$e.forEach(({element:Ee,startIndex:xe})=>{gsap.set(Ee,{y:-xe*Ne})});let Qe=function(){let Ee=gsap.timeline({onComplete:()=>{L.classList.add($)}});return $e.forEach(({element:xe,targetIndex:Me},je)=>{let Ue=-Me*Ne,He;me==="down"?He=($e.length-1-je)*ee:He=je*ee,Ee.to(xe,{y:Ue,duration:J,ease:ce},He)}),Ee};U==="load"?Qe():ScrollTrigger.create({trigger:L,start:y,once:!0,onEnter:()=>{Qe()}})};document.querySelectorAll(c).forEach(L=>{let J=function(){let U=g(R,L.getAttribute(p)),ee=g(U==="ticker"?1.5:2.5,L.getAttribute(h)),ce=g(U==="ticker"?B:Y,L.getAttribute(C)),me=g(w,L.getAttribute(I)),ve=g(k,L.getAttribute(x));U==="ticker"?P(L,{duration:ee,start:ce,activeClass:me,triggerType:ve}):X(L,{duration:ee,start:ce,activeClass:me,triggerType:ve})};if(re(L,n)===!1)return;let $=g("none",L.getAttribute(`data-ix-${n}-breakpoint`));Re(L,$,J)})};var Bt=function(){let n="hoveractive",c='[data-ix-hoveractive="wrap"]',d='[data-ix-hoveractive="trigger"]',p='[data-ix-hoveractive="target"]',h="data-ix-hoveractive-id",C="data-ix-hoveractive-class",I="data-ix-hoveractive-keep-active",x="is-active";if(!se(n))return;let M=function(T){let f=[...T.querySelectorAll(d)],b=g(x,T.getAttribute(C)),A=g(!1,T.getAttribute(I));function R(k,w=!0){let N=!0;b=g(b,k.getAttribute(C));let Y=k.getAttribute(h),H=T.querySelector(`${p}[${h}="${Y}"]`);(!Y||!H)&&(N=!1),w?(k.classList.add(b),N&&H.classList.add(b)):(k.classList.remove(b),N&&H.classList.remove(b))}f.forEach(k=>{k.addEventListener("mouseover",function(w){f.forEach(N=>{N===k?R(k,!0):R(N,!1)})}),k.addEventListener("mouseleave",function(w){A||R(k,!1)})})},v=[...document.querySelectorAll(c)];if(v.length>0)v.forEach(T=>{re(T,n)!==!1&&M(T)});else{let T=document.querySelector("body");M(T)}};var Vi="1.3.13";function Yt(n,c,d){return Math.max(n,Math.min(c,d))}function Fi(n,c,d){return(1-d)*n+d*c}function ji(n,c,d,p){return Fi(n,c,1-Math.exp(-d*p))}function Bi(n,c){return(n%c+c)%c}var zi=class{constructor(){z(this,"isRunning",!1);z(this,"value",0);z(this,"from",0);z(this,"to",0);z(this,"currentTime",0);z(this,"lerp");z(this,"duration");z(this,"easing");z(this,"onUpdate")}advance(n){if(!this.isRunning)return;let c=!1;if(this.duration&&this.easing){this.currentTime+=n;let d=Yt(0,this.currentTime/this.duration,1);c=d>=1;let p=c?1:this.easing(d);this.value=this.from+(this.to-this.from)*p}else this.lerp?(this.value=ji(this.value,this.to,this.lerp*60,n),Math.round(this.value)===this.to&&(this.value=this.to,c=!0)):(this.value=this.to,c=!0);c&&this.stop(),this.onUpdate?.(this.value,c)}stop(){this.isRunning=!1}fromTo(n,c,{lerp:d,duration:p,easing:h,onStart:C,onUpdate:I}){this.from=this.value=n,this.to=c,this.lerp=d,this.duration=p,this.easing=h,this.currentTime=0,this.isRunning=!0,C?.(),this.onUpdate=I}};function Wi(n,c){let d;return function(...p){let h=this;clearTimeout(d),d=setTimeout(()=>{d=void 0,n.apply(h,p)},c)}}var Yi=class{constructor(n,c,{autoResize:d=!0,debounce:p=250}={}){z(this,"width",0);z(this,"height",0);z(this,"scrollHeight",0);z(this,"scrollWidth",0);z(this,"debouncedResize");z(this,"wrapperResizeObserver");z(this,"contentResizeObserver");z(this,"resize",()=>{this.onWrapperResize(),this.onContentResize()});z(this,"onWrapperResize",()=>{this.wrapper instanceof Window?(this.width=window.innerWidth,this.height=window.innerHeight):(this.width=this.wrapper.clientWidth,this.height=this.wrapper.clientHeight)});z(this,"onContentResize",()=>{this.wrapper instanceof Window?(this.scrollHeight=this.content.scrollHeight,this.scrollWidth=this.content.scrollWidth):(this.scrollHeight=this.wrapper.scrollHeight,this.scrollWidth=this.wrapper.scrollWidth)});this.wrapper=n,this.content=c,d&&(this.debouncedResize=Wi(this.resize,p),this.wrapper instanceof Window?window.addEventListener("resize",this.debouncedResize,!1):(this.wrapperResizeObserver=new ResizeObserver(this.debouncedResize),this.wrapperResizeObserver.observe(this.wrapper)),this.contentResizeObserver=new ResizeObserver(this.debouncedResize),this.contentResizeObserver.observe(this.content)),this.resize()}destroy(){this.wrapperResizeObserver?.disconnect(),this.contentResizeObserver?.disconnect(),this.wrapper===window&&this.debouncedResize&&window.removeEventListener("resize",this.debouncedResize,!1)}get limit(){return{x:this.scrollWidth-this.width,y:this.scrollHeight-this.height}}},Gt=class{constructor(){z(this,"events",{})}emit(n,...c){let d=this.events[n]||[];for(let p=0,h=d.length;p<h;p++)d[p]?.(...c)}on(n,c){return this.events[n]?.push(c)||(this.events[n]=[c]),()=>{this.events[n]=this.events[n]?.filter(d=>c!==d)}}off(n,c){this.events[n]=this.events[n]?.filter(d=>c!==d)}destroy(){this.events={}}},zt=100/6,Ge={passive:!1},Gi=class{constructor(n,c={wheelMultiplier:1,touchMultiplier:1}){z(this,"touchStart",{x:0,y:0});z(this,"lastDelta",{x:0,y:0});z(this,"window",{width:0,height:0});z(this,"emitter",new Gt);z(this,"onTouchStart",n=>{let{clientX:c,clientY:d}=n.targetTouches?n.targetTouches[0]:n;this.touchStart.x=c,this.touchStart.y=d,this.lastDelta={x:0,y:0},this.emitter.emit("scroll",{deltaX:0,deltaY:0,event:n})});z(this,"onTouchMove",n=>{let{clientX:c,clientY:d}=n.targetTouches?n.targetTouches[0]:n,p=-(c-this.touchStart.x)*this.options.touchMultiplier,h=-(d-this.touchStart.y)*this.options.touchMultiplier;this.touchStart.x=c,this.touchStart.y=d,this.lastDelta={x:p,y:h},this.emitter.emit("scroll",{deltaX:p,deltaY:h,event:n})});z(this,"onTouchEnd",n=>{this.emitter.emit("scroll",{deltaX:this.lastDelta.x,deltaY:this.lastDelta.y,event:n})});z(this,"onWheel",n=>{let{deltaX:c,deltaY:d,deltaMode:p}=n,h=p===1?zt:p===2?this.window.width:1,C=p===1?zt:p===2?this.window.height:1;c*=h,d*=C,c*=this.options.wheelMultiplier,d*=this.options.wheelMultiplier,this.emitter.emit("scroll",{deltaX:c,deltaY:d,event:n})});z(this,"onWindowResize",()=>{this.window={width:window.innerWidth,height:window.innerHeight}});this.element=n,this.options=c,window.addEventListener("resize",this.onWindowResize,!1),this.onWindowResize(),this.element.addEventListener("wheel",this.onWheel,Ge),this.element.addEventListener("touchstart",this.onTouchStart,Ge),this.element.addEventListener("touchmove",this.onTouchMove,Ge),this.element.addEventListener("touchend",this.onTouchEnd,Ge)}on(n,c){return this.emitter.on(n,c)}destroy(){this.emitter.destroy(),window.removeEventListener("resize",this.onWindowResize,!1),this.element.removeEventListener("wheel",this.onWheel,Ge),this.element.removeEventListener("touchstart",this.onTouchStart,Ge),this.element.removeEventListener("touchmove",this.onTouchMove,Ge),this.element.removeEventListener("touchend",this.onTouchEnd,Ge)}},Wt=n=>Math.min(1,1.001-Math.pow(2,-10*n)),Xt=class{constructor({wrapper:n=window,content:c=document.documentElement,eventsTarget:d=n,smoothWheel:p=!0,syncTouch:h=!1,syncTouchLerp:C=.075,touchInertiaExponent:I=1.7,duration:x,easing:S,lerp:M=.1,infinite:v=!1,orientation:T="vertical",gestureOrientation:f=T==="horizontal"?"both":"vertical",touchMultiplier:b=1,wheelMultiplier:A=1,autoResize:R=!0,prevent:k,virtualScroll:w,overscroll:N=!0,autoRaf:Y=!1,anchors:H=!1,autoToggle:q=!1,allowNestedScroll:B=!1,__experimental__naiveDimensions:O=!1}={}){z(this,"_isScrolling",!1);z(this,"_isStopped",!1);z(this,"_isLocked",!1);z(this,"_preventNextNativeScrollEvent",!1);z(this,"_resetVelocityTimeout",null);z(this,"__rafID",null);z(this,"isTouching");z(this,"time",0);z(this,"userData",{});z(this,"lastVelocity",0);z(this,"velocity",0);z(this,"direction",0);z(this,"options");z(this,"targetScroll");z(this,"animatedScroll");z(this,"animate",new zi);z(this,"emitter",new Gt);z(this,"dimensions");z(this,"virtualScroll");z(this,"onScrollEnd",n=>{n instanceof CustomEvent||(this.isScrolling==="smooth"||this.isScrolling===!1)&&n.stopPropagation()});z(this,"dispatchScrollendEvent",()=>{this.options.wrapper.dispatchEvent(new CustomEvent("scrollend",{bubbles:this.options.wrapper===window,detail:{lenisScrollEnd:!0}}))});z(this,"onTransitionEnd",n=>{if(n.propertyName.includes("overflow")){let c=this.isHorizontal?"overflow-x":"overflow-y",d=getComputedStyle(this.rootElement)[c];["hidden","clip"].includes(d)?this.internalStop():this.internalStart()}});z(this,"onClick",n=>{let d=n.composedPath().find(p=>p instanceof HTMLAnchorElement&&p.getAttribute("href")?.includes("#"));if(d){let p=d.getAttribute("href");if(p){let h=typeof this.options.anchors=="object"&&this.options.anchors?this.options.anchors:void 0,C=`#${p.split("#")[1]}`;this.scrollTo(C,h)}}});z(this,"onPointerDown",n=>{n.button===1&&this.reset()});z(this,"onVirtualScroll",n=>{if(typeof this.options.virtualScroll=="function"&&this.options.virtualScroll(n)===!1)return;let{deltaX:c,deltaY:d,event:p}=n;if(this.emitter.emit("virtual-scroll",{deltaX:c,deltaY:d,event:p}),p.ctrlKey||p.lenisStopPropagation)return;let h=p.type.includes("touch"),C=p.type.includes("wheel");this.isTouching=p.type==="touchstart"||p.type==="touchmove";let I=c===0&&d===0;if(this.options.syncTouch&&h&&p.type==="touchstart"&&I&&!this.isStopped&&!this.isLocked){this.reset();return}let S=this.options.gestureOrientation==="vertical"&&d===0||this.options.gestureOrientation==="horizontal"&&c===0;if(I||S)return;let M=p.composedPath();M=M.slice(0,M.indexOf(this.rootElement));let v=this.options.prevent;if(M.find(k=>k instanceof HTMLElement&&(typeof v=="function"&&v?.(k)||k.hasAttribute?.("data-lenis-prevent")||h&&k.hasAttribute?.("data-lenis-prevent-touch")||C&&k.hasAttribute?.("data-lenis-prevent-wheel")||this.options.allowNestedScroll&&this.checkNestedScroll(k,{deltaX:c,deltaY:d}))))return;if(this.isStopped||this.isLocked){p.cancelable&&p.preventDefault();return}if(!(this.options.syncTouch&&h||this.options.smoothWheel&&C)){this.isScrolling="native",this.animate.stop(),p.lenisStopPropagation=!0;return}let f=d;this.options.gestureOrientation==="both"?f=Math.abs(d)>Math.abs(c)?d:c:this.options.gestureOrientation==="horizontal"&&(f=c),(!this.options.overscroll||this.options.infinite||this.options.wrapper!==window&&this.limit>0&&(this.animatedScroll>0&&this.animatedScroll<this.limit||this.animatedScroll===0&&d>0||this.animatedScroll===this.limit&&d<0))&&(p.lenisStopPropagation=!0),p.cancelable&&p.preventDefault();let b=h&&this.options.syncTouch,R=h&&p.type==="touchend";R&&(f=Math.sign(this.velocity)*Math.pow(Math.abs(this.velocity),this.options.touchInertiaExponent)),this.scrollTo(this.targetScroll+f,{programmatic:!1,...b?{lerp:R?this.options.syncTouchLerp:1}:{lerp:this.options.lerp,duration:this.options.duration,easing:this.options.easing}})});z(this,"onNativeScroll",()=>{if(this._resetVelocityTimeout!==null&&(clearTimeout(this._resetVelocityTimeout),this._resetVelocityTimeout=null),this._preventNextNativeScrollEvent){this._preventNextNativeScrollEvent=!1;return}if(this.isScrolling===!1||this.isScrolling==="native"){let n=this.animatedScroll;this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity,this.velocity=this.animatedScroll-n,this.direction=Math.sign(this.animatedScroll-n),this.isStopped||(this.isScrolling="native"),this.emit(),this.velocity!==0&&(this._resetVelocityTimeout=setTimeout(()=>{this.lastVelocity=this.velocity,this.velocity=0,this.isScrolling=!1,this.emit()},400))}});z(this,"raf",n=>{let c=n-(this.time||n);this.time=n,this.animate.advance(c*.001),this.options.autoRaf&&(this.__rafID=requestAnimationFrame(this.raf))});window.lenisVersion=Vi,(!n||n===document.documentElement)&&(n=window),typeof x=="number"&&typeof S!="function"?S=Wt:typeof S=="function"&&typeof x!="number"&&(x=1),this.options={wrapper:n,content:c,eventsTarget:d,smoothWheel:p,syncTouch:h,syncTouchLerp:C,touchInertiaExponent:I,duration:x,easing:S,lerp:M,infinite:v,gestureOrientation:f,orientation:T,touchMultiplier:b,wheelMultiplier:A,autoResize:R,prevent:k,virtualScroll:w,overscroll:N,autoRaf:Y,anchors:H,autoToggle:q,allowNestedScroll:B,__experimental__naiveDimensions:O},this.dimensions=new Yi(n,c,{autoResize:R}),this.updateClassName(),this.targetScroll=this.animatedScroll=this.actualScroll,this.options.wrapper.addEventListener("scroll",this.onNativeScroll,!1),this.options.wrapper.addEventListener("scrollend",this.onScrollEnd,{capture:!0}),this.options.anchors&&this.options.wrapper===window&&this.options.wrapper.addEventListener("click",this.onClick,!1),this.options.wrapper.addEventListener("pointerdown",this.onPointerDown,!1),this.virtualScroll=new Gi(d,{touchMultiplier:b,wheelMultiplier:A}),this.virtualScroll.on("scroll",this.onVirtualScroll),this.options.autoToggle&&this.rootElement.addEventListener("transitionend",this.onTransitionEnd,{passive:!0}),this.options.autoRaf&&(this.__rafID=requestAnimationFrame(this.raf))}destroy(){this.emitter.destroy(),this.options.wrapper.removeEventListener("scroll",this.onNativeScroll,!1),this.options.wrapper.removeEventListener("scrollend",this.onScrollEnd,{capture:!0}),this.options.wrapper.removeEventListener("pointerdown",this.onPointerDown,!1),this.options.anchors&&this.options.wrapper===window&&this.options.wrapper.removeEventListener("click",this.onClick,!1),this.virtualScroll.destroy(),this.dimensions.destroy(),this.cleanUpClassName(),this.__rafID&&cancelAnimationFrame(this.__rafID)}on(n,c){return this.emitter.on(n,c)}off(n,c){return this.emitter.off(n,c)}setScroll(n){this.isHorizontal?this.options.wrapper.scrollTo({left:n,behavior:"instant"}):this.options.wrapper.scrollTo({top:n,behavior:"instant"})}resize(){this.dimensions.resize(),this.animatedScroll=this.targetScroll=this.actualScroll,this.emit()}emit(){this.emitter.emit("scroll",this)}reset(){this.isLocked=!1,this.isScrolling=!1,this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity=0,this.animate.stop()}start(){if(this.isStopped){if(this.options.autoToggle){this.rootElement.style.removeProperty("overflow");return}this.internalStart()}}internalStart(){this.isStopped&&(this.reset(),this.isStopped=!1,this.emit())}stop(){if(!this.isStopped){if(this.options.autoToggle){this.rootElement.style.setProperty("overflow","clip");return}this.internalStop()}}internalStop(){this.isStopped||(this.reset(),this.isStopped=!0,this.emit())}scrollTo(n,{offset:c=0,immediate:d=!1,lock:p=!1,duration:h=this.options.duration,easing:C=this.options.easing,lerp:I=this.options.lerp,onStart:x,onComplete:S,force:M=!1,programmatic:v=!0,userData:T}={}){if(!((this.isStopped||this.isLocked)&&!M)){if(typeof n=="string"&&["top","left","start","#"].includes(n))n=0;else if(typeof n=="string"&&["bottom","right","end"].includes(n))n=this.limit;else{let f;if(typeof n=="string"?(f=document.querySelector(n),f||(n==="#top"?n=0:console.warn("Lenis: Target not found",n))):n instanceof HTMLElement&&n?.nodeType&&(f=n),f){if(this.options.wrapper!==window){let A=this.rootElement.getBoundingClientRect();c-=this.isHorizontal?A.left:A.top}let b=f.getBoundingClientRect();n=(this.isHorizontal?b.left:b.top)+this.animatedScroll}}if(typeof n=="number"){if(n+=c,n=Math.round(n),this.options.infinite){if(v){this.targetScroll=this.animatedScroll=this.scroll;let f=n-this.animatedScroll;f>this.limit/2?n=n-this.limit:f<-this.limit/2&&(n=n+this.limit)}}else n=Yt(0,n,this.limit);if(n===this.targetScroll){x?.(this),S?.(this);return}if(this.userData=T??{},d){this.animatedScroll=this.targetScroll=n,this.setScroll(this.scroll),this.reset(),this.preventNextNativeScrollEvent(),this.emit(),S?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()});return}v||(this.targetScroll=n),typeof h=="number"&&typeof C!="function"?C=Wt:typeof C=="function"&&typeof h!="number"&&(h=1),this.animate.fromTo(this.animatedScroll,n,{duration:h,easing:C,lerp:I,onStart:()=>{p&&(this.isLocked=!0),this.isScrolling="smooth",x?.(this)},onUpdate:(f,b)=>{this.isScrolling="smooth",this.lastVelocity=this.velocity,this.velocity=f-this.animatedScroll,this.direction=Math.sign(this.velocity),this.animatedScroll=f,this.setScroll(this.scroll),v&&(this.targetScroll=f),b||this.emit(),b&&(this.reset(),this.emit(),S?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()}),this.preventNextNativeScrollEvent())}})}}}preventNextNativeScrollEvent(){this._preventNextNativeScrollEvent=!0,requestAnimationFrame(()=>{this._preventNextNativeScrollEvent=!1})}checkNestedScroll(n,{deltaX:c,deltaY:d}){let p=Date.now(),h=n._lenis??(n._lenis={}),C,I,x,S,M,v,T,f,b=this.options.gestureOrientation;if(p-(h.time??0)>2e3){h.time=Date.now();let q=window.getComputedStyle(n);h.computedStyle=q;let B=q.overflowX,O=q.overflowY;if(C=["auto","overlay","scroll"].includes(B),I=["auto","overlay","scroll"].includes(O),h.hasOverflowX=C,h.hasOverflowY=I,!C&&!I||b==="vertical"&&!I||b==="horizontal"&&!C)return!1;M=n.scrollWidth,v=n.scrollHeight,T=n.clientWidth,f=n.clientHeight,x=M>T,S=v>f,h.isScrollableX=x,h.isScrollableY=S,h.scrollWidth=M,h.scrollHeight=v,h.clientWidth=T,h.clientHeight=f}else x=h.isScrollableX,S=h.isScrollableY,C=h.hasOverflowX,I=h.hasOverflowY,M=h.scrollWidth,v=h.scrollHeight,T=h.clientWidth,f=h.clientHeight;if(!C&&!I||!x&&!S||b==="vertical"&&(!I||!S)||b==="horizontal"&&(!C||!x))return!1;let A;if(b==="horizontal")A="x";else if(b==="vertical")A="y";else{let q=c!==0,B=d!==0;q&&C&&x&&(A="x"),B&&I&&S&&(A="y")}if(!A)return!1;let R,k,w,N,Y;if(A==="x")R=n.scrollLeft,k=M-T,w=c,N=C,Y=x;else if(A==="y")R=n.scrollTop,k=v-f,w=d,N=I,Y=S;else return!1;return(w>0?R<k:R>0)&&N&&Y}get rootElement(){return this.options.wrapper===window?document.documentElement:this.options.wrapper}get limit(){return this.options.__experimental__naiveDimensions?this.isHorizontal?this.rootElement.scrollWidth-this.rootElement.clientWidth:this.rootElement.scrollHeight-this.rootElement.clientHeight:this.dimensions.limit[this.isHorizontal?"x":"y"]}get isHorizontal(){return this.options.orientation==="horizontal"}get actualScroll(){let n=this.options.wrapper;return this.isHorizontal?n.scrollX??n.scrollLeft:n.scrollY??n.scrollTop}get scroll(){return this.options.infinite?Bi(this.animatedScroll,this.limit):this.animatedScroll}get progress(){return this.limit===0?1:this.scroll/this.limit}get isScrolling(){return this._isScrolling}set isScrolling(n){this._isScrolling!==n&&(this._isScrolling=n,this.updateClassName())}get isStopped(){return this._isStopped}set isStopped(n){this._isStopped!==n&&(this._isStopped=n,this.updateClassName())}get isLocked(){return this._isLocked}set isLocked(n){this._isLocked!==n&&(this._isLocked=n,this.updateClassName())}get isSmooth(){return this.isScrolling==="smooth"}get className(){let n="lenis";return this.options.autoToggle&&(n+=" lenis-autoToggle"),this.isStopped&&(n+=" lenis-stopped"),this.isLocked&&(n+=" lenis-locked"),this.isScrolling&&(n+=" lenis-scrolling"),this.isScrolling==="smooth"&&(n+=" lenis-smooth"),n}updateClassName(){this.cleanUpClassName(),this.rootElement.className=`${this.rootElement.className} ${this.className}`.trim()}cleanUpClassName(){this.rootElement.className=this.rootElement.className.replace(/lenis(-\w+)?/g,"").trim()}};var Kt=function(){if(!se("lenis"))return;let d=new Xt({duration:.5,wheelMultiplier:.75,gestureOrientation:"vertical",normalizeWheel:!1,smoothTouch:!1,easing:v=>v===1?1:1-Math.pow(2,-10*v)});d.on("scroll",()=>{ScrollTrigger&&ScrollTrigger.update()}),gsap.ticker.add(v=>{d.raf(v*1e3)}),gsap.ticker.lagSmoothing(0);let p;function h(v=600){clearTimeout(p),p=setTimeout(()=>{requestAnimationFrame(()=>{d.resize()})},v)}function C(){let v=[...document.querySelectorAll('[data-scroll="refresh"]')];v.length!==0&&v.forEach(T=>{T&&T.addEventListener("click",f=>{h()})})}C();function I(){let v=[...document.querySelectorAll("img[loading='lazy']")];v.length!==0&&v.forEach(T=>{T.addEventListener("load",h)})}function x(){let v=document.querySelectorAll('[data-scroll="stop"]');v?.forEach(T=>{T.addEventListener("click",f=>{d.stop()})})}x();function S(){let v=document.querySelectorAll('[data-scroll="start"]');v?.forEach(T=>{T.addEventListener("click",f=>{d.start()})})}S();function M(){let v=document.querySelectorAll('[data-scroll="toggle"]');v?.forEach(T=>{let f=!1;T.addEventListener("click",b=>{f=!f,f?d.stop():d.start()})})}return M(),d};var Qt=function(n){let c="imageswitch",d='[data-ix-imageswitch="wrap"]',p='[data-ix-imageswitch="item"]',h='[data-ix-imageswitch="image"]',C='[data-ix-imageswitch="link"]';if(!se(c))return;let x=[...document.querySelectorAll(d)];x.length!==0&&x.forEach(S=>{if(re(S,c)===!1)return;let v=[...S.querySelectorAll(C)],T=[...S.querySelectorAll(p)],f=[...S.querySelectorAll(h)],b="is-active";if(T.length===0||f.length===0)return;let A=function(R,k=!0){let w=f[R],N=T[R],Y=v[R];k?(w.classList.add(b),N.classList.add(b),Y.classList.add(b)):(w.classList.remove(b),N.classList.remove(b),Y.classList.remove(b))};f.forEach(R=>R.classList.remove(b)),A(0),T.forEach((R,k)=>{let w=f[k],N=v[k];if(!R||!w)return;let Y=gsap.timeline({scrollTrigger:{trigger:R,start:"top center",end:"bottom center",markers:!1,scrub:!0,onEnter:()=>{A(k)},onLeave:()=>{k!==T.length-1&&A(k,!1),N.classList.remove(b)},onEnterBack:()=>{A(k)},onLeaveBack:()=>{k!==0&&A(k,!1),N.classList.remove(b)}}})})})};var Zt=function(n,c,d){let p="lightbox",h='[data-ix-lightbox="wrap"]',C='[data-ix-lightbox="component"]',I='[data-ix-lightbox="trigger"]',x='[data-ix-lightbox="close"]',S='[data-ix-lightbox="next"]',M='[data-ix-lightbox="previous"]',v=".plyr_component",T="no-scroll",f=!1;if(!se(p))return;let A=function(w){let N=function(G,W){!W||W.length===0||W.forEach((X,P)=>{let V=G[P];X.closest(C)&&(B.push(G[P]),O.push(W[P]))})},Y=function(G){if(!O||O.length===0)return;function W(V,L){return V.findIndex(J=>J===L)}let X=G.querySelector(v);if(!X)return!1;let P=W(O,X);return player=B[P],player},H=[...w.querySelectorAll(I)],q=[],B=[],O=[];if(N(n,c),H.length===0)return;H.forEach((G,W)=>{let X=G.parentElement,P=G.querySelector(C);if(q.push(P),!P)return;let V=!1;V=Y(P),X.addEventListener("keydown",L=>{L.key==="Enter"&&L.target===G&&K(P),L.key==="Escape"&&f!==!1&&a(P)}),X.addEventListener("click",L=>{if(L.target.closest(I)!==null)K(P);else if(L.target.closest(x)!==null)a(P),V&&V.pause();else if(L.target.closest(S)!==null){let J=q[W+1];W===q.length-1&&(J=q[0]),a(P),K(J)}else if(L.target.closest(M)!==null){let J=q[W-1];W===0&&(J=q[q.length-1]),a(P),K(J)}})});let K=function(G){G&&(G.showModal(),ct(d),f=G)},a=function(G){G&&(player=Y(G),player&&player.pause(),G.close(),Ze(d),f=!1)}},R=document.querySelector("body"),k=[...document.querySelectorAll(h)];k.length>0?k.forEach(w=>{re(w,p)!==!1&&A(w)}):A(R)};var Jt=function(n){let c="load",d="data-ix-load",p="wrap",h="heading",C="item",I="image",x="line",S="stagger",M="data-ix-load-position",v="data-ix-load-clip-direction",T="<0.2",f=0,b=[];if(!se(c))return;gsap.utils.toArray(`[${d}="${p}"]`).forEach(k=>{let w=[...k.querySelectorAll(`[${d}]:not([${d}-run="false" i])`)];if(w.length===0)return;let N=re(k,c),Y=k.getAttribute("data-ix-load-run")?.toLowerCase();if(N===!1&&Y==="false")return;let H=gsap.timeline({delay:f,paused:!0,defaults:{ease:"power1.out",duration:.8}});H.set(k,{autoAlpha:1});let q=function(P){gsap.set(P,{autoAlpha:1});let V=g(0,P.getAttribute(M));P.classList.contains("w-richtext")&&(P=P.children),SplitText.create(P,{type:"words",wordsClass:"word",autoSplit:!0,onSplit:L=>H.from(L.words,{y:"50%",rotateX:45,autoAlpha:0,stagger:.075},V)})},B=function(P){let V=g(T,P.getAttribute(M));H.fromTo(P,{autoAlpha:0,scale:.7},{autoAlpha:1,scale:1},V)},O=function(P){let V=g(T,P.getAttribute(M)),L=g("left",P.getAttribute(v)),J=Ye(L),y=Ye("full");H.set(P,{autoAlpha:1}),H.fromTo(P,{clipPath:J},{clipPath:y},V)},K=function(P){let V=g(T,P.getAttribute(M));H.fromTo(P,{autoAlpha:0,y:"2rem"},{autoAlpha:1,y:"0rem"},V)},a=function(P){if(!P)return;let V=ut(P);V.length!==0&&V.forEach((L,J)=>{J===0&&gsap.set(P,{autoAlpha:1}),K(L)})},G=function(P){P&&H.fromTo(P,{autoAlpha:0},{autoAlpha:1,ease:"power1.out",duration:1.2},"<")},W=function(){w.forEach(P=>{if(!P)return;let V=P.getAttribute(d);n?G(V===S?P.children:P):(V===h&&q(P),V===I&&B(P),V===x&&O(P),V===C&&K(P),V===S&&a(P))}),f=f+H.duration()-.4,H.play(),b.push(H)},X=g("none",k.getAttribute(`data-ix-${c}-breakpoint`));Re(w[0],X,W)})};var ei=function(){let n="loop",c='[data-ix-loop="item"]';if(!se(n))return;[...document.querySelectorAll(c)].forEach(h=>{if(!h||re(h,n)===!1)return;let I=gsap.timeline({defaults:{repeat:-1,ease:"none"}}),{varsFrom:x,varsTo:S}=dt(h,"loop");S.yoyo=_e(h,"data-ix-loop-yoyo",!1),S.delay=_e(h,"data-ix-loop-delay",0),S.repeatDelay=_e(h,"data-ix-loop-repeat-delay",0),S.duration=_e(h,"data-ix-loop-duration",1),S.ease=_e(h,"data-ix-loop-ease","none");let M=I.fromTo(h,x,S)})};var ti=function(){let n="magnetic",c='[data-ix-magnetic="wrap"]',d='[data-ix-magnetic="trigger"]',p='[data-ix-magnetic="target"]',h='[data-ix-magnetic="inner"]',C="data-ix-magnetic-strength",I="data-ix-magnetic-inner-strength",x="data-ix-magnetic-duration",S="data-ix-magnetic-ease",M="data-ix-magnetic-return-duration",v="data-ix-magnetic-return-ease",T="data-ix-magnetic-active-class",f="data-ix-magnetic-hover-scale";if(!se(n))return;let A=[...document.querySelectorAll(c)];A.length!==0&&A.forEach(R=>{if(!R||re(R,n)===!1||"ontouchstart"in window||navigator.maxTouchPoints)return;let w=g(.3,R.getAttribute(C)),N=g(.5,R.getAttribute(I)),Y=g(.6,R.getAttribute(x)),H=g("power1.out",R.getAttribute(S)),q=g(.6,R.getAttribute(M)),B=g("elastic.out(1.2, 0.5)",R.getAttribute(v)),O=g("is-active",R.getAttribute(T)),K=g(1,R.getAttribute(f)),a=R.querySelector(d)||R,G=R.querySelector(p)||R,W=R.querySelector(h);a.addEventListener("mousemove",function(X){let P=a.getBoundingClientRect(),V=X.clientX-P.left-P.width/2,L=X.clientY-P.top-P.height/2;gsap.to(G,{x:V*w,y:L*w,scale:K,duration:Y,ease:H,overwrite:"auto"}),W&&gsap.to(W,{x:V*N,y:L*N,duration:Y,ease:H,overwrite:"auto"})}),a.addEventListener("mouseenter",function(){R.classList.add(O)}),a.addEventListener("mouseleave",function(){R.classList.remove(O),gsap.to(G,{x:0,y:0,scale:1,duration:q,ease:B,overwrite:"auto"}),W&&gsap.to(W,{x:0,y:0,duration:q,ease:B,overwrite:"auto"})})})};var ii=function(){let n="marquee",c='[data-ix-marquee="wrap"]',d='[data-ix-marquee="list"]',p="data-ix-marquee-vertical",h="data-ix-marquee-reverse",C="data-ix-marquee-duration",I="data-ix-marquee-duration-dynamic",x="data-ix-marquee-duration-per-item",S="data-ix-marquee-hover",M="accelerate",v="decelerate",T="pause";if(!se(n))return;let R=document.querySelectorAll(c);R.length!==0&&R.forEach(k=>{let w=[...k.querySelectorAll(d)],N=function(){let q=g(!1,k.getAttribute(p)),B=g(!1,k.getAttribute(h)),O=g(30,k.getAttribute(C)),K=g(!1,k.getAttribute(I)),a=g(5,k.getAttribute(x)),G=w[0].childElementCount;G===1&&(G=w[0].firstElementChild.childElementCount),K&&(O=G*a);let W=g("none",k.getAttribute(S)),X=1;B&&(X=-1);let P=gsap.timeline({repeat:-1,defaults:{ease:"none"}});P.fromTo(w,{xPercent:0,yPercent:0},{xPercent:q?0:-100*X,yPercent:q?-100*X:0,duration:O}),W===M&&(k.addEventListener("mouseenter",V=>{P.timeScale(2)}),k.addEventListener("mouseleave",V=>{P.timeScale(1)})),W===v&&(k.addEventListener("mouseenter",V=>{P.timeScale(.5)}),k.addEventListener("mouseleave",V=>{P.timeScale(1)})),W===T&&(k.addEventListener("mouseenter",V=>{P.pause()}),k.addEventListener("mouseleave",V=>{P.play()}))};if(re(k,n)===!1)return;let H=g("none",k.getAttribute(`data-ix-${n}-breakpoint`));Re(w[0],H,N)})};var si=function(){let n="mouseover",c='[data-ix-mouseover="wrap"]',d='[data-ix-mouseover="layer"]',p='[data-ix-mouseover="target"]',h="data-ix-mouseover-duration",C="data-ix-mouseover-ease",I="data-ix-mouseover-x-move-x",x="data-ix-mouseover-x-move-y",S="data-ix-mouseover-x-rotate-z",M="data-ix-mouseover-x-rotate-y",v="data-ix-mouseover-x-rotate-x",T="data-ix-mouseover-y-move-x",f="data-ix-mouseover-y-move-y",b="data-ix-mouseover-y-rotate-z",A="data-ix-mouseover-y-rotate-y",R="data-ix-mouseover-y-rotate-x";if(!se(n))return;document.querySelectorAll(c).forEach(N=>{let Y=N.querySelectorAll(d);if(Y.length===0||re(N,n)===!1)return;let q=N.querySelector(p);q||(q=N),function(){let O={x:.5,y:.5},K={x:O.x,y:O.y},a=g(.5,N.getAttribute(h)),G=g("power1.out",N.getAttribute(C)),W=gsap.timeline({paused:!0,defaults:{ease:"none"}}),X=gsap.timeline({paused:!0,defaults:{ease:"none"}}),P=function(L,J,y){let $=_e(L,J,y),U;return $===void 0?[void 0,void 0]:(String($).startsWith("-")?(typeof y=="number"&&(U=-1*$),typeof y=="string"&&(U=$.slice(1))):(typeof y=="number"&&(U=-1*$),typeof y=="string"&&(U="-"+$)),[U,$])};Y.forEach(L=>{let J={},y={},$={},U={};[J.x,y.x]=P(L,I,"10%"),[J.y,y.y]=P(L,x,"10%"),[J.rotateZ,y.rotateZ]=P(L,S,0),[J.rotateY,y.rotateY]=P(L,M,0),[J.rotateX,y.rotateX]=P(L,v,0),[$.y,U.y]=P(L,f,"10%"),[$.x,U.x]=P(L,T,"10%"),[$.rotateZ,U.rotateZ]=P(L,b,0),[$.rotateY,U.rotateY]=P(L,A,0),[$.rotateX,U.rotateX]=P(L,R,0),W.fromTo(L,J,y,0),X.fromTo(L,$,U,0)});function V(L,J){gsap.to(K,{x:L,y:J,ease:G,duration:a,onUpdate:()=>{W.progress(K.x),X.progress(K.y)}})}V(O.x,O.y),q.addEventListener("mousemove",function(L){let J=q.getBoundingClientRect(),y=gsap.utils.clamp(0,1,gsap.utils.normalize(0,J.width,L.clientX-J.left)),$=gsap.utils.clamp(0,1,gsap.utils.normalize(0,J.height,L.clientY-J.top));V(y,$)}),q.addEventListener("mouseleave",function(L){V(O.x,O.y)})}()})};var ni=function(n){let c="modal",d='[data-ix-modal="wrap"]',p="data-ix-modal-trigger",h='[data-ix-modal="close"]',C="data-ix-modal-timeout",I="blank-id",S=!1;if(!se(c))return;let v=[...document.querySelectorAll(d)],T=[...document.querySelectorAll(`[${p}]:not(${d})`)];if(v.length===0)return;v.forEach((A,R)=>{let k=[...A.querySelectorAll(h)],w=g(0,A.getAttribute(C)),N=g(I,A.getAttribute(p));function Y(q,B){return Array.from(B).filter(K=>K.getAttribute(p)===N&&K!==q)}let H=Y(A,T);N!==I&&H.length!==0&&H.forEach((q,B)=>{q.addEventListener("click",O=>{f(A)})}),w!==0&&setTimeout(()=>{f(A)},w*1e3),A.addEventListener("keydown",q=>{q.key==="Escape"&&S!==!1&&b(A)}),k.forEach(q=>{q.addEventListener("click",B=>{b(A)})})});let f=function(A){A&&(S&&b(S),A.showModal(),Ze(n),S=A)},b=function(A){A&&(A.close(),ct(n),S=!1)}};var oi=function(n){let c="pagetransition",d='[data-ix-pagetransition="wrap"]',p='[data-ix-pagetransition="column"]',h="data-ix-pagetransition",C=document.querySelector(d),I=document.querySelectorAll(p);if(!C||I.length===0||!se(c))return;let S=gsap.timeline();S.to(p,{yPercent:-100,stagger:.2}),S.set(d,{display:"none"});let M=function(v){if(!v||v.tagName!=="A")return!1;let T=v.hostname,f=v.target,b=v.getAttribute("href"),A=g(!0,v.getAttribute(h));return!(!T||T!==window.location.hostname||f&&f==="_blank"||!b||b.includes("#")||!A)};document.querySelectorAll("a").forEach(v=>{let T=v.getAttribute("href");M(v)&&v.addEventListener("click",function(b){b.preventDefault();let A=gsap.timeline({onStart:()=>{Ze(n)},onComplete:()=>setTimeout(()=>{window.location.href=T},100)});A.set(d,{display:"flex"}),A.fromTo(p,{yPercent:100},{yPercent:0,stagger:.2})})}),window.onpageshow=function(v){v.persisted&&window.location.reload()}};var ri=function(){let n="parallax",c='[data-ix-parallax="wrap"]',d='[data-ix-parallax="section"]',p='[data-ix-parallax="trigger"]',h="data-ix-parallax-type",C="data-ix-parallax-amount";if(!se(n))return;gsap.utils.toArray(c).forEach(S=>{let M=S.querySelector(d),v=S.querySelector(p);if(!S||!M||!v)return;let T="uncover";if(T=g("uncover",S.getAttribute(h)),moveAmount=g(50,S.getAttribute(C)),re(S,n)===!1)return;let b={scrub:!0,start:"top bottom",end:"top top",moveStart:"-100vh",moveEnd:"0vh"};T==="cover"&&(b.start="bottom bottom",b.end="bottom top",b.moveStart="0vh",b.moveEnd="100vh"),T==="parallax"&&(b.moveStart=`-${moveAmount}vh`,b.moveEnd="0vh"),gsap.timeline({scrollTrigger:{trigger:v,markers:!1,start:b.start,end:b.end,scrub:b.scrub},defaults:{duration:1,ease:"none"},onStart:()=>{ScrollTrigger.refresh()}}).fromTo(M,{y:b.moveStart},{y:b.moveEnd})})};var ai=function(){let n="banner",c='[data-ix-pathhover="wrap"]',d='[data-ix-pathhover="path"]',p="data-ix-pathhover-duration",h="data-ix-pathhover-reverse";if(!se(n))return;document.querySelectorAll(c).forEach(x=>{let S=[...x.querySelectorAll(d)];if(!x||S.length===0||re(x,n)===!1)return;let v=g(1.2,x.getAttribute(p)),T=g(!1,x.getAttribute(h)),f=gsap.timeline({paused:!0});f.fromTo(S,{drawSVG:"0%"},{drawSVG:"0% 100%",duration:v,ease:"power2.inOut"}),T&&f.progress(1),x.addEventListener("mouseenter",()=>{T?f.reverse():f.play()}),x.addEventListener("mouseleave",()=>{T?f.play():f.reverse()})})};var li=function(){let n="scrollin",c="data-ix-scrollin",d="data-ix-scrollin",p="wrap",h="heading",C="item",I="container",x="stagger",S="rich-text",M="image-wrap",v="image",T="line",f="data-ix-scrollin-toggle-actions",b="data-ix-scrollin-scrub",A="data-ix-scrollin-start",R="data-ix-scrollin-end",k="data-ix-scrollin-clip-direction",w="data-ix-scrollin-stagger",q="power1.out";if(!se(n))return;let O=function(y){let $={scrub:!1,toggleActions:"play none none none",start:"top 90%",end:"top 75%"};return $.toggleActions=g($.toggleActions,y.getAttribute(f)),$.scrub=g($.scrub,y.getAttribute(b)),$.start=g($.start,y.getAttribute(A)),$.end=g($.end,y.getAttribute(R)),gsap.timeline({defaults:{duration:.6,ease:q},scrollTrigger:{trigger:y,start:$.start,end:$.end,toggleActions:$.toggleActions,scrub:$.scrub}})},K=function(y,$,U={}){let ee={autoAlpha:0,y:"2rem"},ce={autoAlpha:1,y:"0rem"};return U.stagger&&(ce.stagger={each:U.stagger,from:"start"}),U.stagger==="small"&&(ce.stagger={each:.1,from:"start"}),U.stagger==="large"&&(ce.stagger={each:.3,from:"start"}),$.fromTo(y,ee,ce)},a=function(y){y.classList.contains("w-richtext")&&(y=y.firstChild),SplitText.create(y,{type:"words",wordsClass:"word",autoSplit:!0,onSplit($){let U=O(y);tween=K($.words,U,{stagger:"small"});let ee=function(ce){ce.revert()};return tween.eventCallback("onComplete",ee,[$]),tween}})},G=function(y){if(y)if(y.classList.contains("w-richtext")){let $=gsap.utils.toArray(y.children);if($.length===0)return;$.forEach(U=>{let ee=O(U),ce=K(U,ee)})}else{let $=O(y),U=K(y,$)}},W=function(y){if(!y)return;let $=y.parentElement,U=O(y);U.fromTo(y,{scale:1.2},{scale:1,duration:1}),U.fromTo($,{scale:.9},{scale:1,duration:1},"<")},X=function(y){if(!y)return;let $=g("left",y.getAttribute(k)),U=Ye($),ee=Ye("full");O(y).fromTo(y,{clipPath:U},{clipPath:ee})},P=function(y){if(!y)return;let $=gsap.utils.toArray(y.children);$.length!==0&&$.forEach(U=>{let ee=O(U),ce=K(U,ee)})},V=function(y){if(!y)return;let $=g(.3,y.getAttribute(w)),U=ut(y);if(U.length===0)return;let ee=O(y),ce=K(U,ee,{stagger:$})},L=function(y){if(!y)return;let $=gsap.utils.toArray(y.children);$.length!==0&&$.forEach(U=>{let ee=U.tagName;["H1","H2","H3","H4","H5","H6"].includes(ee)&&a(U),ee==="FIGURE"?W(U):G(U)})},J=[...document.querySelectorAll(`[${c}="${p}"]`)];J.length!==0&&J.forEach(y=>{if(re(y,n)===!1)return;let U=[...y.querySelectorAll(`[${c}]:not([${c}-run="false" i])`)];if(U.length===0)return;(function(ce){U.forEach(me=>{if(!me)return;let ve=me.getAttribute(d);ve===h&&a(me),ve===C&&G(me),ve===v&&W(me),ve===T&&X(me),ve===I&&P(me),ve===x&&V(me),ve===S&&L(me)})})()})};var ci=function(){let n="scrolling",c='[data-ix-scrolling="wrap"]',d='[data-ix-scrolling="trigger"]',p='[data-ix-scrolling="item"]',h="data-ix-scrolling-position",C="data-ix-scrolling-duration",I="data-ix-scrolling-ease",x="data-ix-scrolling-start-breakpoint",S="data-ix-scrolling-end-breakpoint";if(!se(n))return;gsap.utils.toArray(c).forEach(T=>{let f=T.querySelectorAll(p);if(!T||f.length===0)return;let b=T.querySelector(d);b||(b=T);let A=function(w){let N=Ht(T,"scrolling",{scrub:.5,start:"top bottom",end:"bottom top",ease:"none"});w&&T.getAttribute(x)&&(N.start=g(N.start,T.getAttribute(x))),w&&T.getAttribute(S)&&(N.end=g(N.end,T.getAttribute(S)));let Y=gsap.timeline({scrollTrigger:{trigger:b,start:N.start,end:N.end,scrub:N.scrub,markers:!1},defaults:{duration:1,ease:N.ease}});f.forEach(H=>{if(!H)return;let{varsFrom:q,varsTo:B}=dt(H,"scrolling"),O=g("<",H.getAttribute(h));B.duration=g(1,H.getAttribute(C)),B.ease=g("none",H.getAttribute(I));let K=Y.fromTo(H,q,B,O)})};if(re(T,n)===!1)return;let k=g("none",T.getAttribute(`data-ix-${n}-breakpoint`));Re(f[0],k,A)})};var ui=function(){let n="scrollprogress",c='[data-ix-scrollprogress="wrap"]',d='[data-ix-scrollprogress="bar"]',p='[data-ix-scrollprogress="trigger"]',h="data-ix-scrollprogress-scope",C="data-ix-scrollprogress-axis",I="data-ix-scrollprogress-ease",x="data-ix-scrollprogress-scrub",S="data-ix-scrollprogress-start",M="data-ix-scrollprogress-end",v="data-ix-scrollprogress-active-class",T=[...document.querySelectorAll(c)];T.length!==0&&T.forEach(f=>{let b=f.querySelector(d);if(!f||!b||re(f,n)===!1)return;let R=function(){let w=g("page",f.getAttribute(h)),N=g("x",f.getAttribute(C)),Y=g("none",f.getAttribute(I)),H=g(.3,f.getAttribute(x)),q=g("is-active",f.getAttribute(v)),B;w==="page"?B=document.body:B=f.querySelector(`${p}`)||f;let O,K;w==="page"?(O=g("top top",f.getAttribute(S)),K=g("bottom bottom",f.getAttribute(M))):(O=g("top bottom",f.getAttribute(S)),K=g("bottom top",f.getAttribute(M)));let a=N==="y"?{scaleY:0}:{scaleX:0},G=N==="y"?{scaleY:1}:{scaleX:1};gsap.timeline({scrollTrigger:{trigger:B,start:O,end:K,scrub:H,onEnter:()=>{f.classList.add(q)},onLeave:()=>{f.classList.remove(q)},onEnterBack:()=>{f.classList.add(q)},onLeaveBack:()=>{f.classList.remove(q)}}}).fromTo(b,{...a,ease:Y},{...G,ease:Y,duration:1})},k=g("none",f.getAttribute(`data-ix-${n}-breakpoint`));Re(b,k,R)})};var di=function(){let n="stickynav",c='[data-ix-stickynav="wrap"]',d='[data-ix-stickynav="hero"]',p="data-ix-stickynav-hide-on",h="data-ix-stickynav-duration",C="data-ix-stickynav-ease",I="data-ix-stickynav-threshold",x="data-ix-stickynav-bg-active",S="data-ix-stickynav-bg-end",M="data-ix-stickynav-hidden-class",v="data-ix-stickynav-start-hidden",T="data-ix-stickynav-hide-offset";if(!se(n))return;let b=[...document.querySelectorAll(c)];b.length!==0&&b.forEach(A=>{if(!A||re(A,n)===!1)return;let k=g("scroll-down",A.getAttribute(p)),w=g(.3,A.getAttribute(h)),N=g("power2.out",A.getAttribute(C)),Y=g(50,A.getAttribute(I)),H=g("is-scrolled",A.getAttribute(x)),q=g("is-hidden",A.getAttribute(M)),B=g(!1,A.getAttribute(v)),O=g(100,A.getAttribute(T)),K=g("+=500",A.getAttribute(S)),a=A.offsetHeight,G=B,W=!1;B&&(gsap.set(A,{yPercent:-100}),A.classList.add(q));let X=function(){G&&(G=!1,A.classList.remove(q),gsap.to(A,{yPercent:0,duration:w,ease:N,overwrite:"auto"}))},P=function(){G||(G=!0,A.classList.add(q),gsap.to(A,{yPercent:-100,duration:w,ease:N,overwrite:"auto"}))};k!=="none"&&ScrollTrigger.create({start:0,end:"max",onUpdate:L=>{if(L.scroll()<O){X();return}let y=L.direction;Math.abs(L.getVelocity())<Y||(k==="scroll-down"?y===1?P():X():k==="scroll-up"&&(y===1?X():P()))}});let V=document.querySelector(d);V?ScrollTrigger.create({trigger:V,start:"top top",end:K,onLeave:()=>{W||(W=!0,A.classList.add(H))},onEnterBack:()=>{W&&(W=!1,A.classList.remove(H))}}):ScrollTrigger.create({start:0,end:a,onLeave:()=>{W||(W=!0,A.classList.add(H))},onEnterBack:()=>{W&&(W=!1,A.classList.remove(H))}})})};var hi=function(){let n="tabs",c='[data-ix-tabs="wrap"]',d='[data-ix-tabs="content"]',p='[data-ix-tabs="link"]',h='[data-ix-tabs="links"]',C='[data-ix-tabs="next"]',I='[data-ix-tabs="previous"]',x='[data-ix-tabs="toggle"]',S="is-active",M="data-ix-tabs-loop-controls",v="data-ix-tabs-slide-tabs",T="data-ix-tabs-autoplay-duration",f="data-ix-tabs-duration",b="data-ix-tabs-pause-on-hover",A="data-ix-tabs-autoplay-videos",R="data-ix-tabs-ease",k=[...document.querySelectorAll(c)];k.length!==0&&k.forEach((w,N)=>{let Y=g(!0,w.getAttribute(M)),H=g(!1,w.getAttribute(v)),q=g(0,w.getAttribute(T)),B=g(.2,w.getAttribute(f)),O=g(!1,w.getAttribute(b)),K=g(!1,w.getAttribute(A)),a=g("power1.out",w.getAttribute(R)),G=w.querySelector(`${I} button`),W=w.querySelector(`${C} button`),X=w.querySelector(x),P=w.querySelector(`${x} button`),V=[...w.querySelectorAll(p)],L=w.querySelector(d),J=w.querySelector(h),y=!1,$=!0,U;ht(L),pt(L);let ee=V,ce=Array.from(L.children);if(!J||!L||!ee.length||!ce.length){console.warn("Missing elements in:",w);return}ce.forEach((te,ye)=>{te.style.display="none",te.setAttribute("role","tabpanel")}),ee.forEach((te,ye)=>{te.setAttribute("role","tab")}),L.removeAttribute("role"),J.setAttribute("role","tablist"),ee.forEach(te=>te.setAttribute("role","tab")),ce.forEach(te=>te.setAttribute("role","tabpanel"));let me=0,ve=(te,ye=!1,Te=!0,ue=!0)=>{if(y)return;let oe=ce[me];oe&&oe.querySelectorAll("video").forEach(ke=>{ke.paused||ke.pause()}),ee.forEach((ge,ke)=>{ge.classList.toggle("is-active",ke===te),ge.setAttribute("aria-selected",ke===te?"true":"false"),ge.setAttribute("tabindex",ke===te?"0":"-1")}),ce.forEach((ge,ke)=>ge.classList.toggle("is-active",ke===te)),W&&(W.disabled=te===ee.length-1&&!Y),G&&(G.disabled=te===0&&!Y),ye&&ee[te].focus();let Pe=ce[te],be=1;if(me>te&&(be=-1),K&&Pe&&Pe.querySelectorAll("video").forEach(ke=>{if(ke.paused){let ae=ke.play();ae instanceof Promise&&ae.catch(()=>{})}}),typeof gsap<"u"&&Te&&me!==te){U&&!$&&typeof U.restart=="function"&&U.restart(),y=!0;let ge=gsap.timeline({onComplete:()=>{y=!1,typeof ScrollTrigger<"u"&&ScrollTrigger.refresh()},defaults:{duration:B,ease:a}});H?(ge.set(Pe,{display:"block",position:"relative"}),oe&&ge.set(oe,{position:"absolute",top:0,left:0,width:"100%"}),oe&&ge.fromTo(oe,{xPercent:0},{xPercent:-120*be}),ge.fromTo(Pe,{xPercent:120*be},{xPercent:0},"<"),oe&&ge.set(oe,{display:"none"})):(oe&&ge.to(oe,{opacity:0}),oe&&ge.set(oe,{display:"none"}),ge.set(Pe,{display:"block"}),ge.fromTo(Pe,{opacity:0},{opacity:1}))}else oe&&(oe.style.display="none"),Pe&&(Pe.style.display="block");J.scrollTo({left:ee[te].offsetLeft,behavior:"smooth"}),me=te};ve(0,!1,!1);let ne=(te,ye=!1,Te=!0)=>ve((me+te+ee.length)%ee.length,ye,!0,Te);if(W?.addEventListener("click",()=>ne(1)),G?.addEventListener("click",()=>ne(-1)),ee.forEach((te,ye)=>{let Te=w.getAttribute("data-tab-component-id");Te=Te?Te.toLowerCase().replaceAll(" ","-"):N+1;let ue=te.getAttribute("data-tab-item-id");ue=ue?ue.toLowerCase().replaceAll(" ","-"):ye+1,te.setAttribute("id","tab-button-"+Te+"-"+ue),te.setAttribute("aria-controls","tab-panel-"+Te+"-"+ue),ce[ye]?.setAttribute("id","tab-panel-"+Te+"-"+ue),ce[ye]?.setAttribute("aria-labelledby",te.id),new URLSearchParams(location.search).get("tab-id")===Te+"-"+ue&&(ve(ye),q=0,w.scrollIntoView({behavior:"smooth",block:"start"}),history.replaceState({},"",(oe=>(oe.searchParams.delete("tab-id"),oe))(new URL(location.href)))),te.addEventListener("click",()=>ve(ye)),te.addEventListener("keydown",oe=>{["ArrowRight","ArrowDown"].includes(oe.key)?ne(1,!0):["ArrowLeft","ArrowUp"].includes(oe.key)&&ne(-1,!0)})}),q!==0&&typeof gsap<"u"){let oe=function(){Te||!ue||$||te||ye?U.pause():U.play()},Pe=function(){$=!$,P?.setAttribute("aria-pressed",$?"false":"true"),X?.classList.toggle("is-pressed",!$),$||(te=ye=Te=!1),oe()},be=function(ge){Te=ge.matches,oe(),$=!ge.matches,Pe()};U=gsap.timeline({repeat:-1}).fromTo(w,{"--progress":0},{onComplete:()=>ne(1,!1,!1),"--progress":1,ease:"none",duration:q});let te=!1,ye=!1,Te=!1,ue=!0;Pe(),P?.addEventListener("click",function(){Pe()}),be(window.matchMedia("(prefers-reduced-motion: reduce)")),window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change",be),O&&w.addEventListener("mouseenter",()=>{te=!0,oe()}),O&&w.addEventListener("mouseleave",()=>{ye=!1,te=!1,oe()}),w.addEventListener("focusin",()=>{ye=!0,oe()}),w.addEventListener("focusout",ge=>{(!ge.relatedTarget||!w.contains(ge.relatedTarget))&&(ye=!1,oe())}),new IntersectionObserver(ge=>{ue=ge[0].isIntersecting,oe()},{threshold:0}).observe(w)}})};var pi=function(){let n="slider",c="data-ix-slider",d="[data-ix-slider='component']",p="[data-ix-slider='next']",h="[data-ix-slider='previous']",C=".slider_bullet_list",I="slider_bullet_item",x="slider_bullet_item_fill",S=".slider_scrollbar",M="slider_scrollbar_handle",v="data-ix-slider-follow-finger",T="data-ix-slider-mousewheel",f="data-ix-slider-free-mode",b="data-ix-slider-slide-to-clicked",A="data-ix-slider-loop",R="data-ix-slider-speed",k="data-ix-slider-autoplay",w="data-ix-slider-center-slides",N="data-ix-slider-show-autoplay-progress",Y="data-ix-slider-pagination-type",H="is-active";document.querySelectorAll(`${d}:not(${d} ${d})`).forEach(B=>{if(B.dataset.scriptInitialized)return;B.dataset.scriptInitialized="true";let O=B.querySelector(".slider_element"),K=B.querySelector(".slider_list");if(!O||!K)return;ht(K),pt(K),[...K.children].forEach(ee=>ee.classList.add("swiper-slide"));let a=g(!0,O.getAttribute(v)),G=g(!0,O.getAttribute(f)),W=g(!0,O.getAttribute(T)),X=g(!1,O.getAttribute(b)),P=g(!1,O.getAttribute(A)),V=g(600,O.getAttribute(R)),L=g(0,O.getAttribute(k)),J=g("bullets",O.getAttribute(Y)),y=g(!1,O.getAttribute(w)),$=g(!0,O.getAttribute(N)),U=new Swiper(O,{slidesPerView:"auto",followFinger:a,freeMode:G,slideToClickedSlide:X,centeredSlides:y,autoHeight:!1,loop:P,speed:V,mousewheel:{enabled:W,forceToAxis:!0},keyboard:{enabled:!0,onlyInViewport:!0},autoplay:L===0?!1:{delay:L*1e3},navigation:{nextEl:B.querySelector(p),prevEl:B.querySelector(h)},pagination:{type:J,el:B.querySelector(`${C}`),bulletActiveClass:H,bulletClass:`${I}`,bulletElement:"button",clickable:!0,renderFraction:function(ee,ce){return'<div class="u-text-style-small"><span class="'+ee+'"></span> of <span class="'+ce+'"></span> </div>'}},scrollbar:{el:B.querySelector(S),draggable:!0,dragClass:M,snapOnRelease:!0},slideActiveClass:H,slideDuplicateActiveClass:H});if(L>0&&$){let ee=gsap.timeline({paused:!1});ee.fromTo(B,{"--slider-autoplay-progress":"0%"},{"--slider-autoplay-progress":" 100%",ease:"none",duration:L}),U.on("slideChange",function(){ee.restart()})}})};var mi=function(n){let c="textscrub",d='[data-ix-textscrub="item"]',p="line-mask";if(!se(c))return;gsap.utils.toArray(d).forEach(I=>{if(!I||re(I,c)===!1)return;let S,M=[],v=function(f){M.length!==0&&M.forEach(b=>{b.remove()}),f.lines.forEach(b=>{let A=document.createElement("div");M.push(A),A.classList.add(p),b.appendChild(A),gsap.timeline({scrollTrigger:{trigger:b,start:"top 70%",end:"bottom 70%",scrub:1.5}}).fromTo(A,{width:"100%"},{width:"0%",ease:"power1.out",duration:1})})};function T(){let f=SplitText.create(I,{type:"lines",linesClass:"line",autoSplit:!0,onSplit:b=>v(b)});if(f)return f}S=T()})};var gi=function(n){let c="textlink",d='[data-ix-textlink="wrap"]',p='[data-ix-textlink="front"]',h='[data-ix-textlink="back"]';if(!se(c))return;gsap.utils.toArray(d).forEach(x=>{if(!x||re(x,c)===!1)return;let M=x.querySelector(p),v=x.querySelector(h);if(!M||!v)return;let T=gsap.timeline({paused:!0,defaults:{duration:.4,ease:"power1.out"}});T.fromTo(M,{y:"200%",rotateZ:6},{y:"0%",rotateZ:0}),T.fromTo(v,{y:"0%",rotateZ:0},{y:"-200%",rotateZ:-6},0),x.addEventListener("mouseover",function(){T.play()}),x.addEventListener("mouseleave",function(){T.reverse()})})};var yi=Ui(fi(),1),bi=function(){let n=".plyr_component",c=".plyr_video",d=".plyr_cover",p="hide-cover",h=".plyr_pause-trigger",C="contain-video",I={autoplay:!1,loop:!1,mute:!1,hideControls:!0},x=".plyr--playing",S=[],M=[...document.querySelectorAll(n)];if(M.length!==0)return M.forEach((v,T)=>{let f=v.querySelector(c),b=v.querySelector(d),A=v.querySelector(h),R=g(I.loop,v.getAttribute("data-player-loop")),k=g(I.mute,v.getAttribute("data-player-mute")),w=g(!1,v.getAttribute("data-player-show-cover-on-pause")),N=new yi.default(f,{controls:["play","progress","current-time","mute","fullscreen"],hideControls:I.hideControls,loop:{active:R},resetOnEnd:!0});S.push(N),b&&b.addEventListener("click",()=>{N.play()}),N.on("ended",Y=>{v.classList.remove(p)}),w&&N.on("pause",Y=>{v.classList.remove(p)}),N.on("play",Y=>{M.forEach((q,B)=>{q.classList.remove(p),q!==v&&S[B].pause()}),v.classList.add(p);let H=document.querySelector(x).closest(n);H&&H!==v&&H.find(h)[0].click()}),A.addEventListener("click",()=>{N.pause()}),N.on("ended",Y=>{N.fullscreen.active&&N.fullscreen.exit()}),N.on("enterfullscreen",Y=>{v.classList.add(C)}),N.on("exitfullscreen",Y=>{v.classList.remove(C)})}),[S,M]};document.addEventListener("DOMContentLoaded",function(){let n;(function(){n=Kt(),oi(),gsap.matchMedia().add({screen:"(width > 0px)",reduceMotion:"(prefers-reduced-motion: reduce)",highContrast:"(prefers-contrast: more)",noHover:"(hover: none)"},p=>{let{reduceMotion:h,highContrast:C,noHover:I}=p.conditions;Jt(h),h||(jt(),ei(),mi(),si(),ri(),li(),ci(),ai(),ui(),ti());let[x,S]=[bi()];Zt(x,S),ni(n)}),ii(),gi(),pi(),hi(),Ut(),Vt(),Ft(),Bt(),Qt(),di()})(),Dt(),qt(),$t()});})();
+(() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
+  var __commonJS = (cb, mod) => function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
+
+  // bin/live-reload.js
+  var init_live_reload = __esm({
+    "bin/live-reload.js"() {
+      new EventSource(`http://localhost:3000/esbuild`).addEventListener(
+        "change",
+        () => location.reload()
+      );
+    }
+  });
+
+  // node_modules/plyr/dist/plyr.min.js
+  var require_plyr_min = __commonJS({
+    "node_modules/plyr/dist/plyr.min.js"(exports, module) {
+      init_live_reload();
+      "object" == typeof navigator && function(e, t) {
+        "object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define("Plyr", t) : (e = "undefined" != typeof globalThis ? globalThis : e || self).Plyr = t();
+      }(exports, function() {
+        "use strict";
+        function e(e2, t2, i2) {
+          return (t2 = function(e3) {
+            var t3 = function(e4, t4) {
+              if ("object" != typeof e4 || null === e4) return e4;
+              var i3 = e4[Symbol.toPrimitive];
+              if (void 0 !== i3) {
+                var s2 = i3.call(e4, t4 || "default");
+                if ("object" != typeof s2) return s2;
+                throw new TypeError("@@toPrimitive must return a primitive value.");
+              }
+              return ("string" === t4 ? String : Number)(e4);
+            }(e3, "string");
+            return "symbol" == typeof t3 ? t3 : String(t3);
+          }(t2)) in e2 ? Object.defineProperty(e2, t2, { value: i2, enumerable: true, configurable: true, writable: true }) : e2[t2] = i2, e2;
+        }
+        function t(e2, t2) {
+          for (var i2 = 0; i2 < t2.length; i2++) {
+            var s2 = t2[i2];
+            s2.enumerable = s2.enumerable || false, s2.configurable = true, "value" in s2 && (s2.writable = true), Object.defineProperty(e2, s2.key, s2);
+          }
+        }
+        function i(e2, t2, i2) {
+          return t2 in e2 ? Object.defineProperty(e2, t2, { value: i2, enumerable: true, configurable: true, writable: true }) : e2[t2] = i2, e2;
+        }
+        function s(e2, t2) {
+          var i2 = Object.keys(e2);
+          if (Object.getOwnPropertySymbols) {
+            var s2 = Object.getOwnPropertySymbols(e2);
+            t2 && (s2 = s2.filter(function(t3) {
+              return Object.getOwnPropertyDescriptor(e2, t3).enumerable;
+            })), i2.push.apply(i2, s2);
+          }
+          return i2;
+        }
+        function n(e2) {
+          for (var t2 = 1; t2 < arguments.length; t2++) {
+            var n2 = null != arguments[t2] ? arguments[t2] : {};
+            t2 % 2 ? s(Object(n2), true).forEach(function(t3) {
+              i(e2, t3, n2[t3]);
+            }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(n2)) : s(Object(n2)).forEach(function(t3) {
+              Object.defineProperty(e2, t3, Object.getOwnPropertyDescriptor(n2, t3));
+            });
+          }
+          return e2;
+        }
+        var a = { addCSS: true, thumbWidth: 15, watch: true };
+        var l = function(e2) {
+          return null != e2 ? e2.constructor : null;
+        }, r = function(e2, t2) {
+          return !!(e2 && t2 && e2 instanceof t2);
+        }, o = function(e2) {
+          return null == e2;
+        }, c = function(e2) {
+          return l(e2) === Object;
+        }, u = function(e2) {
+          return l(e2) === String;
+        }, h = function(e2) {
+          return Array.isArray(e2);
+        }, d = function(e2) {
+          return r(e2, NodeList);
+        }, m = { nullOrUndefined: o, object: c, number: function(e2) {
+          return l(e2) === Number && !Number.isNaN(e2);
+        }, string: u, boolean: function(e2) {
+          return l(e2) === Boolean;
+        }, function: function(e2) {
+          return l(e2) === Function;
+        }, array: h, nodeList: d, element: function(e2) {
+          return r(e2, Element);
+        }, event: function(e2) {
+          return r(e2, Event);
+        }, empty: function(e2) {
+          return o(e2) || (u(e2) || h(e2) || d(e2)) && !e2.length || c(e2) && !Object.keys(e2).length;
+        } };
+        function p(e2, t2) {
+          if (1 > t2) {
+            var i2 = function(e3) {
+              var t3 = "".concat(e3).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+              return t3 ? Math.max(0, (t3[1] ? t3[1].length : 0) - (t3[2] ? +t3[2] : 0)) : 0;
+            }(t2);
+            return parseFloat(e2.toFixed(i2));
+          }
+          return Math.round(e2 / t2) * t2;
+        }
+        var g = function() {
+          function e2(t2, i2) {
+            (function(e3, t3) {
+              if (!(e3 instanceof t3)) throw new TypeError("Cannot call a class as a function");
+            })(this, e2), m.element(t2) ? this.element = t2 : m.string(t2) && (this.element = document.querySelector(t2)), m.element(this.element) && m.empty(this.element.rangeTouch) && (this.config = n({}, a, {}, i2), this.init());
+          }
+          return function(e3, i2, s2) {
+            i2 && t(e3.prototype, i2), s2 && t(e3, s2);
+          }(e2, [{ key: "init", value: function() {
+            e2.enabled && (this.config.addCSS && (this.element.style.userSelect = "none", this.element.style.webKitUserSelect = "none", this.element.style.touchAction = "manipulation"), this.listeners(true), this.element.rangeTouch = this);
+          } }, { key: "destroy", value: function() {
+            e2.enabled && (this.config.addCSS && (this.element.style.userSelect = "", this.element.style.webKitUserSelect = "", this.element.style.touchAction = ""), this.listeners(false), this.element.rangeTouch = null);
+          } }, { key: "listeners", value: function(e3) {
+            var t2 = this, i2 = e3 ? "addEventListener" : "removeEventListener";
+            ["touchstart", "touchmove", "touchend"].forEach(function(e4) {
+              t2.element[i2](e4, function(e5) {
+                return t2.set(e5);
+              }, false);
+            });
+          } }, { key: "get", value: function(t2) {
+            if (!e2.enabled || !m.event(t2)) return null;
+            var i2, s2 = t2.target, n2 = t2.changedTouches[0], a2 = parseFloat(s2.getAttribute("min")) || 0, l2 = parseFloat(s2.getAttribute("max")) || 100, r2 = parseFloat(s2.getAttribute("step")) || 1, o2 = s2.getBoundingClientRect(), c2 = 100 / o2.width * (this.config.thumbWidth / 2) / 100;
+            return 0 > (i2 = 100 / o2.width * (n2.clientX - o2.left)) ? i2 = 0 : 100 < i2 && (i2 = 100), 50 > i2 ? i2 -= (100 - 2 * i2) * c2 : 50 < i2 && (i2 += 2 * (i2 - 50) * c2), a2 + p(i2 / 100 * (l2 - a2), r2);
+          } }, { key: "set", value: function(t2) {
+            e2.enabled && m.event(t2) && !t2.target.disabled && (t2.preventDefault(), t2.target.value = this.get(t2), function(e3, t3) {
+              if (e3 && t3) {
+                var i2 = new Event(t3, { bubbles: true });
+                e3.dispatchEvent(i2);
+              }
+            }(t2.target, "touchend" === t2.type ? "change" : "input"));
+          } }], [{ key: "setup", value: function(t2) {
+            var i2 = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {}, s2 = null;
+            if (m.empty(t2) || m.string(t2) ? s2 = Array.from(document.querySelectorAll(m.string(t2) ? t2 : 'input[type="range"]')) : m.element(t2) ? s2 = [t2] : m.nodeList(t2) ? s2 = Array.from(t2) : m.array(t2) && (s2 = t2.filter(m.element)), m.empty(s2)) return null;
+            var l2 = n({}, a, {}, i2);
+            if (m.string(t2) && l2.watch) {
+              var r2 = new MutationObserver(function(i3) {
+                Array.from(i3).forEach(function(i4) {
+                  Array.from(i4.addedNodes).forEach(function(i5) {
+                    m.element(i5) && function(e3, t3) {
+                      return function() {
+                        return Array.from(document.querySelectorAll(t3)).includes(this);
+                      }.call(e3, t3);
+                    }(i5, t2) && new e2(i5, l2);
+                  });
+                });
+              });
+              r2.observe(document.body, { childList: true, subtree: true });
+            }
+            return s2.map(function(t3) {
+              return new e2(t3, i2);
+            });
+          } }, { key: "enabled", get: function() {
+            return "ontouchstart" in document.documentElement;
+          } }]), e2;
+        }();
+        const f = (e2) => null != e2 ? e2.constructor : null, y = (e2, t2) => Boolean(e2 && t2 && e2 instanceof t2), b = (e2) => null == e2, v = (e2) => f(e2) === Object, w = (e2) => f(e2) === String, T = (e2) => "function" == typeof e2, k = (e2) => Array.isArray(e2), C = (e2) => y(e2, NodeList), A = (e2) => b(e2) || (w(e2) || k(e2) || C(e2)) && !e2.length || v(e2) && !Object.keys(e2).length;
+        var S = { nullOrUndefined: b, object: v, number: (e2) => f(e2) === Number && !Number.isNaN(e2), string: w, boolean: (e2) => f(e2) === Boolean, function: T, array: k, weakMap: (e2) => y(e2, WeakMap), nodeList: C, element: (e2) => null !== e2 && "object" == typeof e2 && 1 === e2.nodeType && "object" == typeof e2.style && "object" == typeof e2.ownerDocument, textNode: (e2) => f(e2) === Text, event: (e2) => y(e2, Event), keyboardEvent: (e2) => y(e2, KeyboardEvent), cue: (e2) => y(e2, window.TextTrackCue) || y(e2, window.VTTCue), track: (e2) => y(e2, TextTrack) || !b(e2) && w(e2.kind), promise: (e2) => y(e2, Promise) && T(e2.then), url: (e2) => {
+          if (y(e2, window.URL)) return true;
+          if (!w(e2)) return false;
+          let t2 = e2;
+          e2.startsWith("http://") && e2.startsWith("https://") || (t2 = `http://${e2}`);
+          try {
+            return !A(new URL(t2).hostname);
+          } catch (e3) {
+            return false;
+          }
+        }, empty: A };
+        const E = (() => {
+          const e2 = document.createElement("span"), t2 = { WebkitTransition: "webkitTransitionEnd", MozTransition: "transitionend", OTransition: "oTransitionEnd otransitionend", transition: "transitionend" }, i2 = Object.keys(t2).find((t3) => void 0 !== e2.style[t3]);
+          return !!S.string(i2) && t2[i2];
+        })();
+        function P(e2, t2) {
+          setTimeout(() => {
+            try {
+              e2.hidden = true, e2.offsetHeight, e2.hidden = false;
+            } catch (e3) {
+            }
+          }, t2);
+        }
+        var M = { isIE: Boolean(window.document.documentMode), isEdge: /Edge/g.test(navigator.userAgent), isWebKit: "WebkitAppearance" in document.documentElement.style && !/Edge/g.test(navigator.userAgent), isIPhone: /iPhone|iPod/gi.test(navigator.userAgent) && navigator.maxTouchPoints > 1, isIPadOS: "MacIntel" === navigator.platform && navigator.maxTouchPoints > 1, isIos: /iPad|iPhone|iPod/gi.test(navigator.userAgent) && navigator.maxTouchPoints > 1 };
+        function N(e2, t2) {
+          return t2.split(".").reduce((e3, t3) => e3 && e3[t3], e2);
+        }
+        function x(e2 = {}, ...t2) {
+          if (!t2.length) return e2;
+          const i2 = t2.shift();
+          return S.object(i2) ? (Object.keys(i2).forEach((t3) => {
+            S.object(i2[t3]) ? (Object.keys(e2).includes(t3) || Object.assign(e2, { [t3]: {} }), x(e2[t3], i2[t3])) : Object.assign(e2, { [t3]: i2[t3] });
+          }), x(e2, ...t2)) : e2;
+        }
+        function L(e2, t2) {
+          const i2 = e2.length ? e2 : [e2];
+          Array.from(i2).reverse().forEach((e3, i3) => {
+            const s2 = i3 > 0 ? t2.cloneNode(true) : t2, n2 = e3.parentNode, a2 = e3.nextSibling;
+            s2.appendChild(e3), a2 ? n2.insertBefore(s2, a2) : n2.appendChild(s2);
+          });
+        }
+        function I(e2, t2) {
+          S.element(e2) && !S.empty(t2) && Object.entries(t2).filter(([, e3]) => !S.nullOrUndefined(e3)).forEach(([t3, i2]) => e2.setAttribute(t3, i2));
+        }
+        function $(e2, t2, i2) {
+          const s2 = document.createElement(e2);
+          return S.object(t2) && I(s2, t2), S.string(i2) && (s2.innerText = i2), s2;
+        }
+        function _(e2, t2, i2, s2) {
+          S.element(t2) && t2.appendChild($(e2, i2, s2));
+        }
+        function O(e2) {
+          S.nodeList(e2) || S.array(e2) ? Array.from(e2).forEach(O) : S.element(e2) && S.element(e2.parentNode) && e2.parentNode.removeChild(e2);
+        }
+        function j(e2) {
+          if (!S.element(e2)) return;
+          let { length: t2 } = e2.childNodes;
+          for (; t2 > 0; ) e2.removeChild(e2.lastChild), t2 -= 1;
+        }
+        function q(e2, t2) {
+          return S.element(t2) && S.element(t2.parentNode) && S.element(e2) ? (t2.parentNode.replaceChild(e2, t2), e2) : null;
+        }
+        function D(e2, t2) {
+          if (!S.string(e2) || S.empty(e2)) return {};
+          const i2 = {}, s2 = x({}, t2);
+          return e2.split(",").forEach((e3) => {
+            const t3 = e3.trim(), n2 = t3.replace(".", ""), a2 = t3.replace(/[[\]]/g, "").split("="), [l2] = a2, r2 = a2.length > 1 ? a2[1].replace(/["']/g, "") : "";
+            switch (t3.charAt(0)) {
+              case ".":
+                S.string(s2.class) ? i2.class = `${s2.class} ${n2}` : i2.class = n2;
+                break;
+              case "#":
+                i2.id = t3.replace("#", "");
+                break;
+              case "[":
+                i2[l2] = r2;
+            }
+          }), x(s2, i2);
+        }
+        function H(e2, t2) {
+          if (!S.element(e2)) return;
+          let i2 = t2;
+          S.boolean(i2) || (i2 = !e2.hidden), e2.hidden = i2;
+        }
+        function R(e2, t2, i2) {
+          if (S.nodeList(e2)) return Array.from(e2).map((e3) => R(e3, t2, i2));
+          if (S.element(e2)) {
+            let s2 = "toggle";
+            return void 0 !== i2 && (s2 = i2 ? "add" : "remove"), e2.classList[s2](t2), e2.classList.contains(t2);
+          }
+          return false;
+        }
+        function F(e2, t2) {
+          return S.element(e2) && e2.classList.contains(t2);
+        }
+        function V(e2, t2) {
+          const { prototype: i2 } = Element;
+          return (i2.matches || i2.webkitMatchesSelector || i2.mozMatchesSelector || i2.msMatchesSelector || function() {
+            return Array.from(document.querySelectorAll(t2)).includes(this);
+          }).call(e2, t2);
+        }
+        function U(e2) {
+          return this.elements.container.querySelectorAll(e2);
+        }
+        function B(e2) {
+          return this.elements.container.querySelector(e2);
+        }
+        function W(e2 = null, t2 = false) {
+          S.element(e2) && e2.focus({ preventScroll: true, focusVisible: t2 });
+        }
+        const z = { "audio/ogg": "vorbis", "audio/wav": "1", "video/webm": "vp8, vorbis", "video/mp4": "avc1.42E01E, mp4a.40.2", "video/ogg": "theora" }, K = { audio: "canPlayType" in document.createElement("audio"), video: "canPlayType" in document.createElement("video"), check(e2, t2) {
+          const i2 = K[e2] || "html5" !== t2;
+          return { api: i2, ui: i2 && K.rangeInput };
+        }, pip: !(M.isIPhone || !S.function($("video").webkitSetPresentationMode) && (!document.pictureInPictureEnabled || $("video").disablePictureInPicture)), airplay: S.function(window.WebKitPlaybackTargetAvailabilityEvent), playsinline: "playsInline" in document.createElement("video"), mime(e2) {
+          if (S.empty(e2)) return false;
+          const [t2] = e2.split("/");
+          let i2 = e2;
+          if (!this.isHTML5 || t2 !== this.type) return false;
+          Object.keys(z).includes(i2) && (i2 += `; codecs="${z[e2]}"`);
+          try {
+            return Boolean(i2 && this.media.canPlayType(i2).replace(/no/, ""));
+          } catch (e3) {
+            return false;
+          }
+        }, textTracks: "textTracks" in document.createElement("video"), rangeInput: (() => {
+          const e2 = document.createElement("input");
+          return e2.type = "range", "range" === e2.type;
+        })(), touch: "ontouchstart" in document.documentElement, transitions: false !== E, reducedMotion: "matchMedia" in window && window.matchMedia("(prefers-reduced-motion)").matches }, Y = (() => {
+          let e2 = false;
+          try {
+            const t2 = Object.defineProperty({}, "passive", { get: () => (e2 = true, null) });
+            window.addEventListener("test", null, t2), window.removeEventListener("test", null, t2);
+          } catch (e3) {
+          }
+          return e2;
+        })();
+        function Q(e2, t2, i2, s2 = false, n2 = true, a2 = false) {
+          if (!e2 || !("addEventListener" in e2) || S.empty(t2) || !S.function(i2)) return;
+          const l2 = t2.split(" ");
+          let r2 = a2;
+          Y && (r2 = { passive: n2, capture: a2 }), l2.forEach((t3) => {
+            this && this.eventListeners && s2 && this.eventListeners.push({ element: e2, type: t3, callback: i2, options: r2 }), e2[s2 ? "addEventListener" : "removeEventListener"](t3, i2, r2);
+          });
+        }
+        function X(e2, t2 = "", i2, s2 = true, n2 = false) {
+          Q.call(this, e2, t2, i2, true, s2, n2);
+        }
+        function J(e2, t2 = "", i2, s2 = true, n2 = false) {
+          Q.call(this, e2, t2, i2, false, s2, n2);
+        }
+        function G(e2, t2 = "", i2, s2 = true, n2 = false) {
+          const a2 = (...l2) => {
+            J(e2, t2, a2, s2, n2), i2.apply(this, l2);
+          };
+          Q.call(this, e2, t2, a2, true, s2, n2);
+        }
+        function Z(e2, t2 = "", i2 = false, s2 = {}) {
+          if (!S.element(e2) || S.empty(t2)) return;
+          const n2 = new CustomEvent(t2, { bubbles: i2, detail: { ...s2, plyr: this } });
+          e2.dispatchEvent(n2);
+        }
+        function ee() {
+          this && this.eventListeners && (this.eventListeners.forEach((e2) => {
+            const { element: t2, type: i2, callback: s2, options: n2 } = e2;
+            t2.removeEventListener(i2, s2, n2);
+          }), this.eventListeners = []);
+        }
+        function te() {
+          return new Promise((e2) => this.ready ? setTimeout(e2, 0) : X.call(this, this.elements.container, "ready", e2)).then(() => {
+          });
+        }
+        function ie(e2) {
+          S.promise(e2) && e2.then(null, () => {
+          });
+        }
+        function se(e2) {
+          return S.array(e2) ? e2.filter((t2, i2) => e2.indexOf(t2) === i2) : e2;
+        }
+        function ne(e2, t2) {
+          return S.array(e2) && e2.length ? e2.reduce((e3, i2) => Math.abs(i2 - t2) < Math.abs(e3 - t2) ? i2 : e3) : null;
+        }
+        function ae(e2) {
+          return !(!window || !window.CSS) && window.CSS.supports(e2);
+        }
+        const le = [[1, 1], [4, 3], [3, 4], [5, 4], [4, 5], [3, 2], [2, 3], [16, 10], [10, 16], [16, 9], [9, 16], [21, 9], [9, 21], [32, 9], [9, 32]].reduce((e2, [t2, i2]) => ({ ...e2, [t2 / i2]: [t2, i2] }), {});
+        function re(e2) {
+          if (!(S.array(e2) || S.string(e2) && e2.includes(":"))) return false;
+          return (S.array(e2) ? e2 : e2.split(":")).map(Number).every(S.number);
+        }
+        function oe(e2) {
+          if (!S.array(e2) || !e2.every(S.number)) return null;
+          const [t2, i2] = e2, s2 = (e3, t3) => 0 === t3 ? e3 : s2(t3, e3 % t3), n2 = s2(t2, i2);
+          return [t2 / n2, i2 / n2];
+        }
+        function ce(e2) {
+          const t2 = (e3) => re(e3) ? e3.split(":").map(Number) : null;
+          let i2 = t2(e2);
+          if (null === i2 && (i2 = t2(this.config.ratio)), null === i2 && !S.empty(this.embed) && S.array(this.embed.ratio) && ({ ratio: i2 } = this.embed), null === i2 && this.isHTML5) {
+            const { videoWidth: e3, videoHeight: t3 } = this.media;
+            i2 = [e3, t3];
+          }
+          return oe(i2);
+        }
+        function ue(e2) {
+          if (!this.isVideo) return {};
+          const { wrapper: t2 } = this.elements, i2 = ce.call(this, e2);
+          if (!S.array(i2)) return {};
+          const [s2, n2] = oe(i2), a2 = 100 / s2 * n2;
+          if (ae(`aspect-ratio: ${s2}/${n2}`) ? t2.style.aspectRatio = `${s2}/${n2}` : t2.style.paddingBottom = `${a2}%`, this.isVimeo && !this.config.vimeo.premium && this.supported.ui) {
+            const e3 = 100 / this.media.offsetWidth * parseInt(window.getComputedStyle(this.media).paddingBottom, 10), i3 = (e3 - a2) / (e3 / 50);
+            this.fullscreen.active ? t2.style.paddingBottom = null : this.media.style.transform = `translateY(-${i3}%)`;
+          } else this.isHTML5 && t2.classList.add(this.config.classNames.videoFixedRatio);
+          return { padding: a2, ratio: i2 };
+        }
+        function he(e2, t2, i2 = 0.05) {
+          const s2 = e2 / t2, n2 = ne(Object.keys(le), s2);
+          return Math.abs(n2 - s2) <= i2 ? le[n2] : [e2, t2];
+        }
+        const de = { getSources() {
+          if (!this.isHTML5) return [];
+          return Array.from(this.media.querySelectorAll("source")).filter((e2) => {
+            const t2 = e2.getAttribute("type");
+            return !!S.empty(t2) || K.mime.call(this, t2);
+          });
+        }, getQualityOptions() {
+          return this.config.quality.forced ? this.config.quality.options : de.getSources.call(this).map((e2) => Number(e2.getAttribute("size"))).filter(Boolean);
+        }, setup() {
+          if (!this.isHTML5) return;
+          const e2 = this;
+          e2.options.speed = e2.config.speed.options, S.empty(this.config.ratio) || ue.call(e2), Object.defineProperty(e2.media, "quality", { get() {
+            const t2 = de.getSources.call(e2).find((t3) => t3.getAttribute("src") === e2.source);
+            return t2 && Number(t2.getAttribute("size"));
+          }, set(t2) {
+            if (e2.quality !== t2) {
+              if (e2.config.quality.forced && S.function(e2.config.quality.onChange)) e2.config.quality.onChange(t2);
+              else {
+                const i2 = de.getSources.call(e2).find((e3) => Number(e3.getAttribute("size")) === t2);
+                if (!i2) return;
+                const { currentTime: s2, paused: n2, preload: a2, readyState: l2, playbackRate: r2 } = e2.media;
+                e2.media.src = i2.getAttribute("src"), ("none" !== a2 || l2) && (e2.once("loadedmetadata", () => {
+                  e2.speed = r2, e2.currentTime = s2, n2 || ie(e2.play());
+                }), e2.media.load());
+              }
+              Z.call(e2, e2.media, "qualitychange", false, { quality: t2 });
+            }
+          } });
+        }, cancelRequests() {
+          this.isHTML5 && (O(de.getSources.call(this)), this.media.setAttribute("src", this.config.blankVideo), this.media.load(), this.debug.log("Cancelled network requests"));
+        } };
+        function me(e2, ...t2) {
+          return S.empty(e2) ? e2 : e2.toString().replace(/{(\d+)}/g, (e3, i2) => t2[i2].toString());
+        }
+        const pe = (e2 = "", t2 = "", i2 = "") => e2.replace(new RegExp(t2.toString().replace(/([.*+?^=!:${}()|[\]/\\])/g, "\\$1"), "g"), i2.toString()), ge = (e2 = "") => e2.toString().replace(/\w\S*/g, (e3) => e3.charAt(0).toUpperCase() + e3.slice(1).toLowerCase());
+        function fe(e2 = "") {
+          let t2 = e2.toString();
+          return t2 = function(e3 = "") {
+            let t3 = e3.toString();
+            return t3 = pe(t3, "-", " "), t3 = pe(t3, "_", " "), t3 = ge(t3), pe(t3, " ", "");
+          }(t2), t2.charAt(0).toLowerCase() + t2.slice(1);
+        }
+        function ye(e2) {
+          const t2 = document.createElement("div");
+          return t2.appendChild(e2), t2.innerHTML;
+        }
+        const be = { pip: "PIP", airplay: "AirPlay", html5: "HTML5", vimeo: "Vimeo", youtube: "YouTube" }, ve = { get(e2 = "", t2 = {}) {
+          if (S.empty(e2) || S.empty(t2)) return "";
+          let i2 = N(t2.i18n, e2);
+          if (S.empty(i2)) return Object.keys(be).includes(e2) ? be[e2] : "";
+          const s2 = { "{seektime}": t2.seekTime, "{title}": t2.title };
+          return Object.entries(s2).forEach(([e3, t3]) => {
+            i2 = pe(i2, e3, t3);
+          }), i2;
+        } };
+        class we {
+          constructor(t2) {
+            e(this, "get", (e2) => {
+              if (!we.supported || !this.enabled) return null;
+              const t3 = window.localStorage.getItem(this.key);
+              if (S.empty(t3)) return null;
+              const i2 = JSON.parse(t3);
+              return S.string(e2) && e2.length ? i2[e2] : i2;
+            }), e(this, "set", (e2) => {
+              if (!we.supported || !this.enabled) return;
+              if (!S.object(e2)) return;
+              let t3 = this.get();
+              S.empty(t3) && (t3 = {}), x(t3, e2);
+              try {
+                window.localStorage.setItem(this.key, JSON.stringify(t3));
+              } catch (e3) {
+              }
+            }), this.enabled = t2.config.storage.enabled, this.key = t2.config.storage.key;
+          }
+          static get supported() {
+            try {
+              if (!("localStorage" in window)) return false;
+              const e2 = "___test";
+              return window.localStorage.setItem(e2, e2), window.localStorage.removeItem(e2), true;
+            } catch (e2) {
+              return false;
+            }
+          }
+        }
+        function Te(e2, t2 = "text") {
+          return new Promise((i2, s2) => {
+            try {
+              const s3 = new XMLHttpRequest();
+              if (!("withCredentials" in s3)) return;
+              s3.addEventListener("load", () => {
+                if ("text" === t2) try {
+                  i2(JSON.parse(s3.responseText));
+                } catch (e3) {
+                  i2(s3.responseText);
+                }
+                else i2(s3.response);
+              }), s3.addEventListener("error", () => {
+                throw new Error(s3.status);
+              }), s3.open("GET", e2, true), s3.responseType = t2, s3.send();
+            } catch (e3) {
+              s2(e3);
+            }
+          });
+        }
+        function ke(e2, t2) {
+          if (!S.string(e2)) return;
+          const i2 = "cache", s2 = S.string(t2);
+          let n2 = false;
+          const a2 = () => null !== document.getElementById(t2), l2 = (e3, t3) => {
+            e3.innerHTML = t3, s2 && a2() || document.body.insertAdjacentElement("afterbegin", e3);
+          };
+          if (!s2 || !a2()) {
+            const a3 = we.supported, r2 = document.createElement("div");
+            if (r2.setAttribute("hidden", ""), s2 && r2.setAttribute("id", t2), a3) {
+              const e3 = window.localStorage.getItem(`${i2}-${t2}`);
+              if (n2 = null !== e3, n2) {
+                const t3 = JSON.parse(e3);
+                l2(r2, t3.content);
+              }
+            }
+            Te(e2).then((e3) => {
+              if (!S.empty(e3)) {
+                if (a3) try {
+                  window.localStorage.setItem(`${i2}-${t2}`, JSON.stringify({ content: e3 }));
+                } catch (e4) {
+                }
+                l2(r2, e3);
+              }
+            }).catch(() => {
+            });
+          }
+        }
+        const Ce = (e2) => Math.trunc(e2 / 60 / 60 % 60, 10), Ae = (e2) => Math.trunc(e2 / 60 % 60, 10), Se = (e2) => Math.trunc(e2 % 60, 10);
+        function Ee(e2 = 0, t2 = false, i2 = false) {
+          if (!S.number(e2)) return Ee(void 0, t2, i2);
+          const s2 = (e3) => `0${e3}`.slice(-2);
+          let n2 = Ce(e2);
+          const a2 = Ae(e2), l2 = Se(e2);
+          return n2 = t2 || n2 > 0 ? `${n2}:` : "", `${i2 && e2 > 0 ? "-" : ""}${n2}${s2(a2)}:${s2(l2)}`;
+        }
+        const Pe = { getIconUrl() {
+          const e2 = new URL(this.config.iconUrl, window.location), t2 = window.location.host ? window.location.host : window.top.location.host, i2 = e2.host !== t2 || M.isIE && !window.svg4everybody;
+          return { url: this.config.iconUrl, cors: i2 };
+        }, findElements() {
+          try {
+            return this.elements.controls = B.call(this, this.config.selectors.controls.wrapper), this.elements.buttons = { play: U.call(this, this.config.selectors.buttons.play), pause: B.call(this, this.config.selectors.buttons.pause), restart: B.call(this, this.config.selectors.buttons.restart), rewind: B.call(this, this.config.selectors.buttons.rewind), fastForward: B.call(this, this.config.selectors.buttons.fastForward), mute: B.call(this, this.config.selectors.buttons.mute), pip: B.call(this, this.config.selectors.buttons.pip), airplay: B.call(this, this.config.selectors.buttons.airplay), settings: B.call(this, this.config.selectors.buttons.settings), captions: B.call(this, this.config.selectors.buttons.captions), fullscreen: B.call(this, this.config.selectors.buttons.fullscreen) }, this.elements.progress = B.call(this, this.config.selectors.progress), this.elements.inputs = { seek: B.call(this, this.config.selectors.inputs.seek), volume: B.call(this, this.config.selectors.inputs.volume) }, this.elements.display = { buffer: B.call(this, this.config.selectors.display.buffer), currentTime: B.call(this, this.config.selectors.display.currentTime), duration: B.call(this, this.config.selectors.display.duration) }, S.element(this.elements.progress) && (this.elements.display.seekTooltip = this.elements.progress.querySelector(`.${this.config.classNames.tooltip}`)), true;
+          } catch (e2) {
+            return this.debug.warn("It looks like there is a problem with your custom controls HTML", e2), this.toggleNativeControls(true), false;
+          }
+        }, createIcon(e2, t2) {
+          const i2 = "http://www.w3.org/2000/svg", s2 = Pe.getIconUrl.call(this), n2 = `${s2.cors ? "" : s2.url}#${this.config.iconPrefix}`, a2 = document.createElementNS(i2, "svg");
+          I(a2, x(t2, { "aria-hidden": "true", focusable: "false" }));
+          const l2 = document.createElementNS(i2, "use"), r2 = `${n2}-${e2}`;
+          return "href" in l2 && l2.setAttributeNS("http://www.w3.org/1999/xlink", "href", r2), l2.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", r2), a2.appendChild(l2), a2;
+        }, createLabel(e2, t2 = {}) {
+          const i2 = ve.get(e2, this.config);
+          return $("span", { ...t2, class: [t2.class, this.config.classNames.hidden].filter(Boolean).join(" ") }, i2);
+        }, createBadge(e2) {
+          if (S.empty(e2)) return null;
+          const t2 = $("span", { class: this.config.classNames.menu.value });
+          return t2.appendChild($("span", { class: this.config.classNames.menu.badge }, e2)), t2;
+        }, createButton(e2, t2) {
+          const i2 = x({}, t2);
+          let s2 = fe(e2);
+          const n2 = { element: "button", toggle: false, label: null, icon: null, labelPressed: null, iconPressed: null };
+          switch (["element", "icon", "label"].forEach((e3) => {
+            Object.keys(i2).includes(e3) && (n2[e3] = i2[e3], delete i2[e3]);
+          }), "button" !== n2.element || Object.keys(i2).includes("type") || (i2.type = "button"), Object.keys(i2).includes("class") ? i2.class.split(" ").some((e3) => e3 === this.config.classNames.control) || x(i2, { class: `${i2.class} ${this.config.classNames.control}` }) : i2.class = this.config.classNames.control, e2) {
+            case "play":
+              n2.toggle = true, n2.label = "play", n2.labelPressed = "pause", n2.icon = "play", n2.iconPressed = "pause";
+              break;
+            case "mute":
+              n2.toggle = true, n2.label = "mute", n2.labelPressed = "unmute", n2.icon = "volume", n2.iconPressed = "muted";
+              break;
+            case "captions":
+              n2.toggle = true, n2.label = "enableCaptions", n2.labelPressed = "disableCaptions", n2.icon = "captions-off", n2.iconPressed = "captions-on";
+              break;
+            case "fullscreen":
+              n2.toggle = true, n2.label = "enterFullscreen", n2.labelPressed = "exitFullscreen", n2.icon = "enter-fullscreen", n2.iconPressed = "exit-fullscreen";
+              break;
+            case "play-large":
+              i2.class += ` ${this.config.classNames.control}--overlaid`, s2 = "play", n2.label = "play", n2.icon = "play";
+              break;
+            default:
+              S.empty(n2.label) && (n2.label = s2), S.empty(n2.icon) && (n2.icon = e2);
+          }
+          const a2 = $(n2.element);
+          return n2.toggle ? (a2.appendChild(Pe.createIcon.call(this, n2.iconPressed, { class: "icon--pressed" })), a2.appendChild(Pe.createIcon.call(this, n2.icon, { class: "icon--not-pressed" })), a2.appendChild(Pe.createLabel.call(this, n2.labelPressed, { class: "label--pressed" })), a2.appendChild(Pe.createLabel.call(this, n2.label, { class: "label--not-pressed" }))) : (a2.appendChild(Pe.createIcon.call(this, n2.icon)), a2.appendChild(Pe.createLabel.call(this, n2.label))), x(i2, D(this.config.selectors.buttons[s2], i2)), I(a2, i2), "play" === s2 ? (S.array(this.elements.buttons[s2]) || (this.elements.buttons[s2] = []), this.elements.buttons[s2].push(a2)) : this.elements.buttons[s2] = a2, a2;
+        }, createRange(e2, t2) {
+          const i2 = $("input", x(D(this.config.selectors.inputs[e2]), { type: "range", min: 0, max: 100, step: 0.01, value: 0, autocomplete: "off", role: "slider", "aria-label": ve.get(e2, this.config), "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": 0 }, t2));
+          return this.elements.inputs[e2] = i2, Pe.updateRangeFill.call(this, i2), g.setup(i2), i2;
+        }, createProgress(e2, t2) {
+          const i2 = $("progress", x(D(this.config.selectors.display[e2]), { min: 0, max: 100, value: 0, role: "progressbar", "aria-hidden": true }, t2));
+          if ("volume" !== e2) {
+            i2.appendChild($("span", null, "0"));
+            const t3 = { played: "played", buffer: "buffered" }[e2], s2 = t3 ? ve.get(t3, this.config) : "";
+            i2.innerText = `% ${s2.toLowerCase()}`;
+          }
+          return this.elements.display[e2] = i2, i2;
+        }, createTime(e2, t2) {
+          const i2 = D(this.config.selectors.display[e2], t2), s2 = $("div", x(i2, { class: `${i2.class ? i2.class : ""} ${this.config.classNames.display.time} `.trim(), "aria-label": ve.get(e2, this.config), role: "timer" }), "00:00");
+          return this.elements.display[e2] = s2, s2;
+        }, bindMenuItemShortcuts(e2, t2) {
+          X.call(this, e2, "keydown keyup", (i2) => {
+            if (![" ", "ArrowUp", "ArrowDown", "ArrowRight"].includes(i2.key)) return;
+            if (i2.preventDefault(), i2.stopPropagation(), "keydown" === i2.type) return;
+            const s2 = V(e2, '[role="menuitemradio"]');
+            if (!s2 && [" ", "ArrowRight"].includes(i2.key)) Pe.showMenuPanel.call(this, t2, true);
+            else {
+              let t3;
+              " " !== i2.key && ("ArrowDown" === i2.key || s2 && "ArrowRight" === i2.key ? (t3 = e2.nextElementSibling, S.element(t3) || (t3 = e2.parentNode.firstElementChild)) : (t3 = e2.previousElementSibling, S.element(t3) || (t3 = e2.parentNode.lastElementChild)), W.call(this, t3, true));
+            }
+          }, false), X.call(this, e2, "keyup", (e3) => {
+            "Return" === e3.key && Pe.focusFirstMenuItem.call(this, null, true);
+          });
+        }, createMenuItem({ value: e2, list: t2, type: i2, title: s2, badge: n2 = null, checked: a2 = false }) {
+          const l2 = D(this.config.selectors.inputs[i2]), r2 = $("button", x(l2, { type: "button", role: "menuitemradio", class: `${this.config.classNames.control} ${l2.class ? l2.class : ""}`.trim(), "aria-checked": a2, value: e2 })), o2 = $("span");
+          o2.innerHTML = s2, S.element(n2) && o2.appendChild(n2), r2.appendChild(o2), Object.defineProperty(r2, "checked", { enumerable: true, get: () => "true" === r2.getAttribute("aria-checked"), set(e3) {
+            e3 && Array.from(r2.parentNode.children).filter((e4) => V(e4, '[role="menuitemradio"]')).forEach((e4) => e4.setAttribute("aria-checked", "false")), r2.setAttribute("aria-checked", e3 ? "true" : "false");
+          } }), this.listeners.bind(r2, "click keyup", (t3) => {
+            if (!S.keyboardEvent(t3) || " " === t3.key) {
+              switch (t3.preventDefault(), t3.stopPropagation(), r2.checked = true, i2) {
+                case "language":
+                  this.currentTrack = Number(e2);
+                  break;
+                case "quality":
+                  this.quality = e2;
+                  break;
+                case "speed":
+                  this.speed = parseFloat(e2);
+              }
+              Pe.showMenuPanel.call(this, "home", S.keyboardEvent(t3));
+            }
+          }, i2, false), Pe.bindMenuItemShortcuts.call(this, r2, i2), t2.appendChild(r2);
+        }, formatTime(e2 = 0, t2 = false) {
+          if (!S.number(e2)) return e2;
+          return Ee(e2, Ce(this.duration) > 0, t2);
+        }, updateTimeDisplay(e2 = null, t2 = 0, i2 = false) {
+          S.element(e2) && S.number(t2) && (e2.innerText = Pe.formatTime(t2, i2));
+        }, updateVolume() {
+          this.supported.ui && (S.element(this.elements.inputs.volume) && Pe.setRange.call(this, this.elements.inputs.volume, this.muted ? 0 : this.volume), S.element(this.elements.buttons.mute) && (this.elements.buttons.mute.pressed = this.muted || 0 === this.volume));
+        }, setRange(e2, t2 = 0) {
+          S.element(e2) && (e2.value = t2, Pe.updateRangeFill.call(this, e2));
+        }, updateProgress(e2) {
+          if (!this.supported.ui || !S.event(e2)) return;
+          let t2 = 0;
+          const i2 = (e3, t3) => {
+            const i3 = S.number(t3) ? t3 : 0, s3 = S.element(e3) ? e3 : this.elements.display.buffer;
+            if (S.element(s3)) {
+              s3.value = i3;
+              const e4 = s3.getElementsByTagName("span")[0];
+              S.element(e4) && (e4.childNodes[0].nodeValue = i3);
+            }
+          };
+          if (e2) switch (e2.type) {
+            case "timeupdate":
+            case "seeking":
+            case "seeked":
+              s2 = this.currentTime, n2 = this.duration, t2 = 0 === s2 || 0 === n2 || Number.isNaN(s2) || Number.isNaN(n2) ? 0 : (s2 / n2 * 100).toFixed(2), "timeupdate" === e2.type && Pe.setRange.call(this, this.elements.inputs.seek, t2);
+              break;
+            case "playing":
+            case "progress":
+              i2(this.elements.display.buffer, 100 * this.buffered);
+          }
+          var s2, n2;
+        }, updateRangeFill(e2) {
+          const t2 = S.event(e2) ? e2.target : e2;
+          if (S.element(t2) && "range" === t2.getAttribute("type")) {
+            if (V(t2, this.config.selectors.inputs.seek)) {
+              t2.setAttribute("aria-valuenow", this.currentTime);
+              const e3 = Pe.formatTime(this.currentTime), i2 = Pe.formatTime(this.duration), s2 = ve.get("seekLabel", this.config);
+              t2.setAttribute("aria-valuetext", s2.replace("{currentTime}", e3).replace("{duration}", i2));
+            } else if (V(t2, this.config.selectors.inputs.volume)) {
+              const e3 = 100 * t2.value;
+              t2.setAttribute("aria-valuenow", e3), t2.setAttribute("aria-valuetext", `${e3.toFixed(1)}%`);
+            } else t2.setAttribute("aria-valuenow", t2.value);
+            (M.isWebKit || M.isIPadOS) && t2.style.setProperty("--value", t2.value / t2.max * 100 + "%");
+          }
+        }, updateSeekTooltip(e2) {
+          var t2, i2;
+          if (!this.config.tooltips.seek || !S.element(this.elements.inputs.seek) || !S.element(this.elements.display.seekTooltip) || 0 === this.duration) return;
+          const s2 = this.elements.display.seekTooltip, n2 = `${this.config.classNames.tooltip}--visible`, a2 = (e3) => R(s2, n2, e3);
+          if (this.touch) return void a2(false);
+          let l2 = 0;
+          const r2 = this.elements.progress.getBoundingClientRect();
+          if (S.event(e2)) l2 = 100 / r2.width * (e2.pageX - r2.left);
+          else {
+            if (!F(s2, n2)) return;
+            l2 = parseFloat(s2.style.left, 10);
+          }
+          l2 < 0 ? l2 = 0 : l2 > 100 && (l2 = 100);
+          const o2 = this.duration / 100 * l2;
+          s2.innerText = Pe.formatTime(o2);
+          const c2 = null === (t2 = this.config.markers) || void 0 === t2 || null === (i2 = t2.points) || void 0 === i2 ? void 0 : i2.find(({ time: e3 }) => e3 === Math.round(o2));
+          c2 && s2.insertAdjacentHTML("afterbegin", `${c2.label}<br>`), s2.style.left = `${l2}%`, S.event(e2) && ["mouseenter", "mouseleave"].includes(e2.type) && a2("mouseenter" === e2.type);
+        }, timeUpdate(e2) {
+          const t2 = !S.element(this.elements.display.duration) && this.config.invertTime;
+          Pe.updateTimeDisplay.call(this, this.elements.display.currentTime, t2 ? this.duration - this.currentTime : this.currentTime, t2), e2 && "timeupdate" === e2.type && this.media.seeking || Pe.updateProgress.call(this, e2);
+        }, durationUpdate() {
+          if (!this.supported.ui || !this.config.invertTime && this.currentTime) return;
+          if (this.duration >= 2 ** 32) return H(this.elements.display.currentTime, true), void H(this.elements.progress, true);
+          S.element(this.elements.inputs.seek) && this.elements.inputs.seek.setAttribute("aria-valuemax", this.duration);
+          const e2 = S.element(this.elements.display.duration);
+          !e2 && this.config.displayDuration && this.paused && Pe.updateTimeDisplay.call(this, this.elements.display.currentTime, this.duration), e2 && Pe.updateTimeDisplay.call(this, this.elements.display.duration, this.duration), this.config.markers.enabled && Pe.setMarkers.call(this), Pe.updateSeekTooltip.call(this);
+        }, toggleMenuButton(e2, t2) {
+          H(this.elements.settings.buttons[e2], !t2);
+        }, updateSetting(e2, t2, i2) {
+          const s2 = this.elements.settings.panels[e2];
+          let n2 = null, a2 = t2;
+          if ("captions" === e2) n2 = this.currentTrack;
+          else {
+            if (n2 = S.empty(i2) ? this[e2] : i2, S.empty(n2) && (n2 = this.config[e2].default), !S.empty(this.options[e2]) && !this.options[e2].includes(n2)) return void this.debug.warn(`Unsupported value of '${n2}' for ${e2}`);
+            if (!this.config[e2].options.includes(n2)) return void this.debug.warn(`Disabled value of '${n2}' for ${e2}`);
+          }
+          if (S.element(a2) || (a2 = s2 && s2.querySelector('[role="menu"]')), !S.element(a2)) return;
+          this.elements.settings.buttons[e2].querySelector(`.${this.config.classNames.menu.value}`).innerHTML = Pe.getLabel.call(this, e2, n2);
+          const l2 = a2 && a2.querySelector(`[value="${n2}"]`);
+          S.element(l2) && (l2.checked = true);
+        }, getLabel(e2, t2) {
+          switch (e2) {
+            case "speed":
+              return 1 === t2 ? ve.get("normal", this.config) : `${t2}&times;`;
+            case "quality":
+              if (S.number(t2)) {
+                const e3 = ve.get(`qualityLabel.${t2}`, this.config);
+                return e3.length ? e3 : `${t2}p`;
+              }
+              return ge(t2);
+            case "captions":
+              return xe.getLabel.call(this);
+            default:
+              return null;
+          }
+        }, setQualityMenu(e2) {
+          if (!S.element(this.elements.settings.panels.quality)) return;
+          const t2 = "quality", i2 = this.elements.settings.panels.quality.querySelector('[role="menu"]');
+          S.array(e2) && (this.options.quality = se(e2).filter((e3) => this.config.quality.options.includes(e3)));
+          const s2 = !S.empty(this.options.quality) && this.options.quality.length > 1;
+          if (Pe.toggleMenuButton.call(this, t2, s2), j(i2), Pe.checkMenu.call(this), !s2) return;
+          const n2 = (e3) => {
+            const t3 = ve.get(`qualityBadge.${e3}`, this.config);
+            return t3.length ? Pe.createBadge.call(this, t3) : null;
+          };
+          this.options.quality.sort((e3, t3) => {
+            const i3 = this.config.quality.options;
+            return i3.indexOf(e3) > i3.indexOf(t3) ? 1 : -1;
+          }).forEach((e3) => {
+            Pe.createMenuItem.call(this, { value: e3, list: i2, type: t2, title: Pe.getLabel.call(this, "quality", e3), badge: n2(e3) });
+          }), Pe.updateSetting.call(this, t2, i2);
+        }, setCaptionsMenu() {
+          if (!S.element(this.elements.settings.panels.captions)) return;
+          const e2 = "captions", t2 = this.elements.settings.panels.captions.querySelector('[role="menu"]'), i2 = xe.getTracks.call(this), s2 = Boolean(i2.length);
+          if (Pe.toggleMenuButton.call(this, e2, s2), j(t2), Pe.checkMenu.call(this), !s2) return;
+          const n2 = i2.map((e3, i3) => ({ value: i3, checked: this.captions.toggled && this.currentTrack === i3, title: xe.getLabel.call(this, e3), badge: e3.language && Pe.createBadge.call(this, e3.language.toUpperCase()), list: t2, type: "language" }));
+          n2.unshift({ value: -1, checked: !this.captions.toggled, title: ve.get("disabled", this.config), list: t2, type: "language" }), n2.forEach(Pe.createMenuItem.bind(this)), Pe.updateSetting.call(this, e2, t2);
+        }, setSpeedMenu() {
+          if (!S.element(this.elements.settings.panels.speed)) return;
+          const e2 = "speed", t2 = this.elements.settings.panels.speed.querySelector('[role="menu"]');
+          this.options.speed = this.options.speed.filter((e3) => e3 >= this.minimumSpeed && e3 <= this.maximumSpeed);
+          const i2 = !S.empty(this.options.speed) && this.options.speed.length > 1;
+          Pe.toggleMenuButton.call(this, e2, i2), j(t2), Pe.checkMenu.call(this), i2 && (this.options.speed.forEach((i3) => {
+            Pe.createMenuItem.call(this, { value: i3, list: t2, type: e2, title: Pe.getLabel.call(this, "speed", i3) });
+          }), Pe.updateSetting.call(this, e2, t2));
+        }, checkMenu() {
+          const { buttons: e2 } = this.elements.settings, t2 = !S.empty(e2) && Object.values(e2).some((e3) => !e3.hidden);
+          H(this.elements.settings.menu, !t2);
+        }, focusFirstMenuItem(e2, t2 = false) {
+          if (this.elements.settings.popup.hidden) return;
+          let i2 = e2;
+          S.element(i2) || (i2 = Object.values(this.elements.settings.panels).find((e3) => !e3.hidden));
+          const s2 = i2.querySelector('[role^="menuitem"]');
+          W.call(this, s2, t2);
+        }, toggleMenu(e2) {
+          const { popup: t2 } = this.elements.settings, i2 = this.elements.buttons.settings;
+          if (!S.element(t2) || !S.element(i2)) return;
+          const { hidden: s2 } = t2;
+          let n2 = s2;
+          if (S.boolean(e2)) n2 = e2;
+          else if (S.keyboardEvent(e2) && "Escape" === e2.key) n2 = false;
+          else if (S.event(e2)) {
+            const s3 = S.function(e2.composedPath) ? e2.composedPath()[0] : e2.target, a2 = t2.contains(s3);
+            if (a2 || !a2 && e2.target !== i2 && n2) return;
+          }
+          i2.setAttribute("aria-expanded", n2), H(t2, !n2), R(this.elements.container, this.config.classNames.menu.open, n2), n2 && S.keyboardEvent(e2) ? Pe.focusFirstMenuItem.call(this, null, true) : n2 || s2 || W.call(this, i2, S.keyboardEvent(e2));
+        }, getMenuSize(e2) {
+          const t2 = e2.cloneNode(true);
+          t2.style.position = "absolute", t2.style.opacity = 0, t2.removeAttribute("hidden"), e2.parentNode.appendChild(t2);
+          const i2 = t2.scrollWidth, s2 = t2.scrollHeight;
+          return O(t2), { width: i2, height: s2 };
+        }, showMenuPanel(e2 = "", t2 = false) {
+          const i2 = this.elements.container.querySelector(`#plyr-settings-${this.id}-${e2}`);
+          if (!S.element(i2)) return;
+          const s2 = i2.parentNode, n2 = Array.from(s2.children).find((e3) => !e3.hidden);
+          if (K.transitions && !K.reducedMotion) {
+            s2.style.width = `${n2.scrollWidth}px`, s2.style.height = `${n2.scrollHeight}px`;
+            const e3 = Pe.getMenuSize.call(this, i2), t3 = (e4) => {
+              e4.target === s2 && ["width", "height"].includes(e4.propertyName) && (s2.style.width = "", s2.style.height = "", J.call(this, s2, E, t3));
+            };
+            X.call(this, s2, E, t3), s2.style.width = `${e3.width}px`, s2.style.height = `${e3.height}px`;
+          }
+          H(n2, true), H(i2, false), Pe.focusFirstMenuItem.call(this, i2, t2);
+        }, setDownloadUrl() {
+          const e2 = this.elements.buttons.download;
+          S.element(e2) && e2.setAttribute("href", this.download);
+        }, create(e2) {
+          const { bindMenuItemShortcuts: t2, createButton: i2, createProgress: s2, createRange: n2, createTime: a2, setQualityMenu: l2, setSpeedMenu: r2, showMenuPanel: o2 } = Pe;
+          this.elements.controls = null, S.array(this.config.controls) && this.config.controls.includes("play-large") && this.elements.container.appendChild(i2.call(this, "play-large"));
+          const c2 = $("div", D(this.config.selectors.controls.wrapper));
+          this.elements.controls = c2;
+          const u2 = { class: "plyr__controls__item" };
+          return se(S.array(this.config.controls) ? this.config.controls : []).forEach((l3) => {
+            if ("restart" === l3 && c2.appendChild(i2.call(this, "restart", u2)), "rewind" === l3 && c2.appendChild(i2.call(this, "rewind", u2)), "play" === l3 && c2.appendChild(i2.call(this, "play", u2)), "fast-forward" === l3 && c2.appendChild(i2.call(this, "fast-forward", u2)), "progress" === l3) {
+              const t3 = $("div", { class: `${u2.class} plyr__progress__container` }), i3 = $("div", D(this.config.selectors.progress));
+              if (i3.appendChild(n2.call(this, "seek", { id: `plyr-seek-${e2.id}` })), i3.appendChild(s2.call(this, "buffer")), this.config.tooltips.seek) {
+                const e3 = $("span", { class: this.config.classNames.tooltip }, "00:00");
+                i3.appendChild(e3), this.elements.display.seekTooltip = e3;
+              }
+              this.elements.progress = i3, t3.appendChild(this.elements.progress), c2.appendChild(t3);
+            }
+            if ("current-time" === l3 && c2.appendChild(a2.call(this, "currentTime", u2)), "duration" === l3 && c2.appendChild(a2.call(this, "duration", u2)), "mute" === l3 || "volume" === l3) {
+              let { volume: t3 } = this.elements;
+              if (S.element(t3) && c2.contains(t3) || (t3 = $("div", x({}, u2, { class: `${u2.class} plyr__volume`.trim() })), this.elements.volume = t3, c2.appendChild(t3)), "mute" === l3 && t3.appendChild(i2.call(this, "mute")), "volume" === l3 && !M.isIos && !M.isIPadOS) {
+                const i3 = { max: 1, step: 0.05, value: this.config.volume };
+                t3.appendChild(n2.call(this, "volume", x(i3, { id: `plyr-volume-${e2.id}` })));
+              }
+            }
+            if ("captions" === l3 && c2.appendChild(i2.call(this, "captions", u2)), "settings" === l3 && !S.empty(this.config.settings)) {
+              const s3 = $("div", x({}, u2, { class: `${u2.class} plyr__menu`.trim(), hidden: "" }));
+              s3.appendChild(i2.call(this, "settings", { "aria-haspopup": true, "aria-controls": `plyr-settings-${e2.id}`, "aria-expanded": false }));
+              const n3 = $("div", { class: "plyr__menu__container", id: `plyr-settings-${e2.id}`, hidden: "" }), a3 = $("div"), l4 = $("div", { id: `plyr-settings-${e2.id}-home` }), r3 = $("div", { role: "menu" });
+              l4.appendChild(r3), a3.appendChild(l4), this.elements.settings.panels.home = l4, this.config.settings.forEach((i3) => {
+                const s4 = $("button", x(D(this.config.selectors.buttons.settings), { type: "button", class: `${this.config.classNames.control} ${this.config.classNames.control}--forward`, role: "menuitem", "aria-haspopup": true, hidden: "" }));
+                t2.call(this, s4, i3), X.call(this, s4, "click", () => {
+                  o2.call(this, i3, false);
+                });
+                const n4 = $("span", null, ve.get(i3, this.config)), l5 = $("span", { class: this.config.classNames.menu.value });
+                l5.innerHTML = e2[i3], n4.appendChild(l5), s4.appendChild(n4), r3.appendChild(s4);
+                const c3 = $("div", { id: `plyr-settings-${e2.id}-${i3}`, hidden: "" }), u3 = $("button", { type: "button", class: `${this.config.classNames.control} ${this.config.classNames.control}--back` });
+                u3.appendChild($("span", { "aria-hidden": true }, ve.get(i3, this.config))), u3.appendChild($("span", { class: this.config.classNames.hidden }, ve.get("menuBack", this.config))), X.call(this, c3, "keydown", (e3) => {
+                  "ArrowLeft" === e3.key && (e3.preventDefault(), e3.stopPropagation(), o2.call(this, "home", true));
+                }, false), X.call(this, u3, "click", () => {
+                  o2.call(this, "home", false);
+                }), c3.appendChild(u3), c3.appendChild($("div", { role: "menu" })), a3.appendChild(c3), this.elements.settings.buttons[i3] = s4, this.elements.settings.panels[i3] = c3;
+              }), n3.appendChild(a3), s3.appendChild(n3), c2.appendChild(s3), this.elements.settings.popup = n3, this.elements.settings.menu = s3;
+            }
+            if ("pip" === l3 && K.pip && c2.appendChild(i2.call(this, "pip", u2)), "airplay" === l3 && K.airplay && c2.appendChild(i2.call(this, "airplay", u2)), "download" === l3) {
+              const e3 = x({}, u2, { element: "a", href: this.download, target: "_blank" });
+              this.isHTML5 && (e3.download = "");
+              const { download: t3 } = this.config.urls;
+              !S.url(t3) && this.isEmbed && x(e3, { icon: `logo-${this.provider}`, label: this.provider }), c2.appendChild(i2.call(this, "download", e3));
+            }
+            "fullscreen" === l3 && c2.appendChild(i2.call(this, "fullscreen", u2));
+          }), this.isHTML5 && l2.call(this, de.getQualityOptions.call(this)), r2.call(this), c2;
+        }, inject() {
+          if (this.config.loadSprite) {
+            const e3 = Pe.getIconUrl.call(this);
+            e3.cors && ke(e3.url, "sprite-plyr");
+          }
+          this.id = Math.floor(1e4 * Math.random());
+          let e2 = null;
+          this.elements.controls = null;
+          const t2 = { id: this.id, seektime: this.config.seekTime, title: this.config.title };
+          let i2 = true;
+          S.function(this.config.controls) && (this.config.controls = this.config.controls.call(this, t2)), this.config.controls || (this.config.controls = []), S.element(this.config.controls) || S.string(this.config.controls) ? e2 = this.config.controls : (e2 = Pe.create.call(this, { id: this.id, seektime: this.config.seekTime, speed: this.speed, quality: this.quality, captions: xe.getLabel.call(this) }), i2 = false);
+          let s2;
+          i2 && S.string(this.config.controls) && (e2 = ((e3) => {
+            let i3 = e3;
+            return Object.entries(t2).forEach(([e4, t3]) => {
+              i3 = pe(i3, `{${e4}}`, t3);
+            }), i3;
+          })(e2)), S.string(this.config.selectors.controls.container) && (s2 = document.querySelector(this.config.selectors.controls.container)), S.element(s2) || (s2 = this.elements.container);
+          if (s2[S.element(e2) ? "insertAdjacentElement" : "insertAdjacentHTML"]("afterbegin", e2), S.element(this.elements.controls) || Pe.findElements.call(this), !S.empty(this.elements.buttons)) {
+            const e3 = (e4) => {
+              const t3 = this.config.classNames.controlPressed;
+              e4.setAttribute("aria-pressed", "false"), Object.defineProperty(e4, "pressed", { configurable: true, enumerable: true, get: () => F(e4, t3), set(i3 = false) {
+                R(e4, t3, i3), e4.setAttribute("aria-pressed", i3 ? "true" : "false");
+              } });
+            };
+            Object.values(this.elements.buttons).filter(Boolean).forEach((t3) => {
+              S.array(t3) || S.nodeList(t3) ? Array.from(t3).filter(Boolean).forEach(e3) : e3(t3);
+            });
+          }
+          if (M.isEdge && P(s2), this.config.tooltips.controls) {
+            const { classNames: e3, selectors: t3 } = this.config, i3 = `${t3.controls.wrapper} ${t3.labels} .${e3.hidden}`, s3 = U.call(this, i3);
+            Array.from(s3).forEach((e4) => {
+              R(e4, this.config.classNames.hidden, false), R(e4, this.config.classNames.tooltip, true);
+            });
+          }
+        }, setMediaMetadata() {
+          try {
+            "mediaSession" in navigator && (navigator.mediaSession.metadata = new window.MediaMetadata({ title: this.config.mediaMetadata.title, artist: this.config.mediaMetadata.artist, album: this.config.mediaMetadata.album, artwork: this.config.mediaMetadata.artwork }));
+          } catch (e2) {
+          }
+        }, setMarkers() {
+          var e2, t2;
+          if (!this.duration || this.elements.markers) return;
+          const i2 = null === (e2 = this.config.markers) || void 0 === e2 || null === (t2 = e2.points) || void 0 === t2 ? void 0 : t2.filter(({ time: e3 }) => e3 > 0 && e3 < this.duration);
+          if (null == i2 || !i2.length) return;
+          const s2 = document.createDocumentFragment(), n2 = document.createDocumentFragment();
+          let a2 = null;
+          const l2 = `${this.config.classNames.tooltip}--visible`, r2 = (e3) => R(a2, l2, e3);
+          i2.forEach((e3) => {
+            const t3 = $("span", { class: this.config.classNames.marker }, ""), i3 = e3.time / this.duration * 100 + "%";
+            a2 && (t3.addEventListener("mouseenter", () => {
+              e3.label || (a2.style.left = i3, a2.innerHTML = e3.label, r2(true));
+            }), t3.addEventListener("mouseleave", () => {
+              r2(false);
+            })), t3.addEventListener("click", () => {
+              this.currentTime = e3.time;
+            }), t3.style.left = i3, n2.appendChild(t3);
+          }), s2.appendChild(n2), this.config.tooltips.seek || (a2 = $("span", { class: this.config.classNames.tooltip }, ""), s2.appendChild(a2)), this.elements.markers = { points: n2, tip: a2 }, this.elements.progress.appendChild(s2);
+        } };
+        function Me(e2, t2 = true) {
+          let i2 = e2;
+          if (t2) {
+            const e3 = document.createElement("a");
+            e3.href = i2, i2 = e3.href;
+          }
+          try {
+            return new URL(i2);
+          } catch (e3) {
+            return null;
+          }
+        }
+        function Ne(e2) {
+          const t2 = new URLSearchParams();
+          return S.object(e2) && Object.entries(e2).forEach(([e3, i2]) => {
+            t2.set(e3, i2);
+          }), t2;
+        }
+        const xe = { setup() {
+          if (!this.supported.ui) return;
+          if (!this.isVideo || this.isYouTube || this.isHTML5 && !K.textTracks) return void (S.array(this.config.controls) && this.config.controls.includes("settings") && this.config.settings.includes("captions") && Pe.setCaptionsMenu.call(this));
+          var e2, t2;
+          if (S.element(this.elements.captions) || (this.elements.captions = $("div", D(this.config.selectors.captions)), this.elements.captions.setAttribute("dir", "auto"), e2 = this.elements.captions, t2 = this.elements.wrapper, S.element(e2) && S.element(t2) && t2.parentNode.insertBefore(e2, t2.nextSibling)), M.isIE && window.URL) {
+            const e3 = this.media.querySelectorAll("track");
+            Array.from(e3).forEach((e4) => {
+              const t3 = e4.getAttribute("src"), i3 = Me(t3);
+              null !== i3 && i3.hostname !== window.location.href.hostname && ["http:", "https:"].includes(i3.protocol) && Te(t3, "blob").then((t4) => {
+                e4.setAttribute("src", window.URL.createObjectURL(t4));
+              }).catch(() => {
+                O(e4);
+              });
+            });
+          }
+          const i2 = se((navigator.languages || [navigator.language || navigator.userLanguage || "en"]).map((e3) => e3.split("-")[0]));
+          let s2 = (this.storage.get("language") || this.config.captions.language || "auto").toLowerCase();
+          "auto" === s2 && ([s2] = i2);
+          let n2 = this.storage.get("captions");
+          if (S.boolean(n2) || ({ active: n2 } = this.config.captions), Object.assign(this.captions, { toggled: false, active: n2, language: s2, languages: i2 }), this.isHTML5) {
+            const e3 = this.config.captions.update ? "addtrack removetrack" : "removetrack";
+            X.call(this, this.media.textTracks, e3, xe.update.bind(this));
+          }
+          setTimeout(xe.update.bind(this), 0);
+        }, update() {
+          const e2 = xe.getTracks.call(this, true), { active: t2, language: i2, meta: s2, currentTrackNode: n2 } = this.captions, a2 = Boolean(e2.find((e3) => e3.language === i2));
+          this.isHTML5 && this.isVideo && e2.filter((e3) => !s2.get(e3)).forEach((e3) => {
+            this.debug.log("Track added", e3), s2.set(e3, { default: "showing" === e3.mode }), "showing" === e3.mode && (e3.mode = "hidden"), X.call(this, e3, "cuechange", () => xe.updateCues.call(this));
+          }), (a2 && this.language !== i2 || !e2.includes(n2)) && (xe.setLanguage.call(this, i2), xe.toggle.call(this, t2 && a2)), this.elements && R(this.elements.container, this.config.classNames.captions.enabled, !S.empty(e2)), S.array(this.config.controls) && this.config.controls.includes("settings") && this.config.settings.includes("captions") && Pe.setCaptionsMenu.call(this);
+        }, toggle(e2, t2 = true) {
+          if (!this.supported.ui) return;
+          const { toggled: i2 } = this.captions, s2 = this.config.classNames.captions.active, n2 = S.nullOrUndefined(e2) ? !i2 : e2;
+          if (n2 !== i2) {
+            if (t2 || (this.captions.active = n2, this.storage.set({ captions: n2 })), !this.language && n2 && !t2) {
+              const e3 = xe.getTracks.call(this), t3 = xe.findTrack.call(this, [this.captions.language, ...this.captions.languages], true);
+              return this.captions.language = t3.language, void xe.set.call(this, e3.indexOf(t3));
+            }
+            this.elements.buttons.captions && (this.elements.buttons.captions.pressed = n2), R(this.elements.container, s2, n2), this.captions.toggled = n2, Pe.updateSetting.call(this, "captions"), Z.call(this, this.media, n2 ? "captionsenabled" : "captionsdisabled");
+          }
+          setTimeout(() => {
+            n2 && this.captions.toggled && (this.captions.currentTrackNode.mode = "hidden");
+          });
+        }, set(e2, t2 = true) {
+          const i2 = xe.getTracks.call(this);
+          if (-1 !== e2) if (S.number(e2)) if (e2 in i2) {
+            if (this.captions.currentTrack !== e2) {
+              this.captions.currentTrack = e2;
+              const s2 = i2[e2], { language: n2 } = s2 || {};
+              this.captions.currentTrackNode = s2, Pe.updateSetting.call(this, "captions"), t2 || (this.captions.language = n2, this.storage.set({ language: n2 })), this.isVimeo && this.embed.enableTextTrack(n2), Z.call(this, this.media, "languagechange");
+            }
+            xe.toggle.call(this, true, t2), this.isHTML5 && this.isVideo && xe.updateCues.call(this);
+          } else this.debug.warn("Track not found", e2);
+          else this.debug.warn("Invalid caption argument", e2);
+          else xe.toggle.call(this, false, t2);
+        }, setLanguage(e2, t2 = true) {
+          if (!S.string(e2)) return void this.debug.warn("Invalid language argument", e2);
+          const i2 = e2.toLowerCase();
+          this.captions.language = i2;
+          const s2 = xe.getTracks.call(this), n2 = xe.findTrack.call(this, [i2]);
+          xe.set.call(this, s2.indexOf(n2), t2);
+        }, getTracks(e2 = false) {
+          return Array.from((this.media || {}).textTracks || []).filter((t2) => !this.isHTML5 || e2 || this.captions.meta.has(t2)).filter((e3) => ["captions", "subtitles"].includes(e3.kind));
+        }, findTrack(e2, t2 = false) {
+          const i2 = xe.getTracks.call(this), s2 = (e3) => Number((this.captions.meta.get(e3) || {}).default), n2 = Array.from(i2).sort((e3, t3) => s2(t3) - s2(e3));
+          let a2;
+          return e2.every((e3) => (a2 = n2.find((t3) => t3.language === e3), !a2)), a2 || (t2 ? n2[0] : void 0);
+        }, getCurrentTrack() {
+          return xe.getTracks.call(this)[this.currentTrack];
+        }, getLabel(e2) {
+          let t2 = e2;
+          return !S.track(t2) && K.textTracks && this.captions.toggled && (t2 = xe.getCurrentTrack.call(this)), S.track(t2) ? S.empty(t2.label) ? S.empty(t2.language) ? ve.get("enabled", this.config) : e2.language.toUpperCase() : t2.label : ve.get("disabled", this.config);
+        }, updateCues(e2) {
+          if (!this.supported.ui) return;
+          if (!S.element(this.elements.captions)) return void this.debug.warn("No captions element to render to");
+          if (!S.nullOrUndefined(e2) && !Array.isArray(e2)) return void this.debug.warn("updateCues: Invalid input", e2);
+          let t2 = e2;
+          if (!t2) {
+            const e3 = xe.getCurrentTrack.call(this);
+            t2 = Array.from((e3 || {}).activeCues || []).map((e4) => e4.getCueAsHTML()).map(ye);
+          }
+          const i2 = t2.map((e3) => e3.trim()).join("\n");
+          if (i2 !== this.elements.captions.innerHTML) {
+            j(this.elements.captions);
+            const e3 = $("span", D(this.config.selectors.caption));
+            e3.innerHTML = i2, this.elements.captions.appendChild(e3), Z.call(this, this.media, "cuechange");
+          }
+        } }, Le = { enabled: true, title: "", debug: false, autoplay: false, autopause: true, playsinline: true, seekTime: 10, volume: 1, muted: false, duration: null, displayDuration: true, invertTime: true, toggleInvert: true, ratio: null, clickToPlay: true, hideControls: true, resetOnEnd: false, disableContextMenu: true, loadSprite: true, iconPrefix: "plyr", iconUrl: "https://cdn.plyr.io/3.7.8/plyr.svg", blankVideo: "https://cdn.plyr.io/static/blank.mp4", quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240], forced: false, onChange: null }, loop: { active: false }, speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 4] }, keyboard: { focused: true, global: false }, tooltips: { controls: false, seek: true }, captions: { active: false, language: "auto", update: false }, fullscreen: { enabled: true, fallback: true, iosNative: false }, storage: { enabled: true, key: "plyr" }, controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "pip", "airplay", "fullscreen"], settings: ["captions", "quality", "speed"], i18n: { restart: "Restart", rewind: "Rewind {seektime}s", play: "Play", pause: "Pause", fastForward: "Forward {seektime}s", seek: "Seek", seekLabel: "{currentTime} of {duration}", played: "Played", buffered: "Buffered", currentTime: "Current time", duration: "Duration", volume: "Volume", mute: "Mute", unmute: "Unmute", enableCaptions: "Enable captions", disableCaptions: "Disable captions", download: "Download", enterFullscreen: "Enter fullscreen", exitFullscreen: "Exit fullscreen", frameTitle: "Player for {title}", captions: "Captions", settings: "Settings", pip: "PIP", menuBack: "Go back to previous menu", speed: "Speed", normal: "Normal", quality: "Quality", loop: "Loop", start: "Start", end: "End", all: "All", reset: "Reset", disabled: "Disabled", enabled: "Enabled", advertisement: "Ad", qualityBadge: { 2160: "4K", 1440: "HD", 1080: "HD", 720: "HD", 576: "SD", 480: "SD" } }, urls: { download: null, vimeo: { sdk: "https://player.vimeo.com/api/player.js", iframe: "https://player.vimeo.com/video/{0}?{1}", api: "https://vimeo.com/api/oembed.json?url={0}" }, youtube: { sdk: "https://www.youtube.com/iframe_api", api: "https://noembed.com/embed?url=https://www.youtube.com/watch?v={0}" }, googleIMA: { sdk: "https://imasdk.googleapis.com/js/sdkloader/ima3.js" } }, listeners: { seek: null, play: null, pause: null, restart: null, rewind: null, fastForward: null, mute: null, volume: null, captions: null, download: null, fullscreen: null, pip: null, airplay: null, speed: null, quality: null, loop: null, language: null }, events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"], selectors: { editable: "input, textarea, select, [contenteditable]", container: ".plyr", controls: { container: null, wrapper: ".plyr__controls" }, labels: "[data-plyr]", buttons: { play: '[data-plyr="play"]', pause: '[data-plyr="pause"]', restart: '[data-plyr="restart"]', rewind: '[data-plyr="rewind"]', fastForward: '[data-plyr="fast-forward"]', mute: '[data-plyr="mute"]', captions: '[data-plyr="captions"]', download: '[data-plyr="download"]', fullscreen: '[data-plyr="fullscreen"]', pip: '[data-plyr="pip"]', airplay: '[data-plyr="airplay"]', settings: '[data-plyr="settings"]', loop: '[data-plyr="loop"]' }, inputs: { seek: '[data-plyr="seek"]', volume: '[data-plyr="volume"]', speed: '[data-plyr="speed"]', language: '[data-plyr="language"]', quality: '[data-plyr="quality"]' }, display: { currentTime: ".plyr__time--current", duration: ".plyr__time--duration", buffer: ".plyr__progress__buffer", loop: ".plyr__progress__loop", volume: ".plyr__volume--display" }, progress: ".plyr__progress", captions: ".plyr__captions", caption: ".plyr__caption" }, classNames: { type: "plyr--{0}", provider: "plyr--{0}", video: "plyr__video-wrapper", embed: "plyr__video-embed", videoFixedRatio: "plyr__video-wrapper--fixed-ratio", embedContainer: "plyr__video-embed__container", poster: "plyr__poster", posterEnabled: "plyr__poster-enabled", ads: "plyr__ads", control: "plyr__control", controlPressed: "plyr__control--pressed", playing: "plyr--playing", paused: "plyr--paused", stopped: "plyr--stopped", loading: "plyr--loading", hover: "plyr--hover", tooltip: "plyr__tooltip", cues: "plyr__cues", marker: "plyr__progress__marker", hidden: "plyr__sr-only", hideControls: "plyr--hide-controls", isTouch: "plyr--is-touch", uiSupported: "plyr--full-ui", noTransition: "plyr--no-transition", display: { time: "plyr__time" }, menu: { value: "plyr__menu__value", badge: "plyr__badge", open: "plyr--menu-open" }, captions: { enabled: "plyr--captions-enabled", active: "plyr--captions-active" }, fullscreen: { enabled: "plyr--fullscreen-enabled", fallback: "plyr--fullscreen-fallback" }, pip: { supported: "plyr--pip-supported", active: "plyr--pip-active" }, airplay: { supported: "plyr--airplay-supported", active: "plyr--airplay-active" }, previewThumbnails: { thumbContainer: "plyr__preview-thumb", thumbContainerShown: "plyr__preview-thumb--is-shown", imageContainer: "plyr__preview-thumb__image-container", timeContainer: "plyr__preview-thumb__time-container", scrubbingContainer: "plyr__preview-scrubbing", scrubbingContainerShown: "plyr__preview-scrubbing--is-shown" } }, attributes: { embed: { provider: "data-plyr-provider", id: "data-plyr-embed-id", hash: "data-plyr-embed-hash" } }, ads: { enabled: false, publisherId: "", tagUrl: "" }, previewThumbnails: { enabled: false, src: "" }, vimeo: { byline: false, portrait: false, title: false, speed: true, transparent: false, customControls: true, referrerPolicy: null, premium: false }, youtube: { rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1, customControls: true, noCookie: false }, mediaMetadata: { title: "", artist: "", album: "", artwork: [] }, markers: { enabled: false, points: [] } }, Ie = "picture-in-picture", $e = "inline", _e = { html5: "html5", youtube: "youtube", vimeo: "vimeo" }, Oe = "audio", je = "video";
+        const qe = () => {
+        };
+        class De {
+          constructor(e2 = false) {
+            this.enabled = window.console && e2, this.enabled && this.log("Debugging enabled");
+          }
+          get log() {
+            return this.enabled ? Function.prototype.bind.call(console.log, console) : qe;
+          }
+          get warn() {
+            return this.enabled ? Function.prototype.bind.call(console.warn, console) : qe;
+          }
+          get error() {
+            return this.enabled ? Function.prototype.bind.call(console.error, console) : qe;
+          }
+        }
+        class He {
+          constructor(t2) {
+            e(this, "onChange", () => {
+              if (!this.supported) return;
+              const e2 = this.player.elements.buttons.fullscreen;
+              S.element(e2) && (e2.pressed = this.active);
+              const t3 = this.target === this.player.media ? this.target : this.player.elements.container;
+              Z.call(this.player, t3, this.active ? "enterfullscreen" : "exitfullscreen", true);
+            }), e(this, "toggleFallback", (e2 = false) => {
+              if (e2 ? this.scrollPosition = { x: window.scrollX ?? 0, y: window.scrollY ?? 0 } : window.scrollTo(this.scrollPosition.x, this.scrollPosition.y), document.body.style.overflow = e2 ? "hidden" : "", R(this.target, this.player.config.classNames.fullscreen.fallback, e2), M.isIos) {
+                let t3 = document.head.querySelector('meta[name="viewport"]');
+                const i2 = "viewport-fit=cover";
+                t3 || (t3 = document.createElement("meta"), t3.setAttribute("name", "viewport"));
+                const s2 = S.string(t3.content) && t3.content.includes(i2);
+                e2 ? (this.cleanupViewport = !s2, s2 || (t3.content += `,${i2}`)) : this.cleanupViewport && (t3.content = t3.content.split(",").filter((e3) => e3.trim() !== i2).join(","));
+              }
+              this.onChange();
+            }), e(this, "trapFocus", (e2) => {
+              if (M.isIos || M.isIPadOS || !this.active || "Tab" !== e2.key) return;
+              const t3 = document.activeElement, i2 = U.call(this.player, "a[href], button:not(:disabled), input:not(:disabled), [tabindex]"), [s2] = i2, n2 = i2[i2.length - 1];
+              t3 !== n2 || e2.shiftKey ? t3 === s2 && e2.shiftKey && (n2.focus(), e2.preventDefault()) : (s2.focus(), e2.preventDefault());
+            }), e(this, "update", () => {
+              if (this.supported) {
+                let e2;
+                e2 = this.forceFallback ? "Fallback (forced)" : He.nativeSupported ? "Native" : "Fallback", this.player.debug.log(`${e2} fullscreen enabled`);
+              } else this.player.debug.log("Fullscreen not supported and fallback disabled");
+              R(this.player.elements.container, this.player.config.classNames.fullscreen.enabled, this.supported);
+            }), e(this, "enter", () => {
+              this.supported && (M.isIos && this.player.config.fullscreen.iosNative ? this.player.isVimeo ? this.player.embed.requestFullscreen() : this.target.webkitEnterFullscreen() : !He.nativeSupported || this.forceFallback ? this.toggleFallback(true) : this.prefix ? S.empty(this.prefix) || this.target[`${this.prefix}Request${this.property}`]() : this.target.requestFullscreen({ navigationUI: "hide" }));
+            }), e(this, "exit", () => {
+              if (this.supported) if (M.isIos && this.player.config.fullscreen.iosNative) this.player.isVimeo ? this.player.embed.exitFullscreen() : this.target.webkitEnterFullscreen(), ie(this.player.play());
+              else if (!He.nativeSupported || this.forceFallback) this.toggleFallback(false);
+              else if (this.prefix) {
+                if (!S.empty(this.prefix)) {
+                  const e2 = "moz" === this.prefix ? "Cancel" : "Exit";
+                  document[`${this.prefix}${e2}${this.property}`]();
+                }
+              } else (document.cancelFullScreen || document.exitFullscreen).call(document);
+            }), e(this, "toggle", () => {
+              this.active ? this.exit() : this.enter();
+            }), this.player = t2, this.prefix = He.prefix, this.property = He.property, this.scrollPosition = { x: 0, y: 0 }, this.forceFallback = "force" === t2.config.fullscreen.fallback, this.player.elements.fullscreen = t2.config.fullscreen.container && function(e2, t3) {
+              const { prototype: i2 } = Element;
+              return (i2.closest || function() {
+                let e3 = this;
+                do {
+                  if (V.matches(e3, t3)) return e3;
+                  e3 = e3.parentElement || e3.parentNode;
+                } while (null !== e3 && 1 === e3.nodeType);
+                return null;
+              }).call(e2, t3);
+            }(this.player.elements.container, t2.config.fullscreen.container), X.call(this.player, document, "ms" === this.prefix ? "MSFullscreenChange" : `${this.prefix}fullscreenchange`, () => {
+              this.onChange();
+            }), X.call(this.player, this.player.elements.container, "dblclick", (e2) => {
+              S.element(this.player.elements.controls) && this.player.elements.controls.contains(e2.target) || this.player.listeners.proxy(e2, this.toggle, "fullscreen");
+            }), X.call(this, this.player.elements.container, "keydown", (e2) => this.trapFocus(e2)), this.update();
+          }
+          static get nativeSupported() {
+            return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
+          }
+          get useNative() {
+            return He.nativeSupported && !this.forceFallback;
+          }
+          static get prefix() {
+            if (S.function(document.exitFullscreen)) return "";
+            let e2 = "";
+            return ["webkit", "moz", "ms"].some((t2) => !(!S.function(document[`${t2}ExitFullscreen`]) && !S.function(document[`${t2}CancelFullScreen`])) && (e2 = t2, true)), e2;
+          }
+          static get property() {
+            return "moz" === this.prefix ? "FullScreen" : "Fullscreen";
+          }
+          get supported() {
+            return [this.player.config.fullscreen.enabled, this.player.isVideo, He.nativeSupported || this.player.config.fullscreen.fallback, !this.player.isYouTube || He.nativeSupported || !M.isIos || this.player.config.playsinline && !this.player.config.fullscreen.iosNative].every(Boolean);
+          }
+          get active() {
+            if (!this.supported) return false;
+            if (!He.nativeSupported || this.forceFallback) return F(this.target, this.player.config.classNames.fullscreen.fallback);
+            const e2 = this.prefix ? this.target.getRootNode()[`${this.prefix}${this.property}Element`] : this.target.getRootNode().fullscreenElement;
+            return e2 && e2.shadowRoot ? e2 === this.target.getRootNode().host : e2 === this.target;
+          }
+          get target() {
+            return M.isIos && this.player.config.fullscreen.iosNative ? this.player.media : this.player.elements.fullscreen ?? this.player.elements.container;
+          }
+        }
+        function Re(e2, t2 = 1) {
+          return new Promise((i2, s2) => {
+            const n2 = new Image(), a2 = () => {
+              delete n2.onload, delete n2.onerror, (n2.naturalWidth >= t2 ? i2 : s2)(n2);
+            };
+            Object.assign(n2, { onload: a2, onerror: a2, src: e2 });
+          });
+        }
+        const Fe = { addStyleHook() {
+          R(this.elements.container, this.config.selectors.container.replace(".", ""), true), R(this.elements.container, this.config.classNames.uiSupported, this.supported.ui);
+        }, toggleNativeControls(e2 = false) {
+          e2 && this.isHTML5 ? this.media.setAttribute("controls", "") : this.media.removeAttribute("controls");
+        }, build() {
+          if (this.listeners.media(), !this.supported.ui) return this.debug.warn(`Basic support only for ${this.provider} ${this.type}`), void Fe.toggleNativeControls.call(this, true);
+          S.element(this.elements.controls) || (Pe.inject.call(this), this.listeners.controls()), Fe.toggleNativeControls.call(this), this.isHTML5 && xe.setup.call(this), this.volume = null, this.muted = null, this.loop = null, this.quality = null, this.speed = null, Pe.updateVolume.call(this), Pe.timeUpdate.call(this), Pe.durationUpdate.call(this), Fe.checkPlaying.call(this), R(this.elements.container, this.config.classNames.pip.supported, K.pip && this.isHTML5 && this.isVideo), R(this.elements.container, this.config.classNames.airplay.supported, K.airplay && this.isHTML5), R(this.elements.container, this.config.classNames.isTouch, this.touch), this.ready = true, setTimeout(() => {
+            Z.call(this, this.media, "ready");
+          }, 0), Fe.setTitle.call(this), this.poster && Fe.setPoster.call(this, this.poster, false).catch(() => {
+          }), this.config.duration && Pe.durationUpdate.call(this), this.config.mediaMetadata && Pe.setMediaMetadata.call(this);
+        }, setTitle() {
+          let e2 = ve.get("play", this.config);
+          if (S.string(this.config.title) && !S.empty(this.config.title) && (e2 += `, ${this.config.title}`), Array.from(this.elements.buttons.play || []).forEach((t2) => {
+            t2.setAttribute("aria-label", e2);
+          }), this.isEmbed) {
+            const e3 = B.call(this, "iframe");
+            if (!S.element(e3)) return;
+            const t2 = S.empty(this.config.title) ? "video" : this.config.title, i2 = ve.get("frameTitle", this.config);
+            e3.setAttribute("title", i2.replace("{title}", t2));
+          }
+        }, togglePoster(e2) {
+          R(this.elements.container, this.config.classNames.posterEnabled, e2);
+        }, setPoster(e2, t2 = true) {
+          return t2 && this.poster ? Promise.reject(new Error("Poster already set")) : (this.media.setAttribute("data-poster", e2), this.elements.poster.removeAttribute("hidden"), te.call(this).then(() => Re(e2)).catch((t3) => {
+            throw e2 === this.poster && Fe.togglePoster.call(this, false), t3;
+          }).then(() => {
+            if (e2 !== this.poster) throw new Error("setPoster cancelled by later call to setPoster");
+          }).then(() => (Object.assign(this.elements.poster.style, { backgroundImage: `url('${e2}')`, backgroundSize: "" }), Fe.togglePoster.call(this, true), e2)));
+        }, checkPlaying(e2) {
+          R(this.elements.container, this.config.classNames.playing, this.playing), R(this.elements.container, this.config.classNames.paused, this.paused), R(this.elements.container, this.config.classNames.stopped, this.stopped), Array.from(this.elements.buttons.play || []).forEach((e3) => {
+            Object.assign(e3, { pressed: this.playing }), e3.setAttribute("aria-label", ve.get(this.playing ? "pause" : "play", this.config));
+          }), S.event(e2) && "timeupdate" === e2.type || Fe.toggleControls.call(this);
+        }, checkLoading(e2) {
+          this.loading = ["stalled", "waiting"].includes(e2.type), clearTimeout(this.timers.loading), this.timers.loading = setTimeout(() => {
+            R(this.elements.container, this.config.classNames.loading, this.loading), Fe.toggleControls.call(this);
+          }, this.loading ? 250 : 0);
+        }, toggleControls(e2) {
+          const { controls: t2 } = this.elements;
+          if (t2 && this.config.hideControls) {
+            const i2 = this.touch && this.lastSeekTime + 2e3 > Date.now();
+            this.toggleControls(Boolean(e2 || this.loading || this.paused || t2.pressed || t2.hover || i2));
+          }
+        }, migrateStyles() {
+          Object.values({ ...this.media.style }).filter((e2) => !S.empty(e2) && S.string(e2) && e2.startsWith("--plyr")).forEach((e2) => {
+            this.elements.container.style.setProperty(e2, this.media.style.getPropertyValue(e2)), this.media.style.removeProperty(e2);
+          }), S.empty(this.media.style) && this.media.removeAttribute("style");
+        } };
+        class Ve {
+          constructor(t2) {
+            e(this, "firstTouch", () => {
+              const { player: e2 } = this, { elements: t3 } = e2;
+              e2.touch = true, R(t3.container, e2.config.classNames.isTouch, true);
+            }), e(this, "global", (e2 = true) => {
+              const { player: t3 } = this;
+              t3.config.keyboard.global && Q.call(t3, window, "keydown keyup", this.handleKey, e2, false), Q.call(t3, document.body, "click", this.toggleMenu, e2), G.call(t3, document.body, "touchstart", this.firstTouch);
+            }), e(this, "container", () => {
+              const { player: e2 } = this, { config: t3, elements: i2, timers: s2 } = e2;
+              !t3.keyboard.global && t3.keyboard.focused && X.call(e2, i2.container, "keydown keyup", this.handleKey, false), X.call(e2, i2.container, "mousemove mouseleave touchstart touchmove enterfullscreen exitfullscreen", (t4) => {
+                const { controls: n3 } = i2;
+                n3 && "enterfullscreen" === t4.type && (n3.pressed = false, n3.hover = false);
+                let a3 = 0;
+                ["touchstart", "touchmove", "mousemove"].includes(t4.type) && (Fe.toggleControls.call(e2, true), a3 = e2.touch ? 3e3 : 2e3), clearTimeout(s2.controls), s2.controls = setTimeout(() => Fe.toggleControls.call(e2, false), a3);
+              });
+              const n2 = () => {
+                if (!e2.isVimeo || e2.config.vimeo.premium) return;
+                const t4 = i2.wrapper, { active: s3 } = e2.fullscreen, [n3, a3] = ce.call(e2), l2 = ae(`aspect-ratio: ${n3} / ${a3}`);
+                if (!s3) return void (l2 ? (t4.style.width = null, t4.style.height = null) : (t4.style.maxWidth = null, t4.style.margin = null));
+                const [r2, o2] = [Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0), Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)], c2 = r2 / o2 > n3 / a3;
+                l2 ? (t4.style.width = c2 ? "auto" : "100%", t4.style.height = c2 ? "100%" : "auto") : (t4.style.maxWidth = c2 ? o2 / a3 * n3 + "px" : null, t4.style.margin = c2 ? "0 auto" : null);
+              }, a2 = () => {
+                clearTimeout(s2.resized), s2.resized = setTimeout(n2, 50);
+              };
+              X.call(e2, i2.container, "enterfullscreen exitfullscreen", (t4) => {
+                const { target: s3 } = e2.fullscreen;
+                if (s3 !== i2.container) return;
+                if (!e2.isEmbed && S.empty(e2.config.ratio)) return;
+                n2();
+                ("enterfullscreen" === t4.type ? X : J).call(e2, window, "resize", a2);
+              });
+            }), e(this, "media", () => {
+              const { player: e2 } = this, { elements: t3 } = e2;
+              if (X.call(e2, e2.media, "timeupdate seeking seeked", (t4) => Pe.timeUpdate.call(e2, t4)), X.call(e2, e2.media, "durationchange loadeddata loadedmetadata", (t4) => Pe.durationUpdate.call(e2, t4)), X.call(e2, e2.media, "ended", () => {
+                e2.isHTML5 && e2.isVideo && e2.config.resetOnEnd && (e2.restart(), e2.pause());
+              }), X.call(e2, e2.media, "progress playing seeking seeked", (t4) => Pe.updateProgress.call(e2, t4)), X.call(e2, e2.media, "volumechange", (t4) => Pe.updateVolume.call(e2, t4)), X.call(e2, e2.media, "playing play pause ended emptied timeupdate", (t4) => Fe.checkPlaying.call(e2, t4)), X.call(e2, e2.media, "waiting canplay seeked playing", (t4) => Fe.checkLoading.call(e2, t4)), e2.supported.ui && e2.config.clickToPlay && !e2.isAudio) {
+                const i3 = B.call(e2, `.${e2.config.classNames.video}`);
+                if (!S.element(i3)) return;
+                X.call(e2, t3.container, "click", (s2) => {
+                  ([t3.container, i3].includes(s2.target) || i3.contains(s2.target)) && (e2.touch && e2.config.hideControls || (e2.ended ? (this.proxy(s2, e2.restart, "restart"), this.proxy(s2, () => {
+                    ie(e2.play());
+                  }, "play")) : this.proxy(s2, () => {
+                    ie(e2.togglePlay());
+                  }, "play")));
+                });
+              }
+              e2.supported.ui && e2.config.disableContextMenu && X.call(e2, t3.wrapper, "contextmenu", (e3) => {
+                e3.preventDefault();
+              }, false), X.call(e2, e2.media, "volumechange", () => {
+                e2.storage.set({ volume: e2.volume, muted: e2.muted });
+              }), X.call(e2, e2.media, "ratechange", () => {
+                Pe.updateSetting.call(e2, "speed"), e2.storage.set({ speed: e2.speed });
+              }), X.call(e2, e2.media, "qualitychange", (t4) => {
+                Pe.updateSetting.call(e2, "quality", null, t4.detail.quality);
+              }), X.call(e2, e2.media, "ready qualitychange", () => {
+                Pe.setDownloadUrl.call(e2);
+              });
+              const i2 = e2.config.events.concat(["keyup", "keydown"]).join(" ");
+              X.call(e2, e2.media, i2, (i3) => {
+                let { detail: s2 = {} } = i3;
+                "error" === i3.type && (s2 = e2.media.error), Z.call(e2, t3.container, i3.type, true, s2);
+              });
+            }), e(this, "proxy", (e2, t3, i2) => {
+              const { player: s2 } = this, n2 = s2.config.listeners[i2];
+              let a2 = true;
+              S.function(n2) && (a2 = n2.call(s2, e2)), false !== a2 && S.function(t3) && t3.call(s2, e2);
+            }), e(this, "bind", (e2, t3, i2, s2, n2 = true) => {
+              const { player: a2 } = this, l2 = a2.config.listeners[s2], r2 = S.function(l2);
+              X.call(a2, e2, t3, (e3) => this.proxy(e3, i2, s2), n2 && !r2);
+            }), e(this, "controls", () => {
+              const { player: e2 } = this, { elements: t3 } = e2, i2 = M.isIE ? "change" : "input";
+              if (t3.buttons.play && Array.from(t3.buttons.play).forEach((t4) => {
+                this.bind(t4, "click", () => {
+                  ie(e2.togglePlay());
+                }, "play");
+              }), this.bind(t3.buttons.restart, "click", e2.restart, "restart"), this.bind(t3.buttons.rewind, "click", () => {
+                e2.lastSeekTime = Date.now(), e2.rewind();
+              }, "rewind"), this.bind(t3.buttons.fastForward, "click", () => {
+                e2.lastSeekTime = Date.now(), e2.forward();
+              }, "fastForward"), this.bind(t3.buttons.mute, "click", () => {
+                e2.muted = !e2.muted;
+              }, "mute"), this.bind(t3.buttons.captions, "click", () => e2.toggleCaptions()), this.bind(t3.buttons.download, "click", () => {
+                Z.call(e2, e2.media, "download");
+              }, "download"), this.bind(t3.buttons.fullscreen, "click", () => {
+                e2.fullscreen.toggle();
+              }, "fullscreen"), this.bind(t3.buttons.pip, "click", () => {
+                e2.pip = "toggle";
+              }, "pip"), this.bind(t3.buttons.airplay, "click", e2.airplay, "airplay"), this.bind(t3.buttons.settings, "click", (t4) => {
+                t4.stopPropagation(), t4.preventDefault(), Pe.toggleMenu.call(e2, t4);
+              }, null, false), this.bind(t3.buttons.settings, "keyup", (t4) => {
+                [" ", "Enter"].includes(t4.key) && ("Enter" !== t4.key ? (t4.preventDefault(), t4.stopPropagation(), Pe.toggleMenu.call(e2, t4)) : Pe.focusFirstMenuItem.call(e2, null, true));
+              }, null, false), this.bind(t3.settings.menu, "keydown", (t4) => {
+                "Escape" === t4.key && Pe.toggleMenu.call(e2, t4);
+              }), this.bind(t3.inputs.seek, "mousedown mousemove", (e3) => {
+                const i3 = t3.progress.getBoundingClientRect(), s2 = 100 / i3.width * (e3.pageX - i3.left);
+                e3.currentTarget.setAttribute("seek-value", s2);
+              }), this.bind(t3.inputs.seek, "mousedown mouseup keydown keyup touchstart touchend", (t4) => {
+                const i3 = t4.currentTarget, s2 = "play-on-seeked";
+                if (S.keyboardEvent(t4) && !["ArrowLeft", "ArrowRight"].includes(t4.key)) return;
+                e2.lastSeekTime = Date.now();
+                const n2 = i3.hasAttribute(s2), a2 = ["mouseup", "touchend", "keyup"].includes(t4.type);
+                n2 && a2 ? (i3.removeAttribute(s2), ie(e2.play())) : !a2 && e2.playing && (i3.setAttribute(s2, ""), e2.pause());
+              }), M.isIos) {
+                const t4 = U.call(e2, 'input[type="range"]');
+                Array.from(t4).forEach((e3) => this.bind(e3, i2, (e4) => P(e4.target)));
+              }
+              this.bind(t3.inputs.seek, i2, (t4) => {
+                const i3 = t4.currentTarget;
+                let s2 = i3.getAttribute("seek-value");
+                S.empty(s2) && (s2 = i3.value), i3.removeAttribute("seek-value"), e2.currentTime = s2 / i3.max * e2.duration;
+              }, "seek"), this.bind(t3.progress, "mouseenter mouseleave mousemove", (t4) => Pe.updateSeekTooltip.call(e2, t4)), this.bind(t3.progress, "mousemove touchmove", (t4) => {
+                const { previewThumbnails: i3 } = e2;
+                i3 && i3.loaded && i3.startMove(t4);
+              }), this.bind(t3.progress, "mouseleave touchend click", () => {
+                const { previewThumbnails: t4 } = e2;
+                t4 && t4.loaded && t4.endMove(false, true);
+              }), this.bind(t3.progress, "mousedown touchstart", (t4) => {
+                const { previewThumbnails: i3 } = e2;
+                i3 && i3.loaded && i3.startScrubbing(t4);
+              }), this.bind(t3.progress, "mouseup touchend", (t4) => {
+                const { previewThumbnails: i3 } = e2;
+                i3 && i3.loaded && i3.endScrubbing(t4);
+              }), M.isWebKit && Array.from(U.call(e2, 'input[type="range"]')).forEach((t4) => {
+                this.bind(t4, "input", (t5) => Pe.updateRangeFill.call(e2, t5.target));
+              }), e2.config.toggleInvert && !S.element(t3.display.duration) && this.bind(t3.display.currentTime, "click", () => {
+                0 !== e2.currentTime && (e2.config.invertTime = !e2.config.invertTime, Pe.timeUpdate.call(e2));
+              }), this.bind(t3.inputs.volume, i2, (t4) => {
+                e2.volume = t4.target.value;
+              }, "volume"), this.bind(t3.controls, "mouseenter mouseleave", (i3) => {
+                t3.controls.hover = !e2.touch && "mouseenter" === i3.type;
+              }), t3.fullscreen && Array.from(t3.fullscreen.children).filter((e3) => !e3.contains(t3.container)).forEach((i3) => {
+                this.bind(i3, "mouseenter mouseleave", (i4) => {
+                  t3.controls && (t3.controls.hover = !e2.touch && "mouseenter" === i4.type);
+                });
+              }), this.bind(t3.controls, "mousedown mouseup touchstart touchend touchcancel", (e3) => {
+                t3.controls.pressed = ["mousedown", "touchstart"].includes(e3.type);
+              }), this.bind(t3.controls, "focusin", () => {
+                const { config: i3, timers: s2 } = e2;
+                R(t3.controls, i3.classNames.noTransition, true), Fe.toggleControls.call(e2, true), setTimeout(() => {
+                  R(t3.controls, i3.classNames.noTransition, false);
+                }, 0);
+                const n2 = this.touch ? 3e3 : 4e3;
+                clearTimeout(s2.controls), s2.controls = setTimeout(() => Fe.toggleControls.call(e2, false), n2);
+              }), this.bind(t3.inputs.volume, "wheel", (t4) => {
+                const i3 = t4.webkitDirectionInvertedFromDevice, [s2, n2] = [t4.deltaX, -t4.deltaY].map((e3) => i3 ? -e3 : e3), a2 = Math.sign(Math.abs(s2) > Math.abs(n2) ? s2 : n2);
+                e2.increaseVolume(a2 / 50);
+                const { volume: l2 } = e2.media;
+                (1 === a2 && l2 < 1 || -1 === a2 && l2 > 0) && t4.preventDefault();
+              }, "volume", false);
+            }), this.player = t2, this.lastKey = null, this.focusTimer = null, this.lastKeyDown = null, this.handleKey = this.handleKey.bind(this), this.toggleMenu = this.toggleMenu.bind(this), this.firstTouch = this.firstTouch.bind(this);
+          }
+          handleKey(e2) {
+            const { player: t2 } = this, { elements: i2 } = t2, { key: s2, type: n2, altKey: a2, ctrlKey: l2, metaKey: r2, shiftKey: o2 } = e2, c2 = "keydown" === n2, u2 = c2 && s2 === this.lastKey;
+            if (a2 || l2 || r2 || o2) return;
+            if (!s2) return;
+            if (c2) {
+              const n3 = document.activeElement;
+              if (S.element(n3)) {
+                const { editable: s3 } = t2.config.selectors, { seek: a3 } = i2.inputs;
+                if (n3 !== a3 && V(n3, s3)) return;
+                if (" " === e2.key && V(n3, 'button, [role^="menuitem"]')) return;
+              }
+              switch ([" ", "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "c", "f", "k", "l", "m"].includes(s2) && (e2.preventDefault(), e2.stopPropagation()), s2) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                  u2 || (h2 = parseInt(s2, 10), t2.currentTime = t2.duration / 10 * h2);
+                  break;
+                case " ":
+                case "k":
+                  u2 || ie(t2.togglePlay());
+                  break;
+                case "ArrowUp":
+                  t2.increaseVolume(0.1);
+                  break;
+                case "ArrowDown":
+                  t2.decreaseVolume(0.1);
+                  break;
+                case "m":
+                  u2 || (t2.muted = !t2.muted);
+                  break;
+                case "ArrowRight":
+                  t2.forward();
+                  break;
+                case "ArrowLeft":
+                  t2.rewind();
+                  break;
+                case "f":
+                  t2.fullscreen.toggle();
+                  break;
+                case "c":
+                  u2 || t2.toggleCaptions();
+                  break;
+                case "l":
+                  t2.loop = !t2.loop;
+              }
+              "Escape" === s2 && !t2.fullscreen.usingNative && t2.fullscreen.active && t2.fullscreen.toggle(), this.lastKey = s2;
+            } else this.lastKey = null;
+            var h2;
+          }
+          toggleMenu(e2) {
+            Pe.toggleMenu.call(this.player, e2);
+          }
+        }
+        "undefined" != typeof globalThis ? globalThis : "undefined" != typeof window ? window : "undefined" != typeof global ? global : "undefined" != typeof self && self;
+        var Ue = function(e2, t2) {
+          return e2(t2 = { exports: {} }, t2.exports), t2.exports;
+        }(function(e2, t2) {
+          e2.exports = function() {
+            var e3 = function() {
+            }, t3 = {}, i2 = {}, s2 = {};
+            function n2(e4, t4) {
+              e4 = e4.push ? e4 : [e4];
+              var n3, a3, l3, r3 = [], o3 = e4.length, c3 = o3;
+              for (n3 = function(e5, i3) {
+                i3.length && r3.push(e5), --c3 || t4(r3);
+              }; o3--; ) a3 = e4[o3], (l3 = i2[a3]) ? n3(a3, l3) : (s2[a3] = s2[a3] || []).push(n3);
+            }
+            function a2(e4, t4) {
+              if (e4) {
+                var n3 = s2[e4];
+                if (i2[e4] = t4, n3) for (; n3.length; ) n3[0](e4, t4), n3.splice(0, 1);
+              }
+            }
+            function l2(t4, i3) {
+              t4.call && (t4 = { success: t4 }), i3.length ? (t4.error || e3)(i3) : (t4.success || e3)(t4);
+            }
+            function r2(t4, i3, s3, n3) {
+              var a3, l3, o3 = document, c3 = s3.async, u2 = (s3.numRetries || 0) + 1, h2 = s3.before || e3, d2 = t4.replace(/[\?|#].*$/, ""), m2 = t4.replace(/^(css|img)!/, "");
+              n3 = n3 || 0, /(^css!|\.css$)/.test(d2) ? ((l3 = o3.createElement("link")).rel = "stylesheet", l3.href = m2, (a3 = "hideFocus" in l3) && l3.relList && (a3 = 0, l3.rel = "preload", l3.as = "style")) : /(^img!|\.(png|gif|jpg|svg|webp)$)/.test(d2) ? (l3 = o3.createElement("img")).src = m2 : ((l3 = o3.createElement("script")).src = t4, l3.async = void 0 === c3 || c3), l3.onload = l3.onerror = l3.onbeforeload = function(e4) {
+                var o4 = e4.type[0];
+                if (a3) try {
+                  l3.sheet.cssText.length || (o4 = "e");
+                } catch (e5) {
+                  18 != e5.code && (o4 = "e");
+                }
+                if ("e" == o4) {
+                  if ((n3 += 1) < u2) return r2(t4, i3, s3, n3);
+                } else if ("preload" == l3.rel && "style" == l3.as) return l3.rel = "stylesheet";
+                i3(t4, o4, e4.defaultPrevented);
+              }, false !== h2(t4, l3) && o3.head.appendChild(l3);
+            }
+            function o2(e4, t4, i3) {
+              var s3, n3, a3 = (e4 = e4.push ? e4 : [e4]).length, l3 = a3, o3 = [];
+              for (s3 = function(e5, i4, s4) {
+                if ("e" == i4 && o3.push(e5), "b" == i4) {
+                  if (!s4) return;
+                  o3.push(e5);
+                }
+                --a3 || t4(o3);
+              }, n3 = 0; n3 < l3; n3++) r2(e4[n3], s3, i3);
+            }
+            function c2(e4, i3, s3) {
+              var n3, r3;
+              if (i3 && i3.trim && (n3 = i3), r3 = (n3 ? s3 : i3) || {}, n3) {
+                if (n3 in t3) throw "LoadJS";
+                t3[n3] = true;
+              }
+              function c3(t4, i4) {
+                o2(e4, function(e5) {
+                  l2(r3, e5), t4 && l2({ success: t4, error: i4 }, e5), a2(n3, e5);
+                }, r3);
+              }
+              if (r3.returnPromise) return new Promise(c3);
+              c3();
+            }
+            return c2.ready = function(e4, t4) {
+              return n2(e4, function(e5) {
+                l2(t4, e5);
+              }), c2;
+            }, c2.done = function(e4) {
+              a2(e4, []);
+            }, c2.reset = function() {
+              t3 = {}, i2 = {}, s2 = {};
+            }, c2.isDefined = function(e4) {
+              return e4 in t3;
+            }, c2;
+          }();
+        });
+        function Be(e2) {
+          return new Promise((t2, i2) => {
+            Ue(e2, { success: t2, error: i2 });
+          });
+        }
+        function We(e2) {
+          e2 && !this.embed.hasPlayed && (this.embed.hasPlayed = true), this.media.paused === e2 && (this.media.paused = !e2, Z.call(this, this.media, e2 ? "play" : "pause"));
+        }
+        const ze = { setup() {
+          const e2 = this;
+          R(e2.elements.wrapper, e2.config.classNames.embed, true), e2.options.speed = e2.config.speed.options, ue.call(e2), S.object(window.Vimeo) ? ze.ready.call(e2) : Be(e2.config.urls.vimeo.sdk).then(() => {
+            ze.ready.call(e2);
+          }).catch((t2) => {
+            e2.debug.warn("Vimeo SDK (player.js) failed to load", t2);
+          });
+        }, ready() {
+          const e2 = this, t2 = e2.config.vimeo, { premium: i2, referrerPolicy: s2, ...n2 } = t2;
+          let a2 = e2.media.getAttribute("src"), l2 = "";
+          S.empty(a2) ? (a2 = e2.media.getAttribute(e2.config.attributes.embed.id), l2 = e2.media.getAttribute(e2.config.attributes.embed.hash)) : l2 = function(e3) {
+            const t3 = e3.match(/^.*(vimeo.com\/|video\/)(\d+)(\?.*&*h=|\/)+([\d,a-f]+)/);
+            return t3 && 5 === t3.length ? t3[4] : null;
+          }(a2);
+          const r2 = l2 ? { h: l2 } : {};
+          i2 && Object.assign(n2, { controls: false, sidedock: false });
+          const o2 = Ne({ loop: e2.config.loop.active, autoplay: e2.autoplay, muted: e2.muted, gesture: "media", playsinline: e2.config.playsinline, ...r2, ...n2 }), c2 = (u2 = a2, S.empty(u2) ? null : S.number(Number(u2)) ? u2 : u2.match(/^.*(vimeo.com\/|video\/)(\d+).*/) ? RegExp.$2 : u2);
+          var u2;
+          const h2 = $("iframe"), d2 = me(e2.config.urls.vimeo.iframe, c2, o2);
+          if (h2.setAttribute("src", d2), h2.setAttribute("allowfullscreen", ""), h2.setAttribute("allow", ["autoplay", "fullscreen", "picture-in-picture", "encrypted-media", "accelerometer", "gyroscope"].join("; ")), S.empty(s2) || h2.setAttribute("referrerPolicy", s2), i2 || !t2.customControls) h2.setAttribute("data-poster", e2.poster), e2.media = q(h2, e2.media);
+          else {
+            const t3 = $("div", { class: e2.config.classNames.embedContainer, "data-poster": e2.poster });
+            t3.appendChild(h2), e2.media = q(t3, e2.media);
+          }
+          t2.customControls || Te(me(e2.config.urls.vimeo.api, d2)).then((t3) => {
+            !S.empty(t3) && t3.thumbnail_url && Fe.setPoster.call(e2, t3.thumbnail_url).catch(() => {
+            });
+          }), e2.embed = new window.Vimeo.Player(h2, { autopause: e2.config.autopause, muted: e2.muted }), e2.media.paused = true, e2.media.currentTime = 0, e2.supported.ui && e2.embed.disableTextTrack(), e2.media.play = () => (We.call(e2, true), e2.embed.play()), e2.media.pause = () => (We.call(e2, false), e2.embed.pause()), e2.media.stop = () => {
+            e2.pause(), e2.currentTime = 0;
+          };
+          let { currentTime: m2 } = e2.media;
+          Object.defineProperty(e2.media, "currentTime", { get: () => m2, set(t3) {
+            const { embed: i3, media: s3, paused: n3, volume: a3 } = e2, l3 = n3 && !i3.hasPlayed;
+            s3.seeking = true, Z.call(e2, s3, "seeking"), Promise.resolve(l3 && i3.setVolume(0)).then(() => i3.setCurrentTime(t3)).then(() => l3 && i3.pause()).then(() => l3 && i3.setVolume(a3)).catch(() => {
+            });
+          } });
+          let p2 = e2.config.speed.selected;
+          Object.defineProperty(e2.media, "playbackRate", { get: () => p2, set(t3) {
+            e2.embed.setPlaybackRate(t3).then(() => {
+              p2 = t3, Z.call(e2, e2.media, "ratechange");
+            }).catch(() => {
+              e2.options.speed = [1];
+            });
+          } });
+          let { volume: g2 } = e2.config;
+          Object.defineProperty(e2.media, "volume", { get: () => g2, set(t3) {
+            e2.embed.setVolume(t3).then(() => {
+              g2 = t3, Z.call(e2, e2.media, "volumechange");
+            });
+          } });
+          let { muted: f2 } = e2.config;
+          Object.defineProperty(e2.media, "muted", { get: () => f2, set(t3) {
+            const i3 = !!S.boolean(t3) && t3;
+            e2.embed.setMuted(!!i3 || e2.config.muted).then(() => {
+              f2 = i3, Z.call(e2, e2.media, "volumechange");
+            });
+          } });
+          let y2, { loop: b2 } = e2.config;
+          Object.defineProperty(e2.media, "loop", { get: () => b2, set(t3) {
+            const i3 = S.boolean(t3) ? t3 : e2.config.loop.active;
+            e2.embed.setLoop(i3).then(() => {
+              b2 = i3;
+            });
+          } }), e2.embed.getVideoUrl().then((t3) => {
+            y2 = t3, Pe.setDownloadUrl.call(e2);
+          }).catch((e3) => {
+            this.debug.warn(e3);
+          }), Object.defineProperty(e2.media, "currentSrc", { get: () => y2 }), Object.defineProperty(e2.media, "ended", { get: () => e2.currentTime === e2.duration }), Promise.all([e2.embed.getVideoWidth(), e2.embed.getVideoHeight()]).then((t3) => {
+            const [i3, s3] = t3;
+            e2.embed.ratio = he(i3, s3), ue.call(this);
+          }), e2.embed.setAutopause(e2.config.autopause).then((t3) => {
+            e2.config.autopause = t3;
+          }), e2.embed.getVideoTitle().then((t3) => {
+            e2.config.title = t3, Fe.setTitle.call(this);
+          }), e2.embed.getCurrentTime().then((t3) => {
+            m2 = t3, Z.call(e2, e2.media, "timeupdate");
+          }), e2.embed.getDuration().then((t3) => {
+            e2.media.duration = t3, Z.call(e2, e2.media, "durationchange");
+          }), e2.embed.getTextTracks().then((t3) => {
+            e2.media.textTracks = t3, xe.setup.call(e2);
+          }), e2.embed.on("cuechange", ({ cues: t3 = [] }) => {
+            const i3 = t3.map((e3) => function(e4) {
+              const t4 = document.createDocumentFragment(), i4 = document.createElement("div");
+              return t4.appendChild(i4), i4.innerHTML = e4, t4.firstChild.innerText;
+            }(e3.text));
+            xe.updateCues.call(e2, i3);
+          }), e2.embed.on("loaded", () => {
+            if (e2.embed.getPaused().then((t3) => {
+              We.call(e2, !t3), t3 || Z.call(e2, e2.media, "playing");
+            }), S.element(e2.embed.element) && e2.supported.ui) {
+              e2.embed.element.setAttribute("tabindex", -1);
+            }
+          }), e2.embed.on("bufferstart", () => {
+            Z.call(e2, e2.media, "waiting");
+          }), e2.embed.on("bufferend", () => {
+            Z.call(e2, e2.media, "playing");
+          }), e2.embed.on("play", () => {
+            We.call(e2, true), Z.call(e2, e2.media, "playing");
+          }), e2.embed.on("pause", () => {
+            We.call(e2, false);
+          }), e2.embed.on("timeupdate", (t3) => {
+            e2.media.seeking = false, m2 = t3.seconds, Z.call(e2, e2.media, "timeupdate");
+          }), e2.embed.on("progress", (t3) => {
+            e2.media.buffered = t3.percent, Z.call(e2, e2.media, "progress"), 1 === parseInt(t3.percent, 10) && Z.call(e2, e2.media, "canplaythrough"), e2.embed.getDuration().then((t4) => {
+              t4 !== e2.media.duration && (e2.media.duration = t4, Z.call(e2, e2.media, "durationchange"));
+            });
+          }), e2.embed.on("seeked", () => {
+            e2.media.seeking = false, Z.call(e2, e2.media, "seeked");
+          }), e2.embed.on("ended", () => {
+            e2.media.paused = true, Z.call(e2, e2.media, "ended");
+          }), e2.embed.on("error", (t3) => {
+            e2.media.error = t3, Z.call(e2, e2.media, "error");
+          }), t2.customControls && setTimeout(() => Fe.build.call(e2), 0);
+        } };
+        function Ke(e2) {
+          e2 && !this.embed.hasPlayed && (this.embed.hasPlayed = true), this.media.paused === e2 && (this.media.paused = !e2, Z.call(this, this.media, e2 ? "play" : "pause"));
+        }
+        function Ye(e2) {
+          return e2.noCookie ? "https://www.youtube-nocookie.com" : "http:" === window.location.protocol ? "http://www.youtube.com" : void 0;
+        }
+        const Qe = { setup() {
+          if (R(this.elements.wrapper, this.config.classNames.embed, true), S.object(window.YT) && S.function(window.YT.Player)) Qe.ready.call(this);
+          else {
+            const e2 = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = () => {
+              S.function(e2) && e2(), Qe.ready.call(this);
+            }, Be(this.config.urls.youtube.sdk).catch((e3) => {
+              this.debug.warn("YouTube API failed to load", e3);
+            });
+          }
+        }, getTitle(e2) {
+          Te(me(this.config.urls.youtube.api, e2)).then((e3) => {
+            if (S.object(e3)) {
+              const { title: t2, height: i2, width: s2 } = e3;
+              this.config.title = t2, Fe.setTitle.call(this), this.embed.ratio = he(s2, i2);
+            }
+            ue.call(this);
+          }).catch(() => {
+            ue.call(this);
+          });
+        }, ready() {
+          const e2 = this, t2 = e2.config.youtube, i2 = e2.media && e2.media.getAttribute("id");
+          if (!S.empty(i2) && i2.startsWith("youtube-")) return;
+          let s2 = e2.media.getAttribute("src");
+          S.empty(s2) && (s2 = e2.media.getAttribute(this.config.attributes.embed.id));
+          const n2 = (a2 = s2, S.empty(a2) ? null : a2.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/) ? RegExp.$2 : a2);
+          var a2;
+          const l2 = $("div", { id: `${e2.provider}-${Math.floor(1e4 * Math.random())}`, "data-poster": t2.customControls ? e2.poster : void 0 });
+          if (e2.media = q(l2, e2.media), t2.customControls) {
+            const t3 = (e3) => `https://i.ytimg.com/vi/${n2}/${e3}default.jpg`;
+            Re(t3("maxres"), 121).catch(() => Re(t3("sd"), 121)).catch(() => Re(t3("hq"))).then((t4) => Fe.setPoster.call(e2, t4.src)).then((t4) => {
+              t4.includes("maxres") || (e2.elements.poster.style.backgroundSize = "cover");
+            }).catch(() => {
+            });
+          }
+          e2.embed = new window.YT.Player(e2.media, { videoId: n2, host: Ye(t2), playerVars: x({}, { autoplay: e2.config.autoplay ? 1 : 0, hl: e2.config.hl, controls: e2.supported.ui && t2.customControls ? 0 : 1, disablekb: 1, playsinline: e2.config.playsinline && !e2.config.fullscreen.iosNative ? 1 : 0, cc_load_policy: e2.captions.active ? 1 : 0, cc_lang_pref: e2.config.captions.language, widget_referrer: window ? window.location.href : null }, t2), events: { onError(t3) {
+            if (!e2.media.error) {
+              const i3 = t3.data, s3 = { 2: "The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.", 5: "The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.", 100: "The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.", 101: "The owner of the requested video does not allow it to be played in embedded players.", 150: "The owner of the requested video does not allow it to be played in embedded players." }[i3] || "An unknown error occurred";
+              e2.media.error = { code: i3, message: s3 }, Z.call(e2, e2.media, "error");
+            }
+          }, onPlaybackRateChange(t3) {
+            const i3 = t3.target;
+            e2.media.playbackRate = i3.getPlaybackRate(), Z.call(e2, e2.media, "ratechange");
+          }, onReady(i3) {
+            if (S.function(e2.media.play)) return;
+            const s3 = i3.target;
+            Qe.getTitle.call(e2, n2), e2.media.play = () => {
+              Ke.call(e2, true), s3.playVideo();
+            }, e2.media.pause = () => {
+              Ke.call(e2, false), s3.pauseVideo();
+            }, e2.media.stop = () => {
+              s3.stopVideo();
+            }, e2.media.duration = s3.getDuration(), e2.media.paused = true, e2.media.currentTime = 0, Object.defineProperty(e2.media, "currentTime", { get: () => Number(s3.getCurrentTime()), set(t3) {
+              e2.paused && !e2.embed.hasPlayed && e2.embed.mute(), e2.media.seeking = true, Z.call(e2, e2.media, "seeking"), s3.seekTo(t3);
+            } }), Object.defineProperty(e2.media, "playbackRate", { get: () => s3.getPlaybackRate(), set(e3) {
+              s3.setPlaybackRate(e3);
+            } });
+            let { volume: a3 } = e2.config;
+            Object.defineProperty(e2.media, "volume", { get: () => a3, set(t3) {
+              a3 = t3, s3.setVolume(100 * a3), Z.call(e2, e2.media, "volumechange");
+            } });
+            let { muted: l3 } = e2.config;
+            Object.defineProperty(e2.media, "muted", { get: () => l3, set(t3) {
+              const i4 = S.boolean(t3) ? t3 : l3;
+              l3 = i4, s3[i4 ? "mute" : "unMute"](), s3.setVolume(100 * a3), Z.call(e2, e2.media, "volumechange");
+            } }), Object.defineProperty(e2.media, "currentSrc", { get: () => s3.getVideoUrl() }), Object.defineProperty(e2.media, "ended", { get: () => e2.currentTime === e2.duration });
+            const r2 = s3.getAvailablePlaybackRates();
+            e2.options.speed = r2.filter((t3) => e2.config.speed.options.includes(t3)), e2.supported.ui && t2.customControls && e2.media.setAttribute("tabindex", -1), Z.call(e2, e2.media, "timeupdate"), Z.call(e2, e2.media, "durationchange"), clearInterval(e2.timers.buffering), e2.timers.buffering = setInterval(() => {
+              e2.media.buffered = s3.getVideoLoadedFraction(), (null === e2.media.lastBuffered || e2.media.lastBuffered < e2.media.buffered) && Z.call(e2, e2.media, "progress"), e2.media.lastBuffered = e2.media.buffered, 1 === e2.media.buffered && (clearInterval(e2.timers.buffering), Z.call(e2, e2.media, "canplaythrough"));
+            }, 200), t2.customControls && setTimeout(() => Fe.build.call(e2), 50);
+          }, onStateChange(i3) {
+            const s3 = i3.target;
+            clearInterval(e2.timers.playing);
+            switch (e2.media.seeking && [1, 2].includes(i3.data) && (e2.media.seeking = false, Z.call(e2, e2.media, "seeked")), i3.data) {
+              case -1:
+                Z.call(e2, e2.media, "timeupdate"), e2.media.buffered = s3.getVideoLoadedFraction(), Z.call(e2, e2.media, "progress");
+                break;
+              case 0:
+                Ke.call(e2, false), e2.media.loop ? (s3.stopVideo(), s3.playVideo()) : Z.call(e2, e2.media, "ended");
+                break;
+              case 1:
+                t2.customControls && !e2.config.autoplay && e2.media.paused && !e2.embed.hasPlayed ? e2.media.pause() : (Ke.call(e2, true), Z.call(e2, e2.media, "playing"), e2.timers.playing = setInterval(() => {
+                  Z.call(e2, e2.media, "timeupdate");
+                }, 50), e2.media.duration !== s3.getDuration() && (e2.media.duration = s3.getDuration(), Z.call(e2, e2.media, "durationchange")));
+                break;
+              case 2:
+                e2.muted || e2.embed.unMute(), Ke.call(e2, false);
+                break;
+              case 3:
+                Z.call(e2, e2.media, "waiting");
+            }
+            Z.call(e2, e2.elements.container, "statechange", false, { code: i3.data });
+          } } });
+        } }, Xe = { setup() {
+          this.media ? (R(this.elements.container, this.config.classNames.type.replace("{0}", this.type), true), R(this.elements.container, this.config.classNames.provider.replace("{0}", this.provider), true), this.isEmbed && R(this.elements.container, this.config.classNames.type.replace("{0}", "video"), true), this.isVideo && (this.elements.wrapper = $("div", { class: this.config.classNames.video }), L(this.media, this.elements.wrapper), this.elements.poster = $("div", { class: this.config.classNames.poster }), this.elements.wrapper.appendChild(this.elements.poster)), this.isHTML5 ? de.setup.call(this) : this.isYouTube ? Qe.setup.call(this) : this.isVimeo && ze.setup.call(this)) : this.debug.warn("No media element found!");
+        } };
+        class Je {
+          constructor(t2) {
+            e(this, "load", () => {
+              this.enabled && (S.object(window.google) && S.object(window.google.ima) ? this.ready() : Be(this.player.config.urls.googleIMA.sdk).then(() => {
+                this.ready();
+              }).catch(() => {
+                this.trigger("error", new Error("Google IMA SDK failed to load"));
+              }));
+            }), e(this, "ready", () => {
+              var e2;
+              this.enabled || ((e2 = this).manager && e2.manager.destroy(), e2.elements.displayContainer && e2.elements.displayContainer.destroy(), e2.elements.container.remove()), this.startSafetyTimer(12e3, "ready()"), this.managerPromise.then(() => {
+                this.clearSafetyTimer("onAdsManagerLoaded()");
+              }), this.listeners(), this.setupIMA();
+            }), e(this, "setupIMA", () => {
+              this.elements.container = $("div", { class: this.player.config.classNames.ads }), this.player.elements.container.appendChild(this.elements.container), google.ima.settings.setVpaidMode(google.ima.ImaSdkSettings.VpaidMode.ENABLED), google.ima.settings.setLocale(this.player.config.ads.language), google.ima.settings.setDisableCustomPlaybackForIOS10Plus(this.player.config.playsinline), this.elements.displayContainer = new google.ima.AdDisplayContainer(this.elements.container, this.player.media), this.loader = new google.ima.AdsLoader(this.elements.displayContainer), this.loader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, (e2) => this.onAdsManagerLoaded(e2), false), this.loader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, (e2) => this.onAdError(e2), false), this.requestAds();
+            }), e(this, "requestAds", () => {
+              const { container: e2 } = this.player.elements;
+              try {
+                const t3 = new google.ima.AdsRequest();
+                t3.adTagUrl = this.tagUrl, t3.linearAdSlotWidth = e2.offsetWidth, t3.linearAdSlotHeight = e2.offsetHeight, t3.nonLinearAdSlotWidth = e2.offsetWidth, t3.nonLinearAdSlotHeight = e2.offsetHeight, t3.forceNonLinearFullSlot = false, t3.setAdWillPlayMuted(!this.player.muted), this.loader.requestAds(t3);
+              } catch (e3) {
+                this.onAdError(e3);
+              }
+            }), e(this, "pollCountdown", (e2 = false) => {
+              if (!e2) return clearInterval(this.countdownTimer), void this.elements.container.removeAttribute("data-badge-text");
+              this.countdownTimer = setInterval(() => {
+                const e3 = Ee(Math.max(this.manager.getRemainingTime(), 0)), t3 = `${ve.get("advertisement", this.player.config)} - ${e3}`;
+                this.elements.container.setAttribute("data-badge-text", t3);
+              }, 100);
+            }), e(this, "onAdsManagerLoaded", (e2) => {
+              if (!this.enabled) return;
+              const t3 = new google.ima.AdsRenderingSettings();
+              t3.restoreCustomPlaybackStateOnAdBreakComplete = true, t3.enablePreloading = true, this.manager = e2.getAdsManager(this.player, t3), this.cuePoints = this.manager.getCuePoints(), this.manager.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, (e3) => this.onAdError(e3)), Object.keys(google.ima.AdEvent.Type).forEach((e3) => {
+                this.manager.addEventListener(google.ima.AdEvent.Type[e3], (e4) => this.onAdEvent(e4));
+              }), this.trigger("loaded");
+            }), e(this, "addCuePoints", () => {
+              S.empty(this.cuePoints) || this.cuePoints.forEach((e2) => {
+                if (0 !== e2 && -1 !== e2 && e2 < this.player.duration) {
+                  const t3 = this.player.elements.progress;
+                  if (S.element(t3)) {
+                    const i2 = 100 / this.player.duration * e2, s2 = $("span", { class: this.player.config.classNames.cues });
+                    s2.style.left = `${i2.toString()}%`, t3.appendChild(s2);
+                  }
+                }
+              });
+            }), e(this, "onAdEvent", (e2) => {
+              const { container: t3 } = this.player.elements, i2 = e2.getAd(), s2 = e2.getAdData();
+              switch (((e3) => {
+                Z.call(this.player, this.player.media, `ads${e3.replace(/_/g, "").toLowerCase()}`);
+              })(e2.type), e2.type) {
+                case google.ima.AdEvent.Type.LOADED:
+                  this.trigger("loaded"), this.pollCountdown(true), i2.isLinear() || (i2.width = t3.offsetWidth, i2.height = t3.offsetHeight);
+                  break;
+                case google.ima.AdEvent.Type.STARTED:
+                  this.manager.setVolume(this.player.volume);
+                  break;
+                case google.ima.AdEvent.Type.ALL_ADS_COMPLETED:
+                  this.player.ended ? this.loadAds() : this.loader.contentComplete();
+                  break;
+                case google.ima.AdEvent.Type.CONTENT_PAUSE_REQUESTED:
+                  this.pauseContent();
+                  break;
+                case google.ima.AdEvent.Type.CONTENT_RESUME_REQUESTED:
+                  this.pollCountdown(), this.resumeContent();
+                  break;
+                case google.ima.AdEvent.Type.LOG:
+                  s2.adError && this.player.debug.warn(`Non-fatal ad error: ${s2.adError.getMessage()}`);
+              }
+            }), e(this, "onAdError", (e2) => {
+              this.cancel(), this.player.debug.warn("Ads error", e2);
+            }), e(this, "listeners", () => {
+              const { container: e2 } = this.player.elements;
+              let t3;
+              this.player.on("canplay", () => {
+                this.addCuePoints();
+              }), this.player.on("ended", () => {
+                this.loader.contentComplete();
+              }), this.player.on("timeupdate", () => {
+                t3 = this.player.currentTime;
+              }), this.player.on("seeked", () => {
+                const e3 = this.player.currentTime;
+                S.empty(this.cuePoints) || this.cuePoints.forEach((i2, s2) => {
+                  t3 < i2 && i2 < e3 && (this.manager.discardAdBreak(), this.cuePoints.splice(s2, 1));
+                });
+              }), window.addEventListener("resize", () => {
+                this.manager && this.manager.resize(e2.offsetWidth, e2.offsetHeight, google.ima.ViewMode.NORMAL);
+              });
+            }), e(this, "play", () => {
+              const { container: e2 } = this.player.elements;
+              this.managerPromise || this.resumeContent(), this.managerPromise.then(() => {
+                this.manager.setVolume(this.player.volume), this.elements.displayContainer.initialize();
+                try {
+                  this.initialized || (this.manager.init(e2.offsetWidth, e2.offsetHeight, google.ima.ViewMode.NORMAL), this.manager.start()), this.initialized = true;
+                } catch (e3) {
+                  this.onAdError(e3);
+                }
+              }).catch(() => {
+              });
+            }), e(this, "resumeContent", () => {
+              this.elements.container.style.zIndex = "", this.playing = false, ie(this.player.media.play());
+            }), e(this, "pauseContent", () => {
+              this.elements.container.style.zIndex = 3, this.playing = true, this.player.media.pause();
+            }), e(this, "cancel", () => {
+              this.initialized && this.resumeContent(), this.trigger("error"), this.loadAds();
+            }), e(this, "loadAds", () => {
+              this.managerPromise.then(() => {
+                this.manager && this.manager.destroy(), this.managerPromise = new Promise((e2) => {
+                  this.on("loaded", e2), this.player.debug.log(this.manager);
+                }), this.initialized = false, this.requestAds();
+              }).catch(() => {
+              });
+            }), e(this, "trigger", (e2, ...t3) => {
+              const i2 = this.events[e2];
+              S.array(i2) && i2.forEach((e3) => {
+                S.function(e3) && e3.apply(this, t3);
+              });
+            }), e(this, "on", (e2, t3) => (S.array(this.events[e2]) || (this.events[e2] = []), this.events[e2].push(t3), this)), e(this, "startSafetyTimer", (e2, t3) => {
+              this.player.debug.log(`Safety timer invoked from: ${t3}`), this.safetyTimer = setTimeout(() => {
+                this.cancel(), this.clearSafetyTimer("startSafetyTimer()");
+              }, e2);
+            }), e(this, "clearSafetyTimer", (e2) => {
+              S.nullOrUndefined(this.safetyTimer) || (this.player.debug.log(`Safety timer cleared from: ${e2}`), clearTimeout(this.safetyTimer), this.safetyTimer = null);
+            }), this.player = t2, this.config = t2.config.ads, this.playing = false, this.initialized = false, this.elements = { container: null, displayContainer: null }, this.manager = null, this.loader = null, this.cuePoints = null, this.events = {}, this.safetyTimer = null, this.countdownTimer = null, this.managerPromise = new Promise((e2, t3) => {
+              this.on("loaded", e2), this.on("error", t3);
+            }), this.load();
+          }
+          get enabled() {
+            const { config: e2 } = this;
+            return this.player.isHTML5 && this.player.isVideo && e2.enabled && (!S.empty(e2.publisherId) || S.url(e2.tagUrl));
+          }
+          get tagUrl() {
+            const { config: e2 } = this;
+            if (S.url(e2.tagUrl)) return e2.tagUrl;
+            return `https://go.aniview.com/api/adserver6/vast/?${Ne({ AV_PUBLISHERID: "58c25bb0073ef448b1087ad6", AV_CHANNELID: "5a0458dc28a06145e4519d21", AV_URL: window.location.hostname, cb: Date.now(), AV_WIDTH: 640, AV_HEIGHT: 480, AV_CDIM2: e2.publisherId })}`;
+          }
+        }
+        function Ge(e2 = 0, t2 = 0, i2 = 255) {
+          return Math.min(Math.max(e2, t2), i2);
+        }
+        const Ze = (e2) => {
+          const t2 = [];
+          return e2.split(/\r\n\r\n|\n\n|\r\r/).forEach((e3) => {
+            const i2 = {};
+            e3.split(/\r\n|\n|\r/).forEach((e4) => {
+              if (S.number(i2.startTime)) {
+                if (!S.empty(e4.trim()) && S.empty(i2.text)) {
+                  const t3 = e4.trim().split("#xywh=");
+                  [i2.text] = t3, t3[1] && ([i2.x, i2.y, i2.w, i2.h] = t3[1].split(","));
+                }
+              } else {
+                const t3 = e4.match(/([0-9]{2})?:?([0-9]{2}):([0-9]{2}).([0-9]{2,3})( ?--> ?)([0-9]{2})?:?([0-9]{2}):([0-9]{2}).([0-9]{2,3})/);
+                t3 && (i2.startTime = 60 * Number(t3[1] || 0) * 60 + 60 * Number(t3[2]) + Number(t3[3]) + Number(`0.${t3[4]}`), i2.endTime = 60 * Number(t3[6] || 0) * 60 + 60 * Number(t3[7]) + Number(t3[8]) + Number(`0.${t3[9]}`));
+              }
+            }), i2.text && t2.push(i2);
+          }), t2;
+        }, et = (e2, t2) => {
+          const i2 = {};
+          return e2 > t2.width / t2.height ? (i2.width = t2.width, i2.height = 1 / e2 * t2.width) : (i2.height = t2.height, i2.width = e2 * t2.height), i2;
+        };
+        class tt {
+          constructor(t2) {
+            e(this, "load", () => {
+              this.player.elements.display.seekTooltip && (this.player.elements.display.seekTooltip.hidden = this.enabled), this.enabled && this.getThumbnails().then(() => {
+                this.enabled && (this.render(), this.determineContainerAutoSizing(), this.listeners(), this.loaded = true);
+              });
+            }), e(this, "getThumbnails", () => new Promise((e2) => {
+              const { src: t3 } = this.player.config.previewThumbnails;
+              if (S.empty(t3)) throw new Error("Missing previewThumbnails.src config attribute");
+              const i2 = () => {
+                this.thumbnails.sort((e3, t4) => e3.height - t4.height), this.player.debug.log("Preview thumbnails", this.thumbnails), e2();
+              };
+              if (S.function(t3)) t3((e3) => {
+                this.thumbnails = e3, i2();
+              });
+              else {
+                const e3 = (S.string(t3) ? [t3] : t3).map((e4) => this.getThumbnail(e4));
+                Promise.all(e3).then(i2);
+              }
+            })), e(this, "getThumbnail", (e2) => new Promise((t3) => {
+              Te(e2).then((i2) => {
+                const s2 = { frames: Ze(i2), height: null, urlPrefix: "" };
+                s2.frames[0].text.startsWith("/") || s2.frames[0].text.startsWith("http://") || s2.frames[0].text.startsWith("https://") || (s2.urlPrefix = e2.substring(0, e2.lastIndexOf("/") + 1));
+                const n2 = new Image();
+                n2.onload = () => {
+                  s2.height = n2.naturalHeight, s2.width = n2.naturalWidth, this.thumbnails.push(s2), t3();
+                }, n2.src = s2.urlPrefix + s2.frames[0].text;
+              });
+            })), e(this, "startMove", (e2) => {
+              if (this.loaded && S.event(e2) && ["touchmove", "mousemove"].includes(e2.type) && this.player.media.duration) {
+                if ("touchmove" === e2.type) this.seekTime = this.player.media.duration * (this.player.elements.inputs.seek.value / 100);
+                else {
+                  var t3, i2;
+                  const s2 = this.player.elements.progress.getBoundingClientRect(), n2 = 100 / s2.width * (e2.pageX - s2.left);
+                  this.seekTime = this.player.media.duration * (n2 / 100), this.seekTime < 0 && (this.seekTime = 0), this.seekTime > this.player.media.duration - 1 && (this.seekTime = this.player.media.duration - 1), this.mousePosX = e2.pageX, this.elements.thumb.time.innerText = Ee(this.seekTime);
+                  const a2 = null === (t3 = this.player.config.markers) || void 0 === t3 || null === (i2 = t3.points) || void 0 === i2 ? void 0 : i2.find(({ time: e3 }) => e3 === Math.round(this.seekTime));
+                  a2 && this.elements.thumb.time.insertAdjacentHTML("afterbegin", `${a2.label}<br>`);
+                }
+                this.showImageAtCurrentTime();
+              }
+            }), e(this, "endMove", () => {
+              this.toggleThumbContainer(false, true);
+            }), e(this, "startScrubbing", (e2) => {
+              (S.nullOrUndefined(e2.button) || false === e2.button || 0 === e2.button) && (this.mouseDown = true, this.player.media.duration && (this.toggleScrubbingContainer(true), this.toggleThumbContainer(false, true), this.showImageAtCurrentTime()));
+            }), e(this, "endScrubbing", () => {
+              this.mouseDown = false, Math.ceil(this.lastTime) === Math.ceil(this.player.media.currentTime) ? this.toggleScrubbingContainer(false) : G.call(this.player, this.player.media, "timeupdate", () => {
+                this.mouseDown || this.toggleScrubbingContainer(false);
+              });
+            }), e(this, "listeners", () => {
+              this.player.on("play", () => {
+                this.toggleThumbContainer(false, true);
+              }), this.player.on("seeked", () => {
+                this.toggleThumbContainer(false);
+              }), this.player.on("timeupdate", () => {
+                this.lastTime = this.player.media.currentTime;
+              });
+            }), e(this, "render", () => {
+              this.elements.thumb.container = $("div", { class: this.player.config.classNames.previewThumbnails.thumbContainer }), this.elements.thumb.imageContainer = $("div", { class: this.player.config.classNames.previewThumbnails.imageContainer }), this.elements.thumb.container.appendChild(this.elements.thumb.imageContainer);
+              const e2 = $("div", { class: this.player.config.classNames.previewThumbnails.timeContainer });
+              this.elements.thumb.time = $("span", {}, "00:00"), e2.appendChild(this.elements.thumb.time), this.elements.thumb.imageContainer.appendChild(e2), S.element(this.player.elements.progress) && this.player.elements.progress.appendChild(this.elements.thumb.container), this.elements.scrubbing.container = $("div", { class: this.player.config.classNames.previewThumbnails.scrubbingContainer }), this.player.elements.wrapper.appendChild(this.elements.scrubbing.container);
+            }), e(this, "destroy", () => {
+              this.elements.thumb.container && this.elements.thumb.container.remove(), this.elements.scrubbing.container && this.elements.scrubbing.container.remove();
+            }), e(this, "showImageAtCurrentTime", () => {
+              this.mouseDown ? this.setScrubbingContainerSize() : this.setThumbContainerSizeAndPos();
+              const e2 = this.thumbnails[0].frames.findIndex((e3) => this.seekTime >= e3.startTime && this.seekTime <= e3.endTime), t3 = e2 >= 0;
+              let i2 = 0;
+              this.mouseDown || this.toggleThumbContainer(t3), t3 && (this.thumbnails.forEach((t4, s2) => {
+                this.loadedImages.includes(t4.frames[e2].text) && (i2 = s2);
+              }), e2 !== this.showingThumb && (this.showingThumb = e2, this.loadImage(i2)));
+            }), e(this, "loadImage", (e2 = 0) => {
+              const t3 = this.showingThumb, i2 = this.thumbnails[e2], { urlPrefix: s2 } = i2, n2 = i2.frames[t3], a2 = i2.frames[t3].text, l2 = s2 + a2;
+              if (this.currentImageElement && this.currentImageElement.dataset.filename === a2) this.showImage(this.currentImageElement, n2, e2, t3, a2, false), this.currentImageElement.dataset.index = t3, this.removeOldImages(this.currentImageElement);
+              else {
+                this.loadingImage && this.usingSprites && (this.loadingImage.onload = null);
+                const i3 = new Image();
+                i3.src = l2, i3.dataset.index = t3, i3.dataset.filename = a2, this.showingThumbFilename = a2, this.player.debug.log(`Loading image: ${l2}`), i3.onload = () => this.showImage(i3, n2, e2, t3, a2, true), this.loadingImage = i3, this.removeOldImages(i3);
+              }
+            }), e(this, "showImage", (e2, t3, i2, s2, n2, a2 = true) => {
+              this.player.debug.log(`Showing thumb: ${n2}. num: ${s2}. qual: ${i2}. newimg: ${a2}`), this.setImageSizeAndOffset(e2, t3), a2 && (this.currentImageContainer.appendChild(e2), this.currentImageElement = e2, this.loadedImages.includes(n2) || this.loadedImages.push(n2)), this.preloadNearby(s2, true).then(this.preloadNearby(s2, false)).then(this.getHigherQuality(i2, e2, t3, n2));
+            }), e(this, "removeOldImages", (e2) => {
+              Array.from(this.currentImageContainer.children).forEach((t3) => {
+                if ("img" !== t3.tagName.toLowerCase()) return;
+                const i2 = this.usingSprites ? 500 : 1e3;
+                if (t3.dataset.index !== e2.dataset.index && !t3.dataset.deleting) {
+                  t3.dataset.deleting = true;
+                  const { currentImageContainer: e3 } = this;
+                  setTimeout(() => {
+                    e3.removeChild(t3), this.player.debug.log(`Removing thumb: ${t3.dataset.filename}`);
+                  }, i2);
+                }
+              });
+            }), e(this, "preloadNearby", (e2, t3 = true) => new Promise((i2) => {
+              setTimeout(() => {
+                const s2 = this.thumbnails[0].frames[e2].text;
+                if (this.showingThumbFilename === s2) {
+                  let n2;
+                  n2 = t3 ? this.thumbnails[0].frames.slice(e2) : this.thumbnails[0].frames.slice(0, e2).reverse();
+                  let a2 = false;
+                  n2.forEach((e3) => {
+                    const t4 = e3.text;
+                    if (t4 !== s2 && !this.loadedImages.includes(t4)) {
+                      a2 = true, this.player.debug.log(`Preloading thumb filename: ${t4}`);
+                      const { urlPrefix: e4 } = this.thumbnails[0], s3 = e4 + t4, n3 = new Image();
+                      n3.src = s3, n3.onload = () => {
+                        this.player.debug.log(`Preloaded thumb filename: ${t4}`), this.loadedImages.includes(t4) || this.loadedImages.push(t4), i2();
+                      };
+                    }
+                  }), a2 || i2();
+                }
+              }, 300);
+            })), e(this, "getHigherQuality", (e2, t3, i2, s2) => {
+              if (e2 < this.thumbnails.length - 1) {
+                let n2 = t3.naturalHeight;
+                this.usingSprites && (n2 = i2.h), n2 < this.thumbContainerHeight && setTimeout(() => {
+                  this.showingThumbFilename === s2 && (this.player.debug.log(`Showing higher quality thumb for: ${s2}`), this.loadImage(e2 + 1));
+                }, 300);
+              }
+            }), e(this, "toggleThumbContainer", (e2 = false, t3 = false) => {
+              const i2 = this.player.config.classNames.previewThumbnails.thumbContainerShown;
+              this.elements.thumb.container.classList.toggle(i2, e2), !e2 && t3 && (this.showingThumb = null, this.showingThumbFilename = null);
+            }), e(this, "toggleScrubbingContainer", (e2 = false) => {
+              const t3 = this.player.config.classNames.previewThumbnails.scrubbingContainerShown;
+              this.elements.scrubbing.container.classList.toggle(t3, e2), e2 || (this.showingThumb = null, this.showingThumbFilename = null);
+            }), e(this, "determineContainerAutoSizing", () => {
+              (this.elements.thumb.imageContainer.clientHeight > 20 || this.elements.thumb.imageContainer.clientWidth > 20) && (this.sizeSpecifiedInCSS = true);
+            }), e(this, "setThumbContainerSizeAndPos", () => {
+              const { imageContainer: e2 } = this.elements.thumb;
+              if (this.sizeSpecifiedInCSS) {
+                if (e2.clientHeight > 20 && e2.clientWidth < 20) {
+                  const t3 = Math.floor(e2.clientHeight * this.thumbAspectRatio);
+                  e2.style.width = `${t3}px`;
+                } else if (e2.clientHeight < 20 && e2.clientWidth > 20) {
+                  const t3 = Math.floor(e2.clientWidth / this.thumbAspectRatio);
+                  e2.style.height = `${t3}px`;
+                }
+              } else {
+                const t3 = Math.floor(this.thumbContainerHeight * this.thumbAspectRatio);
+                e2.style.height = `${this.thumbContainerHeight}px`, e2.style.width = `${t3}px`;
+              }
+              this.setThumbContainerPos();
+            }), e(this, "setThumbContainerPos", () => {
+              const e2 = this.player.elements.progress.getBoundingClientRect(), t3 = this.player.elements.container.getBoundingClientRect(), { container: i2 } = this.elements.thumb, s2 = t3.left - e2.left + 10, n2 = t3.right - e2.left - i2.clientWidth - 10, a2 = this.mousePosX - e2.left - i2.clientWidth / 2, l2 = Ge(a2, s2, n2);
+              i2.style.left = `${l2}px`, i2.style.setProperty("--preview-arrow-offset", a2 - l2 + "px");
+            }), e(this, "setScrubbingContainerSize", () => {
+              const { width: e2, height: t3 } = et(this.thumbAspectRatio, { width: this.player.media.clientWidth, height: this.player.media.clientHeight });
+              this.elements.scrubbing.container.style.width = `${e2}px`, this.elements.scrubbing.container.style.height = `${t3}px`;
+            }), e(this, "setImageSizeAndOffset", (e2, t3) => {
+              if (!this.usingSprites) return;
+              const i2 = this.thumbContainerHeight / t3.h;
+              e2.style.height = e2.naturalHeight * i2 + "px", e2.style.width = e2.naturalWidth * i2 + "px", e2.style.left = `-${t3.x * i2}px`, e2.style.top = `-${t3.y * i2}px`;
+            }), this.player = t2, this.thumbnails = [], this.loaded = false, this.lastMouseMoveTime = Date.now(), this.mouseDown = false, this.loadedImages = [], this.elements = { thumb: {}, scrubbing: {} }, this.load();
+          }
+          get enabled() {
+            return this.player.isHTML5 && this.player.isVideo && this.player.config.previewThumbnails.enabled;
+          }
+          get currentImageContainer() {
+            return this.mouseDown ? this.elements.scrubbing.container : this.elements.thumb.imageContainer;
+          }
+          get usingSprites() {
+            return Object.keys(this.thumbnails[0].frames[0]).includes("w");
+          }
+          get thumbAspectRatio() {
+            return this.usingSprites ? this.thumbnails[0].frames[0].w / this.thumbnails[0].frames[0].h : this.thumbnails[0].width / this.thumbnails[0].height;
+          }
+          get thumbContainerHeight() {
+            if (this.mouseDown) {
+              const { height: e2 } = et(this.thumbAspectRatio, { width: this.player.media.clientWidth, height: this.player.media.clientHeight });
+              return e2;
+            }
+            return this.sizeSpecifiedInCSS ? this.elements.thumb.imageContainer.clientHeight : Math.floor(this.player.media.clientWidth / this.thumbAspectRatio / 4);
+          }
+          get currentImageElement() {
+            return this.mouseDown ? this.currentScrubbingImageElement : this.currentThumbnailImageElement;
+          }
+          set currentImageElement(e2) {
+            this.mouseDown ? this.currentScrubbingImageElement = e2 : this.currentThumbnailImageElement = e2;
+          }
+        }
+        const it = { insertElements(e2, t2) {
+          S.string(t2) ? _(e2, this.media, { src: t2 }) : S.array(t2) && t2.forEach((t3) => {
+            _(e2, this.media, t3);
+          });
+        }, change(e2) {
+          N(e2, "sources.length") ? (de.cancelRequests.call(this), this.destroy.call(this, () => {
+            this.options.quality = [], O(this.media), this.media = null, S.element(this.elements.container) && this.elements.container.removeAttribute("class");
+            const { sources: t2, type: i2 } = e2, [{ provider: s2 = _e.html5, src: n2 }] = t2, a2 = "html5" === s2 ? i2 : "div", l2 = "html5" === s2 ? {} : { src: n2 };
+            Object.assign(this, { provider: s2, type: i2, supported: K.check(i2, s2, this.config.playsinline), media: $(a2, l2) }), this.elements.container.appendChild(this.media), S.boolean(e2.autoplay) && (this.config.autoplay = e2.autoplay), this.isHTML5 && (this.config.crossorigin && this.media.setAttribute("crossorigin", ""), this.config.autoplay && this.media.setAttribute("autoplay", ""), S.empty(e2.poster) || (this.poster = e2.poster), this.config.loop.active && this.media.setAttribute("loop", ""), this.config.muted && this.media.setAttribute("muted", ""), this.config.playsinline && this.media.setAttribute("playsinline", "")), Fe.addStyleHook.call(this), this.isHTML5 && it.insertElements.call(this, "source", t2), this.config.title = e2.title, Xe.setup.call(this), this.isHTML5 && Object.keys(e2).includes("tracks") && it.insertElements.call(this, "track", e2.tracks), (this.isHTML5 || this.isEmbed && !this.supported.ui) && Fe.build.call(this), this.isHTML5 && this.media.load(), S.empty(e2.previewThumbnails) || (Object.assign(this.config.previewThumbnails, e2.previewThumbnails), this.previewThumbnails && this.previewThumbnails.loaded && (this.previewThumbnails.destroy(), this.previewThumbnails = null), this.config.previewThumbnails.enabled && (this.previewThumbnails = new tt(this))), this.fullscreen.update();
+          }, true)) : this.debug.warn("Invalid source format");
+        } };
+        class st {
+          constructor(t2, i2) {
+            if (e(this, "play", () => S.function(this.media.play) ? (this.ads && this.ads.enabled && this.ads.managerPromise.then(() => this.ads.play()).catch(() => ie(this.media.play())), this.media.play()) : null), e(this, "pause", () => this.playing && S.function(this.media.pause) ? this.media.pause() : null), e(this, "togglePlay", (e2) => (S.boolean(e2) ? e2 : !this.playing) ? this.play() : this.pause()), e(this, "stop", () => {
+              this.isHTML5 ? (this.pause(), this.restart()) : S.function(this.media.stop) && this.media.stop();
+            }), e(this, "restart", () => {
+              this.currentTime = 0;
+            }), e(this, "rewind", (e2) => {
+              this.currentTime -= S.number(e2) ? e2 : this.config.seekTime;
+            }), e(this, "forward", (e2) => {
+              this.currentTime += S.number(e2) ? e2 : this.config.seekTime;
+            }), e(this, "increaseVolume", (e2) => {
+              const t3 = this.media.muted ? 0 : this.volume;
+              this.volume = t3 + (S.number(e2) ? e2 : 0);
+            }), e(this, "decreaseVolume", (e2) => {
+              this.increaseVolume(-e2);
+            }), e(this, "airplay", () => {
+              K.airplay && this.media.webkitShowPlaybackTargetPicker();
+            }), e(this, "toggleControls", (e2) => {
+              if (this.supported.ui && !this.isAudio) {
+                const t3 = F(this.elements.container, this.config.classNames.hideControls), i3 = void 0 === e2 ? void 0 : !e2, s3 = R(this.elements.container, this.config.classNames.hideControls, i3);
+                if (s3 && S.array(this.config.controls) && this.config.controls.includes("settings") && !S.empty(this.config.settings) && Pe.toggleMenu.call(this, false), s3 !== t3) {
+                  const e3 = s3 ? "controlshidden" : "controlsshown";
+                  Z.call(this, this.media, e3);
+                }
+                return !s3;
+              }
+              return false;
+            }), e(this, "on", (e2, t3) => {
+              X.call(this, this.elements.container, e2, t3);
+            }), e(this, "once", (e2, t3) => {
+              G.call(this, this.elements.container, e2, t3);
+            }), e(this, "off", (e2, t3) => {
+              J(this.elements.container, e2, t3);
+            }), e(this, "destroy", (e2, t3 = false) => {
+              if (!this.ready) return;
+              const i3 = () => {
+                document.body.style.overflow = "", this.embed = null, t3 ? (Object.keys(this.elements).length && (O(this.elements.buttons.play), O(this.elements.captions), O(this.elements.controls), O(this.elements.wrapper), this.elements.buttons.play = null, this.elements.captions = null, this.elements.controls = null, this.elements.wrapper = null), S.function(e2) && e2()) : (ee.call(this), de.cancelRequests.call(this), q(this.elements.original, this.elements.container), Z.call(this, this.elements.original, "destroyed", true), S.function(e2) && e2.call(this.elements.original), this.ready = false, setTimeout(() => {
+                  this.elements = null, this.media = null;
+                }, 200));
+              };
+              this.stop(), clearTimeout(this.timers.loading), clearTimeout(this.timers.controls), clearTimeout(this.timers.resized), this.isHTML5 ? (Fe.toggleNativeControls.call(this, true), i3()) : this.isYouTube ? (clearInterval(this.timers.buffering), clearInterval(this.timers.playing), null !== this.embed && S.function(this.embed.destroy) && this.embed.destroy(), i3()) : this.isVimeo && (null !== this.embed && this.embed.unload().then(i3), setTimeout(i3, 200));
+            }), e(this, "supports", (e2) => K.mime.call(this, e2)), this.timers = {}, this.ready = false, this.loading = false, this.failed = false, this.touch = K.touch, this.media = t2, S.string(this.media) && (this.media = document.querySelectorAll(this.media)), (window.jQuery && this.media instanceof jQuery || S.nodeList(this.media) || S.array(this.media)) && (this.media = this.media[0]), this.config = x({}, Le, st.defaults, i2 || {}, (() => {
+              try {
+                return JSON.parse(this.media.getAttribute("data-plyr-config"));
+              } catch (e2) {
+                return {};
+              }
+            })()), this.elements = { container: null, fullscreen: null, captions: null, buttons: {}, display: {}, progress: {}, inputs: {}, settings: { popup: null, menu: null, panels: {}, buttons: {} } }, this.captions = { active: null, currentTrack: -1, meta: /* @__PURE__ */ new WeakMap() }, this.fullscreen = { active: false }, this.options = { speed: [], quality: [] }, this.debug = new De(this.config.debug), this.debug.log("Config", this.config), this.debug.log("Support", K), S.nullOrUndefined(this.media) || !S.element(this.media)) return void this.debug.error("Setup failed: no suitable element passed");
+            if (this.media.plyr) return void this.debug.warn("Target already setup");
+            if (!this.config.enabled) return void this.debug.error("Setup failed: disabled by config");
+            if (!K.check().api) return void this.debug.error("Setup failed: no support");
+            const s2 = this.media.cloneNode(true);
+            s2.autoplay = false, this.elements.original = s2;
+            const n2 = this.media.tagName.toLowerCase();
+            let a2 = null, l2 = null;
+            switch (n2) {
+              case "div":
+                if (a2 = this.media.querySelector("iframe"), S.element(a2)) {
+                  if (l2 = Me(a2.getAttribute("src")), this.provider = function(e2) {
+                    return /^(https?:\/\/)?(www\.)?(youtube\.com|youtube-nocookie\.com|youtu\.?be)\/.+$/.test(e2) ? _e.youtube : /^https?:\/\/player.vimeo.com\/video\/\d{0,9}(?=\b|\/)/.test(e2) ? _e.vimeo : null;
+                  }(l2.toString()), this.elements.container = this.media, this.media = a2, this.elements.container.className = "", l2.search.length) {
+                    const e2 = ["1", "true"];
+                    e2.includes(l2.searchParams.get("autoplay")) && (this.config.autoplay = true), e2.includes(l2.searchParams.get("loop")) && (this.config.loop.active = true), this.isYouTube ? (this.config.playsinline = e2.includes(l2.searchParams.get("playsinline")), this.config.youtube.hl = l2.searchParams.get("hl")) : this.config.playsinline = true;
+                  }
+                } else this.provider = this.media.getAttribute(this.config.attributes.embed.provider), this.media.removeAttribute(this.config.attributes.embed.provider);
+                if (S.empty(this.provider) || !Object.values(_e).includes(this.provider)) return void this.debug.error("Setup failed: Invalid provider");
+                this.type = je;
+                break;
+              case "video":
+              case "audio":
+                this.type = n2, this.provider = _e.html5, this.media.hasAttribute("crossorigin") && (this.config.crossorigin = true), this.media.hasAttribute("autoplay") && (this.config.autoplay = true), (this.media.hasAttribute("playsinline") || this.media.hasAttribute("webkit-playsinline")) && (this.config.playsinline = true), this.media.hasAttribute("muted") && (this.config.muted = true), this.media.hasAttribute("loop") && (this.config.loop.active = true);
+                break;
+              default:
+                return void this.debug.error("Setup failed: unsupported type");
+            }
+            this.supported = K.check(this.type, this.provider), this.supported.api ? (this.eventListeners = [], this.listeners = new Ve(this), this.storage = new we(this), this.media.plyr = this, S.element(this.elements.container) || (this.elements.container = $("div"), L(this.media, this.elements.container)), Fe.migrateStyles.call(this), Fe.addStyleHook.call(this), Xe.setup.call(this), this.config.debug && X.call(this, this.elements.container, this.config.events.join(" "), (e2) => {
+              this.debug.log(`event: ${e2.type}`);
+            }), this.fullscreen = new He(this), (this.isHTML5 || this.isEmbed && !this.supported.ui) && Fe.build.call(this), this.listeners.container(), this.listeners.global(), this.config.ads.enabled && (this.ads = new Je(this)), this.isHTML5 && this.config.autoplay && this.once("canplay", () => ie(this.play())), this.lastSeekTime = 0, this.config.previewThumbnails.enabled && (this.previewThumbnails = new tt(this))) : this.debug.error("Setup failed: no support");
+          }
+          get isHTML5() {
+            return this.provider === _e.html5;
+          }
+          get isEmbed() {
+            return this.isYouTube || this.isVimeo;
+          }
+          get isYouTube() {
+            return this.provider === _e.youtube;
+          }
+          get isVimeo() {
+            return this.provider === _e.vimeo;
+          }
+          get isVideo() {
+            return this.type === je;
+          }
+          get isAudio() {
+            return this.type === Oe;
+          }
+          get playing() {
+            return Boolean(this.ready && !this.paused && !this.ended);
+          }
+          get paused() {
+            return Boolean(this.media.paused);
+          }
+          get stopped() {
+            return Boolean(this.paused && 0 === this.currentTime);
+          }
+          get ended() {
+            return Boolean(this.media.ended);
+          }
+          set currentTime(e2) {
+            if (!this.duration) return;
+            const t2 = S.number(e2) && e2 > 0;
+            this.media.currentTime = t2 ? Math.min(e2, this.duration) : 0, this.debug.log(`Seeking to ${this.currentTime} seconds`);
+          }
+          get currentTime() {
+            return Number(this.media.currentTime);
+          }
+          get buffered() {
+            const { buffered: e2 } = this.media;
+            return S.number(e2) ? e2 : e2 && e2.length && this.duration > 0 ? e2.end(0) / this.duration : 0;
+          }
+          get seeking() {
+            return Boolean(this.media.seeking);
+          }
+          get duration() {
+            const e2 = parseFloat(this.config.duration), t2 = (this.media || {}).duration, i2 = S.number(t2) && t2 !== 1 / 0 ? t2 : 0;
+            return e2 || i2;
+          }
+          set volume(e2) {
+            let t2 = e2;
+            S.string(t2) && (t2 = Number(t2)), S.number(t2) || (t2 = this.storage.get("volume")), S.number(t2) || ({ volume: t2 } = this.config), t2 > 1 && (t2 = 1), t2 < 0 && (t2 = 0), this.config.volume = t2, this.media.volume = t2, !S.empty(e2) && this.muted && t2 > 0 && (this.muted = false);
+          }
+          get volume() {
+            return Number(this.media.volume);
+          }
+          set muted(e2) {
+            let t2 = e2;
+            S.boolean(t2) || (t2 = this.storage.get("muted")), S.boolean(t2) || (t2 = this.config.muted), this.config.muted = t2, this.media.muted = t2;
+          }
+          get muted() {
+            return Boolean(this.media.muted);
+          }
+          get hasAudio() {
+            return !this.isHTML5 || (!!this.isAudio || (Boolean(this.media.mozHasAudio) || Boolean(this.media.webkitAudioDecodedByteCount) || Boolean(this.media.audioTracks && this.media.audioTracks.length)));
+          }
+          set speed(e2) {
+            let t2 = null;
+            S.number(e2) && (t2 = e2), S.number(t2) || (t2 = this.storage.get("speed")), S.number(t2) || (t2 = this.config.speed.selected);
+            const { minimumSpeed: i2, maximumSpeed: s2 } = this;
+            t2 = Ge(t2, i2, s2), this.config.speed.selected = t2, setTimeout(() => {
+              this.media && (this.media.playbackRate = t2);
+            }, 0);
+          }
+          get speed() {
+            return Number(this.media.playbackRate);
+          }
+          get minimumSpeed() {
+            return this.isYouTube ? Math.min(...this.options.speed) : this.isVimeo ? 0.5 : 0.0625;
+          }
+          get maximumSpeed() {
+            return this.isYouTube ? Math.max(...this.options.speed) : this.isVimeo ? 2 : 16;
+          }
+          set quality(e2) {
+            const t2 = this.config.quality, i2 = this.options.quality;
+            if (!i2.length) return;
+            let s2 = [!S.empty(e2) && Number(e2), this.storage.get("quality"), t2.selected, t2.default].find(S.number), n2 = true;
+            if (!i2.includes(s2)) {
+              const e3 = ne(i2, s2);
+              this.debug.warn(`Unsupported quality option: ${s2}, using ${e3} instead`), s2 = e3, n2 = false;
+            }
+            t2.selected = s2, this.media.quality = s2, n2 && this.storage.set({ quality: s2 });
+          }
+          get quality() {
+            return this.media.quality;
+          }
+          set loop(e2) {
+            const t2 = S.boolean(e2) ? e2 : this.config.loop.active;
+            this.config.loop.active = t2, this.media.loop = t2;
+          }
+          get loop() {
+            return Boolean(this.media.loop);
+          }
+          set source(e2) {
+            it.change.call(this, e2);
+          }
+          get source() {
+            return this.media.currentSrc;
+          }
+          get download() {
+            const { download: e2 } = this.config.urls;
+            return S.url(e2) ? e2 : this.source;
+          }
+          set download(e2) {
+            S.url(e2) && (this.config.urls.download = e2, Pe.setDownloadUrl.call(this));
+          }
+          set poster(e2) {
+            this.isVideo ? Fe.setPoster.call(this, e2, false).catch(() => {
+            }) : this.debug.warn("Poster can only be set for video");
+          }
+          get poster() {
+            return this.isVideo ? this.media.getAttribute("poster") || this.media.getAttribute("data-poster") : null;
+          }
+          get ratio() {
+            if (!this.isVideo) return null;
+            const e2 = oe(ce.call(this));
+            return S.array(e2) ? e2.join(":") : e2;
+          }
+          set ratio(e2) {
+            this.isVideo ? S.string(e2) && re(e2) ? (this.config.ratio = oe(e2), ue.call(this)) : this.debug.error(`Invalid aspect ratio specified (${e2})`) : this.debug.warn("Aspect ratio can only be set for video");
+          }
+          set autoplay(e2) {
+            this.config.autoplay = S.boolean(e2) ? e2 : this.config.autoplay;
+          }
+          get autoplay() {
+            return Boolean(this.config.autoplay);
+          }
+          toggleCaptions(e2) {
+            xe.toggle.call(this, e2, false);
+          }
+          set currentTrack(e2) {
+            xe.set.call(this, e2, false), xe.setup.call(this);
+          }
+          get currentTrack() {
+            const { toggled: e2, currentTrack: t2 } = this.captions;
+            return e2 ? t2 : -1;
+          }
+          set language(e2) {
+            xe.setLanguage.call(this, e2, false);
+          }
+          get language() {
+            return (xe.getCurrentTrack.call(this) || {}).language;
+          }
+          set pip(e2) {
+            if (!K.pip) return;
+            const t2 = S.boolean(e2) ? e2 : !this.pip;
+            S.function(this.media.webkitSetPresentationMode) && this.media.webkitSetPresentationMode(t2 ? Ie : $e), S.function(this.media.requestPictureInPicture) && (!this.pip && t2 ? this.media.requestPictureInPicture() : this.pip && !t2 && document.exitPictureInPicture());
+          }
+          get pip() {
+            return K.pip ? S.empty(this.media.webkitPresentationMode) ? this.media === document.pictureInPictureElement : this.media.webkitPresentationMode === Ie : null;
+          }
+          setPreviewThumbnails(e2) {
+            this.previewThumbnails && this.previewThumbnails.loaded && (this.previewThumbnails.destroy(), this.previewThumbnails = null), Object.assign(this.config.previewThumbnails, e2), this.config.previewThumbnails.enabled && (this.previewThumbnails = new tt(this));
+          }
+          static supported(e2, t2) {
+            return K.check(e2, t2);
+          }
+          static loadSprite(e2, t2) {
+            return ke(e2, t2);
+          }
+          static setup(e2, t2 = {}) {
+            let i2 = null;
+            return S.string(e2) ? i2 = Array.from(document.querySelectorAll(e2)) : S.nodeList(e2) ? i2 = Array.from(e2) : S.array(e2) && (i2 = e2.filter(S.element)), S.empty(i2) ? null : i2.map((e3) => new st(e3, t2));
+          }
+        }
+        var nt;
+        return st.defaults = (nt = Le, JSON.parse(JSON.stringify(nt))), st;
+      });
+    }
+  });
+
+  // src/index.js
+  init_live_reload();
+
+  // src/utilities.js
+  init_live_reload();
+  var stopScroll = function(lenis) {
+    if (lenis) {
+      lenis.stop();
+    } else {
+      const body = document.querySelector("body");
+      const NO_SCROLL_CLASS = "no-scroll";
+      body.classList.add(NO_SCROLL_CLASS);
+    }
+  };
+  var startScroll = function(lenis) {
+    if (lenis) {
+      lenis.start();
+    } else {
+      const body = document.querySelector("body");
+      const NO_SCROLL_CLASS = "no-scroll";
+      body.classList.remove(NO_SCROLL_CLASS);
+    }
+  };
+  var attr = function(defaultVal, attrVal) {
+    const defaultValType = typeof defaultVal;
+    if (typeof attrVal !== "string" || attrVal.trim() === "") return defaultVal;
+    if (attrVal?.toLowerCase() === "true" && defaultValType === "boolean") return true;
+    if (attrVal?.toLowerCase() === "false" && defaultValType === "boolean") return false;
+    if (isNaN(attrVal) && defaultValType === "string") return attrVal;
+    if (!isNaN(attrVal) && defaultValType === "number") return +attrVal;
+    return defaultVal;
+  };
+  var attrIfSet = function(item, attributeName, defaultValue) {
+    const hasAttribute = item.hasAttribute(attributeName);
+    const attributeValue = attr(defaultValue, item.getAttribute(attributeName));
+    if (hasAttribute) {
+      return attributeValue;
+    } else {
+      return;
+    }
+  };
+  var checkContainer = function(containerChild, breakpoint, callback, additionalParams) {
+    let containerQuery = breakpoint;
+    if (breakpoint === "medium") {
+      containerQuery = "(width < 50em)";
+    } else if (breakpoint === "small") {
+      containerQuery = "(width < 35em)";
+    } else if (breakpoint === "xsmall") {
+      containerQuery = "(width < 20em)";
+    }
+    if (containerQuery === "none") {
+      callback(false, additionalParams);
+    } else {
+      containerChild.observeContainer(containerQuery, (match) => {
+        callback(match, additionalParams);
+      });
+    }
+  };
+  var checkRunProp = function(item, animationID) {
+    if (!item || !animationID) {
+      console.error(`GSAP check Run Error in ${animationID}`);
+      return;
+    }
+    const RUN = `data-ix-${animationID}-run`;
+    const run = attr(true, item.getAttribute(RUN));
+    if (run === false) return false;
+    return true;
+  };
+  var checkSiteAndPageRun = function(animationID) {
+    if (!animationID) {
+      console.error(`No animationID provided to checkSiteAndPageRun`);
+      return;
+    }
+    const pageRunEl = document.querySelector(`[data-ix-${animationID}-page-run]`);
+    const pageRun = attr(true, pageRunEl?.getAttribute(`data-ix-${animationID}-page-run`));
+    const siteRunEl = document.querySelector(`[data-ix-${animationID}-site-run]`);
+    const siteRun = attr(true, siteRunEl?.getAttribute(`data-ix-${animationID}-site-run`));
+    if (pageRun === false || siteRun === false) {
+      document.querySelector("body").setAttribute(`data-ix-${animationID}-site-run`, "false");
+      return false;
+    }
+    return true;
+  };
+  var getClipDirection = function(attributeValue) {
+    const clipDirections = {
+      left: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",
+      right: "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
+      top: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+      bottom: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+      full: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+    };
+    return clipDirections[attributeValue] || attributeValue;
+  };
+  function getNonContentsChildren(item) {
+    if (!item || !(item instanceof Element)) return [];
+    const result = [];
+    function processChildren(parent) {
+      const children = Array.from(parent.children);
+      for (const child of children) {
+        const display = window.getComputedStyle(child).display;
+        if (display === "contents") {
+          processChildren(child);
+        } else {
+          result.push(child);
+        }
+      }
+    }
+    processChildren(item);
+    return result;
+  }
+  var copyURL = function() {
+    const elements = [...document.querySelectorAll("[fs-copyclip-text]")];
+    if (elements.length === 0) return;
+    elements.forEach((el) => {
+      const val = el.getAttribute("fs-copyclip-text");
+      if (val === "url") {
+        el.setAttribute("fs-copyclip-text", window.location.href);
+      }
+    });
+  };
+  var scrollReset = function() {
+    const RESET_EL = "[data-ix-reset]";
+    const RESET_TIME = "data-ix-reset-time";
+    const resetScrollTriggers = document.querySelectorAll(RESET_EL);
+    resetScrollTriggers.forEach(function(item) {
+      item.addEventListener("click", function(e) {
+        ScrollTrigger.refresh();
+        if (item.hasAttribute(RESET_TIME)) {
+          let time = attr(1e3, item.getAttribute(RESET_TIME));
+          setTimeout(() => {
+            ScrollTrigger.refresh();
+          }, time);
+        }
+      });
+    });
+  };
+  var updaterFooterYear = function() {
+    const YEAR_SELECTOR = "[data-footer-year]";
+    const yearSpan = document.querySelector(YEAR_SELECTOR);
+    if (!yearSpan) return;
+    const currentYear = (/* @__PURE__ */ new Date()).getFullYear();
+    yearSpan.innerText = currentYear.toString();
+  };
+  var getAttrConfig = function(element, prefix, defaults) {
+    const config = {};
+    for (const [key, defaultVal] of Object.entries(defaults)) {
+      const attrName = `data-ix-${prefix}-${key}`;
+      config[key] = attr(defaultVal, element.getAttribute(attrName));
+    }
+    return config;
+  };
+  var buildFromToVars = function(item, prefix) {
+    const PROPERTY_MAP = [
+      ["x", "x", "0%"],
+      ["y", "y", "0%"],
+      ["scale", "scale", 1],
+      ["scaleX", "scale-x", 1],
+      ["scaleY", "scale-y", 1],
+      ["width", "width", "0%"],
+      ["height", "height", "0%"],
+      ["rotateX", "rotate-x", 0],
+      ["rotateY", "rotate-y", 0],
+      ["rotateZ", "rotate-z", 0],
+      ["opacity", "opacity", 0],
+      ["borderRadius", "radius", "string"]
+    ];
+    const varsFrom = {};
+    const varsTo = {};
+    PROPERTY_MAP.forEach(([gsapProp, attrSuffix, defaultVal]) => {
+      varsFrom[gsapProp] = attrIfSet(item, `data-ix-${prefix}-${attrSuffix}-start`, defaultVal);
+      varsTo[gsapProp] = attrIfSet(item, `data-ix-${prefix}-${attrSuffix}-end`, defaultVal);
+    });
+    const clipStart = attrIfSet(item, `data-ix-${prefix}-clip-start`, "left");
+    const clipEnd = attrIfSet(item, `data-ix-${prefix}-clip-end`, "full");
+    varsFrom.clipPath = getClipDirection(clipStart);
+    varsTo.clipPath = getClipDirection(clipEnd);
+    return { varsFrom, varsTo };
+  };
+  var flattenDisplayContents = function(slot) {
+    if (!slot) return;
+    let child = slot.firstElementChild;
+    while (child && child.classList.contains("u-display-contents")) {
+      while (child.firstChild) {
+        slot.insertBefore(child.firstChild, child);
+      }
+      slot.removeChild(child);
+      child = slot.firstElementChild;
+    }
+  };
+  var removeCMSList = function(slot) {
+    const dynList = Array.from(slot.children).find((child) => child.classList.contains("w-dyn-list"));
+    if (!dynList) return;
+    const nestedItems = dynList?.querySelector(".w-dyn-items")?.children;
+    if (!nestedItems) return;
+    const staticWrapper = [...slot.children];
+    [...nestedItems].forEach((el) => {
+      const c = [...el.children].find((c2) => !c2.classList.contains("w-condition-invisible"));
+      c && slot.appendChild(c);
+    });
+    staticWrapper.forEach((el) => el.remove());
+  };
+
+  // src/interactions/accordion.js
+  init_live_reload();
+  var accordion = function() {
+    const ANIMATION_ID = "accordion";
+    const WRAP = '[data-ix-accordion="wrap"]';
+    const ITEM = '[data-ix-accordion="item"]';
+    const OPEN = '[data-ix-accordion="open"]';
+    const OPTION_FIRST_OPEN = "data-ix-accordion-first-open";
+    const OPTION_ONE_ACTIVE = "data-ix-accordion-one-active";
+    const OPTION_KEEP_ONE_OPEN = "data-ix-accordion-keep-one-open";
+    const OPTION_HOVER_OPEN = "data-ix-accordion-hover";
+    const ACTIVE_CLASS = "is-active";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    const openAccordion = function(item, open = true) {
+      const trigger = item.querySelector(OPEN);
+      if (open === true) {
+        item.classList.add(ACTIVE_CLASS);
+        trigger.setAttribute("aria-expanded", "true");
+      } else {
+        item.classList.remove(ACTIVE_CLASS);
+        trigger.setAttribute("aria-expanded", "false");
+      }
+    };
+    if (wraps.length === 0 || wraps === void 0) return;
+    wraps.forEach((wrap) => {
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      let firstOpen = attr(false, wrap.getAttribute(OPTION_FIRST_OPEN));
+      let oneActive = attr(false, wrap.getAttribute(OPTION_ONE_ACTIVE));
+      let keepOneOpen = attr(false, wrap.getAttribute(OPTION_KEEP_ONE_OPEN));
+      let hoverOnly = attr(false, wrap.getAttribute(OPTION_HOVER_OPEN));
+      const items = [...wrap.querySelectorAll(ITEM)];
+      if (items.length === 0) return;
+      const firstItem = items[0];
+      if (firstOpen) {
+        openAccordion(firstItem);
+      }
+      if (!hoverOnly) {
+        wrap.addEventListener("click", function(e) {
+          const clickedEl = e.target.closest(OPEN);
+          if (!clickedEl) return;
+          const clickedItem = clickedEl.closest(ITEM);
+          let clickedItemAlreadyActive = clickedItem.classList.contains(ACTIVE_CLASS);
+          if (!clickedItemAlreadyActive) {
+            if (oneActive) {
+              items.forEach((item) => {
+                if (item === clickedItem) {
+                  openAccordion(item);
+                } else {
+                  openAccordion(item, false);
+                }
+              });
+            }
+            if (!oneActive) {
+              openAccordion(clickedItem);
+            }
+          }
+          if (clickedItemAlreadyActive && !keepOneOpen) {
+            openAccordion(clickedItem, false);
+          }
+          if (clickedItemAlreadyActive && keepOneOpen) {
+            const activeItems = items.filter(function(item) {
+              return item.classList.contains(ACTIVE_CLASS);
+            });
+            if (activeItems.length > 1) {
+              openAccordion(clickedItem, false);
+            }
+          }
+        });
+      }
+      if (hoverOnly) {
+        items.forEach((item) => {
+          item.addEventListener("mouseover", function() {
+            openAccordion(item);
+          });
+          item.addEventListener("mouseout", function() {
+            openAccordion(item, false);
+          });
+        });
+      }
+    });
+  };
+
+  // src/interactions/banner.js
+  init_live_reload();
+  var banner = function() {
+    const ANIMATION_ID = "banner";
+    const WRAP = '[data-ix-banner="wrap"]';
+    const TRACK = '[data-ix-banner="track"]';
+    const START = "data-ix-banner-start";
+    const END = "data-ix-banner-end";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    wraps.forEach((wrap) => {
+      const track = wrap.querySelector(TRACK);
+      if (!wrap || !track) return;
+      const animation = function() {
+        let start = attr("center 80%", wrap.getAttribute(START));
+        let end = attr("center 20%", wrap.getAttribute(END));
+        let tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: wrap,
+            start,
+            end,
+            scrub: 1,
+            markers: false
+          }
+        });
+        tl.to(track, { xPercent: -100, ease: "none", duration: 1 });
+      };
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(track, breakpoint, animation);
+    });
+  };
+
+  // src/interactions/click-active.js
+  init_live_reload();
+  var clickActive = function() {
+    const ANIMATION_ID = "clickactive";
+    const WRAP = '[data-ix-clickactive="wrap"]';
+    const TRIGGER = '[data-ix-clickactive="trigger"]';
+    const TARGET = '[data-ix-clickactive="target"]';
+    const ID = "data-ix-clickactive-id";
+    const OPTION_START_ACTIVE = "data-ix-clickactive-start-active";
+    const OPTION_ACTIVE_CLASS = "data-ix-clickactive-class";
+    const OPTION_FIRST_ACTIVE = "data-ix-clickactive-first-active";
+    const OPTION_ONE_ACTIVE = "data-ix-clickactive-one-active";
+    const OPTION_KEEP_ONE_ACTIVE = "data-ix-clickactive-keep-one-active";
+    const INTERACTION_DURATION = 800;
+    const ACTIVE_CLASS = "is-active";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const clickActiveList = function(rootElement) {
+      const triggers = Array.from(rootElement.querySelectorAll(TRIGGER));
+      let activeClass = ACTIVE_CLASS;
+      let firstActive = false;
+      let oneActive = false;
+      let keepOneActive = false;
+      if (rootElement !== document) {
+        activeClass = attr(ACTIVE_CLASS, rootElement.getAttribute(OPTION_ACTIVE_CLASS));
+        firstActive = attr(false, rootElement.getAttribute(OPTION_FIRST_ACTIVE));
+        oneActive = attr(false, rootElement.getAttribute(OPTION_ONE_ACTIVE));
+        keepOneActive = attr(false, rootElement.getAttribute(OPTION_KEEP_ONE_ACTIVE));
+        let runProp = checkRunProp(rootElement, ANIMATION_ID);
+        if (runProp === false) return;
+      }
+      const activateItems = function(item, makeActive = true) {
+        if (!item) return;
+        let hasTarget = true;
+        const itemID = item.getAttribute(ID);
+        const targetEl = rootElement.querySelector(`${TARGET}[${ID}="${itemID}"]`);
+        if (!itemID || !targetEl) {
+          hasTarget = false;
+        }
+        if (makeActive) {
+          item.classList.add(activeClass);
+          if (hasTarget) {
+            targetEl.classList.add(activeClass);
+          }
+        } else {
+          item.classList.remove(activeClass);
+          if (hasTarget) {
+            targetEl.classList.remove(activeClass);
+          }
+        }
+      };
+      triggers.forEach((item) => {
+        if (!item) return;
+        let startActive = attr(false, item.getAttribute(OPTION_START_ACTIVE));
+        if (startActive) {
+          activateItems(item);
+        } else {
+          activateItems(item, false);
+        }
+        item.addEventListener("click", function(e) {
+          let itemIsActive = item.classList.contains(ACTIVE_CLASS);
+          if (!itemIsActive) {
+            if (oneActive) {
+              triggers.forEach((itemElement) => {
+                if (itemElement === item) {
+                  activateItems(itemElement);
+                } else {
+                  activateItems(itemElement, false);
+                }
+              });
+            }
+            if (!oneActive) {
+              activateItems(item);
+            }
+          }
+          if (itemIsActive && !keepOneActive) {
+            activateItems(item, false);
+          }
+          if (itemIsActive && keepOneActive) {
+            const activeItems = triggers.filter(function(item2) {
+              return item2.classList.contains(activeClass);
+            });
+            if (activeItems.length > 1) {
+              activateItems(item, false);
+            }
+          }
+          if (gsap.ScrollTrigger !== void 0) {
+            setTimeout(() => {
+              ScrollTrigger.refresh();
+            }, INTERACTION_DURATION);
+          }
+        });
+      });
+      const firstItem = triggers[0];
+      if (firstActive) {
+        activateItems(firstItem);
+      }
+    };
+    const clickWraps = gsap.utils.toArray(WRAP);
+    if (clickWraps.length === 0 || clickWraps === void 0) {
+      clickActiveList(document);
+    } else {
+      clickWraps.forEach((wrap) => {
+        clickActiveList(wrap);
+      });
+    }
+  };
+
+  // src/interactions/count-up.js
+  init_live_reload();
+  var countUp = function() {
+    const ANIMATION_ID = "countup";
+    const ITEM = '[data-ix-countup="item"]';
+    const TEXT = '[data-ix-countup="text"]';
+    const OPTION_TYPE = "data-ix-countup-type";
+    const OPTION_DURATION = "data-ix-countup-duration";
+    const OPTION_START = "data-ix-countup-start";
+    const OPTION_ACTIVE_CLASS = "data-ix-countup-active";
+    const OPTION_TRIGGER = "data-ix-countup-trigger";
+    const OPTION_STAGGER = "data-ix-countup-stagger";
+    const OPTION_EASE = "data-ix-countup-ease";
+    const OPTION_DIRECTION = "data-ix-countup-direction";
+    const OPTION_USE_GROUPING = "data-ix-countup-use-grouping";
+    const COLUMN_CLASS = "ticker_column";
+    const DIGIT_CLASS = "ticker_digit";
+    const SEPARATOR_CLASS = "ticker_separator";
+    const DEFAULT_TYPE = "count";
+    const DEFAULT_TRIGGER = "scroll";
+    const DEFAULT_ACTIVE_CLASS = "is-active";
+    const DEFAULT_COUNT_DURATION = 2.5;
+    const DEFAULT_COUNT_START = "top bottom";
+    const DEFAULT_COUNT_EASE = "power3.out";
+    const DEFAULT_TICKER_DURATION = 1.5;
+    const DEFAULT_TICKER_START = "top 90%";
+    const DEFAULT_TICKER_STAGGER = 0.1;
+    const DEFAULT_TICKER_EASE = "power2.out";
+    const DEFAULT_TICKER_DIRECTION = "down";
+    const DEFAULT_TICKER_USE_GROUPING = true;
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const runCountAnimation = function(item, { duration, start, activeClass, triggerType }) {
+      const parent = item.parentElement;
+      const textEl = item.querySelector(TEXT) || item;
+      const rawText = textEl.textContent.trim();
+      const cleanedText = rawText.replace(/,/g, "");
+      const targetNumber = parseFloat(cleanedText);
+      if (!targetNumber || isNaN(targetNumber)) return;
+      const decimalParts = cleanedText.split(".");
+      const decimalPlaces = decimalParts.length > 1 ? decimalParts[1].length : 0;
+      const formatValue = function(val) {
+        return decimalPlaces > 0 ? val.toFixed(decimalPlaces) : Math.round(val).toString();
+      };
+      textEl.textContent = formatValue(0);
+      const startAnimation = function() {
+        const counter = { value: 0 };
+        gsap.to(counter, {
+          value: targetNumber,
+          duration,
+          ease: DEFAULT_COUNT_EASE,
+          onUpdate: function() {
+            textEl.textContent = formatValue(counter.value);
+          },
+          onComplete: function() {
+            textEl.textContent = formatValue(targetNumber);
+          }
+        });
+        parent.classList.add(activeClass);
+        setTimeout(() => {
+          parent.classList.remove(activeClass);
+        }, duration * 1e3);
+      };
+      if (triggerType === "load") {
+        startAnimation();
+      } else {
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start,
+            end: "top 10%",
+            scrub: true,
+            onEnter: startAnimation
+          }
+        });
+      }
+    };
+    const runTickerAnimation = function(item, { duration, start, activeClass, triggerType }) {
+      let stagger = attr(DEFAULT_TICKER_STAGGER, item.getAttribute(OPTION_STAGGER));
+      let ease = attr(DEFAULT_TICKER_EASE, item.getAttribute(OPTION_EASE));
+      let direction = attr(DEFAULT_TICKER_DIRECTION, item.getAttribute(OPTION_DIRECTION));
+      let useGrouping = attr(DEFAULT_TICKER_USE_GROUPING, item.getAttribute(OPTION_USE_GROUPING));
+      const textEl = item.querySelector(TEXT) || item;
+      const rawText = textEl.textContent.trim();
+      const cleanedText = rawText.replace(/[,\s]/g, "");
+      const targetNumber = parseFloat(cleanedText);
+      if (isNaN(targetNumber)) return;
+      const decimalParts = cleanedText.split(".");
+      const decimalPlaces = decimalParts.length > 1 ? decimalParts[1].length : 0;
+      const formatNumber = function(num) {
+        let formatted;
+        if (decimalPlaces > 0) {
+          formatted = Math.abs(num).toFixed(decimalPlaces);
+        } else {
+          formatted = Math.abs(Math.round(num)).toString();
+        }
+        if (useGrouping) {
+          const parts = formatted.split(".");
+          parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          formatted = parts.join(".");
+        }
+        if (num < 0) {
+          formatted = "-" + formatted;
+        }
+        return formatted;
+      };
+      const targetString = formatNumber(targetNumber);
+      const numberMatch = rawText.match(/^([^0-9\-]*)([\-]?[\d,.\s]+)([^0-9]*)$/);
+      const prefix = numberMatch ? numberMatch[1] : "";
+      const suffix = numberMatch ? numberMatch[3] : "";
+      item.textContent = "";
+      item.setAttribute("aria-label", rawText);
+      if (prefix) {
+        const prefixEl = document.createElement("span");
+        prefixEl.classList.add(SEPARATOR_CLASS);
+        prefixEl.textContent = prefix;
+        prefixEl.setAttribute("aria-hidden", "true");
+        item.appendChild(prefixEl);
+      }
+      const EXTRA_TICKS = [1, 3, 6, 10, 15];
+      const columns = [];
+      const targetDigits = targetString.replace("-", "");
+      let digitColumnIndex = 0;
+      for (let i = 0; i < targetDigits.length; i++) {
+        const char = targetDigits[i];
+        if (isNaN(parseInt(char))) {
+          const sep = document.createElement("span");
+          sep.classList.add(SEPARATOR_CLASS);
+          sep.textContent = char;
+          sep.setAttribute("aria-hidden", "true");
+          item.appendChild(sep);
+          continue;
+        }
+        const targetDigit = parseInt(char);
+        const extraTicks = EXTRA_TICKS[Math.min(digitColumnIndex, EXTRA_TICKS.length - 1)];
+        const numCycles = Math.max(0, Math.ceil((extraTicks - targetDigit) / 10));
+        const targetIndex = numCycles * 10 + targetDigit;
+        const startIndex = targetIndex - extraTicks;
+        const column = document.createElement("span");
+        column.classList.add(COLUMN_CLASS);
+        column.setAttribute("aria-hidden", "true");
+        for (let cycle = 0; cycle <= numCycles; cycle++) {
+          for (let d = 0; d <= 9; d++) {
+            const digitEl = document.createElement("span");
+            digitEl.classList.add(DIGIT_CLASS);
+            digitEl.textContent = d;
+            column.appendChild(digitEl);
+          }
+        }
+        item.appendChild(column);
+        columns.push({ element: column, targetIndex, startIndex });
+        digitColumnIndex++;
+      }
+      if (suffix) {
+        const suffixEl = document.createElement("span");
+        suffixEl.classList.add(SEPARATOR_CLASS);
+        suffixEl.textContent = suffix;
+        suffixEl.setAttribute("aria-hidden", "true");
+        item.appendChild(suffixEl);
+      }
+      if (columns.length === 0) return;
+      const firstDigitEl = columns[0].element.querySelector(`.${DIGIT_CLASS}`);
+      const digitHeight = firstDigitEl.offsetHeight;
+      columns.forEach(({ element, startIndex }) => {
+        gsap.set(element, { y: -startIndex * digitHeight });
+      });
+      const animateColumns = function() {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            item.classList.add(activeClass);
+          }
+        });
+        columns.forEach(({ element, targetIndex }, index) => {
+          const targetY = -targetIndex * digitHeight;
+          let position;
+          if (direction === "down") {
+            position = (columns.length - 1 - index) * stagger;
+          } else {
+            position = index * stagger;
+          }
+          tl.to(element, { y: targetY, duration, ease }, position);
+        });
+        return tl;
+      };
+      if (triggerType === "load") {
+        animateColumns();
+      } else {
+        ScrollTrigger.create({
+          trigger: item,
+          start,
+          once: true,
+          onEnter: () => {
+            animateColumns();
+          }
+        });
+      }
+    };
+    const items = document.querySelectorAll(ITEM);
+    items.forEach((item) => {
+      const animation = function() {
+        let type = attr(DEFAULT_TYPE, item.getAttribute(OPTION_TYPE));
+        let duration = attr(
+          type === "ticker" ? DEFAULT_TICKER_DURATION : DEFAULT_COUNT_DURATION,
+          item.getAttribute(OPTION_DURATION)
+        );
+        let start = attr(
+          type === "ticker" ? DEFAULT_TICKER_START : DEFAULT_COUNT_START,
+          item.getAttribute(OPTION_START)
+        );
+        let activeClass = attr(DEFAULT_ACTIVE_CLASS, item.getAttribute(OPTION_ACTIVE_CLASS));
+        let triggerType = attr(DEFAULT_TRIGGER, item.getAttribute(OPTION_TRIGGER));
+        if (type === "ticker") {
+          runTickerAnimation(item, { duration, start, activeClass, triggerType });
+        } else {
+          runCountAnimation(item, { duration, start, activeClass, triggerType });
+        }
+      };
+      let runProp = checkRunProp(item, ANIMATION_ID);
+      if (runProp === false) return;
+      const breakpoint = attr("none", item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(item, breakpoint, animation);
+    });
+  };
+
+  // src/interactions/cursor.js
+  init_live_reload();
+
+  // src/interactions/hover-active.js
+  init_live_reload();
+  var hoverActive = function() {
+    const ANIMATION_ID = "hoveractive";
+    const WRAP = '[data-ix-hoveractive="wrap"]';
+    const TRIGGER = '[data-ix-hoveractive="trigger"]';
+    const TARGET = '[data-ix-hoveractive="target"]';
+    const ID = "data-ix-hoveractive-id";
+    const OPTION_ACTIVE_CLASS = "data-ix-hoveractive-class";
+    const OPTION_KEEP_ACTIVE = "data-ix-hoveractive-keep-active";
+    const ACTIVE_CLASS = "is-active";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const hoverActiveList = function(listElement) {
+      const children = [...listElement.querySelectorAll(TRIGGER)];
+      let activeClass = attr(ACTIVE_CLASS, listElement.getAttribute(OPTION_ACTIVE_CLASS));
+      let keepActive = attr(false, listElement.getAttribute(OPTION_KEEP_ACTIVE));
+      function activateItem(item, activate = true) {
+        let hasTarget = true;
+        activeClass = attr(activeClass, item.getAttribute(OPTION_ACTIVE_CLASS));
+        const itemID = item.getAttribute(ID);
+        const targetEl = listElement.querySelector(`${TARGET}[${ID}="${itemID}"]`);
+        if (!itemID || !targetEl) {
+          hasTarget = false;
+        }
+        if (activate) {
+          item.classList.add(activeClass);
+          if (hasTarget) {
+            targetEl.classList.add(activeClass);
+          }
+        } else {
+          item.classList.remove(activeClass);
+          if (hasTarget) {
+            targetEl.classList.remove(activeClass);
+          }
+        }
+      }
+      children.forEach((currentItem) => {
+        currentItem.addEventListener("mouseover", function(e) {
+          children.forEach((child) => {
+            if (child === currentItem) {
+              activateItem(currentItem, true);
+            } else {
+              activateItem(child, false);
+            }
+          });
+        });
+        currentItem.addEventListener("mouseleave", function(e) {
+          if (!keepActive) {
+            activateItem(currentItem, false);
+          }
+        });
+      });
+    };
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length > 0) {
+      wraps.forEach((wrap) => {
+        let runProp = checkRunProp(wrap, ANIMATION_ID);
+        if (runProp === false) return;
+        hoverActiveList(wrap);
+      });
+    } else {
+      const body = document.querySelector("body");
+      hoverActiveList(body);
+    }
+  };
+
+  // src/interactions/lenis.js
+  init_live_reload();
+
+  // node_modules/lenis/dist/lenis.mjs
+  init_live_reload();
+  var version = "1.3.13";
+  function clamp(min, input, max) {
+    return Math.max(min, Math.min(input, max));
+  }
+  function lerp(x, y, t) {
+    return (1 - t) * x + t * y;
+  }
+  function damp(x, y, lambda, deltaTime) {
+    return lerp(x, y, 1 - Math.exp(-lambda * deltaTime));
+  }
+  function modulo(n, d) {
+    return (n % d + d) % d;
+  }
+  var Animate = class {
+    isRunning = false;
+    value = 0;
+    from = 0;
+    to = 0;
+    currentTime = 0;
+    // These are instanciated in the fromTo method
+    lerp;
+    duration;
+    easing;
+    onUpdate;
+    /**
+     * Advance the animation by the given delta time
+     *
+     * @param deltaTime - The time in seconds to advance the animation
+     */
+    advance(deltaTime) {
+      if (!this.isRunning) return;
+      let completed = false;
+      if (this.duration && this.easing) {
+        this.currentTime += deltaTime;
+        const linearProgress = clamp(0, this.currentTime / this.duration, 1);
+        completed = linearProgress >= 1;
+        const easedProgress = completed ? 1 : this.easing(linearProgress);
+        this.value = this.from + (this.to - this.from) * easedProgress;
+      } else if (this.lerp) {
+        this.value = damp(this.value, this.to, this.lerp * 60, deltaTime);
+        if (Math.round(this.value) === this.to) {
+          this.value = this.to;
+          completed = true;
+        }
+      } else {
+        this.value = this.to;
+        completed = true;
+      }
+      if (completed) {
+        this.stop();
+      }
+      this.onUpdate?.(this.value, completed);
+    }
+    /** Stop the animation */
+    stop() {
+      this.isRunning = false;
+    }
+    /**
+     * Set up the animation from a starting value to an ending value
+     * with optional parameters for lerping, duration, easing, and onUpdate callback
+     *
+     * @param from - The starting value
+     * @param to - The ending value
+     * @param options - Options for the animation
+     */
+    fromTo(from, to, { lerp: lerp2, duration, easing, onStart, onUpdate }) {
+      this.from = this.value = from;
+      this.to = to;
+      this.lerp = lerp2;
+      this.duration = duration;
+      this.easing = easing;
+      this.currentTime = 0;
+      this.isRunning = true;
+      onStart?.();
+      this.onUpdate = onUpdate;
+    }
+  };
+  function debounce(callback, delay) {
+    let timer;
+    return function(...args) {
+      let context = this;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = void 0;
+        callback.apply(context, args);
+      }, delay);
+    };
+  }
+  var Dimensions = class {
+    constructor(wrapper, content, { autoResize = true, debounce: debounceValue = 250 } = {}) {
+      this.wrapper = wrapper;
+      this.content = content;
+      if (autoResize) {
+        this.debouncedResize = debounce(this.resize, debounceValue);
+        if (this.wrapper instanceof Window) {
+          window.addEventListener("resize", this.debouncedResize, false);
+        } else {
+          this.wrapperResizeObserver = new ResizeObserver(this.debouncedResize);
+          this.wrapperResizeObserver.observe(this.wrapper);
+        }
+        this.contentResizeObserver = new ResizeObserver(this.debouncedResize);
+        this.contentResizeObserver.observe(this.content);
+      }
+      this.resize();
+    }
+    width = 0;
+    height = 0;
+    scrollHeight = 0;
+    scrollWidth = 0;
+    // These are instanciated in the constructor as they need information from the options
+    debouncedResize;
+    wrapperResizeObserver;
+    contentResizeObserver;
+    destroy() {
+      this.wrapperResizeObserver?.disconnect();
+      this.contentResizeObserver?.disconnect();
+      if (this.wrapper === window && this.debouncedResize) {
+        window.removeEventListener("resize", this.debouncedResize, false);
+      }
+    }
+    resize = () => {
+      this.onWrapperResize();
+      this.onContentResize();
+    };
+    onWrapperResize = () => {
+      if (this.wrapper instanceof Window) {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+      } else {
+        this.width = this.wrapper.clientWidth;
+        this.height = this.wrapper.clientHeight;
+      }
+    };
+    onContentResize = () => {
+      if (this.wrapper instanceof Window) {
+        this.scrollHeight = this.content.scrollHeight;
+        this.scrollWidth = this.content.scrollWidth;
+      } else {
+        this.scrollHeight = this.wrapper.scrollHeight;
+        this.scrollWidth = this.wrapper.scrollWidth;
+      }
+    };
+    get limit() {
+      return {
+        x: this.scrollWidth - this.width,
+        y: this.scrollHeight - this.height
+      };
+    }
+  };
+  var Emitter = class {
+    events = {};
+    /**
+     * Emit an event with the given data
+     * @param event Event name
+     * @param args Data to pass to the event handlers
+     */
+    emit(event, ...args) {
+      let callbacks = this.events[event] || [];
+      for (let i = 0, length = callbacks.length; i < length; i++) {
+        callbacks[i]?.(...args);
+      }
+    }
+    /**
+     * Add a callback to the event
+     * @param event Event name
+     * @param cb Callback function
+     * @returns Unsubscribe function
+     */
+    on(event, cb) {
+      this.events[event]?.push(cb) || (this.events[event] = [cb]);
+      return () => {
+        this.events[event] = this.events[event]?.filter((i) => cb !== i);
+      };
+    }
+    /**
+     * Remove a callback from the event
+     * @param event Event name
+     * @param callback Callback function
+     */
+    off(event, callback) {
+      this.events[event] = this.events[event]?.filter((i) => callback !== i);
+    }
+    /**
+     * Remove all event listeners and clean up
+     */
+    destroy() {
+      this.events = {};
+    }
+  };
+  var LINE_HEIGHT = 100 / 6;
+  var listenerOptions = { passive: false };
+  var VirtualScroll = class {
+    constructor(element, options = { wheelMultiplier: 1, touchMultiplier: 1 }) {
+      this.element = element;
+      this.options = options;
+      window.addEventListener("resize", this.onWindowResize, false);
+      this.onWindowResize();
+      this.element.addEventListener("wheel", this.onWheel, listenerOptions);
+      this.element.addEventListener(
+        "touchstart",
+        this.onTouchStart,
+        listenerOptions
+      );
+      this.element.addEventListener(
+        "touchmove",
+        this.onTouchMove,
+        listenerOptions
+      );
+      this.element.addEventListener("touchend", this.onTouchEnd, listenerOptions);
+    }
+    touchStart = {
+      x: 0,
+      y: 0
+    };
+    lastDelta = {
+      x: 0,
+      y: 0
+    };
+    window = {
+      width: 0,
+      height: 0
+    };
+    emitter = new Emitter();
+    /**
+     * Add an event listener for the given event and callback
+     *
+     * @param event Event name
+     * @param callback Callback function
+     */
+    on(event, callback) {
+      return this.emitter.on(event, callback);
+    }
+    /** Remove all event listeners and clean up */
+    destroy() {
+      this.emitter.destroy();
+      window.removeEventListener("resize", this.onWindowResize, false);
+      this.element.removeEventListener("wheel", this.onWheel, listenerOptions);
+      this.element.removeEventListener(
+        "touchstart",
+        this.onTouchStart,
+        listenerOptions
+      );
+      this.element.removeEventListener(
+        "touchmove",
+        this.onTouchMove,
+        listenerOptions
+      );
+      this.element.removeEventListener(
+        "touchend",
+        this.onTouchEnd,
+        listenerOptions
+      );
+    }
+    /**
+     * Event handler for 'touchstart' event
+     *
+     * @param event Touch event
+     */
+    onTouchStart = (event) => {
+      const { clientX, clientY } = event.targetTouches ? event.targetTouches[0] : event;
+      this.touchStart.x = clientX;
+      this.touchStart.y = clientY;
+      this.lastDelta = {
+        x: 0,
+        y: 0
+      };
+      this.emitter.emit("scroll", {
+        deltaX: 0,
+        deltaY: 0,
+        event
+      });
+    };
+    /** Event handler for 'touchmove' event */
+    onTouchMove = (event) => {
+      const { clientX, clientY } = event.targetTouches ? event.targetTouches[0] : event;
+      const deltaX = -(clientX - this.touchStart.x) * this.options.touchMultiplier;
+      const deltaY = -(clientY - this.touchStart.y) * this.options.touchMultiplier;
+      this.touchStart.x = clientX;
+      this.touchStart.y = clientY;
+      this.lastDelta = {
+        x: deltaX,
+        y: deltaY
+      };
+      this.emitter.emit("scroll", {
+        deltaX,
+        deltaY,
+        event
+      });
+    };
+    onTouchEnd = (event) => {
+      this.emitter.emit("scroll", {
+        deltaX: this.lastDelta.x,
+        deltaY: this.lastDelta.y,
+        event
+      });
+    };
+    /** Event handler for 'wheel' event */
+    onWheel = (event) => {
+      let { deltaX, deltaY, deltaMode } = event;
+      const multiplierX = deltaMode === 1 ? LINE_HEIGHT : deltaMode === 2 ? this.window.width : 1;
+      const multiplierY = deltaMode === 1 ? LINE_HEIGHT : deltaMode === 2 ? this.window.height : 1;
+      deltaX *= multiplierX;
+      deltaY *= multiplierY;
+      deltaX *= this.options.wheelMultiplier;
+      deltaY *= this.options.wheelMultiplier;
+      this.emitter.emit("scroll", { deltaX, deltaY, event });
+    };
+    onWindowResize = () => {
+      this.window = {
+        width: window.innerWidth,
+        height: window.innerHeight
+      };
+    };
+  };
+  var defaultEasing = (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+  var Lenis = class {
+    _isScrolling = false;
+    // true when scroll is animating
+    _isStopped = false;
+    // true if user should not be able to scroll - enable/disable programmatically
+    _isLocked = false;
+    // same as isStopped but enabled/disabled when scroll reaches target
+    _preventNextNativeScrollEvent = false;
+    _resetVelocityTimeout = null;
+    __rafID = null;
+    /**
+     * Whether or not the user is touching the screen
+     */
+    isTouching;
+    /**
+     * The time in ms since the lenis instance was created
+     */
+    time = 0;
+    /**
+     * User data that will be forwarded through the scroll event
+     *
+     * @example
+     * lenis.scrollTo(100, {
+     *   userData: {
+     *     foo: 'bar'
+     *   }
+     * })
+     */
+    userData = {};
+    /**
+     * The last velocity of the scroll
+     */
+    lastVelocity = 0;
+    /**
+     * The current velocity of the scroll
+     */
+    velocity = 0;
+    /**
+     * The direction of the scroll
+     */
+    direction = 0;
+    /**
+     * The options passed to the lenis instance
+     */
+    options;
+    /**
+     * The target scroll value
+     */
+    targetScroll;
+    /**
+     * The animated scroll value
+     */
+    animatedScroll;
+    // These are instanciated here as they don't need information from the options
+    animate = new Animate();
+    emitter = new Emitter();
+    // These are instanciated in the constructor as they need information from the options
+    dimensions;
+    // This is not private because it's used in the Snap class
+    virtualScroll;
+    constructor({
+      wrapper = window,
+      content = document.documentElement,
+      eventsTarget = wrapper,
+      smoothWheel = true,
+      syncTouch = false,
+      syncTouchLerp = 0.075,
+      touchInertiaExponent = 1.7,
+      duration,
+      // in seconds
+      easing,
+      lerp: lerp2 = 0.1,
+      infinite = false,
+      orientation = "vertical",
+      // vertical, horizontal
+      gestureOrientation = orientation === "horizontal" ? "both" : "vertical",
+      // vertical, horizontal, both
+      touchMultiplier = 1,
+      wheelMultiplier = 1,
+      autoResize = true,
+      prevent,
+      virtualScroll,
+      overscroll = true,
+      autoRaf = false,
+      anchors = false,
+      autoToggle = false,
+      // https://caniuse.com/?search=transition-behavior
+      allowNestedScroll = false,
+      __experimental__naiveDimensions = false
+    } = {}) {
+      window.lenisVersion = version;
+      if (!wrapper || wrapper === document.documentElement) {
+        wrapper = window;
+      }
+      if (typeof duration === "number" && typeof easing !== "function") {
+        easing = defaultEasing;
+      } else if (typeof easing === "function" && typeof duration !== "number") {
+        duration = 1;
+      }
+      this.options = {
+        wrapper,
+        content,
+        eventsTarget,
+        smoothWheel,
+        syncTouch,
+        syncTouchLerp,
+        touchInertiaExponent,
+        duration,
+        easing,
+        lerp: lerp2,
+        infinite,
+        gestureOrientation,
+        orientation,
+        touchMultiplier,
+        wheelMultiplier,
+        autoResize,
+        prevent,
+        virtualScroll,
+        overscroll,
+        autoRaf,
+        anchors,
+        autoToggle,
+        allowNestedScroll,
+        __experimental__naiveDimensions
+      };
+      this.dimensions = new Dimensions(wrapper, content, { autoResize });
+      this.updateClassName();
+      this.targetScroll = this.animatedScroll = this.actualScroll;
+      this.options.wrapper.addEventListener("scroll", this.onNativeScroll, false);
+      this.options.wrapper.addEventListener("scrollend", this.onScrollEnd, {
+        capture: true
+      });
+      if (this.options.anchors && this.options.wrapper === window) {
+        this.options.wrapper.addEventListener(
+          "click",
+          this.onClick,
+          false
+        );
+      }
+      this.options.wrapper.addEventListener(
+        "pointerdown",
+        this.onPointerDown,
+        false
+      );
+      this.virtualScroll = new VirtualScroll(eventsTarget, {
+        touchMultiplier,
+        wheelMultiplier
+      });
+      this.virtualScroll.on("scroll", this.onVirtualScroll);
+      if (this.options.autoToggle) {
+        this.rootElement.addEventListener("transitionend", this.onTransitionEnd, {
+          passive: true
+        });
+      }
+      if (this.options.autoRaf) {
+        this.__rafID = requestAnimationFrame(this.raf);
+      }
+    }
+    /**
+     * Destroy the lenis instance, remove all event listeners and clean up the class name
+     */
+    destroy() {
+      this.emitter.destroy();
+      this.options.wrapper.removeEventListener(
+        "scroll",
+        this.onNativeScroll,
+        false
+      );
+      this.options.wrapper.removeEventListener("scrollend", this.onScrollEnd, {
+        capture: true
+      });
+      this.options.wrapper.removeEventListener(
+        "pointerdown",
+        this.onPointerDown,
+        false
+      );
+      if (this.options.anchors && this.options.wrapper === window) {
+        this.options.wrapper.removeEventListener(
+          "click",
+          this.onClick,
+          false
+        );
+      }
+      this.virtualScroll.destroy();
+      this.dimensions.destroy();
+      this.cleanUpClassName();
+      if (this.__rafID) {
+        cancelAnimationFrame(this.__rafID);
+      }
+    }
+    on(event, callback) {
+      return this.emitter.on(event, callback);
+    }
+    off(event, callback) {
+      return this.emitter.off(event, callback);
+    }
+    onScrollEnd = (e) => {
+      if (!(e instanceof CustomEvent)) {
+        if (this.isScrolling === "smooth" || this.isScrolling === false) {
+          e.stopPropagation();
+        }
+      }
+    };
+    dispatchScrollendEvent = () => {
+      this.options.wrapper.dispatchEvent(
+        new CustomEvent("scrollend", {
+          bubbles: this.options.wrapper === window,
+          // cancelable: false,
+          detail: {
+            lenisScrollEnd: true
+          }
+        })
+      );
+    };
+    onTransitionEnd = (event) => {
+      if (event.propertyName.includes("overflow")) {
+        const property = this.isHorizontal ? "overflow-x" : "overflow-y";
+        const overflow = getComputedStyle(this.rootElement)[property];
+        if (["hidden", "clip"].includes(overflow)) {
+          this.internalStop();
+        } else {
+          this.internalStart();
+        }
+      }
+    };
+    setScroll(scroll) {
+      if (this.isHorizontal) {
+        this.options.wrapper.scrollTo({ left: scroll, behavior: "instant" });
+      } else {
+        this.options.wrapper.scrollTo({ top: scroll, behavior: "instant" });
+      }
+    }
+    onClick = (event) => {
+      const path = event.composedPath();
+      const anchor = path.find(
+        (node) => node instanceof HTMLAnchorElement && node.getAttribute("href")?.includes("#")
+      );
+      if (anchor) {
+        const href = anchor.getAttribute("href");
+        if (href) {
+          const options = typeof this.options.anchors === "object" && this.options.anchors ? this.options.anchors : void 0;
+          const target = `#${href.split("#")[1]}`;
+          this.scrollTo(target, options);
+        }
+      }
+    };
+    onPointerDown = (event) => {
+      if (event.button === 1) {
+        this.reset();
+      }
+    };
+    onVirtualScroll = (data) => {
+      if (typeof this.options.virtualScroll === "function" && this.options.virtualScroll(data) === false)
+        return;
+      const { deltaX, deltaY, event } = data;
+      this.emitter.emit("virtual-scroll", { deltaX, deltaY, event });
+      if (event.ctrlKey) return;
+      if (event.lenisStopPropagation) return;
+      const isTouch = event.type.includes("touch");
+      const isWheel = event.type.includes("wheel");
+      this.isTouching = event.type === "touchstart" || event.type === "touchmove";
+      const isClickOrTap = deltaX === 0 && deltaY === 0;
+      const isTapToStop = this.options.syncTouch && isTouch && event.type === "touchstart" && isClickOrTap && !this.isStopped && !this.isLocked;
+      if (isTapToStop) {
+        this.reset();
+        return;
+      }
+      const isUnknownGesture = this.options.gestureOrientation === "vertical" && deltaY === 0 || this.options.gestureOrientation === "horizontal" && deltaX === 0;
+      if (isClickOrTap || isUnknownGesture) {
+        return;
+      }
+      let composedPath = event.composedPath();
+      composedPath = composedPath.slice(0, composedPath.indexOf(this.rootElement));
+      const prevent = this.options.prevent;
+      if (!!composedPath.find(
+        (node) => node instanceof HTMLElement && (typeof prevent === "function" && prevent?.(node) || node.hasAttribute?.("data-lenis-prevent") || isTouch && node.hasAttribute?.("data-lenis-prevent-touch") || isWheel && node.hasAttribute?.("data-lenis-prevent-wheel") || this.options.allowNestedScroll && this.checkNestedScroll(node, { deltaX, deltaY }))
+      ))
+        return;
+      if (this.isStopped || this.isLocked) {
+        if (event.cancelable) {
+          event.preventDefault();
+        }
+        return;
+      }
+      const isSmooth = this.options.syncTouch && isTouch || this.options.smoothWheel && isWheel;
+      if (!isSmooth) {
+        this.isScrolling = "native";
+        this.animate.stop();
+        event.lenisStopPropagation = true;
+        return;
+      }
+      let delta = deltaY;
+      if (this.options.gestureOrientation === "both") {
+        delta = Math.abs(deltaY) > Math.abs(deltaX) ? deltaY : deltaX;
+      } else if (this.options.gestureOrientation === "horizontal") {
+        delta = deltaX;
+      }
+      if (!this.options.overscroll || this.options.infinite || this.options.wrapper !== window && this.limit > 0 && (this.animatedScroll > 0 && this.animatedScroll < this.limit || this.animatedScroll === 0 && deltaY > 0 || this.animatedScroll === this.limit && deltaY < 0)) {
+        event.lenisStopPropagation = true;
+      }
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      const isSyncTouch = isTouch && this.options.syncTouch;
+      const isTouchEnd = isTouch && event.type === "touchend";
+      const hasTouchInertia = isTouchEnd;
+      if (hasTouchInertia) {
+        delta = Math.sign(this.velocity) * Math.pow(Math.abs(this.velocity), this.options.touchInertiaExponent);
+      }
+      this.scrollTo(this.targetScroll + delta, {
+        programmatic: false,
+        ...isSyncTouch ? {
+          lerp: hasTouchInertia ? this.options.syncTouchLerp : 1
+          // immediate: !hasTouchInertia,
+        } : {
+          lerp: this.options.lerp,
+          duration: this.options.duration,
+          easing: this.options.easing
+        }
+      });
+    };
+    /**
+     * Force lenis to recalculate the dimensions
+     */
+    resize() {
+      this.dimensions.resize();
+      this.animatedScroll = this.targetScroll = this.actualScroll;
+      this.emit();
+    }
+    emit() {
+      this.emitter.emit("scroll", this);
+    }
+    onNativeScroll = () => {
+      if (this._resetVelocityTimeout !== null) {
+        clearTimeout(this._resetVelocityTimeout);
+        this._resetVelocityTimeout = null;
+      }
+      if (this._preventNextNativeScrollEvent) {
+        this._preventNextNativeScrollEvent = false;
+        return;
+      }
+      if (this.isScrolling === false || this.isScrolling === "native") {
+        const lastScroll = this.animatedScroll;
+        this.animatedScroll = this.targetScroll = this.actualScroll;
+        this.lastVelocity = this.velocity;
+        this.velocity = this.animatedScroll - lastScroll;
+        this.direction = Math.sign(
+          this.animatedScroll - lastScroll
+        );
+        if (!this.isStopped) {
+          this.isScrolling = "native";
+        }
+        this.emit();
+        if (this.velocity !== 0) {
+          this._resetVelocityTimeout = setTimeout(() => {
+            this.lastVelocity = this.velocity;
+            this.velocity = 0;
+            this.isScrolling = false;
+            this.emit();
+          }, 400);
+        }
+      }
+    };
+    reset() {
+      this.isLocked = false;
+      this.isScrolling = false;
+      this.animatedScroll = this.targetScroll = this.actualScroll;
+      this.lastVelocity = this.velocity = 0;
+      this.animate.stop();
+    }
+    /**
+     * Start lenis scroll after it has been stopped
+     */
+    start() {
+      if (!this.isStopped) return;
+      if (this.options.autoToggle) {
+        this.rootElement.style.removeProperty("overflow");
+        return;
+      }
+      this.internalStart();
+    }
+    internalStart() {
+      if (!this.isStopped) return;
+      this.reset();
+      this.isStopped = false;
+      this.emit();
+    }
+    /**
+     * Stop lenis scroll
+     */
+    stop() {
+      if (this.isStopped) return;
+      if (this.options.autoToggle) {
+        this.rootElement.style.setProperty("overflow", "clip");
+        return;
+      }
+      this.internalStop();
+    }
+    internalStop() {
+      if (this.isStopped) return;
+      this.reset();
+      this.isStopped = true;
+      this.emit();
+    }
+    /**
+     * RequestAnimationFrame for lenis
+     *
+     * @param time The time in ms from an external clock like `requestAnimationFrame` or Tempus
+     */
+    raf = (time) => {
+      const deltaTime = time - (this.time || time);
+      this.time = time;
+      this.animate.advance(deltaTime * 1e-3);
+      if (this.options.autoRaf) {
+        this.__rafID = requestAnimationFrame(this.raf);
+      }
+    };
+    /**
+     * Scroll to a target value
+     *
+     * @param target The target value to scroll to
+     * @param options The options for the scroll
+     *
+     * @example
+     * lenis.scrollTo(100, {
+     *   offset: 100,
+     *   duration: 1,
+     *   easing: (t) => 1 - Math.cos((t * Math.PI) / 2),
+     *   lerp: 0.1,
+     *   onStart: () => {
+     *     console.log('onStart')
+     *   },
+     *   onComplete: () => {
+     *     console.log('onComplete')
+     *   },
+     * })
+     */
+    scrollTo(target, {
+      offset = 0,
+      immediate = false,
+      lock = false,
+      duration = this.options.duration,
+      easing = this.options.easing,
+      lerp: lerp2 = this.options.lerp,
+      onStart,
+      onComplete,
+      force = false,
+      // scroll even if stopped
+      programmatic = true,
+      // called from outside of the class
+      userData
+    } = {}) {
+      if ((this.isStopped || this.isLocked) && !force) return;
+      if (typeof target === "string" && ["top", "left", "start", "#"].includes(target)) {
+        target = 0;
+      } else if (typeof target === "string" && ["bottom", "right", "end"].includes(target)) {
+        target = this.limit;
+      } else {
+        let node;
+        if (typeof target === "string") {
+          node = document.querySelector(target);
+          if (!node) {
+            if (target === "#top") {
+              target = 0;
+            } else {
+              console.warn("Lenis: Target not found", target);
+            }
+          }
+        } else if (target instanceof HTMLElement && target?.nodeType) {
+          node = target;
+        }
+        if (node) {
+          if (this.options.wrapper !== window) {
+            const wrapperRect = this.rootElement.getBoundingClientRect();
+            offset -= this.isHorizontal ? wrapperRect.left : wrapperRect.top;
+          }
+          const rect = node.getBoundingClientRect();
+          target = (this.isHorizontal ? rect.left : rect.top) + this.animatedScroll;
+        }
+      }
+      if (typeof target !== "number") return;
+      target += offset;
+      target = Math.round(target);
+      if (this.options.infinite) {
+        if (programmatic) {
+          this.targetScroll = this.animatedScroll = this.scroll;
+          const distance = target - this.animatedScroll;
+          if (distance > this.limit / 2) {
+            target = target - this.limit;
+          } else if (distance < -this.limit / 2) {
+            target = target + this.limit;
+          }
+        }
+      } else {
+        target = clamp(0, target, this.limit);
+      }
+      if (target === this.targetScroll) {
+        onStart?.(this);
+        onComplete?.(this);
+        return;
+      }
+      this.userData = userData ?? {};
+      if (immediate) {
+        this.animatedScroll = this.targetScroll = target;
+        this.setScroll(this.scroll);
+        this.reset();
+        this.preventNextNativeScrollEvent();
+        this.emit();
+        onComplete?.(this);
+        this.userData = {};
+        requestAnimationFrame(() => {
+          this.dispatchScrollendEvent();
+        });
+        return;
+      }
+      if (!programmatic) {
+        this.targetScroll = target;
+      }
+      if (typeof duration === "number" && typeof easing !== "function") {
+        easing = defaultEasing;
+      } else if (typeof easing === "function" && typeof duration !== "number") {
+        duration = 1;
+      }
+      this.animate.fromTo(this.animatedScroll, target, {
+        duration,
+        easing,
+        lerp: lerp2,
+        onStart: () => {
+          if (lock) this.isLocked = true;
+          this.isScrolling = "smooth";
+          onStart?.(this);
+        },
+        onUpdate: (value, completed) => {
+          this.isScrolling = "smooth";
+          this.lastVelocity = this.velocity;
+          this.velocity = value - this.animatedScroll;
+          this.direction = Math.sign(this.velocity);
+          this.animatedScroll = value;
+          this.setScroll(this.scroll);
+          if (programmatic) {
+            this.targetScroll = value;
+          }
+          if (!completed) this.emit();
+          if (completed) {
+            this.reset();
+            this.emit();
+            onComplete?.(this);
+            this.userData = {};
+            requestAnimationFrame(() => {
+              this.dispatchScrollendEvent();
+            });
+            this.preventNextNativeScrollEvent();
+          }
+        }
+      });
+    }
+    preventNextNativeScrollEvent() {
+      this._preventNextNativeScrollEvent = true;
+      requestAnimationFrame(() => {
+        this._preventNextNativeScrollEvent = false;
+      });
+    }
+    checkNestedScroll(node, { deltaX, deltaY }) {
+      const time = Date.now();
+      const cache = node._lenis ??= {};
+      let hasOverflowX, hasOverflowY, isScrollableX, isScrollableY, scrollWidth, scrollHeight, clientWidth, clientHeight;
+      const gestureOrientation = this.options.gestureOrientation;
+      if (time - (cache.time ?? 0) > 2e3) {
+        cache.time = Date.now();
+        const computedStyle = window.getComputedStyle(node);
+        cache.computedStyle = computedStyle;
+        const overflowXString = computedStyle.overflowX;
+        const overflowYString = computedStyle.overflowY;
+        hasOverflowX = ["auto", "overlay", "scroll"].includes(overflowXString);
+        hasOverflowY = ["auto", "overlay", "scroll"].includes(overflowYString);
+        cache.hasOverflowX = hasOverflowX;
+        cache.hasOverflowY = hasOverflowY;
+        if (!hasOverflowX && !hasOverflowY) return false;
+        if (gestureOrientation === "vertical" && !hasOverflowY) return false;
+        if (gestureOrientation === "horizontal" && !hasOverflowX) return false;
+        scrollWidth = node.scrollWidth;
+        scrollHeight = node.scrollHeight;
+        clientWidth = node.clientWidth;
+        clientHeight = node.clientHeight;
+        isScrollableX = scrollWidth > clientWidth;
+        isScrollableY = scrollHeight > clientHeight;
+        cache.isScrollableX = isScrollableX;
+        cache.isScrollableY = isScrollableY;
+        cache.scrollWidth = scrollWidth;
+        cache.scrollHeight = scrollHeight;
+        cache.clientWidth = clientWidth;
+        cache.clientHeight = clientHeight;
+      } else {
+        isScrollableX = cache.isScrollableX;
+        isScrollableY = cache.isScrollableY;
+        hasOverflowX = cache.hasOverflowX;
+        hasOverflowY = cache.hasOverflowY;
+        scrollWidth = cache.scrollWidth;
+        scrollHeight = cache.scrollHeight;
+        clientWidth = cache.clientWidth;
+        clientHeight = cache.clientHeight;
+      }
+      if (!hasOverflowX && !hasOverflowY || !isScrollableX && !isScrollableY) {
+        return false;
+      }
+      if (gestureOrientation === "vertical" && (!hasOverflowY || !isScrollableY))
+        return false;
+      if (gestureOrientation === "horizontal" && (!hasOverflowX || !isScrollableX))
+        return false;
+      let orientation;
+      if (gestureOrientation === "horizontal") {
+        orientation = "x";
+      } else if (gestureOrientation === "vertical") {
+        orientation = "y";
+      } else {
+        const isScrollingX = deltaX !== 0;
+        const isScrollingY = deltaY !== 0;
+        if (isScrollingX && hasOverflowX && isScrollableX) {
+          orientation = "x";
+        }
+        if (isScrollingY && hasOverflowY && isScrollableY) {
+          orientation = "y";
+        }
+      }
+      if (!orientation) return false;
+      let scroll, maxScroll, delta, hasOverflow, isScrollable;
+      if (orientation === "x") {
+        scroll = node.scrollLeft;
+        maxScroll = scrollWidth - clientWidth;
+        delta = deltaX;
+        hasOverflow = hasOverflowX;
+        isScrollable = isScrollableX;
+      } else if (orientation === "y") {
+        scroll = node.scrollTop;
+        maxScroll = scrollHeight - clientHeight;
+        delta = deltaY;
+        hasOverflow = hasOverflowY;
+        isScrollable = isScrollableY;
+      } else {
+        return false;
+      }
+      const willScroll = delta > 0 ? scroll < maxScroll : scroll > 0;
+      return willScroll && hasOverflow && isScrollable;
+    }
+    /**
+     * The root element on which lenis is instanced
+     */
+    get rootElement() {
+      return this.options.wrapper === window ? document.documentElement : this.options.wrapper;
+    }
+    /**
+     * The limit which is the maximum scroll value
+     */
+    get limit() {
+      if (this.options.__experimental__naiveDimensions) {
+        if (this.isHorizontal) {
+          return this.rootElement.scrollWidth - this.rootElement.clientWidth;
+        } else {
+          return this.rootElement.scrollHeight - this.rootElement.clientHeight;
+        }
+      } else {
+        return this.dimensions.limit[this.isHorizontal ? "x" : "y"];
+      }
+    }
+    /**
+     * Whether or not the scroll is horizontal
+     */
+    get isHorizontal() {
+      return this.options.orientation === "horizontal";
+    }
+    /**
+     * The actual scroll value
+     */
+    get actualScroll() {
+      const wrapper = this.options.wrapper;
+      return this.isHorizontal ? wrapper.scrollX ?? wrapper.scrollLeft : wrapper.scrollY ?? wrapper.scrollTop;
+    }
+    /**
+     * The current scroll value
+     */
+    get scroll() {
+      return this.options.infinite ? modulo(this.animatedScroll, this.limit) : this.animatedScroll;
+    }
+    /**
+     * The progress of the scroll relative to the limit
+     */
+    get progress() {
+      return this.limit === 0 ? 1 : this.scroll / this.limit;
+    }
+    /**
+     * Current scroll state
+     */
+    get isScrolling() {
+      return this._isScrolling;
+    }
+    set isScrolling(value) {
+      if (this._isScrolling !== value) {
+        this._isScrolling = value;
+        this.updateClassName();
+      }
+    }
+    /**
+     * Check if lenis is stopped
+     */
+    get isStopped() {
+      return this._isStopped;
+    }
+    set isStopped(value) {
+      if (this._isStopped !== value) {
+        this._isStopped = value;
+        this.updateClassName();
+      }
+    }
+    /**
+     * Check if lenis is locked
+     */
+    get isLocked() {
+      return this._isLocked;
+    }
+    set isLocked(value) {
+      if (this._isLocked !== value) {
+        this._isLocked = value;
+        this.updateClassName();
+      }
+    }
+    /**
+     * Check if lenis is smooth scrolling
+     */
+    get isSmooth() {
+      return this.isScrolling === "smooth";
+    }
+    /**
+     * The class name applied to the wrapper element
+     */
+    get className() {
+      let className = "lenis";
+      if (this.options.autoToggle) className += " lenis-autoToggle";
+      if (this.isStopped) className += " lenis-stopped";
+      if (this.isLocked) className += " lenis-locked";
+      if (this.isScrolling) className += " lenis-scrolling";
+      if (this.isScrolling === "smooth") className += " lenis-smooth";
+      return className;
+    }
+    updateClassName() {
+      this.cleanUpClassName();
+      this.rootElement.className = `${this.rootElement.className} ${this.className}`.trim();
+    }
+    cleanUpClassName() {
+      this.rootElement.className = this.rootElement.className.replace(/lenis(-\w+)?/g, "").trim();
+    }
+  };
+
+  // src/interactions/lenis.js
+  var initLenis = function() {
+    const ANIMATION_ID = "lenis";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const lenis = new Lenis({
+      duration: 0.5,
+      wheelMultiplier: 0.75,
+      gestureOrientation: "vertical",
+      normalizeWheel: false,
+      smoothTouch: false,
+      easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t)
+      // https://easings.net
+    });
+    lenis.on("scroll", () => {
+      if (!ScrollTrigger) return;
+      ScrollTrigger.update();
+    });
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1e3);
+    });
+    gsap.ticker.lagSmoothing(0);
+    let resizeTimeout;
+    function refreshLenisTimeout(delay = 600) {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        requestAnimationFrame(() => {
+          lenis.resize();
+        });
+      }, delay);
+    }
+    function refreshScroll() {
+      const triggers = [...document.querySelectorAll('[data-scroll="refresh"]')];
+      if (triggers.length === 0) return;
+      triggers.forEach((item) => {
+        if (!item) return;
+        item.addEventListener("click", (event) => {
+          refreshLenisTimeout();
+        });
+      });
+    }
+    refreshScroll();
+    function refreshScrollOnLazyLoad() {
+      const images = [...document.querySelectorAll("img[loading='lazy']")];
+      if (images.length === 0) return;
+      images.forEach((img) => {
+        img.addEventListener("load", refreshLenisTimeout);
+      });
+    }
+    function stopScroll2() {
+      const stopScrollLinks = document.querySelectorAll('[data-scroll="stop"]');
+      if (stopScrollLinks == null) {
+        return;
+      }
+      stopScrollLinks.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          lenis.stop();
+        });
+      });
+    }
+    stopScroll2();
+    function startScroll2() {
+      const startScrollLinks = document.querySelectorAll('[data-scroll="start"]');
+      if (startScrollLinks == null) {
+        return;
+      }
+      startScrollLinks.forEach((item) => {
+        item.addEventListener("click", (event) => {
+          lenis.start();
+        });
+      });
+    }
+    startScroll2();
+    function toggleScroll() {
+      const toggleScrollLinks = document.querySelectorAll('[data-scroll="toggle"]');
+      if (toggleScrollLinks == null) {
+        return;
+      }
+      toggleScrollLinks.forEach((item) => {
+        let stopScroll3 = false;
+        item.addEventListener("click", (event) => {
+          stopScroll3 = !stopScroll3;
+          if (stopScroll3) lenis.stop();
+          else lenis.start();
+        });
+      });
+    }
+    toggleScroll();
+    return lenis;
+  };
+
+  // src/interactions/image-switch.js
+  init_live_reload();
+  var imageSwitch = function(gsapContext) {
+    const ANIMATION_ID = "imageswitch";
+    const WRAP = '[data-ix-imageswitch="wrap"]';
+    const ITEM = '[data-ix-imageswitch="item"]';
+    const IMAGE = '[data-ix-imageswitch="image"]';
+    const LINK = '[data-ix-imageswitch="link"]';
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const tabLinks = [...wrap.querySelectorAll(LINK)];
+      const items = [...wrap.querySelectorAll(ITEM)];
+      const images = [...wrap.querySelectorAll(IMAGE)];
+      const ACTIVE_CLASS = "is-active";
+      if (items.length === 0 || images.length === 0) return;
+      const activateItem = function(index, activate = true) {
+        const image = images[index];
+        const item = items[index];
+        const tab = tabLinks[index];
+        if (activate) {
+          image.classList.add(ACTIVE_CLASS);
+          item.classList.add(ACTIVE_CLASS);
+          tab.classList.add(ACTIVE_CLASS);
+        } else {
+          image.classList.remove(ACTIVE_CLASS);
+          item.classList.remove(ACTIVE_CLASS);
+          tab.classList.remove(ACTIVE_CLASS);
+        }
+      };
+      images.forEach((item) => item.classList.remove(ACTIVE_CLASS));
+      activateItem(0);
+      items.forEach((item, index) => {
+        const image = images[index];
+        const tab = tabLinks[index];
+        if (!item || !image) return;
+        const imageTL = gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: "top center",
+            end: "bottom center",
+            markers: false,
+            scrub: true,
+            onEnter: () => {
+              activateItem(index);
+            },
+            onLeave: () => {
+              if (index !== items.length - 1) {
+                activateItem(index, false);
+              }
+              tab.classList.remove(ACTIVE_CLASS);
+            },
+            onEnterBack: () => {
+              activateItem(index);
+            },
+            onLeaveBack: () => {
+              if (index !== 0) {
+                activateItem(index, false);
+              }
+              tab.classList.remove(ACTIVE_CLASS);
+            }
+          }
+        });
+      });
+    });
+  };
+
+  // src/interactions/lightbox.js
+  init_live_reload();
+  var lightbox = function(pagePlayers, pagePlayerComponents, lenis) {
+    const ANIMATION_ID = "lightbox";
+    const LIGHTBOX_WRAP = '[data-ix-lightbox="wrap"]';
+    const LIGHTBOX_COMPONENT = '[data-ix-lightbox="component"]';
+    const LIGHTBOX_TRIGGER = '[data-ix-lightbox="trigger"]';
+    const LIGHTBOX_CLOSE_BTN = '[data-ix-lightbox="close"]';
+    const LIGHTBOX_NEXT_BTN = '[data-ix-lightbox="next"]';
+    const LIGHTBOX_PREVIOUS_BTN = '[data-ix-lightbox="previous"]';
+    const VIDEO_CLASS = ".plyr_component";
+    const NO_SCROLL = "no-scroll";
+    let activeLightbox = false;
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const activateLightboxes = function(listElement) {
+      const filterPlayers = function(pagePlayers2, pagePlayerComponents2) {
+        if (!pagePlayerComponents2 || pagePlayerComponents2.length === 0) return;
+        pagePlayerComponents2.forEach((component, index) => {
+          const matchingPlayer = pagePlayers2[index];
+          if (Boolean(component.closest(LIGHTBOX_COMPONENT))) {
+            players.push(pagePlayers2[index]);
+            plyrComponents.push(pagePlayerComponents2[index]);
+          }
+        });
+      };
+      const findPlayer = function(lightbox2) {
+        if (!plyrComponents || plyrComponents.length === 0) return;
+        function findMatchingVideo(plyrComponents2, videoEl2) {
+          return plyrComponents2.findIndex((videoElement) => videoElement === videoEl2);
+        }
+        const videoEl = lightbox2.querySelector(VIDEO_CLASS);
+        if (!videoEl) return false;
+        let playerIndex = findMatchingVideo(plyrComponents, videoEl);
+        player = players[playerIndex];
+        return player;
+      };
+      const lightboxTriggers = [...listElement.querySelectorAll(LIGHTBOX_TRIGGER)];
+      const lightboxElements = [];
+      const players = [];
+      const plyrComponents = [];
+      filterPlayers(pagePlayers, pagePlayerComponents);
+      if (lightboxTriggers.length === 0) return;
+      lightboxTriggers.forEach((trigger, index) => {
+        const parent = trigger.parentElement;
+        const lightbox2 = trigger.querySelector(LIGHTBOX_COMPONENT);
+        lightboxElements.push(lightbox2);
+        if (!lightbox2) return;
+        let player2 = false;
+        player2 = findPlayer(lightbox2);
+        parent.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && e.target === trigger) {
+            openModal(lightbox2);
+          }
+          if (e.key === "Escape" && activeLightbox !== false) {
+            closeModal(lightbox2);
+          }
+        });
+        parent.addEventListener("click", (e) => {
+          if (e.target.closest(LIGHTBOX_TRIGGER) !== null) {
+            openModal(lightbox2);
+          } else if (e.target.closest(LIGHTBOX_CLOSE_BTN) !== null) {
+            closeModal(lightbox2);
+            if (player2) {
+              player2.pause();
+            }
+          } else if (e.target.closest(LIGHTBOX_NEXT_BTN) !== null) {
+            let nextLightbox = lightboxElements[index + 1];
+            if (index === lightboxElements.length - 1) {
+              nextLightbox = lightboxElements[0];
+            }
+            closeModal(lightbox2);
+            openModal(nextLightbox);
+          } else if (e.target.closest(LIGHTBOX_PREVIOUS_BTN) !== null) {
+            let previousLightbox = lightboxElements[index - 1];
+            if (index === 0) {
+              previousLightbox = lightboxElements[lightboxElements.length - 1];
+            }
+            closeModal(lightbox2);
+            openModal(previousLightbox);
+          }
+        });
+      });
+      const openModal = function(lightbox2) {
+        if (!lightbox2) return;
+        lightbox2.showModal();
+        startScroll(lenis);
+        activeLightbox = lightbox2;
+      };
+      const closeModal = function(lightbox2) {
+        if (!lightbox2) return;
+        player = findPlayer(lightbox2);
+        if (player) {
+          player.pause();
+        }
+        lightbox2.close();
+        stopScroll(lenis);
+        activeLightbox = false;
+      };
+    };
+    const body = document.querySelector("body");
+    const wraps = [...document.querySelectorAll(LIGHTBOX_WRAP)];
+    if (wraps.length > 0) {
+      wraps.forEach((wrap) => {
+        let runProp = checkRunProp(wrap, ANIMATION_ID);
+        if (runProp === false) return;
+        activateLightboxes(wrap);
+      });
+    } else {
+      activateLightboxes(body);
+    }
+  };
+
+  // src/interactions/load.js
+  init_live_reload();
+  var load = function(reduceMotion) {
+    const ANIMATION_ID = "load";
+    const ATTRIBUTE = "data-ix-load";
+    const WRAP = "wrap";
+    const HEADING = "heading";
+    const ITEM = "item";
+    const IMAGE = "image";
+    const LINE = "line";
+    const STAGGER = "stagger";
+    const POSITION = "data-ix-load-position";
+    const CLIP_DIRECTION = "data-ix-load-clip-direction";
+    const DEFAULT_STAGGER = "<0.2";
+    let totalDuration = 0;
+    let loadTimelines = [];
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
+    wraps.forEach((wrap) => {
+      const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
+      if (items.length === 0) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      const wrapRunAttribute = wrap.getAttribute("data-ix-load-run")?.toLowerCase();
+      if (runProp === false && wrapRunAttribute === "false") return;
+      const tl = gsap.timeline({
+        delay: totalDuration,
+        paused: true,
+        defaults: {
+          ease: "power1.out",
+          duration: 0.8
+        }
+      });
+      tl.set(wrap, {
+        autoAlpha: 1
+      });
+      const loadHeading = function(item) {
+        gsap.set(item, { autoAlpha: 1 });
+        const position = attr(0, item.getAttribute(POSITION));
+        if (item.classList.contains("w-richtext")) {
+          item = item.children;
+        }
+        SplitText.create(item, {
+          type: "words",
+          // linesClass: 'line',
+          wordsClass: "word",
+          // charsClass: "char",
+          // mask: 'lines',
+          autoSplit: true,
+          onSplit: (self2) => {
+            return tl.from(
+              self2.words,
+              {
+                y: "50%",
+                rotateX: 45,
+                autoAlpha: 0,
+                stagger: 0.075
+              },
+              position
+            );
+          }
+        });
+      };
+      const loadImage = function(item) {
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+        tl.fromTo(item, { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 1, scale: 1 }, position);
+      };
+      const loadLine = function(item) {
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+        const clipAttr = attr("left", item.getAttribute(CLIP_DIRECTION));
+        const clipStart = getClipDirection(clipAttr);
+        const clipEnd = getClipDirection("full");
+        tl.set(item, {
+          autoAlpha: 1
+        });
+        tl.fromTo(
+          item,
+          {
+            clipPath: clipStart
+          },
+          {
+            clipPath: clipEnd
+          },
+          position
+        );
+      };
+      const loadItem = function(item) {
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+        tl.fromTo(item, { autoAlpha: 0, y: "2rem" }, { autoAlpha: 1, y: "0rem" }, position);
+      };
+      const loadStagger = function(item) {
+        if (!item) return;
+        let children = getNonContentsChildren(item);
+        if (children.length === 0) return;
+        children.forEach((child, index) => {
+          if (index === 0) {
+            gsap.set(item, { autoAlpha: 1 });
+          }
+          loadItem(child);
+        });
+      };
+      const loadSimple = function(item) {
+        if (!item) return;
+        tl.fromTo(
+          item,
+          {
+            autoAlpha: 0
+          },
+          {
+            autoAlpha: 1,
+            ease: "power1.out",
+            duration: 1.2
+          },
+          "<"
+        );
+      };
+      const animation = function() {
+        items.forEach((item) => {
+          if (!item) return;
+          const loadType = item.getAttribute(ATTRIBUTE);
+          if (reduceMotion) {
+            if (loadType === STAGGER) {
+              loadSimple(item.children);
+            } else {
+              loadSimple(item);
+            }
+          } else {
+            if (loadType === HEADING) {
+              loadHeading(item);
+            }
+            if (loadType === IMAGE) {
+              loadImage(item);
+            }
+            if (loadType === LINE) {
+              loadLine(item);
+            }
+            if (loadType === ITEM) {
+              loadItem(item);
+            }
+            if (loadType === STAGGER) {
+              loadStagger(item);
+            }
+          }
+        });
+        totalDuration = totalDuration + tl.duration() - 0.4;
+        tl.play();
+        loadTimelines.push(tl);
+      };
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(items[0], breakpoint, animation);
+    });
+  };
+
+  // src/interactions/loop.js
+  init_live_reload();
+  var loop = function() {
+    const ANIMATION_ID = "loop";
+    const ITEM = `[data-ix-loop="item"]`;
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const items = [...document.querySelectorAll(ITEM)];
+    items.forEach((item) => {
+      if (!item) return;
+      let runProp = checkRunProp(item, ANIMATION_ID);
+      if (runProp === false) return;
+      let tl = gsap.timeline({
+        defaults: {
+          repeat: -1,
+          ease: "none"
+        }
+      });
+      const { varsFrom, varsTo } = buildFromToVars(item, "loop");
+      varsTo.yoyo = attrIfSet(item, "data-ix-loop-yoyo", false);
+      varsTo.delay = attrIfSet(item, "data-ix-loop-delay", 0);
+      varsTo.repeatDelay = attrIfSet(item, "data-ix-loop-repeat-delay", 0);
+      varsTo.duration = attrIfSet(item, "data-ix-loop-duration", 1);
+      varsTo.ease = attrIfSet(item, "data-ix-loop-ease", "none");
+      let tween2 = tl.fromTo(item, varsFrom, varsTo);
+    });
+  };
+
+  // src/interactions/magnetic.js
+  init_live_reload();
+  var magnetic = function() {
+    const ANIMATION_ID = "magnetic";
+    const WRAP = '[data-ix-magnetic="wrap"]';
+    const TRIGGER = '[data-ix-magnetic="trigger"]';
+    const TARGET = '[data-ix-magnetic="target"]';
+    const INNER = '[data-ix-magnetic="inner"]';
+    const STRENGTH = "data-ix-magnetic-strength";
+    const INNER_STRENGTH = "data-ix-magnetic-inner-strength";
+    const DURATION = "data-ix-magnetic-duration";
+    const EASE = "data-ix-magnetic-ease";
+    const RETURN_DURATION = "data-ix-magnetic-return-duration";
+    const RETURN_EASE = "data-ix-magnetic-return-ease";
+    const ACTIVE_CLASS = "data-ix-magnetic-active-class";
+    const HOVER_SCALE = "data-ix-magnetic-hover-scale";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      if (!wrap) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      if ("ontouchstart" in window || navigator.maxTouchPoints) return;
+      let strength = attr(0.3, wrap.getAttribute(STRENGTH));
+      let innerStrength = attr(0.5, wrap.getAttribute(INNER_STRENGTH));
+      let duration = attr(0.6, wrap.getAttribute(DURATION));
+      let ease = attr("power1.out", wrap.getAttribute(EASE));
+      let returnDuration = attr(0.6, wrap.getAttribute(RETURN_DURATION));
+      let returnEase = attr("elastic.out(1.2, 0.5)", wrap.getAttribute(RETURN_EASE));
+      let activeClass = attr("is-active", wrap.getAttribute(ACTIVE_CLASS));
+      let hoverScale = attr(1, wrap.getAttribute(HOVER_SCALE));
+      const trigger = wrap.querySelector(TRIGGER) || wrap;
+      const target = wrap.querySelector(TARGET) || wrap;
+      const inner = wrap.querySelector(INNER);
+      trigger.addEventListener("mousemove", function(e) {
+        const rect = trigger.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left - rect.width / 2;
+        const offsetY = e.clientY - rect.top - rect.height / 2;
+        gsap.to(target, {
+          x: offsetX * strength,
+          y: offsetY * strength,
+          scale: hoverScale,
+          duration,
+          ease,
+          overwrite: "auto"
+        });
+        if (inner) {
+          gsap.to(inner, {
+            x: offsetX * innerStrength,
+            y: offsetY * innerStrength,
+            duration,
+            ease,
+            overwrite: "auto"
+          });
+        }
+      });
+      trigger.addEventListener("mouseenter", function() {
+        wrap.classList.add(activeClass);
+      });
+      trigger.addEventListener("mouseleave", function() {
+        wrap.classList.remove(activeClass);
+        gsap.to(target, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: returnDuration,
+          ease: returnEase,
+          overwrite: "auto"
+        });
+        if (inner) {
+          gsap.to(inner, {
+            x: 0,
+            y: 0,
+            duration: returnDuration,
+            ease: returnEase,
+            overwrite: "auto"
+          });
+        }
+      });
+    });
+  };
+
+  // src/interactions/marquee.js
+  init_live_reload();
+  var marquee = function() {
+    const ANIMATION_ID = "marquee";
+    const WRAP = '[data-ix-marquee="wrap"]';
+    const LIST = '[data-ix-marquee="list"]';
+    const VERTICAL = "data-ix-marquee-vertical";
+    const REVERSE = "data-ix-marquee-reverse";
+    const DURATION = "data-ix-marquee-duration";
+    const DYNAMIC_DURATION = "data-ix-marquee-duration-dynamic";
+    const DURATION_PER_ITEM = "data-ix-marquee-duration-per-item";
+    const HOVER_EFFECT = "data-ix-marquee-hover";
+    const ACCELERATE_ON_HOVER = "accelerate";
+    const DECELERATE_ON_HOVER = "decelerate";
+    const PAUSE_ON_HOVER = "pause";
+    const DEFAULT_DURATION = 30;
+    const DEFAULT_DYNAMIC_DURATION = 5;
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = document.querySelectorAll(WRAP);
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      const lists = [...wrap.querySelectorAll(LIST)];
+      const animation = function() {
+        let vertical = attr(false, wrap.getAttribute(VERTICAL));
+        let reverse = attr(false, wrap.getAttribute(REVERSE));
+        let duration = attr(DEFAULT_DURATION, wrap.getAttribute(DURATION));
+        let durationDynamic = attr(false, wrap.getAttribute(DYNAMIC_DURATION));
+        let durationPerItem = attr(DEFAULT_DYNAMIC_DURATION, wrap.getAttribute(DURATION_PER_ITEM));
+        let itemCount = lists[0].childElementCount;
+        if (itemCount === 1) {
+          itemCount = lists[0].firstElementChild.childElementCount;
+        }
+        if (durationDynamic) {
+          duration = itemCount * durationPerItem;
+        }
+        let hoverEffect = attr("none", wrap.getAttribute(HOVER_EFFECT));
+        let direction = 1;
+        if (reverse) {
+          direction = -1;
+        }
+        let tl = gsap.timeline({
+          repeat: -1,
+          defaults: {
+            ease: "none"
+          }
+        });
+        tl.fromTo(
+          lists,
+          {
+            xPercent: 0,
+            yPercent: 0
+          },
+          {
+            // if vertical is true move yPercent, otherwise move x percent
+            xPercent: vertical ? 0 : -100 * direction,
+            yPercent: vertical ? -100 * direction : 0,
+            duration
+          }
+        );
+        if (hoverEffect === ACCELERATE_ON_HOVER) {
+          wrap.addEventListener("mouseenter", (event) => {
+            tl.timeScale(2);
+          });
+          wrap.addEventListener("mouseleave", (event) => {
+            tl.timeScale(1);
+          });
+        }
+        if (hoverEffect === DECELERATE_ON_HOVER) {
+          wrap.addEventListener("mouseenter", (event) => {
+            tl.timeScale(0.5);
+          });
+          wrap.addEventListener("mouseleave", (event) => {
+            tl.timeScale(1);
+          });
+        }
+        if (hoverEffect === PAUSE_ON_HOVER) {
+          wrap.addEventListener("mouseenter", (event) => {
+            tl.pause();
+          });
+          wrap.addEventListener("mouseleave", (event) => {
+            tl.play();
+          });
+        }
+      };
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(lists[0], breakpoint, animation);
+    });
+  };
+
+  // src/interactions/mouse-over.js
+  init_live_reload();
+  var mouseOver = function() {
+    const ANIMATION_ID = "mouseover";
+    const WRAP = '[data-ix-mouseover="wrap"]';
+    const LAYER = '[data-ix-mouseover="layer"]';
+    const TARGET = '[data-ix-mouseover="target"]';
+    const DURATION = "data-ix-mouseover-duration";
+    const EASE = "data-ix-mouseover-ease";
+    const X_MOVE_X = "data-ix-mouseover-x-move-x";
+    const X_MOVE_Y = "data-ix-mouseover-x-move-y";
+    const X_ROTATE_Z = "data-ix-mouseover-x-rotate-z";
+    const X_ROTATE_Y = "data-ix-mouseover-x-rotate-y";
+    const X_ROTATE_X = "data-ix-mouseover-x-rotate-x";
+    const Y_MOVE_X = "data-ix-mouseover-y-move-x";
+    const Y_MOVE_Y = "data-ix-mouseover-y-move-y";
+    const Y_ROTATE_Z = "data-ix-mouseover-y-rotate-z";
+    const Y_ROTATE_Y = "data-ix-mouseover-y-rotate-y";
+    const Y_ROTATE_X = "data-ix-mouseover-y-rotate-x";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = document.querySelectorAll(WRAP);
+    wraps.forEach((wrap) => {
+      const layers = wrap.querySelectorAll(LAYER);
+      if (layers.length === 0) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      let target = wrap.querySelector(TARGET);
+      if (!target) {
+        target = wrap;
+      }
+      const mouseMove = function() {
+        let initialProgress = { x: 0.5, y: 0.5 };
+        let progressObject = { x: initialProgress.x, y: initialProgress.y };
+        let duration = attr(0.5, wrap.getAttribute(DURATION));
+        let ease = attr("power1.out", wrap.getAttribute(EASE));
+        let cursorXTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+        let cursorYTimeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+        const setVarsForOption = function(layer, attribute, defaultAttr) {
+          let toValue = attrIfSet(layer, attribute, defaultAttr);
+          let fromValue;
+          if (toValue === void 0) return [void 0, void 0];
+          if (String(toValue).startsWith("-")) {
+            if (typeof defaultAttr === "number") {
+              fromValue = -1 * toValue;
+            }
+            if (typeof defaultAttr === "string") {
+              fromValue = toValue.slice(1);
+            }
+          } else {
+            if (typeof defaultAttr === "number") {
+              fromValue = -1 * toValue;
+            }
+            if (typeof defaultAttr === "string") {
+              fromValue = "-" + toValue;
+            }
+          }
+          return [fromValue, toValue];
+        };
+        layers.forEach((layer) => {
+          let xVarsFrom = {};
+          let xVarsTo = {};
+          let yVarsFrom = {};
+          let yVarsTo = {};
+          [xVarsFrom.x, xVarsTo.x] = setVarsForOption(layer, X_MOVE_X, "10%");
+          [xVarsFrom.y, xVarsTo.y] = setVarsForOption(layer, X_MOVE_Y, "10%");
+          [xVarsFrom.rotateZ, xVarsTo.rotateZ] = setVarsForOption(layer, X_ROTATE_Z, 0);
+          [xVarsFrom.rotateY, xVarsTo.rotateY] = setVarsForOption(layer, X_ROTATE_Y, 0);
+          [xVarsFrom.rotateX, xVarsTo.rotateX] = setVarsForOption(layer, X_ROTATE_X, 0);
+          [yVarsFrom.y, yVarsTo.y] = setVarsForOption(layer, Y_MOVE_Y, "10%");
+          [yVarsFrom.x, yVarsTo.x] = setVarsForOption(layer, Y_MOVE_X, "10%");
+          [yVarsFrom.rotateZ, yVarsTo.rotateZ] = setVarsForOption(layer, Y_ROTATE_Z, 0);
+          [yVarsFrom.rotateY, yVarsTo.rotateY] = setVarsForOption(layer, Y_ROTATE_Y, 0);
+          [yVarsFrom.rotateX, yVarsTo.rotateX] = setVarsForOption(layer, Y_ROTATE_X, 0);
+          cursorXTimeline.fromTo(layer, xVarsFrom, xVarsTo, 0);
+          cursorYTimeline.fromTo(layer, yVarsFrom, yVarsTo, 0);
+        });
+        function setTimelineProgress(xValue, yValue) {
+          gsap.to(progressObject, {
+            x: xValue,
+            y: yValue,
+            ease,
+            duration,
+            onUpdate: () => {
+              cursorXTimeline.progress(progressObject.x);
+              cursorYTimeline.progress(progressObject.y);
+            }
+          });
+        }
+        setTimelineProgress(initialProgress.x, initialProgress.y);
+        target.addEventListener("mousemove", function(e) {
+          const rect = target.getBoundingClientRect();
+          let mousePercentX = gsap.utils.clamp(
+            0,
+            1,
+            gsap.utils.normalize(0, rect.width, e.clientX - rect.left)
+          );
+          let mousePercentY = gsap.utils.clamp(
+            0,
+            1,
+            gsap.utils.normalize(0, rect.height, e.clientY - rect.top)
+          );
+          setTimelineProgress(mousePercentX, mousePercentY);
+        });
+        target.addEventListener("mouseleave", function(e) {
+          setTimelineProgress(initialProgress.x, initialProgress.y);
+        });
+      };
+      mouseMove();
+    });
+  };
+
+  // src/interactions/modal.js
+  init_live_reload();
+  var modal = function(lenis) {
+    const ANIMATION_ID = "modal";
+    const MODAL_WRAP = '[data-ix-modal="wrap"]';
+    const MODAL_TRIGGER = "data-ix-modal-trigger";
+    const MODAL_CLOSE = '[data-ix-modal="close"]';
+    const TIMEOUT = "data-ix-modal-timeout";
+    const MODAL_TRIGGER_DEFAULT = "blank-id";
+    const DEFAULT_TIMEOUT = 0;
+    let activeModal = false;
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const modals = [...document.querySelectorAll(MODAL_WRAP)];
+    const triggers = [...document.querySelectorAll(`[${MODAL_TRIGGER}]:not(${MODAL_WRAP})`)];
+    if (modals.length === 0) return;
+    modals.forEach((modal2, index) => {
+      const closeButtons = [...modal2.querySelectorAll(MODAL_CLOSE)];
+      const timeout = attr(DEFAULT_TIMEOUT, modal2.getAttribute(TIMEOUT));
+      const triggerID = attr(MODAL_TRIGGER_DEFAULT, modal2.getAttribute(MODAL_TRIGGER));
+      function getModalTriggers(modal3, triggers2) {
+        const modalTriggers2 = Array.from(triggers2).filter((trigger) => {
+          return trigger.getAttribute(MODAL_TRIGGER) === triggerID && trigger !== modal3;
+        });
+        return modalTriggers2;
+      }
+      const modalTriggers = getModalTriggers(modal2, triggers);
+      if (triggerID !== MODAL_TRIGGER_DEFAULT) {
+        if (modalTriggers.length !== 0) {
+          modalTriggers.forEach((trigger, index2) => {
+            trigger.addEventListener("click", (e) => {
+              openModal(modal2);
+            });
+          });
+        }
+      }
+      if (timeout !== DEFAULT_TIMEOUT) {
+        setTimeout(() => {
+          openModal(modal2);
+        }, timeout * 1e3);
+      }
+      modal2.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && activeModal !== false) {
+          closeModal(modal2);
+        }
+      });
+      closeButtons.forEach((item) => {
+        item.addEventListener("click", (e) => {
+          closeModal(modal2);
+        });
+      });
+    });
+    const openModal = function(modal2) {
+      if (!modal2) return;
+      if (activeModal) {
+        closeModal(activeModal);
+      }
+      modal2.showModal();
+      stopScroll(lenis);
+      activeModal = modal2;
+    };
+    const closeModal = function(modal2) {
+      if (!modal2) return;
+      modal2.close();
+      startScroll(lenis);
+      activeModal = false;
+    };
+  };
+
+  // src/interactions/page-transition.js
+  init_live_reload();
+  var pageTransition = function(lenis) {
+    const ANIMATION_ID = "pagetransition";
+    const WRAP = '[data-ix-pagetransition="wrap"]';
+    const COLUMN = '[data-ix-pagetransition="column"]';
+    const EXCLUDE = "data-ix-pagetransition";
+    const transitionWrap = document.querySelector(WRAP);
+    const transitionColumns = document.querySelectorAll(COLUMN);
+    if (!transitionWrap || transitionColumns.length === 0) return;
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const tlLoad = gsap.timeline();
+    tlLoad.to(COLUMN, { yPercent: -100, stagger: 0.2 });
+    tlLoad.set(WRAP, { display: "none" });
+    const checkLink = function(link) {
+      if (!link || link.tagName !== "A") {
+        return false;
+      }
+      const hostname = link.hostname;
+      const target = link.target;
+      const href = link.getAttribute("href");
+      const playTransition = attr(true, link.getAttribute(EXCLUDE));
+      if (!hostname || hostname !== window.location.hostname || target && target === "_blank" || !href || href.includes("#") || !playTransition) {
+        return false;
+      } else {
+        return true;
+      }
+    };
+    document.querySelectorAll("a").forEach((link) => {
+      const linkURL = link.getAttribute("href");
+      const playTransition = checkLink(link);
+      if (playTransition) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          const tlClick = gsap.timeline({
+            onStart: () => {
+              stopScroll(lenis);
+            },
+            onComplete: () => setTimeout(() => {
+              window.location.href = linkURL;
+            }, 100)
+          });
+          tlClick.set(WRAP, { display: "flex" });
+          tlClick.fromTo(COLUMN, { yPercent: 100 }, { yPercent: 0, stagger: 0.2 });
+        });
+      }
+    });
+    window.onpageshow = function(event) {
+      if (event.persisted) window.location.reload();
+    };
+  };
+
+  // src/interactions/parallax.js
+  init_live_reload();
+  var parallax = function() {
+    const ANIMATION_ID = "parallax";
+    const WRAP = `[data-ix-parallax="wrap"]`;
+    const SECTION = `[data-ix-parallax="section"]`;
+    const TRIGGER = `[data-ix-parallax="trigger"]`;
+    const TYPE = "data-ix-parallax-type";
+    const AMOUNT = "data-ix-parallax-amount";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = gsap.utils.toArray(WRAP);
+    wraps.forEach((wrap) => {
+      const section = wrap.querySelector(SECTION);
+      const trigger = wrap.querySelector(TRIGGER);
+      if (!wrap || !section || !trigger) return;
+      let animationType = "uncover";
+      animationType = attr("uncover", wrap.getAttribute(TYPE));
+      moveAmount = attr(50, wrap.getAttribute(AMOUNT));
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const settings = {
+        scrub: true,
+        start: "top bottom",
+        end: "top top",
+        moveStart: "-100vh",
+        moveEnd: "0vh"
+      };
+      if (animationType === "cover") {
+        settings.start = "bottom bottom";
+        settings.end = "bottom top";
+        settings.moveStart = "0vh";
+        settings.moveEnd = "100vh";
+      }
+      if (animationType === "parallax") {
+        settings.moveStart = `-${moveAmount}vh`;
+        settings.moveEnd = "0vh";
+      }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger,
+          markers: false,
+          start: settings.start,
+          end: settings.end,
+          scrub: settings.scrub
+        },
+        defaults: {
+          duration: 1,
+          ease: "none"
+        },
+        onStart: () => {
+          ScrollTrigger.refresh();
+        }
+      });
+      tl.fromTo(
+        section,
+        {
+          y: settings.moveStart
+        },
+        {
+          y: settings.moveEnd
+        }
+      );
+    });
+  };
+
+  // src/interactions/path-hover.js
+  init_live_reload();
+  var pathHover = function() {
+    const ANIMATION_ID = "banner";
+    const WRAP = '[data-ix-pathhover="wrap"]';
+    const PATH = '[data-ix-pathhover="path"]';
+    const DURATION = "data-ix-pathhover-duration";
+    const REVERSE = "data-ix-pathhover-reverse";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = document.querySelectorAll(WRAP);
+    wraps.forEach((wrap) => {
+      const paths = [...wrap.querySelectorAll(PATH)];
+      if (!wrap || paths.length === 0) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      let duration = attr(1.2, wrap.getAttribute(DURATION));
+      let reverse = attr(false, wrap.getAttribute(REVERSE));
+      let tl = gsap.timeline({
+        paused: true
+      });
+      tl.fromTo(
+        paths,
+        {
+          drawSVG: "0%"
+        },
+        {
+          drawSVG: "0% 100%",
+          duration,
+          ease: "power2.inOut"
+        }
+      );
+      if (reverse) {
+        tl.progress(1);
+      }
+      wrap.addEventListener("mouseenter", () => {
+        if (!reverse) {
+          tl.play();
+        } else {
+          tl.reverse();
+        }
+      });
+      wrap.addEventListener("mouseleave", () => {
+        if (reverse) {
+          tl.play();
+        } else {
+          tl.reverse();
+        }
+      });
+    });
+  };
+
+  // src/interactions/scroll-in.js
+  init_live_reload();
+  var scrollIn = function() {
+    const ANIMATION_ID = "scrollin";
+    const ATTRIBUTE = "data-ix-scrollin";
+    const ELEMENT = "data-ix-scrollin";
+    const WRAP = "wrap";
+    const HEADING = "heading";
+    const ITEM = "item";
+    const CONTAINER = "container";
+    const STAGGER = "stagger";
+    const RICH_TEXT = "rich-text";
+    const IMAGE_WRAP = "image-wrap";
+    const IMAGE = "image";
+    const LINE = "line";
+    const SCROLL_TOGGLE_ACTIONS = "data-ix-scrollin-toggle-actions";
+    const SCROLL_SCRUB = "data-ix-scrollin-scrub";
+    const SCROLL_START = "data-ix-scrollin-start";
+    const SCROLL_END = "data-ix-scrollin-end";
+    const CLIP_DIRECTION = "data-ix-scrollin-clip-direction";
+    const SCROLL_STAGGER = "data-ix-scrollin-stagger";
+    const EASE_SMALL = 0.1;
+    const EASE_LARGE = 0.3;
+    const DURATION = 0.6;
+    const EASE = "power1.out";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const scrollInTL = function(item) {
+      const settings = {
+        scrub: false,
+        toggleActions: "play none none none",
+        start: "top 90%",
+        end: "top 75%"
+      };
+      settings.toggleActions = attr(settings.toggleActions, item.getAttribute(SCROLL_TOGGLE_ACTIONS));
+      settings.scrub = attr(settings.scrub, item.getAttribute(SCROLL_SCRUB));
+      settings.start = attr(settings.start, item.getAttribute(SCROLL_START));
+      settings.end = attr(settings.end, item.getAttribute(SCROLL_END));
+      const tl = gsap.timeline({
+        defaults: {
+          duration: DURATION,
+          ease: EASE
+        },
+        scrollTrigger: {
+          trigger: item,
+          start: settings.start,
+          end: settings.end,
+          toggleActions: settings.toggleActions,
+          scrub: settings.scrub
+        }
+      });
+      return tl;
+    };
+    const defaultTween = function(item, tl, options = {}) {
+      const varsFrom = {
+        autoAlpha: 0,
+        y: "2rem"
+      };
+      const varsTo = {
+        autoAlpha: 1,
+        y: "0rem"
+      };
+      if (options.stagger) {
+        varsTo.stagger = { each: options.stagger, from: "start" };
+      }
+      if (options.stagger === "small") {
+        varsTo.stagger = { each: EASE_SMALL, from: "start" };
+      }
+      if (options.stagger === "large") {
+        varsTo.stagger = { each: EASE_LARGE, from: "start" };
+      }
+      const tween2 = tl.fromTo(item, varsFrom, varsTo);
+      return tween2;
+    };
+    const scrollInHeading = function(item) {
+      if (item.classList.contains("w-richtext")) {
+        item = item.firstChild;
+      }
+      SplitText.create(item, {
+        type: "words",
+        // 'chars, words, lines
+        // linesClass: "line",
+        wordsClass: "word",
+        // charsClass: "char",
+        // mask: 'lines',
+        autoSplit: true,
+        //have it auto adjust based on width
+        // mask: 'lines',
+        onSplit(self2) {
+          const tl = scrollInTL(item);
+          tween = defaultTween(self2.words, tl, { stagger: "small" });
+          const revertText = function(self3) {
+            self3.revert();
+          };
+          tween.eventCallback("onComplete", revertText, [self2]);
+          return tween;
+        }
+      });
+    };
+    const scrollInItem = function(item) {
+      if (!item) return;
+      if (item.classList.contains("w-richtext")) {
+        const children = gsap.utils.toArray(item.children);
+        if (children.length === 0) return;
+        children.forEach((child) => {
+          const tl = scrollInTL(child);
+          const tween2 = defaultTween(child, tl);
+        });
+      } else {
+        const tl = scrollInTL(item);
+        const tween2 = defaultTween(item, tl);
+      }
+    };
+    const scrollInImage = function(item) {
+      if (!item) return;
+      const parent = item.parentElement;
+      const tl = scrollInTL(item);
+      tl.fromTo(
+        item,
+        {
+          scale: 1.2
+        },
+        {
+          scale: 1,
+          duration: 1
+        }
+      );
+      tl.fromTo(
+        parent,
+        {
+          scale: 0.9
+        },
+        {
+          scale: 1,
+          duration: 1
+        },
+        "<"
+      );
+    };
+    const scrollInLine = function(item) {
+      if (!item) return;
+      const clipAttr = attr("left", item.getAttribute(CLIP_DIRECTION));
+      const clipStart = getClipDirection(clipAttr);
+      const clipEnd = getClipDirection("full");
+      const tl = scrollInTL(item);
+      tl.fromTo(
+        item,
+        {
+          clipPath: clipStart
+        },
+        {
+          clipPath: clipEnd
+        }
+      );
+    };
+    const scrollInContainer = function(item) {
+      if (!item) return;
+      const children = gsap.utils.toArray(item.children);
+      if (children.length === 0) return;
+      children.forEach((child) => {
+        const tl = scrollInTL(child);
+        const tween2 = defaultTween(child, tl);
+      });
+    };
+    const scrollInStagger = function(item) {
+      if (!item) return;
+      const staggerAmount = attr(EASE_LARGE, item.getAttribute(SCROLL_STAGGER));
+      let children = getNonContentsChildren(item);
+      if (children.length === 0) return;
+      const tl = scrollInTL(item);
+      const tween2 = defaultTween(children, tl, { stagger: staggerAmount });
+    };
+    const scrollInRichText = function(item) {
+      if (!item) return;
+      const children = gsap.utils.toArray(item.children);
+      if (children.length === 0) return;
+      children.forEach((child) => {
+        const childTag = child.tagName;
+        if (["H1", "H2", "H3", "H4", "H5", "H6"].includes(childTag)) {
+          scrollInHeading(child);
+        }
+        if (childTag === "FIGURE") {
+          scrollInImage(child);
+        } else {
+          scrollInItem(child);
+        }
+      });
+    };
+    const wraps = [...document.querySelectorAll(`[${ATTRIBUTE}="${WRAP}"]`)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
+      if (items.length === 0) return;
+      const animation = function(smallBreakpoint) {
+        items.forEach((item) => {
+          if (!item) return;
+          const scrollInType = item.getAttribute(ELEMENT);
+          if (scrollInType === HEADING) {
+            scrollInHeading(item);
+          }
+          if (scrollInType === ITEM) {
+            scrollInItem(item);
+          }
+          if (scrollInType === IMAGE) {
+            scrollInImage(item);
+          }
+          if (scrollInType === LINE) {
+            scrollInLine(item);
+          }
+          if (scrollInType === CONTAINER) {
+            scrollInContainer(item);
+          }
+          if (scrollInType === STAGGER) {
+            scrollInStagger(item);
+          }
+          if (scrollInType === RICH_TEXT) {
+            scrollInRichText(item);
+          }
+        });
+      };
+      animation();
+    });
+  };
+
+  // src/interactions/scrolling.js
+  init_live_reload();
+  var scrolling = function() {
+    const ANIMATION_ID = "scrolling";
+    const WRAP = `[data-ix-scrolling="wrap"]`;
+    const TRIGGER = `[data-ix-scrolling="trigger"]`;
+    const ITEM = '[data-ix-scrolling="item"]';
+    const POSITION = "data-ix-scrolling-position";
+    const DURATION = "data-ix-scrolling-duration";
+    const EASE = "data-ix-scrolling-ease";
+    const BREAKPOINT_START = "data-ix-scrolling-start-breakpoint";
+    const BREAKPOINT_END = "data-ix-scrolling-end-breakpoint";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = gsap.utils.toArray(WRAP);
+    wraps.forEach((wrap) => {
+      const items = wrap.querySelectorAll(ITEM);
+      if (!wrap || items.length === 0) return;
+      let trigger = wrap.querySelector(TRIGGER);
+      if (!trigger) {
+        trigger = wrap;
+      }
+      const animation = function(smallBreakpoint) {
+        const tlSettings = getAttrConfig(wrap, "scrolling", {
+          scrub: 0.5,
+          start: "top bottom",
+          end: "bottom top",
+          ease: "none"
+        });
+        if (smallBreakpoint && wrap.getAttribute(BREAKPOINT_START)) {
+          tlSettings.start = attr(tlSettings.start, wrap.getAttribute(BREAKPOINT_START));
+        }
+        if (smallBreakpoint && wrap.getAttribute(BREAKPOINT_END)) {
+          tlSettings.end = attr(tlSettings.end, wrap.getAttribute(BREAKPOINT_END));
+        }
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger,
+            start: tlSettings.start,
+            end: tlSettings.end,
+            scrub: tlSettings.scrub,
+            markers: false
+          },
+          defaults: {
+            duration: 1,
+            ease: tlSettings.ease
+          }
+        });
+        items.forEach((item) => {
+          if (!item) return;
+          const { varsFrom, varsTo } = buildFromToVars(item, "scrolling");
+          const position = attr("<", item.getAttribute(POSITION));
+          varsTo.duration = attr(1, item.getAttribute(DURATION));
+          varsTo.ease = attr("none", item.getAttribute(EASE));
+          let tween2 = tl.fromTo(item, varsFrom, varsTo, position);
+        });
+      };
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(items[0], breakpoint, animation);
+    });
+  };
+
+  // src/interactions/scroll-progress.js
+  init_live_reload();
+  var scrollProgress = function() {
+    const ANIMATION_ID = "scrollprogress";
+    const WRAP = '[data-ix-scrollprogress="wrap"]';
+    const BAR = '[data-ix-scrollprogress="bar"]';
+    const TRIGGER = '[data-ix-scrollprogress="trigger"]';
+    const SCOPE = "data-ix-scrollprogress-scope";
+    const AXIS = "data-ix-scrollprogress-axis";
+    const EASE = "data-ix-scrollprogress-ease";
+    const SCRUB = "data-ix-scrollprogress-scrub";
+    const START = "data-ix-scrollprogress-start";
+    const END = "data-ix-scrollprogress-end";
+    const ACTIVE_CLASS = "data-ix-scrollprogress-active-class";
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      const bar = wrap.querySelector(BAR);
+      if (!wrap || !bar) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const animation = function() {
+        let scope = attr("page", wrap.getAttribute(SCOPE));
+        let axis = attr("x", wrap.getAttribute(AXIS));
+        let ease = attr("none", wrap.getAttribute(EASE));
+        let scrub = attr(0.3, wrap.getAttribute(SCRUB));
+        let activeClass = attr("is-active", wrap.getAttribute(ACTIVE_CLASS));
+        let trigger;
+        if (scope === "page") {
+          trigger = document.body;
+        } else {
+          trigger = wrap.querySelector(`${TRIGGER}`) || wrap;
+        }
+        let start, end;
+        if (scope === "page") {
+          start = attr("top top", wrap.getAttribute(START));
+          end = attr("bottom bottom", wrap.getAttribute(END));
+        } else {
+          start = attr("top bottom", wrap.getAttribute(START));
+          end = attr("bottom top", wrap.getAttribute(END));
+        }
+        const scaleFrom = axis === "y" ? { scaleY: 0 } : { scaleX: 0 };
+        const scaleTo = axis === "y" ? { scaleY: 1 } : { scaleX: 1 };
+        let tl = gsap.timeline({
+          scrollTrigger: {
+            trigger,
+            start,
+            end,
+            scrub,
+            onEnter: () => {
+              wrap.classList.add(activeClass);
+            },
+            onLeave: () => {
+              wrap.classList.remove(activeClass);
+            },
+            onEnterBack: () => {
+              wrap.classList.add(activeClass);
+            },
+            onLeaveBack: () => {
+              wrap.classList.remove(activeClass);
+            }
+          }
+        });
+        tl.fromTo(bar, { ...scaleFrom, ease }, { ...scaleTo, ease, duration: 1 });
+      };
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(bar, breakpoint, animation);
+    });
+  };
+
+  // src/interactions/sticky-nav.js
+  init_live_reload();
+  var stickyNav = function() {
+    const ANIMATION_ID = "stickynav";
+    const WRAP = '[data-ix-stickynav="wrap"]';
+    const HERO = '[data-ix-stickynav="hero"]';
+    const HIDE_ON = "data-ix-stickynav-hide-on";
+    const DURATION = "data-ix-stickynav-duration";
+    const EASE = "data-ix-stickynav-ease";
+    const SCROLL_THRESHOLD = "data-ix-stickynav-threshold";
+    const BG_ACTIVE = "data-ix-stickynav-bg-active";
+    const HERO_BG_END = "data-ix-stickynav-bg-end";
+    const HIDDEN_CLASS = "data-ix-stickynav-hidden-class";
+    const START_HIDDEN = "data-ix-stickynav-start-hidden";
+    const HIDE_OFFSET = "data-ix-stickynav-hide-offset";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = [...document.querySelectorAll(WRAP)];
+    if (wraps.length === 0) return;
+    wraps.forEach((wrap) => {
+      if (!wrap) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      let hideOn = attr("scroll-down", wrap.getAttribute(HIDE_ON));
+      let duration = attr(0.3, wrap.getAttribute(DURATION));
+      let ease = attr("power2.out", wrap.getAttribute(EASE));
+      let scrollThreshold = attr(50, wrap.getAttribute(SCROLL_THRESHOLD));
+      let bgActiveClass = attr("is-scrolled", wrap.getAttribute(BG_ACTIVE));
+      let hiddenClass = attr("is-hidden", wrap.getAttribute(HIDDEN_CLASS));
+      let startHidden = attr(false, wrap.getAttribute(START_HIDDEN));
+      let hideOffset = attr(100, wrap.getAttribute(HIDE_OFFSET));
+      let bgEnd = attr("+=500", wrap.getAttribute(HERO_BG_END));
+      const navHeight = wrap.offsetHeight;
+      let isHidden = startHidden;
+      let isScrolled = false;
+      if (startHidden) {
+        gsap.set(wrap, { yPercent: -100 });
+        wrap.classList.add(hiddenClass);
+      }
+      const showNav = function() {
+        if (!isHidden) return;
+        isHidden = false;
+        wrap.classList.remove(hiddenClass);
+        gsap.to(wrap, {
+          yPercent: 0,
+          duration,
+          ease,
+          overwrite: "auto"
+        });
+      };
+      const hideNav = function() {
+        if (isHidden) return;
+        isHidden = true;
+        wrap.classList.add(hiddenClass);
+        gsap.to(wrap, {
+          yPercent: -100,
+          duration,
+          ease,
+          overwrite: "auto"
+        });
+      };
+      if (hideOn !== "none") {
+        ScrollTrigger.create({
+          start: 0,
+          end: "max",
+          onUpdate: (self2) => {
+            const scrollY = self2.scroll();
+            if (scrollY < hideOffset) {
+              showNav();
+              return;
+            }
+            const direction = self2.direction;
+            const velocity = Math.abs(self2.getVelocity());
+            if (velocity < scrollThreshold) return;
+            if (hideOn === "scroll-down") {
+              if (direction === 1) {
+                hideNav();
+              } else {
+                showNav();
+              }
+            } else if (hideOn === "scroll-up") {
+              if (direction === 1) {
+                showNav();
+              } else {
+                hideNav();
+              }
+            }
+          }
+        });
+      }
+      const triggerEl = document.querySelector(HERO);
+      if (triggerEl) {
+        ScrollTrigger.create({
+          trigger: triggerEl,
+          start: "top top",
+          end: bgEnd,
+          onLeave: () => {
+            if (!isScrolled) {
+              isScrolled = true;
+              wrap.classList.add(bgActiveClass);
+            }
+          },
+          onEnterBack: () => {
+            if (isScrolled) {
+              isScrolled = false;
+              wrap.classList.remove(bgActiveClass);
+            }
+          }
+        });
+      } else {
+        ScrollTrigger.create({
+          start: 0,
+          end: navHeight,
+          onLeave: () => {
+            if (!isScrolled) {
+              isScrolled = true;
+              wrap.classList.add(bgActiveClass);
+            }
+          },
+          onEnterBack: () => {
+            if (isScrolled) {
+              isScrolled = false;
+              wrap.classList.remove(bgActiveClass);
+            }
+          }
+        });
+      }
+    });
+  };
+
+  // src/interactions/tabs.js
+  init_live_reload();
+  var tabs = function() {
+    const ANIMATION_ID = "tabs";
+    const WRAP = '[data-ix-tabs="wrap"]';
+    const CONTENT = '[data-ix-tabs="content"]';
+    const LINK = '[data-ix-tabs="link"]';
+    const LINKS = '[data-ix-tabs="links"]';
+    const NEXT_BTN = '[data-ix-tabs="next"]';
+    const PREV_BTN = '[data-ix-tabs="previous"]';
+    const PLAY_BTN = '[data-ix-tabs="toggle"]';
+    const ACTIVE_CLASS = "is-active";
+    const LOOP_CONTROLS = "data-ix-tabs-loop-controls";
+    const SLIDE_TABS = "data-ix-tabs-slide-tabs";
+    const AUTOPLAY = "data-ix-tabs-autoplay-duration";
+    const DURATION = "data-ix-tabs-duration";
+    const PAUSE_ON_HOVER = "data-ix-tabs-pause-on-hover";
+    const AUTOPLAYVIDEOS = "data-ix-tabs-autoplay-videos";
+    const EASE = "data-ix-tabs-ease";
+    const tabWraps = [...document.querySelectorAll(WRAP)];
+    if (tabWraps.length === 0) return;
+    tabWraps.forEach((tabWrap, componentIndex) => {
+      let loopControls = attr(true, tabWrap.getAttribute(LOOP_CONTROLS));
+      let slideTabs = attr(false, tabWrap.getAttribute(SLIDE_TABS));
+      let autoplay = attr(0, tabWrap.getAttribute(AUTOPLAY));
+      let duration = attr(0.2, tabWrap.getAttribute(DURATION));
+      let pauseOnHover = attr(false, tabWrap.getAttribute(PAUSE_ON_HOVER));
+      let autoplayVideos = attr(false, tabWrap.getAttribute(AUTOPLAYVIDEOS));
+      let ease = attr("power1.out", tabWrap.getAttribute(EASE));
+      let previousButton = tabWrap.querySelector(`${PREV_BTN} button`), nextButton = tabWrap.querySelector(`${NEXT_BTN} button`), toggleWrap = tabWrap.querySelector(PLAY_BTN), toggleButton = tabWrap.querySelector(`${PLAY_BTN} button`), buttons = [...tabWrap.querySelectorAll(LINK)], panelList = tabWrap.querySelector(CONTENT), buttonList = tabWrap.querySelector(LINKS), animating = false, canPlay = true, autoplayTl;
+      flattenDisplayContents(panelList);
+      removeCMSList(panelList);
+      let buttonItems = buttons;
+      let panelItems = Array.from(panelList.children);
+      if (!buttonList || !panelList || !buttonItems.length || !panelItems.length) {
+        console.warn("Missing elements in:", tabWrap);
+        return;
+      }
+      panelItems.forEach((panel, i) => {
+        panel.style.display = "none";
+        panel.setAttribute("role", "tabpanel");
+      });
+      buttonItems.forEach((button, i) => {
+        button.setAttribute("role", "tab");
+      });
+      panelList.removeAttribute("role");
+      buttonList.setAttribute("role", "tablist");
+      buttonItems.forEach((btn) => btn.setAttribute("role", "tab"));
+      panelItems.forEach((panel) => panel.setAttribute("role", "tabpanel"));
+      let activeIndex = 0;
+      const makeActive = (index, focus = false, animate = true, pause = true) => {
+        if (animating) return;
+        const previousPanel = panelItems[activeIndex];
+        if (previousPanel) {
+          const videos = previousPanel.querySelectorAll("video");
+          videos.forEach((video) => {
+            if (!video.paused) video.pause();
+          });
+        }
+        buttonItems.forEach((btn, i) => {
+          btn.classList.toggle("is-active", i === index);
+          btn.setAttribute("aria-selected", i === index ? "true" : "false");
+          btn.setAttribute("tabindex", i === index ? "0" : "-1");
+        });
+        panelItems.forEach((panel, i) => panel.classList.toggle("is-active", i === index));
+        if (nextButton) nextButton.disabled = index === buttonItems.length - 1 && !loopControls;
+        if (previousButton) previousButton.disabled = index === 0 && !loopControls;
+        if (focus) buttonItems[index].focus();
+        const currentPanel = panelItems[index];
+        let direction = 1;
+        if (activeIndex > index) direction = -1;
+        if (autoplayVideos && currentPanel) {
+          const currentVideos = currentPanel.querySelectorAll("video");
+          currentVideos.forEach((video) => {
+            if (video.paused) {
+              const playPromise = video.play();
+              if (playPromise instanceof Promise) {
+                playPromise.catch(() => {
+                });
+              }
+            }
+          });
+        }
+        if (typeof gsap !== "undefined" && animate && activeIndex !== index) {
+          if (autoplayTl && !canPlay && typeof autoplayTl.restart === "function") {
+            autoplayTl.restart();
+          }
+          animating = true;
+          let tl = gsap.timeline({
+            onComplete: () => {
+              animating = false;
+              if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+            },
+            defaults: { duration, ease }
+          });
+          if (slideTabs) {
+            tl.set(currentPanel, { display: "block", position: "relative" });
+            if (previousPanel)
+              tl.set(previousPanel, { position: "absolute", top: 0, left: 0, width: "100%" });
+            if (previousPanel)
+              tl.fromTo(previousPanel, { xPercent: 0 }, { xPercent: -120 * direction });
+            tl.fromTo(currentPanel, { xPercent: 120 * direction }, { xPercent: 0 }, "<");
+            if (previousPanel) tl.set(previousPanel, { display: "none" });
+          } else {
+            if (previousPanel) tl.to(previousPanel, { opacity: 0 });
+            if (previousPanel) tl.set(previousPanel, { display: "none" });
+            tl.set(currentPanel, { display: "block" });
+            tl.fromTo(currentPanel, { opacity: 0 }, { opacity: 1 });
+          }
+        } else {
+          if (previousPanel) previousPanel.style.display = "none";
+          if (currentPanel) currentPanel.style.display = "block";
+        }
+        buttonList.scrollTo({ left: buttonItems[index].offsetLeft, behavior: "smooth" });
+        activeIndex = index;
+      };
+      makeActive(0, false, false);
+      const updateIndex = (delta, focus = false, pause = true) => makeActive(
+        (activeIndex + delta + buttonItems.length) % buttonItems.length,
+        focus,
+        true,
+        pause
+      );
+      nextButton?.addEventListener("click", () => updateIndex(1));
+      previousButton?.addEventListener("click", () => updateIndex(-1));
+      buttonItems.forEach((btn, index) => {
+        let tabId = tabWrap.getAttribute("data-tab-component-id");
+        tabId = tabId ? tabId.toLowerCase().replaceAll(" ", "-") : componentIndex + 1;
+        let itemId = btn.getAttribute("data-tab-item-id");
+        itemId = itemId ? itemId.toLowerCase().replaceAll(" ", "-") : index + 1;
+        btn.setAttribute("id", "tab-button-" + tabId + "-" + itemId);
+        btn.setAttribute("aria-controls", "tab-panel-" + tabId + "-" + itemId);
+        panelItems[index]?.setAttribute("id", "tab-panel-" + tabId + "-" + itemId);
+        panelItems[index]?.setAttribute("aria-labelledby", btn.id);
+        if (new URLSearchParams(location.search).get("tab-id") === tabId + "-" + itemId)
+          makeActive(index), autoplay = 0, tabWrap.scrollIntoView({ behavior: "smooth", block: "start" }), history.replaceState(
+            {},
+            "",
+            ((u) => (u.searchParams.delete("tab-id"), u))(new URL(location.href))
+          );
+        btn.addEventListener("click", () => makeActive(index));
+        btn.addEventListener("keydown", (e) => {
+          if (["ArrowRight", "ArrowDown"].includes(e.key)) updateIndex(1, true);
+          else if (["ArrowLeft", "ArrowUp"].includes(e.key)) updateIndex(-1, true);
+        });
+      });
+      if (autoplay !== 0 && typeof gsap !== "undefined") {
+        let updateAuto = function() {
+          if (prefersReducedMotion || !inView || canPlay || isHovered || hasFocusInside)
+            autoplayTl.pause();
+          else autoplayTl.play();
+        }, setButton = function() {
+          canPlay = !canPlay;
+          toggleButton?.setAttribute("aria-pressed", !canPlay ? "true" : "false");
+          toggleWrap?.classList.toggle("is-pressed", !canPlay);
+          if (!canPlay) isHovered = hasFocusInside = prefersReducedMotion = false;
+          updateAuto();
+        }, handleMotionChange = function(e) {
+          prefersReducedMotion = e.matches;
+          updateAuto();
+          canPlay = !e.matches;
+          setButton();
+        };
+        autoplayTl = gsap.timeline({ repeat: -1 }).fromTo(
+          tabWrap,
+          { "--progress": 0 },
+          {
+            onComplete: () => updateIndex(1, false, false),
+            "--progress": 1,
+            ease: "none",
+            duration: autoplay
+          }
+        );
+        let isHovered = false, hasFocusInside = false, prefersReducedMotion = false, inView = true;
+        setButton();
+        toggleButton?.addEventListener("click", function() {
+          setButton();
+        });
+        handleMotionChange(window.matchMedia("(prefers-reduced-motion: reduce)"));
+        window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", handleMotionChange);
+        if (pauseOnHover)
+          tabWrap.addEventListener("mouseenter", () => {
+            isHovered = true;
+            updateAuto();
+          });
+        if (pauseOnHover)
+          tabWrap.addEventListener("mouseleave", () => {
+            hasFocusInside = false;
+            isHovered = false;
+            updateAuto();
+          });
+        tabWrap.addEventListener("focusin", () => {
+          hasFocusInside = true;
+          updateAuto();
+        });
+        tabWrap.addEventListener("focusout", (e) => {
+          if (!e.relatedTarget || !tabWrap.contains(e.relatedTarget)) {
+            hasFocusInside = false;
+            updateAuto();
+          }
+        });
+        new IntersectionObserver(
+          (e) => {
+            inView = e[0].isIntersecting;
+            updateAuto();
+          },
+          { threshold: 0 }
+        ).observe(tabWrap);
+      }
+    });
+  };
+
+  // src/interactions/slider.js
+  init_live_reload();
+  var slider = function() {
+    const ANIMATION_ID = "slider";
+    const ATTRIBUTE = "data-ix-slider";
+    const SLIDER = "[data-ix-slider='component']";
+    const NEXT = "[data-ix-slider='next']";
+    const PREVIOUS = "[data-ix-slider='previous']";
+    const PAGINATION = ".slider_bullet_list";
+    const PAGINATION_BUTTON = "slider_bullet_item";
+    const PAGINATION_BUTTON_FILL = "slider_bullet_item_fill";
+    const SCROLLBAR = ".slider_scrollbar";
+    const SCROLLBAR_HANDLE = "slider_scrollbar_handle";
+    const FOLLOW_FINGER = "data-ix-slider-follow-finger";
+    const MOUSEWHEEL = "data-ix-slider-mousewheel";
+    const FREE_MODE = "data-ix-slider-free-mode";
+    const SLIDE_TO_CLICKED = "data-ix-slider-slide-to-clicked";
+    const LOOP = "data-ix-slider-loop";
+    const SPEED = "data-ix-slider-speed";
+    const AUTOPLAY = "data-ix-slider-autoplay";
+    const CENTER_SLIDES = "data-ix-slider-center-slides";
+    const SHOW_AUTOPLAY_PROGRESS = "data-ix-slider-show-autoplay-progress";
+    const PAGINATION_TYPE = "data-ix-slider-pagination-type";
+    const ACTIVE_CLASS = "is-active";
+    const sliders = document.querySelectorAll(`${SLIDER}:not(${SLIDER} ${SLIDER})`);
+    sliders.forEach((component) => {
+      if (component.dataset.scriptInitialized) return;
+      component.dataset.scriptInitialized = "true";
+      const swiperElement = component.querySelector(".slider_element");
+      const swiperWrapper = component.querySelector(".slider_list");
+      if (!swiperElement || !swiperWrapper) return;
+      flattenDisplayContents(swiperWrapper);
+      removeCMSList(swiperWrapper);
+      [...swiperWrapper.children].forEach((el) => el.classList.add("swiper-slide"));
+      const followFinger = attr(true, swiperElement.getAttribute(FOLLOW_FINGER));
+      const freeMode = attr(true, swiperElement.getAttribute(FREE_MODE));
+      const mousewheel = attr(true, swiperElement.getAttribute(MOUSEWHEEL));
+      const slideToClickedSlide = attr(false, swiperElement.getAttribute(SLIDE_TO_CLICKED));
+      const loopMode = attr(false, swiperElement.getAttribute(LOOP));
+      const speed = attr(600, swiperElement.getAttribute(SPEED));
+      const autoplay = attr(0, swiperElement.getAttribute(AUTOPLAY));
+      const paginationType = attr("bullets", swiperElement.getAttribute(PAGINATION_TYPE));
+      const centerSlides = attr(false, swiperElement.getAttribute(CENTER_SLIDES));
+      const showAutoplayProgress = attr(true, swiperElement.getAttribute(SHOW_AUTOPLAY_PROGRESS));
+      const swiper = new Swiper(swiperElement, {
+        slidesPerView: "auto",
+        followFinger,
+        freeMode,
+        slideToClickedSlide,
+        centeredSlides: centerSlides,
+        autoHeight: false,
+        loop: loopMode,
+        loopAdditionalSlides: 3,
+        speed,
+        mousewheel: {
+          enabled: mousewheel,
+          forceToAxis: true
+        },
+        keyboard: {
+          enabled: true,
+          onlyInViewport: true
+        },
+        autoplay: autoplay === 0 ? false : { delay: autoplay * 1e3 },
+        navigation: {
+          nextEl: component.querySelector(NEXT),
+          prevEl: component.querySelector(PREVIOUS)
+        },
+        pagination: {
+          type: paginationType,
+          el: component.querySelector(`${PAGINATION}`),
+          bulletActiveClass: ACTIVE_CLASS,
+          bulletClass: `${PAGINATION_BUTTON}`,
+          bulletElement: "button",
+          clickable: true,
+          //version for fraction pagination with utility class
+          renderFraction: function(currentClass, totalClass) {
+            return '<div class="u-text-style-small"><span class="' + currentClass + '"></span> of <span class="' + totalClass + '"></span> </div>';
+          }
+        },
+        scrollbar: {
+          el: component.querySelector(SCROLLBAR),
+          draggable: true,
+          dragClass: SCROLLBAR_HANDLE,
+          snapOnRelease: true
+        },
+        slideActiveClass: ACTIVE_CLASS,
+        slideDuplicateActiveClass: ACTIVE_CLASS
+      });
+      if (autoplay > 0 && showAutoplayProgress) {
+        const progressTL = gsap.timeline({ paused: false });
+        progressTL.fromTo(
+          component,
+          { "--slider-autoplay-progress": "0%" },
+          {
+            "--slider-autoplay-progress": " 100%",
+            ease: "none",
+            duration: autoplay
+          }
+        );
+        swiper.on("slideChange", function() {
+          progressTL.restart();
+        });
+      }
+    });
+  };
+
+  // src/interactions/text-scrub.js
+  init_live_reload();
+  var textScrub = function(gsapContext) {
+    const ANIMATION_ID = "textscrub";
+    const ITEM = '[data-ix-textscrub="item"]';
+    const LINE_CLASS = "line-mask";
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const items = gsap.utils.toArray(ITEM);
+    items.forEach((item) => {
+      if (!item) return;
+      let runProp = checkRunProp(item, ANIMATION_ID);
+      if (runProp === false) return;
+      let splitText;
+      const lineMasks = [];
+      const animateLines = function(self2) {
+        if (lineMasks.length !== 0) {
+          lineMasks.forEach((line) => {
+            line.remove();
+          });
+        }
+        self2.lines.forEach((line) => {
+          const lineMask = document.createElement("div");
+          lineMasks.push(lineMask);
+          lineMask.classList.add(LINE_CLASS);
+          line.appendChild(lineMask);
+          let tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: line,
+              start: "top 70%",
+              end: "bottom 70%",
+              scrub: 1.5
+            }
+          });
+          tl.fromTo(
+            lineMask,
+            {
+              width: "100%"
+            },
+            {
+              width: "0%",
+              ease: "power1.out",
+              duration: 1
+            }
+          );
+        });
+      };
+      function createAnimation() {
+        const splitText2 = SplitText.create(item, {
+          type: "lines",
+          linesClass: "line",
+          autoSplit: true,
+          onSplit: (self2) => {
+            return animateLines(self2);
+          }
+        });
+        if (!splitText2) return;
+        return splitText2;
+      }
+      splitText = createAnimation();
+    });
+  };
+
+  // src/interactions/text-links.js
+  init_live_reload();
+  var textLinks = function(gsapContext) {
+    const ANIMATION_ID = "textlink";
+    const WRAP = '[data-ix-textlink="wrap"]';
+    const FRONT = '[data-ix-textlink="front"]';
+    const BACK = '[data-ix-textlink="back"]';
+    let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
+    if (!siteOrPageCancel) return;
+    const wraps = gsap.utils.toArray(WRAP);
+    wraps.forEach((wrap) => {
+      if (!wrap) return;
+      let runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const front = wrap.querySelector(FRONT);
+      const back = wrap.querySelector(BACK);
+      if (!front || !back) return;
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: {
+          duration: 0.4,
+          ease: "power1.out"
+        }
+      });
+      tl.fromTo(
+        front,
+        {
+          y: "200%",
+          rotateZ: 6
+        },
+        {
+          y: "0%",
+          rotateZ: 0
+        }
+      );
+      tl.fromTo(
+        back,
+        {
+          y: "0%",
+          rotateZ: 0
+        },
+        {
+          y: "-200%",
+          rotateZ: -6
+        },
+        0
+      );
+      wrap.addEventListener("mouseover", function() {
+        tl.play();
+      });
+      wrap.addEventListener("mouseleave", function() {
+        tl.reverse();
+      });
+    });
+  };
+
+  // src/interactions/video-plyr.js
+  init_live_reload();
+  var import_plyr = __toESM(require_plyr_min(), 1);
+  var videoPlyr = function() {
+    const COMPONENT = ".plyr_component";
+    const VIDEO_CLASS = ".plyr_video";
+    const COVER_CLASS = ".plyr_cover";
+    const HIDE_COVER_CLASS = "hide-cover";
+    const PAUSE_TRIGGER_CLASS = ".plyr_pause-trigger";
+    const CONTAIN_CLASS = "contain-video";
+    const settings = {
+      autoplay: false,
+      loop: false,
+      mute: false,
+      hideControls: true
+    };
+    const PLAYING_CLASS = ".plyr--playing";
+    const players = [];
+    const components = [...document.querySelectorAll(COMPONENT)];
+    if (components.length === 0) return;
+    components.forEach((component, index) => {
+      const video = component.querySelector(VIDEO_CLASS);
+      const cover = component.querySelector(COVER_CLASS);
+      const pauseTrigger = component.querySelector(PAUSE_TRIGGER_CLASS);
+      const loopSetting = attr(settings.loop, component.getAttribute("data-player-loop"));
+      let muteSetting = attr(settings.mute, component.getAttribute("data-player-mute"));
+      const showCoverOnPause = attr(false, component.getAttribute("data-player-show-cover-on-pause"));
+      let player2 = new import_plyr.default(video, {
+        controls: ["play", "progress", "current-time", "mute", "fullscreen"],
+        hideControls: settings.hideControls,
+        loop: { active: loopSetting },
+        resetOnEnd: true
+      });
+      players.push(player2);
+      if (cover) {
+        cover.addEventListener("click", () => {
+          player2.play();
+        });
+      }
+      player2.on("ended", (event) => {
+        component.classList.remove(HIDE_COVER_CLASS);
+      });
+      if (showCoverOnPause) {
+        player2.on("pause", (event) => {
+          component.classList.remove(HIDE_COVER_CLASS);
+        });
+      }
+      player2.on("play", (event) => {
+        components.forEach((item, index2) => {
+          item.classList.remove(HIDE_COVER_CLASS);
+          if (item !== component) {
+            const player3 = players[index2];
+            player3.pause();
+          }
+        });
+        component.classList.add(HIDE_COVER_CLASS);
+        let prevPlayingComponent = document.querySelector(PLAYING_CLASS).closest(COMPONENT);
+        if (prevPlayingComponent && prevPlayingComponent !== component) {
+          prevPlayingComponent.find(PAUSE_TRIGGER_CLASS)[0].click();
+        }
+      });
+      pauseTrigger.addEventListener("click", () => {
+        player2.pause();
+      });
+      player2.on("ended", (event) => {
+        if (player2.fullscreen.active) {
+          player2.fullscreen.exit();
+        }
+      });
+      player2.on("enterfullscreen", (event) => {
+        component.classList.add(CONTAIN_CLASS);
+      });
+      player2.on("exitfullscreen", (event) => {
+        component.classList.remove(CONTAIN_CLASS);
+      });
+    });
+    return [players, components];
+  };
+
+  // src/index.js
+  document.addEventListener("DOMContentLoaded", function() {
+    let lenis;
+    const gsapInit = function() {
+      lenis = initLenis();
+      pageTransition();
+      let mm = gsap.matchMedia();
+      mm.add(
+        {
+          screen: "(width > 0px)",
+          //required for the callback to run regardless.
+          reduceMotion: "(prefers-reduced-motion: reduce)",
+          highContrast: "(prefers-contrast: more)",
+          noHover: "(hover: none)"
+        },
+        (gsapContext) => {
+          let { reduceMotion, highContrast, noHover } = gsapContext.conditions;
+          load(reduceMotion);
+          if (!reduceMotion) {
+            countUp();
+            loop();
+            textScrub();
+            mouseOver();
+            parallax();
+            scrollIn();
+            scrolling();
+            pathHover();
+            scrollProgress();
+            magnetic();
+          }
+          const [players, components] = [videoPlyr()];
+          lightbox(players, components);
+          modal(lenis);
+        }
+      );
+      marquee();
+      textLinks();
+      slider();
+      tabs();
+      accordion();
+      banner();
+      clickActive();
+      hoverActive();
+      imageSwitch();
+      stickyNav();
+    };
+    gsapInit();
+    copyURL();
+    scrollReset();
+    updaterFooterYear();
+  });
+})();

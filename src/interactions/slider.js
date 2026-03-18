@@ -60,7 +60,7 @@ export const slider = function () {
       centeredSlides: centerSlides,
       autoHeight: false,
       loop: loopMode,
-      //   loopAdditionalSlides: 0,
+      loopAdditionalSlides: 3,
       speed: speed,
       mousewheel: {
         enabled: mousewheel,
