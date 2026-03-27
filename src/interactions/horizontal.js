@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 export const horizontal = function () {
   //animation ID
   const ANIMATION_ID = 'horizontal';
@@ -10,9 +10,8 @@ export const horizontal = function () {
   //options
   const OPTION_MATCH_HEIGHT = 'data-ix-horizontal-start';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //elements
   const wraps = document.querySelectorAll(WRAP);

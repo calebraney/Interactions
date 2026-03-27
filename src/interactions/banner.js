@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const banner = function () {
   //animation ID
@@ -10,9 +10,8 @@ export const banner = function () {
   const START = 'data-ix-banner-start';
   const END = 'data-ix-banner-end';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //elements
   const wraps = [...document.querySelectorAll(WRAP)];

@@ -2,9 +2,9 @@ import {
   attr,
   checkRunProp,
   checkContainer,
-  checkSiteAndPageRun,
   getAttrConfig,
   buildFromToVars,
+  getIxConfig,
 } from '../utilities';
 
 export const scrolling = function () {
@@ -22,9 +22,8 @@ export const scrolling = function () {
   const BREAKPOINT_START = 'data-ix-scrolling-start-breakpoint';
   const BREAKPOINT_END = 'data-ix-scrolling-end-breakpoint';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const wraps = gsap.utils.toArray(WRAP);
   wraps.forEach((wrap) => {

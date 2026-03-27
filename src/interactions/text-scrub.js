@@ -1,4 +1,4 @@
-import { checkRunProp, checkSiteAndPageRun } from '../utilities';
+import { checkRunProp, getIxConfig } from '../utilities';
 
 /*
 CSS
@@ -27,9 +27,8 @@ export const textScrub = function (gsapContext) {
   //options
   const LINE_CLASS = 'line-mask';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //element selector
   const items = gsap.utils.toArray(ITEM);

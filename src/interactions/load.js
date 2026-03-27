@@ -1,13 +1,14 @@
 import {
   attr,
-  getClipDirection,
   getNonContentsChildren,
   checkRunProp,
   checkContainer,
-  checkSiteAndPageRun,
+  getIxConfig,
 } from '../utilities';
+import { createAnimation, isAnimationType } from './animations';
+
 /* CSS in PAGE Head
-body:not([data-ix-load-site-run="false" i]) [data-ix-load="wrap"]:not([data-ix-load-run="false" i]) {
+body:not([data-ix-load-page-run="false" i]) [data-ix-load="wrap"]:not([data-ix-load-run="false" i]) {
   & [data-ix-load]:not([data-ix-load-run="false" i], [data-ix-load="stagger"]) {
     visibility: hidden;
   }
@@ -21,42 +22,61 @@ body:not([data-ix-load-site-run="false" i]) [data-ix-load="wrap"]:not([data-ix-l
 */
 
 export const load = function (reduceMotion) {
-  //animation ID
+  // Animation ID used for data attribute construction and run checks
   const ANIMATION_ID = 'load';
-  // hero animation attribute
   const ATTRIBUTE = 'data-ix-load';
-  // hero animation selectors
+
+  // Element-type keyword constants (values for the data-ix-load attribute)
   const WRAP = 'wrap';
   const HEADING = 'heading';
+  const PARAGRAPH = 'paragraph';
   const ITEM = 'item';
   const IMAGE = 'image';
   const LINE = 'line';
   const STAGGER = 'stagger';
-  //tween options
-  const POSITION = 'data-ix-load-position'; // sequential by default, use "<" to start tweens
-  const CLIP_DIRECTION = 'data-ix-load-clip-direction';
-  const DEFAULT_STAGGER = '<0.2';
-  //array of load section timelines
-  let totalDuration = 0;
-  let loadTimelines = [];
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
 
-  //get sections
+  // Timeline positioning attributes
+  const POSITION = 'data-ix-load-position'; // sequential by default; use "<" to overlap tweens
+  const DEFAULT_STAGGER = '<0.2'; // default gap between consecutive load items
+
+  // Tracks total duration of completed load sections for sequential section delays
+  let totalDuration = 0;
+
+  // ── Config resolution ─────────────────────────────────────────────────────
+  // Maps element-type keywords to animation types.
+  // Override per-site via window.ixConfig.load in <head>:
+  //   window.ixConfig = { load: { heading: 'slide-up-words' } }
+  //   window.ixConfig = { load: false }  // disables entire load interaction
+  const ELEMENT_TYPE_DEFAULTS = {
+    [HEADING]: 'rotate-up-dramatic-words', // strong 3D flip — matches original loadHeading behaviour
+    [PARAGRAPH]: 'scale-up',
+    [ITEM]: 'fade',
+    [IMAGE]: 'scale-up', // scale from 0.8 + fade — matches original loadImage behaviour
+    [LINE]: 'clip-left',
+    [STAGGER]: 'fade',
+  };
+  const ixConfig = getIxConfig(ANIMATION_ID, ELEMENT_TYPE_DEFAULTS);
+  // Exit if the entire load interaction is disabled in site config
+  if (ixConfig === false) return;
+
+  // ── Main loop ─────────────────────────────────────────────────────────────
+  // Each wrap element creates its own timeline. Multiple wraps are staggered
+  // sequentially using totalDuration so later sections don't overlap with earlier ones.
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
   wraps.forEach((wrap) => {
-    //get all items within the section that are not set to run false
-    // i makes it case insensitive
+    // Collect all load elements inside this wrap.
+    // :not(...-run="false" i) excludes disabled elements; `i` is case-insensitive
+    // (handles both "false" and "False").
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
     if (items.length === 0) return;
 
-    //check if run is true and exit if set to false
-    let runProp = checkRunProp(wrap, ANIMATION_ID);
+    // Allow individual wraps to opt out via data-ix-load-run="false"
+    const runProp = checkRunProp(wrap, ANIMATION_ID);
     const wrapRunAttribute = wrap.getAttribute('data-ix-load-run')?.toLowerCase();
-
     if (runProp === false && wrapRunAttribute === 'false') return;
 
+    // Build this wrap's timeline. It starts paused and is played after
+    // all items are added (see tl.play() below).
     const tl = gsap.timeline({
       delay: totalDuration,
       paused: true,
@@ -65,160 +85,73 @@ export const load = function (reduceMotion) {
         duration: 0.8,
       },
     });
-    tl.set(wrap, {
-      autoAlpha: 1,
-    });
-    //anything that needs to be set to start the interaction happens here
+    // Make the wrap itself visible immediately when the timeline starts
+    tl.set(wrap, { autoAlpha: 1 });
 
-    //h1 load tween
-    const loadHeading = function (item) {
-      //reset items autoAlpha
-      gsap.set(item, { autoAlpha: 1 });
-      //get timeline positions
-      const position = attr(0, item.getAttribute(POSITION));
-      //check if item is rich text and if it is find the first child and set it to be the heading
-      if (item.classList.contains('w-richtext')) {
-        item = item.children;
-      }
-      // split text and animate it
-      SplitText.create(item, {
-        type: 'words',
-        // linesClass: 'line',
-        wordsClass: 'word',
-        // charsClass: "char",
-        // mask: 'lines',
-        autoSplit: true,
-        onSplit: (self) => {
-          return tl.from(
-            self.words,
-            {
-              y: '50%',
-              rotateX: 45,
-              autoAlpha: 0,
-              stagger: 0.075,
-            },
-            position
-          );
-        },
-      });
-    };
-    //images load tween
-    const loadImage = function (item) {
-      // get the position attribute or set defautl position
-      const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
-      tl.fromTo(item, { autoAlpha: 0, scale: 0.7 }, { autoAlpha: 1, scale: 1 }, position);
-    };
-    //images load tween
-    const loadLine = function (item) {
-      // get the position attribute or set defautl position
-      const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
-      //get clip direction
-      const clipAttr = attr('left', item.getAttribute(CLIP_DIRECTION));
-      const clipStart = getClipDirection(clipAttr);
-      const clipEnd = getClipDirection('full');
-
-      //create timeline
-      tl.set(item, {
-        autoAlpha: 1,
-      });
-      tl.fromTo(
-        item,
-        {
-          clipPath: clipStart,
-        },
-        {
-          clipPath: clipEnd,
-        },
-        position
-      );
-    };
-    //default load tween
-    const loadItem = function (item) {
-      // get the position attribute
-      const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
-      tl.fromTo(item, { autoAlpha: 0, y: '2rem' }, { autoAlpha: 1, y: '0rem' }, position);
-    };
-
-    //add item tween to each element in this parent
-    const loadStagger = function (item) {
-      if (!item) return;
-      // gsap.set(item, { autoAlpha: 1 });
-      // get the children of the item  without display contents
-      let children = getNonContentsChildren(item);
-      if (children.length === 0) return;
-      children.forEach((child, index) => {
-        //first item set parent autoAlpha to 1
-        if (index === 0) {
-          gsap.set(item, { autoAlpha: 1 });
-        }
-        loadItem(child);
-      });
-    };
-
-    const loadSimple = function (item) {
-      if (!item) return;
-      tl.fromTo(
-        item,
-        {
-          autoAlpha: 0,
-        },
-        {
-          autoAlpha: 1,
-          ease: 'power1.out',
-          duration: 1.2,
-        },
-        '<'
-      );
-    };
     const animation = function () {
-      //get all elements and apply animations
       items.forEach((item) => {
         if (!item) return;
-        //find the type of the load animation
-        const loadType = item.getAttribute(ATTRIBUTE);
-        //if reduce motion is true or run animation is false but the run attribute is true use a simple fade in
+
+        const attrValue = item.getAttribute(ATTRIBUTE);
+        // Skip the wrap element itself
+        if (attrValue === WRAP) return;
+
+        // ── Reduced motion fallback ────────────────────────────────────────
+        // If the user prefers reduced motion, replace every animation with a
+        // simple fade-in so the page still reveals without motion effects.
         if (reduceMotion) {
-          //simple animation
-          if (loadType === STAGGER) {
-            loadSimple(item.children);
-          } else {
-            loadSimple(item);
-          }
-        } else {
-          //otherwise assign the correct animation to each element type
-          if (loadType === HEADING) {
-            loadHeading(item);
-          }
-          if (loadType === IMAGE) {
-            loadImage(item);
-          }
-          if (loadType === LINE) {
-            loadLine(item);
-          }
-          if (loadType === ITEM) {
-            loadItem(item);
-          }
-          if (loadType === STAGGER) {
-            loadStagger(item);
-          }
+          // Disable the FOUC CSS rule so the element stays visible after GSAP completes
+          item.setAttribute(`${ATTRIBUTE}-run`, 'false');
+          tl.fromTo(item, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2 }, '<');
+          return;
         }
+
+        // Resolve animation type:
+        // Direct type name (e.g. data-ix-load="clip-bottom") → use directly.
+        // Element-type keyword (e.g. data-ix-load="heading") → look up config.
+        const animationType = isAnimationType(attrValue) ? attrValue : ixConfig[attrValue];
+
+        // Skip if type is unknown or explicitly disabled (false) in config
+        if (!animationType) return;
+
+        // Read per-element timeline position, defaulting to DEFAULT_STAGGER
+        const position = attr(DEFAULT_STAGGER, item.getAttribute(POSITION));
+
+        // Disable the FOUC CSS rule for this element. The CSS hides [data-ix-load]
+        // elements (and children of stagger containers) until animated.
+        item.setAttribute(`${ATTRIBUTE}-run`, 'false');
+
+        // ── stagger ───────────────────────────────────────────────────────
+        // Reveal each child of the stagger container sequentially.
+        // The container itself is made visible first, then each child is
+        // added to the shared timeline with its own position offset.
+        if (attrValue === STAGGER) {
+          gsap.set(item, { autoAlpha: 1 });
+          const children = getNonContentsChildren(item);
+          if (children.length === 0) return;
+          children.forEach((child, index) => {
+            // Ensure the container is visible before the first child animates
+            if (index === 0) gsap.set(item, { autoAlpha: 1 });
+            createAnimation(tl, child, animationType, { position });
+          });
+          return;
+        }
+
+        // ── all other types ────────────────────────────────────────────────
+        // Single element added to the shared load timeline at the resolved position
+        createAnimation(tl, item, animationType, { position });
       });
-      //delay further sections with load based on the duration of the previous one
+
+      // Stack subsequent wrap sections so they play after the previous one ends.
+      // Subtracting 0.4 creates a slight overlap for a more natural feel.
       totalDuration = totalDuration + tl.duration() - 0.4;
 
-      //Play interaction on font load, or remove it from callback to play immediately
+      // Play the timeline — fonts are usually ready by the time JS runs
       tl.play();
-      // was creating issues in firefox
-      // document.fonts.ready.then(() => {
-      //   tl.play(0);
-      // });
-      // push this sections load timeline into array of all load loadTimelines.
-      loadTimelines.push(tl);
     };
-    //check container breakpoint and run callback.
+
+    // Check container breakpoint and run animation callback
     const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
     checkContainer(items[0], breakpoint, animation);
   });
-  // Optionally retun array of load timelines
-  // return loadTimelines
 };

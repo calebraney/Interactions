@@ -1,4 +1,4 @@
-import { attr, flattenDisplayContents, removeCMSList, checkSiteAndPageRun } from '../utilities';
+import { attr, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
 
 export const slider = function () {
   //animation ID
@@ -26,6 +26,9 @@ export const slider = function () {
 
   const PAGINATION_TYPE = 'data-ix-slider-pagination-type'; //bullets, fraction, progressbar
   const ACTIVE_CLASS = 'is-active';
+
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const sliders = document.querySelectorAll(`${SLIDER}:not(${SLIDER} ${SLIDER})`);
   sliders.forEach((component) => {

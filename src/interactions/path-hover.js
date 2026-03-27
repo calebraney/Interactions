@@ -1,8 +1,8 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const pathHover = function () {
   //animation ID
-  const ANIMATION_ID = 'banner';
+  const ANIMATION_ID = 'pathhover';
   //selectors
   const WRAP = '[data-ix-pathhover="wrap"]';
   const PATH = '[data-ix-pathhover="path"]';
@@ -10,9 +10,8 @@ export const pathHover = function () {
   const DURATION = 'data-ix-pathhover-duration';
   const REVERSE = 'data-ix-pathhover-reverse';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //elements
   const wraps = document.querySelectorAll(WRAP);

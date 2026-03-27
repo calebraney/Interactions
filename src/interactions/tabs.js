@@ -1,4 +1,4 @@
-import { attr, flattenDisplayContents, removeCMSList, checkSiteAndPageRun } from '../utilities';
+import { attr, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
 export const tabs = function () {
   //animation ID
   const ANIMATION_ID = 'tabs';
@@ -21,6 +21,9 @@ export const tabs = function () {
   const PAUSE_ON_HOVER = 'data-ix-tabs-pause-on-hover';
   const AUTOPLAYVIDEOS = 'data-ix-tabs-autoplay-videos'; // ADDED
   const EASE = 'data-ix-tabs-ease';
+
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //select all the wrap elements
   const tabWraps = [...document.querySelectorAll(WRAP)];

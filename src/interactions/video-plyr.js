@@ -1,7 +1,8 @@
-import { attr } from '../utilities';
+import { attr, getIxConfig } from '../utilities';
 import Plyr from 'plyr';
 
 export const videoPlyr = function () {
+  const ANIMATION_ID = 'videoplyr';
   //selectors
   const COMPONENT = '.plyr_component';
   //custom classes
@@ -20,6 +21,9 @@ export const videoPlyr = function () {
   const PLAYING_CLASS = '.plyr--playing';
   //array of video players
   const players = [];
+
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const components = [...document.querySelectorAll(COMPONENT)];
   if (components.length === 0) return;

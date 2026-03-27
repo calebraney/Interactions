@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, getAttrConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const scrollProgress = function () {
   //animation ID
@@ -15,6 +15,9 @@ export const scrollProgress = function () {
   const START = 'data-ix-scrollprogress-start';
   const END = 'data-ix-scrollprogress-end';
   const ACTIVE_CLASS = 'data-ix-scrollprogress-active-class'; // class added to wrap while scrolltrigger is active
+
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const wraps = [...document.querySelectorAll(WRAP)];
   if (wraps.length === 0) return;

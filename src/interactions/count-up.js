@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 /*
 CSS required for the "ticker" type — include in page head:
@@ -65,9 +65,8 @@ export const countUp = function () {
   const DEFAULT_TICKER_DIRECTION = 'down'; //down or up
   const DEFAULT_TICKER_USE_GROUPING = true;
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   // --- Count type animation ---
   const runCountAnimation = function (item, { duration, start, activeClass, triggerType }) {

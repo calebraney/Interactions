@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const accordion = function () {
   //animation ID
@@ -14,9 +14,8 @@ export const accordion = function () {
   const OPTION_HOVER_OPEN = 'data-ix-accordion-hover';
   const ACTIVE_CLASS = 'is-active';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const wraps = [...document.querySelectorAll(WRAP)];
   // utility function to open or close accordions

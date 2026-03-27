@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const marquee = function () {
   //animation ID
@@ -18,9 +18,8 @@ export const marquee = function () {
   const DEFAULT_DURATION = 30;
   const DEFAULT_DYNAMIC_DURATION = 5;
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //for each wrap
   const wraps = document.querySelectorAll(WRAP);

@@ -1,4 +1,4 @@
-import { attr, startScroll, stopScroll, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, startScroll, stopScroll, checkContainer, getIxConfig } from '../utilities';
 
 /*
 Include this css in the head code
@@ -23,9 +23,8 @@ export const pageTransition = function (lenis) {
   const transitionColumns = document.querySelectorAll(COLUMN);
   if (!transitionWrap || transitionColumns.length === 0) return;
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   // Page load animation
   const tlLoad = gsap.timeline();

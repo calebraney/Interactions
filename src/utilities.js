@@ -99,38 +99,6 @@ export const checkRunProp = function (item, animationID) {
   return true;
 };
 
-//check for attributes to stop animation on specific breakpoints
-export const checkSiteAndPageRun = function (animationID) {
-  //exit if items aren't found
-  if (!animationID) {
-    console.error(`No animationID provided to checkSiteAndPageRun`);
-    return;
-  }
-  //Check if page run is set to false, if so return false to stop interaction
-  const pageRunEl = document.querySelector(`[data-ix-${animationID}-page-run]`);
-  const pageRun = attr(true, pageRunEl?.getAttribute(`data-ix-${animationID}-page-run`));
-
-  //Check if page run is set to false, if so return false to stop interaction
-  const siteRunEl = document.querySelector(`[data-ix-${animationID}-site-run]`);
-  const siteRun = attr(true, siteRunEl?.getAttribute(`data-ix-${animationID}-site-run`));
-
-  if (pageRun === false || siteRun === false) {
-    document.querySelector('body').setAttribute(`data-ix-${animationID}-site-run`, 'false');
-    return false;
-  }
-
-  //Alternate Version that checks CSS variables instead of data attributes
-
-  // // Then check site-level CSS variable
-  // const siteRunVar = window
-  //   .getComputedStyle(document.documentElement)
-  //   .getPropertyValue(`--interactions--${animationID}-run`);
-  // const siteRun = attr(true, siteRunVar);
-  // if (siteRun === false) return false;
-  //If neither are set to false, return true to allow interaction to run
-  return true;
-};
-
 //utility function to get the clipping direction of items (horizontal or vertical only)
 export const getClipDirection = function (attributeValue) {
   const clipDirections = {
@@ -420,6 +388,75 @@ export const flattenDisplayContents = function (slot) {
     slot.removeChild(child);
     child = slot.firstElementChild;
   }
+};
+
+// ============================================================================
+// getIxConfig: Site-Level Animation Config Reader
+// ============================================================================
+//
+// Reads window.ixConfig[interactionID] set in a site's <head> script and
+// merges it with the interaction's built-in defaults.
+//
+// This allows per-site customisation of which animation type is used for each
+// element-type keyword (heading, item, line, etc.) without touching library code.
+//
+// Usage in a site's <head> (no defer/async so it runs before the main script):
+//   <script>
+//   window.ixConfig = {
+//     scrollin: { heading: 'fade-lines', item: 'slide-up' },
+//     load: false,          // disables entire load interaction
+//   };
+//   </script>
+//
+// Returns:
+//   - The defaults object (unchanged) if window.ixConfig is not set.
+//   - false if window.ixConfig[interactionID] === false (interaction disabled).
+//   - A merged object of defaults + overrides otherwise.
+//     Individual keys set to false in the override pass through, allowing
+//     per-type disabling (e.g. scrollin: { line: false }).
+// ============================================================================
+export const getIxConfig = function (interactionID, defaults) {
+  //exit if items aren't found
+  if (!interactionID) {
+    console.error(`No interactionID provided to getIxConfig`);
+    return;
+  }
+  //Check if page run is set to false, if so return false to stop interaction
+  const pageRunEl = document.querySelector(`[data-ix-${interactionID}-page-run]`);
+  const pageRun = attr(true, pageRunEl?.getAttribute(`data-ix-${interactionID}-page-run`));
+
+  if (pageRun === false) {
+    document.querySelector('body').setAttribute(`data-ix-${interactionID}-page-run`, 'false');
+    return false;
+  }
+
+  // No site-level config set — use built-in defaults as-is
+  if (typeof window.ixConfig === 'undefined') return defaults;
+  const siteConfig = window.ixConfig[interactionID];
+  // Interaction disabled entirely
+  if (siteConfig === false) return false;
+  // No override for this interaction — use defaults
+  if (!siteConfig || typeof siteConfig !== 'object') return defaults;
+  // Merge: defaults provide the base, site config overrides specific keys
+  return Object.assign({}, defaults, siteConfig);
+};
+
+// ============================================================================
+// resolveRichTextTarget: Rich Text Element Resolver
+// ============================================================================
+//
+// SplitText must target the actual text element, not the Webflow rich-text
+// wrapper div (.w-richtext). This function returns the first child of a
+// rich-text wrapper, or the element itself if it is not a rich-text wrapper.
+//
+// Only used inside split-text animation handlers — plain element animations
+// should animate the rich-text element directly.
+// ============================================================================
+export const resolveRichTextTarget = function (element) {
+  if (element && element.classList.contains('w-richtext')) {
+    return element.firstChild;
+  }
+  return element;
 };
 
 // removeCMSList:
