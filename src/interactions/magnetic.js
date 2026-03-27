@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, getIxConfig } from '../utilities';
 
 export const magnetic = function () {
   //animation ID
@@ -18,9 +18,8 @@ export const magnetic = function () {
   const ACTIVE_CLASS = 'data-ix-magnetic-active-class'; // class added while the cursor is inside the wrap
   const HOVER_SCALE = 'data-ix-magnetic-hover-scale'; // optional scale on hover (default 1, set to e.g. 1.05)
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   // Select all wraps
   const wraps = [...document.querySelectorAll(WRAP)];

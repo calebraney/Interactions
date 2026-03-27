@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, getIxConfig } from '../utilities';
 
 export const stickyNav = function () {
   //animation ID
@@ -17,9 +17,8 @@ export const stickyNav = function () {
   const START_HIDDEN = 'data-ix-stickynav-start-hidden'; // if true, nav starts hidden and appears on first scroll-up (default false)
   const HIDE_OFFSET = 'data-ix-stickynav-hide-offset'; // px from top before hide behavior activates (default 100)
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const wraps = [...document.querySelectorAll(WRAP)];
   if (wraps.length === 0) return;

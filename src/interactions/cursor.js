@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 /*
 CSS to include
@@ -38,9 +38,8 @@ export const cursor = function () {
   //classes
   const HOVER_CLASS = 'is-hover';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   // select the items
   const wrap = document.querySelector(WRAP);

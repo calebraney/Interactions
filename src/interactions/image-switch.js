@@ -1,4 +1,4 @@
-import { checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const imageSwitch = function (gsapContext) {
   const ANIMATION_ID = 'imageswitch';
@@ -8,9 +8,8 @@ export const imageSwitch = function (gsapContext) {
   const IMAGE = '[data-ix-imageswitch="image"]';
   const LINK = '[data-ix-imageswitch="link"]';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const wraps = [...document.querySelectorAll(WRAP)];
   if (wraps.length === 0) return;

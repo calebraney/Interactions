@@ -1,4 +1,4 @@
-import { attrIfSet, checkRunProp, buildFromToVars, checkSiteAndPageRun } from '../utilities';
+import { attrIfSet, checkRunProp, buildFromToVars, getIxConfig } from '../utilities';
 
 export const loop = function () {
   //animation ID
@@ -6,9 +6,8 @@ export const loop = function () {
   //elements
   const ITEM = `[data-ix-loop="item"]`;
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const items = [...document.querySelectorAll(ITEM)];
   items.forEach((item) => {

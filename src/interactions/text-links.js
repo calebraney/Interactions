@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, getIxConfig } from '../utilities';
 
 export const textLinks = function (gsapContext) {
   //animation ID
@@ -8,9 +8,8 @@ export const textLinks = function (gsapContext) {
   const FRONT = '[data-ix-textlink="front"]';
   const BACK = '[data-ix-textlink="back"]';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   //get wraps
   const wraps = gsap.utils.toArray(WRAP);

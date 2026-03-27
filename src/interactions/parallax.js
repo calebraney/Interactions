@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, checkSiteAndPageRun } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const parallax = function () {
   //animation ID
@@ -11,9 +11,8 @@ export const parallax = function () {
   const TYPE = 'data-ix-parallax-type'; //options are uncover, cover, or parallax
   const AMOUNT = 'data-ix-parallax-amount';
 
-  //check if page run or site run settings are false and exit if so
-  let siteOrPageCancel = checkSiteAndPageRun(ANIMATION_ID);
-  if (!siteOrPageCancel) return;
+  const ixEnabled = getIxConfig(ANIMATION_ID, true);
+  if (ixEnabled === false) return;
 
   const wraps = gsap.utils.toArray(WRAP);
   wraps.forEach((wrap) => {
