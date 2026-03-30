@@ -48,12 +48,12 @@ export const load = function (reduceMotion) {
   //   window.ixConfig = { load: { heading: 'slide-up-words' } }
   //   window.ixConfig = { load: false }  // disables entire load interaction
   const ELEMENT_TYPE_DEFAULTS = {
-    [HEADING]: 'rotate-up-dramatic-words', // strong 3D flip — matches original loadHeading behaviour
-    [PARAGRAPH]: 'scale-up',
-    [ITEM]: 'fade',
+    [HEADING]: 'slide-up-words', // strong 3D flip — matches original loadHeading behaviour
+    [PARAGRAPH]: 'slide-up',
+    [ITEM]: 'slide-up',
     [IMAGE]: 'scale-up', // scale from 0.8 + fade — matches original loadImage behaviour
     [LINE]: 'clip-left',
-    [STAGGER]: 'fade',
+    [STAGGER]: 'slide-up',
   };
   const ixConfig = getIxConfig(ANIMATION_ID, ELEMENT_TYPE_DEFAULTS);
   // Exit if the entire load interaction is disabled in site config
