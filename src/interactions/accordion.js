@@ -1,4 +1,4 @@
-import { checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const accordion = function () {
   //animation ID

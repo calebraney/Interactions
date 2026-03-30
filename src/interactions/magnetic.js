@@ -1,4 +1,4 @@
-import { checkRunProp, getAttrConfig, getIxConfig } from '../utilities';
+import { attr, checkRunProp, getAttrConfig, getIxConfig } from '../utilities';
 
 export const magnetic = function () {
   //animation ID
