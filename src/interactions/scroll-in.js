@@ -1,4 +1,10 @@
-import { attr, checkRunProp, getNonContentsChildren, getAttrConfig, getIxConfig } from '../utilities';
+import {
+  attr,
+  checkRunProp,
+  getNonContentsChildren,
+  getAttrConfig,
+  getIxConfig,
+} from '../utilities';
 import { createAnimation, isAnimationType } from './animations';
 
 export const scrollIn = function () {
@@ -30,18 +36,22 @@ export const scrollIn = function () {
   // Override any of these per-site via window.ixConfig.scrollin in <head>:
   //   window.ixConfig = { scrollin: { heading: 'fade-lines', line: false } }
   const ELEMENT_TYPE_DEFAULTS = {
-    [HEADING]: 'slide-up-chars',
-    [PARAGRAPH]: 'fade',
-    [ITEM]: 'fade',
-    [CONTAINER]: 'fade',
-    [STAGGER]: 'fade',
-    [RICH_TEXT]: 'fade',
+    [HEADING]: 'slide-up-words',
+    [PARAGRAPH]: 'slide-up',
+    [ITEM]: 'slide-up',
+    [CONTAINER]: 'slide-up',
+    [STAGGER]: 'slide-up',
+    [RICH_TEXT]: 'slide-up',
     [IMAGE]: 'image-zoom',
     [LINE]: 'clip-left',
   };
   const ixConfig = getIxConfig(ANIMATION_ID, ELEMENT_TYPE_DEFAULTS);
   // Exit if the entire scrollin interaction is disabled in site config
   if (ixConfig === false) return;
+
+  // Timing defaults — can be overridden via window.ixConfig.scrollin.duration / .ease
+  const tlDuration = ixConfig.duration ?? 0.6;
+  const tlEase = ixConfig.ease ?? 'power1.out';
 
   // ── ScrollTrigger timeline factory ────────────────────────────────────────
   // Creates a per-element GSAP timeline with a ScrollTrigger attached.
@@ -55,8 +65,8 @@ export const scrollIn = function () {
     });
     return gsap.timeline({
       defaults: {
-        duration: 0.6,
-        ease: 'power1.out',
+        duration: tlDuration,
+        ease: tlEase,
       },
       scrollTrigger: {
         trigger: item,

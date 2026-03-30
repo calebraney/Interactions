@@ -59,6 +59,10 @@ export const load = function (reduceMotion) {
   // Exit if the entire load interaction is disabled in site config
   if (ixConfig === false) return;
 
+  // Timing defaults — can be overridden via window.ixConfig.load.duration / .ease
+  const tlDuration = ixConfig.duration ?? 0.8;
+  const tlEase = ixConfig.ease ?? 'power1.out';
+
   // ── Main loop ─────────────────────────────────────────────────────────────
   // Each wrap element creates its own timeline. Multiple wraps are staggered
   // sequentially using totalDuration so later sections don't overlap with earlier ones.
@@ -81,8 +85,8 @@ export const load = function (reduceMotion) {
       delay: totalDuration,
       paused: true,
       defaults: {
-        ease: 'power1.out',
-        duration: 0.8,
+        ease: tlEase,
+        duration: tlDuration,
       },
     });
     // Make the wrap itself visible immediately when the timeline starts
