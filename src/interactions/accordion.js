@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
+import { checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const accordion = function () {
   //animation ID
@@ -7,11 +7,6 @@ export const accordion = function () {
   const WRAP = '[data-ix-accordion="wrap"]';
   const ITEM = '[data-ix-accordion="item"]';
   const OPEN = '[data-ix-accordion="open"]';
-  //options
-  const OPTION_FIRST_OPEN = 'data-ix-accordion-first-open';
-  const OPTION_ONE_ACTIVE = 'data-ix-accordion-one-active';
-  const OPTION_KEEP_ONE_OPEN = 'data-ix-accordion-keep-one-open';
-  const OPTION_HOVER_OPEN = 'data-ix-accordion-hover';
   const ACTIVE_CLASS = 'is-active';
 
   const ixEnabled = getIxConfig(ANIMATION_ID, true);
@@ -57,18 +52,20 @@ export const accordion = function () {
     let runProp = checkRunProp(wrap, ANIMATION_ID);
     if (runProp === false) return;
     // set up conditions for
-    let firstOpen = attr(false, wrap.getAttribute(OPTION_FIRST_OPEN));
-    let oneActive = attr(false, wrap.getAttribute(OPTION_ONE_ACTIVE));
-    let keepOneOpen = attr(false, wrap.getAttribute(OPTION_KEEP_ONE_OPEN));
-    let hoverOnly = attr(false, wrap.getAttribute(OPTION_HOVER_OPEN));
+    const config = getAttrConfig(wrap, ANIMATION_ID, {
+      'first-open': false,
+      'one-active': false,
+      'keep-one-open': false,
+      hover: false,
+    });
     //get the first accordion item and all of the items
     const items = [...wrap.querySelectorAll(ITEM)];
     if (items.length === 0) return;
     const firstItem = items[0];
-    if (firstOpen) {
+    if (config['first-open']) {
       openAccordion(firstItem);
     }
-    if (!hoverOnly) {
+    if (!config.hover) {
       // Add event listener for when accordion lists are clicked
       wrap.addEventListener('click', function (e) {
         // check if the clicked element was the top of an accordion and get that accordion
@@ -81,7 +78,7 @@ export const accordion = function () {
         // if item is NOT ACTIVE
         if (!clickedItemAlreadyActive) {
           // check if oneActive is True
-          if (oneActive) {
+          if (config['one-active']) {
             // if one active is true loop through each item
             items.forEach((item) => {
               //if item is the current item Open
@@ -94,17 +91,17 @@ export const accordion = function () {
               }
             });
           }
-          if (!oneActive) {
+          if (!config['one-active']) {
             // if one active is false just set the current item to active and open it
             openAccordion(clickedItem);
           }
         }
         // if the current item IS ACTIVE and keep one open is false close it
-        if (clickedItemAlreadyActive && !keepOneOpen) {
+        if (clickedItemAlreadyActive && !config['keep-one-open']) {
           openAccordion(clickedItem, false);
         }
         // if the current item IS ACTIVE and keep one open is true check how many items are active
-        if (clickedItemAlreadyActive && keepOneOpen) {
+        if (clickedItemAlreadyActive && config['keep-one-open']) {
           const activeItems = items.filter(function (item) {
             return item.classList.contains(ACTIVE_CLASS);
           });
@@ -115,7 +112,7 @@ export const accordion = function () {
         }
       });
     }
-    if (hoverOnly) {
+    if (config.hover) {
       items.forEach((item) => {
         item.addEventListener('mouseover', function () {
           openAccordion(item);

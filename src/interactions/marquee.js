@@ -1,16 +1,10 @@
-import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const marquee = function () {
   //animation ID
   const ANIMATION_ID = 'marquee';
   const WRAP = '[data-ix-marquee="wrap"]';
   const LIST = '[data-ix-marquee="list"]'; // put on the CMS LIST WRAP element (NOT THE LIST)
-  const VERTICAL = 'data-ix-marquee-vertical'; // needs to be set to true if vertical
-  const REVERSE = 'data-ix-marquee-reverse'; // needs to be set to true if reversed
-  const DURATION = 'data-ix-marquee-duration'; //set a custom duration in seconds
-  const DYNAMIC_DURATION = 'data-ix-marquee-duration-dynamic'; // set to true to make the duration dynamic per amount of items
-  const DURATION_PER_ITEM = 'data-ix-marquee-duration-per-item'; // the duration per the amount of items
-  const HOVER_EFFECT = 'data-ix-marquee-hover'; //option for hover effect
   const ACCELERATE_ON_HOVER = 'accelerate';
   const DECELERATE_ON_HOVER = 'decelerate';
   const PAUSE_ON_HOVER = 'pause';
@@ -29,11 +23,14 @@ export const marquee = function () {
     const lists = [...wrap.querySelectorAll(LIST)];
     //animation function
     const animation = function () {
-      let vertical = attr(false, wrap.getAttribute(VERTICAL));
-      let reverse = attr(false, wrap.getAttribute(REVERSE));
-      let duration = attr(DEFAULT_DURATION, wrap.getAttribute(DURATION));
-      let durationDynamic = attr(false, wrap.getAttribute(DYNAMIC_DURATION));
-      let durationPerItem = attr(DEFAULT_DYNAMIC_DURATION, wrap.getAttribute(DURATION_PER_ITEM));
+      const config = getAttrConfig(wrap, ANIMATION_ID, {
+        vertical: false,
+        reverse: false,
+        duration: DEFAULT_DURATION,
+        'duration-dynamic': false,
+        'duration-per-item': DEFAULT_DYNAMIC_DURATION,
+        hover: 'none',
+      });
       // get the amount of items in the wrap
       let itemCount = lists[0].childElementCount;
       if (itemCount === 1) {
@@ -41,14 +38,12 @@ export const marquee = function () {
         itemCount = lists[0].firstElementChild.childElementCount;
       }
       //if duration is set to be dynamic make the duration based on the amount of items and the duration per item
-      if (durationDynamic) {
-        duration = itemCount * durationPerItem;
-      }
-
-      let hoverEffect = attr('none', wrap.getAttribute(HOVER_EFFECT));
+      let duration = config['duration-dynamic']
+        ? itemCount * config['duration-per-item']
+        : config.duration;
 
       let direction = 1;
-      if (reverse) {
+      if (config.reverse) {
         direction = -1;
       }
       let tl = gsap.timeline({
@@ -65,12 +60,12 @@ export const marquee = function () {
         },
         {
           // if vertical is true move yPercent, otherwise move x percent
-          xPercent: vertical ? 0 : -100 * direction,
-          yPercent: vertical ? -100 * direction : 0,
+          xPercent: config.vertical ? 0 : -100 * direction,
+          yPercent: config.vertical ? -100 * direction : 0,
           duration: duration,
         }
       );
-      if (hoverEffect === ACCELERATE_ON_HOVER) {
+      if (config.hover === ACCELERATE_ON_HOVER) {
         wrap.addEventListener('mouseenter', (event) => {
           tl.timeScale(2);
         });
@@ -78,7 +73,7 @@ export const marquee = function () {
           tl.timeScale(1);
         });
       }
-      if (hoverEffect === DECELERATE_ON_HOVER) {
+      if (config.hover === DECELERATE_ON_HOVER) {
         wrap.addEventListener('mouseenter', (event) => {
           tl.timeScale(0.5);
         });
@@ -86,7 +81,7 @@ export const marquee = function () {
           tl.timeScale(1);
         });
       }
-      if (hoverEffect === PAUSE_ON_HOVER) {
+      if (config.hover === PAUSE_ON_HOVER) {
         wrap.addEventListener('mouseenter', (event) => {
           tl.pause();
         });

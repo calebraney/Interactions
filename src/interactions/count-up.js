@@ -1,4 +1,4 @@
-import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 /*
 CSS required for the "ticker" type — include in page head:
@@ -35,16 +35,6 @@ export const countUp = function () {
 
   // Shared options
   const OPTION_TYPE = 'data-ix-countup-type'; // "count" (default) or "ticker"
-  const OPTION_DURATION = 'data-ix-countup-duration'; // animation duration
-  const OPTION_START = 'data-ix-countup-start'; // ScrollTrigger start position
-  const OPTION_ACTIVE_CLASS = 'data-ix-countup-active'; // class added on animation complete
-  const OPTION_TRIGGER = 'data-ix-countup-trigger'; // "scroll" (default) or "load"
-
-  // Ticker-specific options
-  const OPTION_STAGGER = 'data-ix-countup-stagger'; // delay between digit columns
-  const OPTION_EASE = 'data-ix-countup-ease'; // easing
-  const OPTION_DIRECTION = 'data-ix-countup-direction'; // "down" (default) or "up" — column roll direction
-  const OPTION_USE_GROUPING = 'data-ix-countup-use-grouping'; // format number with commas
 
   // Ticker CSS classes for generated elements
   const COLUMN_CLASS = 'ticker_column';
@@ -131,10 +121,14 @@ export const countUp = function () {
   // --- Ticker type animation ---
   const runTickerAnimation = function (item, { duration, start, activeClass, triggerType }) {
     // ticker-specific options
-    let stagger = attr(DEFAULT_TICKER_STAGGER, item.getAttribute(OPTION_STAGGER));
-    let ease = attr(DEFAULT_TICKER_EASE, item.getAttribute(OPTION_EASE));
-    let direction = attr(DEFAULT_TICKER_DIRECTION, item.getAttribute(OPTION_DIRECTION));
-    let useGrouping = attr(DEFAULT_TICKER_USE_GROUPING, item.getAttribute(OPTION_USE_GROUPING));
+    const tickerConfig = getAttrConfig(item, ANIMATION_ID, {
+      stagger: DEFAULT_TICKER_STAGGER,
+      ease: DEFAULT_TICKER_EASE,
+      direction: DEFAULT_TICKER_DIRECTION,
+      'use-grouping': DEFAULT_TICKER_USE_GROUPING,
+    });
+    const { stagger, ease, direction } = tickerConfig;
+    const useGrouping = tickerConfig['use-grouping'];
 
     // if a child element with the text attribute exists, use it as the number source
     const textEl = item.querySelector(TEXT) || item;
@@ -309,18 +303,17 @@ export const countUp = function () {
   items.forEach((item) => {
     //animation function
     const animation = function () {
-      // shared options
-      let type = attr(DEFAULT_TYPE, item.getAttribute(OPTION_TYPE));
-      let duration = attr(
-        type === 'ticker' ? DEFAULT_TICKER_DURATION : DEFAULT_COUNT_DURATION,
-        item.getAttribute(OPTION_DURATION)
-      );
-      let start = attr(
-        type === 'ticker' ? DEFAULT_TICKER_START : DEFAULT_COUNT_START,
-        item.getAttribute(OPTION_START)
-      );
-      let activeClass = attr(DEFAULT_ACTIVE_CLASS, item.getAttribute(OPTION_ACTIVE_CLASS));
-      let triggerType = attr(DEFAULT_TRIGGER, item.getAttribute(OPTION_TRIGGER));
+      // shared options — type is read first because duration/start defaults depend on it
+      const type = attr(DEFAULT_TYPE, item.getAttribute(OPTION_TYPE));
+      const sharedConfig = getAttrConfig(item, ANIMATION_ID, {
+        duration: type === 'ticker' ? DEFAULT_TICKER_DURATION : DEFAULT_COUNT_DURATION,
+        start: type === 'ticker' ? DEFAULT_TICKER_START : DEFAULT_COUNT_START,
+        active: DEFAULT_ACTIVE_CLASS,
+        trigger: DEFAULT_TRIGGER,
+      });
+      const { duration, start } = sharedConfig;
+      const activeClass = sharedConfig.active;
+      const triggerType = sharedConfig.trigger;
 
       if (type === 'ticker') {
         runTickerAnimation(item, { duration, start, activeClass, triggerType });

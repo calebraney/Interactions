@@ -1,4 +1,4 @@
-import { attr, checkRunProp, getNonContentsChildren, getIxConfig } from '../utilities';
+import { attr, checkRunProp, getNonContentsChildren, getAttrConfig, getIxConfig } from '../utilities';
 import { createAnimation, isAnimationType } from './animations';
 
 export const scrollIn = function () {
@@ -20,10 +20,6 @@ export const scrollIn = function () {
   const LINE = 'line';
 
   // ScrollTrigger option attributes
-  const SCROLL_TOGGLE_ACTIONS = 'data-ix-scrollin-toggle-actions';
-  const SCROLL_SCRUB = 'data-ix-scrollin-scrub';
-  const SCROLL_START = 'data-ix-scrollin-start';
-  const SCROLL_END = 'data-ix-scrollin-end';
   const SCROLL_STAGGER = 'data-ix-scrollin-stagger';
 
   // Default stagger for stagger-type elements (can be overridden via attribute)
@@ -51,16 +47,12 @@ export const scrollIn = function () {
   // Creates a per-element GSAP timeline with a ScrollTrigger attached.
   // Options can be customised per-element via data attributes.
   const scrollInTL = function (item) {
-    const settings = {
+    const settings = getAttrConfig(item, ANIMATION_ID, {
+      'toggle-actions': 'play none none none',
       scrub: false,
-      toggleActions: 'play none none none',
       start: 'top 90%',
       end: 'top 75%',
-    };
-    settings.toggleActions = attr(settings.toggleActions, item.getAttribute(SCROLL_TOGGLE_ACTIONS));
-    settings.scrub = attr(settings.scrub, item.getAttribute(SCROLL_SCRUB));
-    settings.start = attr(settings.start, item.getAttribute(SCROLL_START));
-    settings.end = attr(settings.end, item.getAttribute(SCROLL_END));
+    });
     return gsap.timeline({
       defaults: {
         duration: 0.6,
@@ -70,7 +62,7 @@ export const scrollIn = function () {
         trigger: item,
         start: settings.start,
         end: settings.end,
-        toggleActions: settings.toggleActions,
+        toggleActions: settings['toggle-actions'],
         scrub: settings.scrub,
       },
     });

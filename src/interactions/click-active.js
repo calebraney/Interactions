@@ -1,4 +1,4 @@
-import { checkRunProp, attr, checkContainer, getIxConfig } from '../utilities';
+import { checkRunProp, attr, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const clickActive = function () {
   //animation ID
@@ -10,10 +10,6 @@ export const clickActive = function () {
   const ID = 'data-ix-clickactive-id';
   //option for active class and default class
   const OPTION_START_ACTIVE = 'data-ix-clickactive-start-active'; // applied to triggers
-  const OPTION_ACTIVE_CLASS = 'data-ix-clickactive-class'; //aplied to wrap
-  const OPTION_FIRST_ACTIVE = 'data-ix-clickactive-first-active'; // applied to wrap
-  const OPTION_ONE_ACTIVE = 'data-ix-clickactive-one-active'; // applied to wrap
-  const OPTION_KEEP_ONE_ACTIVE = 'data-ix-clickactive-keep-one-active'; // applied to wrap
   //duration of the interaction in MS (for GSAP Scrolltrigger reset)
   const INTERACTION_DURATION = 800;
 
@@ -35,11 +31,16 @@ export const clickActive = function () {
     let keepOneActive = false;
     //conditional options to check if the root element is a wrap
     if (rootElement !== document) {
-      // set up conditions for the function
-      activeClass = attr(ACTIVE_CLASS, rootElement.getAttribute(OPTION_ACTIVE_CLASS));
-      firstActive = attr(false, rootElement.getAttribute(OPTION_FIRST_ACTIVE));
-      oneActive = attr(false, rootElement.getAttribute(OPTION_ONE_ACTIVE));
-      keepOneActive = attr(false, rootElement.getAttribute(OPTION_KEEP_ONE_ACTIVE));
+      const config = getAttrConfig(rootElement, ANIMATION_ID, {
+        class: ACTIVE_CLASS,
+        'first-active': false,
+        'one-active': false,
+        'keep-one-active': false,
+      });
+      activeClass = config.class;
+      firstActive = config['first-active'];
+      oneActive = config['one-active'];
+      keepOneActive = config['keep-one-active'];
 
       //check if the run prop is set to true
       let runProp = checkRunProp(rootElement, ANIMATION_ID);

@@ -1,4 +1,4 @@
-import { attr, checkRunProp, getIxConfig } from '../utilities';
+import { checkRunProp, getAttrConfig, getIxConfig } from '../utilities';
 
 export const magnetic = function () {
   //animation ID
@@ -8,15 +8,6 @@ export const magnetic = function () {
   const TRIGGER = '[data-ix-magnetic="trigger"]'; // optional: source of pointer events (defaults to wrap)
   const TARGET = '[data-ix-magnetic="target"]'; // optional: the element that moves (defaults to wrap)
   const INNER = '[data-ix-magnetic="inner"]'; // optional inner element that moves further (e.g. button text)
-  //options
-  const STRENGTH = 'data-ix-magnetic-strength'; // 0-1, how much the element follows the cursor (default 0.3)
-  const INNER_STRENGTH = 'data-ix-magnetic-inner-strength'; // 0-1, inner element follows more than outer (default 0.5)
-  const DURATION = 'data-ix-magnetic-duration'; // how fast the element catches up (default 0.4)
-  const EASE = 'data-ix-magnetic-ease'; // easing on the follow movement (default 'power2.out')
-  const RETURN_DURATION = 'data-ix-magnetic-return-duration'; // how fast the element returns to center (default 0.6)
-  const RETURN_EASE = 'data-ix-magnetic-return-ease'; // easing on the return (default 'elastic.out(1.2, 0.5)')
-  const ACTIVE_CLASS = 'data-ix-magnetic-active-class'; // class added while the cursor is inside the wrap
-  const HOVER_SCALE = 'data-ix-magnetic-hover-scale'; // optional scale on hover (default 1, set to e.g. 1.05)
 
   const ixEnabled = getIxConfig(ANIMATION_ID, true);
   if (ixEnabled === false) return;
@@ -36,14 +27,16 @@ export const magnetic = function () {
     if ('ontouchstart' in window || navigator.maxTouchPoints) return;
 
     // Read options
-    let strength = attr(0.3, wrap.getAttribute(STRENGTH));
-    let innerStrength = attr(0.5, wrap.getAttribute(INNER_STRENGTH));
-    let duration = attr(0.6, wrap.getAttribute(DURATION));
-    let ease = attr('power1.out', wrap.getAttribute(EASE));
-    let returnDuration = attr(0.6, wrap.getAttribute(RETURN_DURATION));
-    let returnEase = attr('elastic.out(1.2, 0.5)', wrap.getAttribute(RETURN_EASE));
-    let activeClass = attr('is-active', wrap.getAttribute(ACTIVE_CLASS));
-    let hoverScale = attr(1, wrap.getAttribute(HOVER_SCALE));
+    const config = getAttrConfig(wrap, ANIMATION_ID, {
+      strength: 0.3,
+      'inner-strength': 0.5,
+      duration: 0.6,
+      ease: 'power1.out',
+      'return-duration': 0.6,
+      'return-ease': 'elastic.out(1.2, 0.5)',
+      'active-class': 'is-active',
+      'hover-scale': 1,
+    });
 
     // Get optional elements — fall back to wrap if not present
     const trigger = wrap.querySelector(TRIGGER) || wrap; // source of pointer events
@@ -59,39 +52,39 @@ export const magnetic = function () {
 
       // Move the target by strength amount
       gsap.to(target, {
-        x: offsetX * strength,
-        y: offsetY * strength,
-        scale: hoverScale,
-        duration: duration,
-        ease: ease,
+        x: offsetX * config.strength,
+        y: offsetY * config.strength,
+        scale: config['hover-scale'],
+        duration: config.duration,
+        ease: config.ease,
         overwrite: 'auto',
       });
 
       // Move the inner element further for a layered parallax-like effect
       if (inner) {
         gsap.to(inner, {
-          x: offsetX * innerStrength,
-          y: offsetY * innerStrength,
-          duration: duration,
-          ease: ease,
+          x: offsetX * config['inner-strength'],
+          y: offsetY * config['inner-strength'],
+          duration: config.duration,
+          ease: config.ease,
           overwrite: 'auto',
         });
       }
     });
 
     trigger.addEventListener('mouseenter', function () {
-      wrap.classList.add(activeClass);
+      wrap.classList.add(config['active-class']);
     });
 
     trigger.addEventListener('mouseleave', function () {
-      wrap.classList.remove(activeClass);
+      wrap.classList.remove(config['active-class']);
       // Snap back to center
       gsap.to(target, {
         x: 0,
         y: 0,
         scale: 1,
-        duration: returnDuration,
-        ease: returnEase,
+        duration: config['return-duration'],
+        ease: config['return-ease'],
         overwrite: 'auto',
       });
 
@@ -99,8 +92,8 @@ export const magnetic = function () {
         gsap.to(inner, {
           x: 0,
           y: 0,
-          duration: returnDuration,
-          ease: returnEase,
+          duration: config['return-duration'],
+          ease: config['return-ease'],
           overwrite: 'auto',
         });
       }

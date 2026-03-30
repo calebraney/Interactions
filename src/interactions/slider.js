@@ -1,4 +1,4 @@
-import { attr, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
+import { getAttrConfig, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
 
 export const slider = function () {
   //animation ID

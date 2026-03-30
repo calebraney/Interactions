@@ -14,6 +14,7 @@ import { cursor } from './interactions/cursor';
 import { hoverActive } from './interactions/hover-active';
 import { initLenis } from './interactions/lenis';
 import { imageSwitch } from './interactions/image-switch';
+import { logoSwitch } from './interactions/logo-switch';
 import { lightbox } from './interactions/lightbox';
 import { load } from './interactions/load';
 import { loop } from './interactions/loop';
@@ -24,6 +25,7 @@ import { modal } from './interactions/modal';
 import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { pathHover } from './interactions/path-hover';
+import { playSound } from './interactions/play-sound';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
 import { scrollProgress } from './interactions/scroll-progress';
@@ -32,6 +34,7 @@ import { tabs } from './interactions/tabs';
 import { slider } from './interactions/slider';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
+import { typeText } from './interactions/type-text';
 import { videoPlyr } from './interactions/video-plyr';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -91,6 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
     clickActive();
     hoverActive();
     imageSwitch();
+    logoSwitch();
+    typeText();
+    playSound();
     stickyNav();
   };
   gsapInit();
