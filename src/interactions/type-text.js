@@ -36,10 +36,10 @@ export const typeText = function () {
     const animation = function () {
       // get options
       const config = getAttrConfig(wrap, ANIMATION_ID, {
-        type: TYPE_BACKSPACE, // 'yoyo' | 'replace' | 'backspace'
+        type: TYPE_YOYO, // 'yoyo' | 'replace' | 'backspace'
         duration: 1,
         repeat: false,
-        delay: 1.5,
+        delay: 1,
         'repeat-delay': 1,
         ease: 'none',
         'cursor-duration': 0.5,

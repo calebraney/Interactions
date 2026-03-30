@@ -76,6 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
           pathHover();
           scrollProgress();
           magnetic();
+          imageSwitch();
+          banner();
+          logoSwitch();
+          typeText();
         }
         //setup video players
         const [players, components] = [videoPlyr()];
@@ -90,12 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
     slider();
     tabs();
     accordion();
-    banner();
     clickActive();
     hoverActive();
-    imageSwitch();
-    logoSwitch();
-    typeText();
     playSound();
     stickyNav();
   };

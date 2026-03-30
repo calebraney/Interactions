@@ -1,4 +1,10 @@
-import { getAttrConfig, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
+import {
+  getAttrConfig,
+  attr,
+  flattenDisplayContents,
+  removeCMSList,
+  getIxConfig,
+} from '../utilities';
 
 export const slider = function () {
   //animation ID
@@ -32,6 +38,7 @@ export const slider = function () {
 
   const sliders = document.querySelectorAll(`${SLIDER}:not(${SLIDER} ${SLIDER})`);
   sliders.forEach((component) => {
+    //lumos script initialization guard — prevents duplicate initialization when multiple slider components are present on the same page
     if (component.dataset.scriptInitialized) return;
     component.dataset.scriptInitialized = 'true';
 
