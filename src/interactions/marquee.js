@@ -8,9 +8,6 @@ export const marquee = function () {
   const ACCELERATE_ON_HOVER = 'accelerate';
   const DECELERATE_ON_HOVER = 'decelerate';
   const PAUSE_ON_HOVER = 'pause';
-  //defaults
-  const DEFAULT_DURATION = 30;
-  const DEFAULT_DYNAMIC_DURATION = 5;
 
   const ixEnabled = getIxConfig(ANIMATION_ID, true);
   if (ixEnabled === false) return;
@@ -26,10 +23,10 @@ export const marquee = function () {
       const config = getAttrConfig(wrap, ANIMATION_ID, {
         vertical: false,
         reverse: false,
-        duration: DEFAULT_DURATION,
+        duration: 30, //duration in seconds
         'duration-dynamic': false,
-        'duration-per-item': DEFAULT_DYNAMIC_DURATION,
-        hover: 'none',
+        'duration-per-item': 5, // only used if duration-dynamic is true — determines the duration based on the amount of items in the list
+        hover: 'none', // or use one of the constants for hover behavior
       });
       // get the amount of items in the wrap
       let itemCount = lists[0].childElementCount;
