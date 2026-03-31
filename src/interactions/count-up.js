@@ -125,10 +125,9 @@ export const countUp = function () {
       stagger: DEFAULT_TICKER_STAGGER,
       ease: DEFAULT_TICKER_EASE,
       direction: DEFAULT_TICKER_DIRECTION,
-      'use-grouping': DEFAULT_TICKER_USE_GROUPING,
+      useGrouping: DEFAULT_TICKER_USE_GROUPING,
     });
-    const { stagger, ease, direction } = tickerConfig;
-    const useGrouping = tickerConfig['use-grouping'];
+    const { stagger, ease, direction, useGrouping } = tickerConfig;
 
     // if a child element with the text attribute exists, use it as the number source
     const textEl = item.querySelector(TEXT) || item;

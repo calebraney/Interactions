@@ -1,6 +1,5 @@
 import {
   getAttrConfig,
-  attr,
   flattenDisplayContents,
   removeCMSList,
   getIxConfig,
@@ -19,18 +18,6 @@ export const slider = function () {
   const PAGINATION_BUTTON_FILL = 'slider_bullet_item_fill';
   const SCROLLBAR = '.slider_scrollbar';
   const SCROLLBAR_HANDLE = 'slider_scrollbar_handle';
-  //options
-  const FOLLOW_FINGER = 'data-ix-slider-follow-finger';
-  const MOUSEWHEEL = 'data-ix-slider-mousewheel';
-  const FREE_MODE = 'data-ix-slider-free-mode';
-  const SLIDE_TO_CLICKED = 'data-ix-slider-slide-to-clicked';
-  const LOOP = 'data-ix-slider-loop';
-  const SPEED = 'data-ix-slider-speed';
-  const AUTOPLAY = 'data-ix-slider-autoplay';
-  const CENTER_SLIDES = 'data-ix-slider-center-slides';
-  const SHOW_AUTOPLAY_PROGRESS = 'data-ix-slider-show-autoplay-progress';
-
-  const PAGINATION_TYPE = 'data-ix-slider-pagination-type'; //bullets, fraction, progressbar
   const ACTIVE_CLASS = 'is-active';
 
   const ixEnabled = getIxConfig(ANIMATION_ID, true);
@@ -51,42 +38,44 @@ export const slider = function () {
     removeCMSList(swiperWrapper);
 
     [...swiperWrapper.children].forEach((el) => el.classList.add('swiper-slide'));
-    const followFinger = attr(true, swiperElement.getAttribute(FOLLOW_FINGER));
-    const freeMode = attr(true, swiperElement.getAttribute(FREE_MODE));
-    const mousewheel = attr(true, swiperElement.getAttribute(MOUSEWHEEL));
-    const slideToClickedSlide = attr(false, swiperElement.getAttribute(SLIDE_TO_CLICKED));
-    const loopMode = attr(false, swiperElement.getAttribute(LOOP));
-    const speed = attr(600, swiperElement.getAttribute(SPEED));
-    const autoplay = attr(0, swiperElement.getAttribute(AUTOPLAY)); //autoplay duration in MS
-    const paginationType = attr('bullets', swiperElement.getAttribute(PAGINATION_TYPE)); //bullets, fraction, progressbar
-    const centerSlides = attr(false, swiperElement.getAttribute(CENTER_SLIDES));
-    const showAutoplayProgress = attr(true, swiperElement.getAttribute(SHOW_AUTOPLAY_PROGRESS));
+    const config = getAttrConfig(swiperElement, ANIMATION_ID, {
+      followFinger: true,
+      freeMode: true,
+      mousewheel: true,
+      slideToClicked: false,
+      loop: false,
+      speed: 600,
+      autoplay: 0, // autoplay duration in MS
+      paginationType: 'bullets', // bullets, fraction, progressbar
+      centerSlides: false,
+      showAutoplayProgress: true,
+    });
     //create slider instance
     const swiper = new Swiper(swiperElement, {
       slidesPerView: 'auto',
-      followFinger: followFinger,
-      freeMode: freeMode,
-      slideToClickedSlide: slideToClickedSlide,
-      centeredSlides: centerSlides,
+      followFinger: config.followFinger,
+      freeMode: config.freeMode,
+      slideToClickedSlide: config.slideToClicked,
+      centeredSlides: config.centerSlides,
       autoHeight: false,
-      loop: loopMode,
+      loop: config.loop,
       loopAdditionalSlides: 3,
-      speed: speed,
+      speed: config.speed,
       mousewheel: {
-        enabled: mousewheel,
+        enabled: config.mousewheel,
         forceToAxis: true,
       },
       keyboard: {
         enabled: true,
         onlyInViewport: true,
       },
-      autoplay: autoplay === 0 ? false : { delay: autoplay * 1000 },
+      autoplay: config.autoplay === 0 ? false : { delay: config.autoplay * 1000 },
       navigation: {
         nextEl: component.querySelector(NEXT),
         prevEl: component.querySelector(PREVIOUS),
       },
       pagination: {
-        type: paginationType,
+        type: config.paginationType,
         el: component.querySelector(`${PAGINATION}`),
         bulletActiveClass: ACTIVE_CLASS,
         bulletClass: `${PAGINATION_BUTTON}`,
@@ -115,7 +104,7 @@ export const slider = function () {
       slideDuplicateActiveClass: ACTIVE_CLASS,
     });
     //autoplay progress animation within pagination bullet
-    if (autoplay > 0 && showAutoplayProgress) {
+    if (config.autoplay > 0 && config.showAutoplayProgress) {
       const progressTL = gsap.timeline({ paused: false });
       progressTL.fromTo(
         component,
@@ -123,7 +112,7 @@ export const slider = function () {
         {
           '--slider-autoplay-progress': ' 100%',
           ease: 'none',
-          duration: autoplay,
+          duration: config.autoplay,
         }
       );
       //when slide changes, animate the progress fill

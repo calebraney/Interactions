@@ -29,13 +29,13 @@ export const magnetic = function () {
     // Read options
     const config = getAttrConfig(wrap, ANIMATION_ID, {
       strength: 0.3,
-      'inner-strength': 0.5,
+      innerStrength: 0.5,
       duration: 0.6,
       ease: 'power1.out',
-      'return-duration': 0.6,
-      'return-ease': 'elastic.out(1.2, 0.5)',
-      'active-class': 'is-active',
-      'hover-scale': 1,
+      returnDuration: 0.6,
+      returnEase: 'elastic.out(1.2, 0.5)',
+      activeClass: 'is-active',
+      hoverScale: 1,
     });
 
     // Get optional elements — fall back to wrap if not present
@@ -54,7 +54,7 @@ export const magnetic = function () {
       gsap.to(target, {
         x: offsetX * config.strength,
         y: offsetY * config.strength,
-        scale: config['hover-scale'],
+        scale: config.hoverScale,
         duration: config.duration,
         ease: config.ease,
         overwrite: 'auto',
@@ -63,8 +63,8 @@ export const magnetic = function () {
       // Move the inner element further for a layered parallax-like effect
       if (inner) {
         gsap.to(inner, {
-          x: offsetX * config['inner-strength'],
-          y: offsetY * config['inner-strength'],
+          x: offsetX * config.innerStrength,
+          y: offsetY * config.innerStrength,
           duration: config.duration,
           ease: config.ease,
           overwrite: 'auto',
@@ -73,18 +73,18 @@ export const magnetic = function () {
     });
 
     trigger.addEventListener('mouseenter', function () {
-      wrap.classList.add(config['active-class']);
+      wrap.classList.add(config.activeClass);
     });
 
     trigger.addEventListener('mouseleave', function () {
-      wrap.classList.remove(config['active-class']);
+      wrap.classList.remove(config.activeClass);
       // Snap back to center
       gsap.to(target, {
         x: 0,
         y: 0,
         scale: 1,
-        duration: config['return-duration'],
-        ease: config['return-ease'],
+        duration: config.returnDuration,
+        ease: config.returnEase,
         overwrite: 'auto',
       });
 
@@ -92,8 +92,8 @@ export const magnetic = function () {
         gsap.to(inner, {
           x: 0,
           y: 0,
-          duration: config['return-duration'],
-          ease: config['return-ease'],
+          duration: config.returnDuration,
+          ease: config.returnEase,
           overwrite: 'auto',
         });
       }

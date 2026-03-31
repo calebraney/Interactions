@@ -24,8 +24,8 @@ export const marquee = function () {
         vertical: false,
         reverse: false,
         duration: 30, //duration in seconds
-        'duration-dynamic': false,
-        'duration-per-item': 5, // only used if duration-dynamic is true — determines the duration based on the amount of items in the list
+        durationDynamic: false,
+        durationPerItem: 5, // only used if durationDynamic is true — determines the duration based on the amount of items in the list
         hover: 'none', // or use one of the constants for hover behavior
       });
       // get the amount of items in the wrap
@@ -35,8 +35,8 @@ export const marquee = function () {
         itemCount = lists[0].firstElementChild.childElementCount;
       }
       //if duration is set to be dynamic make the duration based on the amount of items and the duration per item
-      let duration = config['duration-dynamic']
-        ? itemCount * config['duration-per-item']
+      let duration = config.durationDynamic
+        ? itemCount * config.durationPerItem
         : config.duration;
 
       let direction = 1;

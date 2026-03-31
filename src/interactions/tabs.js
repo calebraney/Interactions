@@ -1,4 +1,4 @@
-import { attr, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
+import { getAttrConfig, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
 export const tabs = function () {
   //animation ID
   const ANIMATION_ID = 'tabs';
@@ -12,15 +12,7 @@ export const tabs = function () {
   const PREV_BTN = '[data-ix-tabs="previous"]';
   const PLAY_BTN = '[data-ix-tabs="toggle"]';
 
-  //options
   const ACTIVE_CLASS = 'is-active';
-  const LOOP_CONTROLS = 'data-ix-tabs-loop-controls';
-  const SLIDE_TABS = 'data-ix-tabs-slide-tabs';
-  const AUTOPLAY = 'data-ix-tabs-autoplay-duration';
-  const DURATION = 'data-ix-tabs-duration';
-  const PAUSE_ON_HOVER = 'data-ix-tabs-pause-on-hover';
-  const AUTOPLAYVIDEOS = 'data-ix-tabs-autoplay-videos'; // ADDED
-  const EASE = 'data-ix-tabs-ease';
 
   const ixEnabled = getIxConfig(ANIMATION_ID, true);
   if (ixEnabled === false) return;
@@ -31,13 +23,22 @@ export const tabs = function () {
   //for each tabs elements
   tabWraps.forEach((tabWrap, componentIndex) => {
     //get options
-    let loopControls = attr(true, tabWrap.getAttribute(LOOP_CONTROLS));
-    let slideTabs = attr(false, tabWrap.getAttribute(SLIDE_TABS));
-    let autoplay = attr(0, tabWrap.getAttribute(AUTOPLAY));
-    let duration = attr(0.2, tabWrap.getAttribute(DURATION));
-    let pauseOnHover = attr(false, tabWrap.getAttribute(PAUSE_ON_HOVER));
-    let autoplayVideos = attr(false, tabWrap.getAttribute(AUTOPLAYVIDEOS));
-    let ease = attr('power1.out', tabWrap.getAttribute(EASE));
+    const tabConfig = getAttrConfig(tabWrap, ANIMATION_ID, {
+      loopControls: true,
+      slideTabs: false,
+      autoplayDuration: 0,
+      duration: 0.2,
+      pauseOnHover: false,
+      autoplayVideos: false,
+      ease: 'power1.out',
+    });
+    const loopControls = tabConfig.loopControls;
+    let autoplay = tabConfig.autoplayDuration; // let — reassigned in URL params handler
+    const slideTabs = tabConfig.slideTabs;
+    const duration = tabConfig.duration;
+    const pauseOnHover = tabConfig.pauseOnHover;
+    const autoplayVideos = tabConfig.autoplayVideos;
+    const ease = tabConfig.ease;
 
     //get elements
     let previousButton = tabWrap.querySelector(`${PREV_BTN} button`),

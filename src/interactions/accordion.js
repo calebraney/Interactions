@@ -53,16 +53,16 @@ export const accordion = function () {
     if (runProp === false) return;
     // set up conditions for
     const config = getAttrConfig(wrap, ANIMATION_ID, {
-      'first-open': false,
-      'one-active': false,
-      'keep-one-open': false,
+      firstOpen: false,
+      oneActive: false,
+      keepOneOpen: false,
       hover: false,
     });
     //get the first accordion item and all of the items
     const items = [...wrap.querySelectorAll(ITEM)];
     if (items.length === 0) return;
     const firstItem = items[0];
-    if (config['first-open']) {
+    if (config.firstOpen) {
       openAccordion(firstItem);
     }
     if (!config.hover) {
@@ -78,7 +78,7 @@ export const accordion = function () {
         // if item is NOT ACTIVE
         if (!clickedItemAlreadyActive) {
           // check if oneActive is True
-          if (config['one-active']) {
+          if (config.oneActive) {
             // if one active is true loop through each item
             items.forEach((item) => {
               //if item is the current item Open
@@ -91,17 +91,17 @@ export const accordion = function () {
               }
             });
           }
-          if (!config['one-active']) {
+          if (!config.oneActive) {
             // if one active is false just set the current item to active and open it
             openAccordion(clickedItem);
           }
         }
         // if the current item IS ACTIVE and keep one open is false close it
-        if (clickedItemAlreadyActive && !config['keep-one-open']) {
+        if (clickedItemAlreadyActive && !config.keepOneOpen) {
           openAccordion(clickedItem, false);
         }
         // if the current item IS ACTIVE and keep one open is true check how many items are active
-        if (clickedItemAlreadyActive && config['keep-one-open']) {
+        if (clickedItemAlreadyActive && config.keepOneOpen) {
           const activeItems = items.filter(function (item) {
             return item.classList.contains(ACTIVE_CLASS);
           });

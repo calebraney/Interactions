@@ -49,30 +49,27 @@ export const scrollIn = function () {
   // Exit if the entire scrollin interaction is disabled in site config
   if (ixConfig === false) return;
 
-  // Timing defaults — can be overridden via window.ixConfig.scrollin.duration / .ease
-  const tlDuration = ixConfig.duration ?? 0.6;
-  const tlEase = ixConfig.ease ?? 'power1.out';
-
   // ── ScrollTrigger timeline factory ────────────────────────────────────────
   // Creates a per-element GSAP timeline with a ScrollTrigger attached.
   // Options can be customised per-element via data attributes.
+  // duration/ease pull from ixConfig so window.ixConfig.scrollin overrides apply.
   const scrollInTL = function (item) {
     const settings = getAttrConfig(item, ANIMATION_ID, {
-      'toggle-actions': 'play none none none',
-      scrub: false,
-      start: 'top 90%',
-      end: 'top 75%',
+      toggleActions: ixConfig.toggleActions ?? 'play none none none',
+      scrub: ixConfig.scrub ?? false,
+      start: ixConfig.start ?? 'top 90%',
+      end: ixConfig.end ?? 'top 75%',
     });
     return gsap.timeline({
       defaults: {
-        duration: tlDuration,
-        ease: tlEase,
+        duration: ixConfig.duration ?? 0.6,
+        ease: ixConfig.ease ?? 'power1.out',
       },
       scrollTrigger: {
         trigger: item,
         start: settings.start,
         end: settings.end,
-        toggleActions: settings['toggle-actions'],
+        toggleActions: settings.toggleActions,
         scrub: settings.scrub,
       },
     });
@@ -116,7 +113,7 @@ export const scrollIn = function () {
         // Each direct child gets its own independent ScrollTrigger timeline
         if (attrValue === CONTAINER) {
           gsap.utils.toArray(item.children).forEach((child) => {
-            createAnimation(scrollInTL(child), child, animationType, {});
+            createAnimation(scrollInTL(child), child, animationType, {}, ixConfig);
           });
           return;
         }
@@ -129,7 +126,13 @@ export const scrollIn = function () {
           const staggerAmount = attr(DEFAULT_STAGGER_AMOUNT, item.getAttribute(SCROLL_STAGGER));
           const children = getNonContentsChildren(item);
           if (children.length === 0) return;
-          createAnimation(scrollInTL(item), children, animationType, { stagger: staggerAmount });
+          createAnimation(
+            scrollInTL(item),
+            children,
+            animationType,
+            { stagger: staggerAmount },
+            ixConfig
+          );
           return;
         }
 
@@ -150,14 +153,14 @@ export const scrollIn = function () {
               ? ixConfig[IMAGE]
               : ixConfig[ITEM];
             if (!childType) return;
-            createAnimation(scrollInTL(child), child, childType, {});
+            createAnimation(scrollInTL(child), child, childType, {}, ixConfig);
           });
           return;
         }
 
         // ── all other types ────────────────────────────────────────────────
         // Single element with its own ScrollTrigger
-        createAnimation(scrollInTL(item), item, animationType, {});
+        createAnimation(scrollInTL(item), item, animationType, {}, ixConfig);
       });
     };
 

@@ -33,14 +33,14 @@ export const clickActive = function () {
     if (rootElement !== document) {
       const config = getAttrConfig(rootElement, ANIMATION_ID, {
         class: ACTIVE_CLASS,
-        'first-active': false,
-        'one-active': false,
-        'keep-one-active': false,
+        firstActive: false,
+        oneActive: false,
+        keepOneActive: false,
       });
       activeClass = config.class;
-      firstActive = config['first-active'];
-      oneActive = config['one-active'];
-      keepOneActive = config['keep-one-active'];
+      firstActive = config.firstActive;
+      oneActive = config.oneActive;
+      keepOneActive = config.keepOneActive;
 
       //check if the run prop is set to true
       let runProp = checkRunProp(rootElement, ANIMATION_ID);

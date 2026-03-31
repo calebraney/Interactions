@@ -1,4 +1,4 @@
-import { attr, checkRunProp, getIxConfig } from '../utilities';
+import { checkRunProp, getAttrConfig, getIxConfig } from '../utilities';
 
 export const stickyNav = function () {
   //animation ID
@@ -6,16 +6,6 @@ export const stickyNav = function () {
   //elements
   const WRAP = '[data-ix-stickynav="wrap"]'; // the nav element (should be position: fixed or sticky)
   const HERO = '[data-ix-stickynav="hero"]'; // optional hero section — falls back to <main>, then a fixed scroll distance
-  //options
-  const HIDE_ON = 'data-ix-stickynav-hide-on'; // "scroll-down" (default), "scroll-up", or "none"
-  const DURATION = 'data-ix-stickynav-duration'; // animation duration for show/hide (default 0.3)
-  const EASE = 'data-ix-stickynav-ease'; // easing for show/hide (default 'power2.out')
-  const SCROLL_THRESHOLD = 'data-ix-stickynav-threshold'; // minimum px scrolled in a direction before triggering (default 50)
-  const BG_ACTIVE = 'data-ix-stickynav-bg-active'; // class added to nav after scrolling past hero (default 'is-scrolled')
-  const HERO_BG_END = 'data-ix-stickynav-bg-end'; // ScrollTrigger end point that triggers the background class — e.g. 'bottom top' or '+=100' (default 'bottom top')
-  const HIDDEN_CLASS = 'data-ix-stickynav-hidden-class'; // class added when nav is hidden (default 'is-hidden')
-  const START_HIDDEN = 'data-ix-stickynav-start-hidden'; // if true, nav starts hidden and appears on first scroll-up (default false)
-  const HIDE_OFFSET = 'data-ix-stickynav-hide-offset'; // px from top before hide behavior activates (default 100)
 
   const ixEnabled = getIxConfig(ANIMATION_ID, true);
   if (ixEnabled === false) return;
@@ -31,15 +21,25 @@ export const stickyNav = function () {
     if (runProp === false) return;
 
     // Read options
-    let hideOn = attr('scroll-down', wrap.getAttribute(HIDE_ON));
-    let duration = attr(0.3, wrap.getAttribute(DURATION));
-    let ease = attr('power2.out', wrap.getAttribute(EASE));
-    let scrollThreshold = attr(50, wrap.getAttribute(SCROLL_THRESHOLD));
-    let bgActiveClass = attr('is-scrolled', wrap.getAttribute(BG_ACTIVE));
-    let hiddenClass = attr('is-hidden', wrap.getAttribute(HIDDEN_CLASS));
-    let startHidden = attr(false, wrap.getAttribute(START_HIDDEN));
-    let hideOffset = attr(100, wrap.getAttribute(HIDE_OFFSET));
-    let bgEnd = attr('+=500', wrap.getAttribute(HERO_BG_END)); //either a certain pixel amount or when the hero reaches a certain point in the viewport
+    const config = getAttrConfig(wrap, ANIMATION_ID, {
+      hideOn: 'scroll-down', // "scroll-down", "scroll-up", or "none"
+      duration: 0.3,
+      ease: 'power2.out',
+      threshold: 50, // minimum px/s velocity before triggering
+      bgActive: 'is-scrolled', // class added after scrolling past hero
+      bgEnd: '+=500', // ScrollTrigger end for the bg class toggle
+      hiddenClass: 'is-hidden',
+      startHidden: false,
+      hideOffset: 100, // px from top before hide behavior activates
+    });
+    const { duration, ease } = config;
+    const hideOn = config.hideOn;
+    const scrollThreshold = config.threshold;
+    const bgActiveClass = config.bgActive;
+    const bgEnd = config.bgEnd;
+    const hiddenClass = config.hiddenClass;
+    const startHidden = config.startHidden;
+    const hideOffset = config.hideOffset;
 
     // Get the nav height for the hide transform
     const navHeight = wrap.offsetHeight;

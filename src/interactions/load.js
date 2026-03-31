@@ -59,10 +59,6 @@ export const load = function (reduceMotion) {
   // Exit if the entire load interaction is disabled in site config
   if (ixConfig === false) return;
 
-  // Timing defaults — can be overridden via window.ixConfig.load.duration / .ease
-  const tlDuration = ixConfig.duration ?? 0.8;
-  const tlEase = ixConfig.ease ?? 'power1.out';
-
   // ── Main loop ─────────────────────────────────────────────────────────────
   // Each wrap element creates its own timeline. Multiple wraps are staggered
   // sequentially using totalDuration so later sections don't overlap with earlier ones.
@@ -85,8 +81,8 @@ export const load = function (reduceMotion) {
       delay: totalDuration,
       paused: true,
       defaults: {
-        ease: tlEase,
-        duration: tlDuration,
+        ease: ixConfig.ease ?? 'power1.out',
+        duration: ixConfig.duration ?? 0.8,
       },
     });
     // Make the wrap itself visible immediately when the timeline starts
@@ -136,14 +132,14 @@ export const load = function (reduceMotion) {
           children.forEach((child, index) => {
             // Ensure the container is visible before the first child animates
             if (index === 0) gsap.set(item, { autoAlpha: 1 });
-            createAnimation(tl, child, animationType, { position });
+            createAnimation(tl, child, animationType, { position }, ixConfig);
           });
           return;
         }
 
         // ── all other types ────────────────────────────────────────────────
         // Single element added to the shared load timeline at the resolved position
-        createAnimation(tl, item, animationType, { position });
+        createAnimation(tl, item, animationType, { position }, ixConfig);
       });
 
       // Stack subsequent wrap sections so they play after the previous one ends.

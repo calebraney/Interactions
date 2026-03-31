@@ -40,11 +40,11 @@ export const typeText = function () {
         duration: 1,
         repeat: false,
         delay: 1,
-        'repeat-delay': 1,
+        repeatDelay: 1,
         ease: 'none',
-        'cursor-duration': 0.5,
-        'cursor-ease': 'power2.inOut',
-        'type-first': false,
+        cursorDuration: 0.5,
+        cursorEase: 'power2.inOut',
+        typeFirst: false,
       });
 
       // build phrases array — prefer the data attribute, fall back to child phrase elements
@@ -68,7 +68,7 @@ export const typeText = function () {
       if (phrases.length === 0) return;
 
       // if type-first is false, set first phrase immediately so it can be animated out
-      gsap.set(textEl, { text: config['type-first'] ? '' : phrases[0] });
+      gsap.set(textEl, { text: config.typeFirst ? '' : phrases[0] });
 
       // animate cursor blink if present
       const cursorEl = wrap.querySelector(CURSOR);
@@ -77,8 +77,8 @@ export const typeText = function () {
           opacity: 0,
           repeat: -1,
           yoyo: true,
-          duration: config['cursor-duration'],
-          ease: config['cursor-ease'],
+          duration: config.cursorDuration,
+          ease: config.cursorEase,
         });
       }
 
@@ -86,7 +86,7 @@ export const typeText = function () {
       const addAnimateOut = function (tl) {
         if (config.type === TYPE_REPLACE) {
           // instant clear after the hold
-          tl.set(textEl, {}, `+=${config['repeat-delay']}`);
+          tl.set(textEl, {}, `+=${config.repeatDelay}`);
         } else if (config.type === TYPE_BACKSPACE || config.type === TYPE_YOYO) {
           // tween out to '' — yoyo uses this path only for the first-no-type case;
           // normal yoyo phrases are handled by GSAP's built-in yoyo mechanism
@@ -94,7 +94,7 @@ export const typeText = function () {
             duration: config.duration,
             text: '',
             ease: config.ease,
-            delay: config['repeat-delay'],
+            delay: config.repeatDelay,
           });
         }
       };
@@ -104,7 +104,7 @@ export const typeText = function () {
 
       phrases.forEach((phrase, index) => {
         const isLast = index === phrases.length - 1;
-        const isFirstNoType = !config['type-first'] && index === 0;
+        const isFirstNoType = !config.typeFirst && index === 0;
         const staysAtEnd = !config.repeat && isLast;
 
         // when type-first is false, the first phrase is already set — only animate it out
@@ -117,7 +117,7 @@ export const typeText = function () {
               n: 0,
               duration: config.duration,
               ease: config.ease,
-              delay: config['repeat-delay'],
+              delay: config.repeatDelay,
               onUpdate() {
                 textEl.textContent = phrase.slice(0, Math.round(counter.n));
               },
@@ -134,7 +134,7 @@ export const typeText = function () {
           const tlPhrase = gsap.timeline({
             repeat: 1,
             yoyo: true,
-            repeatDelay: config['repeat-delay'],
+            repeatDelay: config.repeatDelay,
           });
           tlPhrase.to(textEl, { duration: config.duration, text: phrase, ease: config.ease });
           tlMaster.add(tlPhrase);

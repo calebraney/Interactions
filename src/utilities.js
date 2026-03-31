@@ -269,7 +269,8 @@ export const updaterFooterYear = function () {
 export const getAttrConfig = function (element, prefix, defaults) {
   const config = {};
   for (const [key, defaultVal] of Object.entries(defaults)) {
-    const attrName = `data-ix-${prefix}-${key}`;
+    const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+    const attrName = `data-ix-${prefix}-${kebabKey}`;
     config[key] = attr(defaultVal, element.getAttribute(attrName));
   }
   return config;
