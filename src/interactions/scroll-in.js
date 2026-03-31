@@ -113,7 +113,7 @@ export const scrollIn = function () {
         // Each direct child gets its own independent ScrollTrigger timeline
         if (attrValue === CONTAINER) {
           gsap.utils.toArray(item.children).forEach((child) => {
-            createAnimation(scrollInTL(child), child, animationType, {}, ixConfig);
+            createAnimation(scrollInTL(child), child, animationType, ixConfig);
           });
           return;
         }
@@ -126,13 +126,7 @@ export const scrollIn = function () {
           const staggerAmount = attr(DEFAULT_STAGGER_AMOUNT, item.getAttribute(SCROLL_STAGGER));
           const children = getNonContentsChildren(item);
           if (children.length === 0) return;
-          createAnimation(
-            scrollInTL(item),
-            children,
-            animationType,
-            { stagger: staggerAmount },
-            ixConfig
-          );
+          createAnimation(scrollInTL(item), children, animationType, { stagger: staggerAmount, ...ixConfig });
           return;
         }
 
@@ -153,14 +147,14 @@ export const scrollIn = function () {
               ? ixConfig[IMAGE]
               : ixConfig[ITEM];
             if (!childType) return;
-            createAnimation(scrollInTL(child), child, childType, {}, ixConfig);
+            createAnimation(scrollInTL(child), child, childType, ixConfig);
           });
           return;
         }
 
         // ── all other types ────────────────────────────────────────────────
         // Single element with its own ScrollTrigger
-        createAnimation(scrollInTL(item), item, animationType, {}, ixConfig);
+        createAnimation(scrollInTL(item), item, animationType, ixConfig);
       });
     };
 

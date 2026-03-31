@@ -132,14 +132,14 @@ export const load = function (reduceMotion) {
           children.forEach((child, index) => {
             // Ensure the container is visible before the first child animates
             if (index === 0) gsap.set(item, { autoAlpha: 1 });
-            createAnimation(tl, child, animationType, { position }, ixConfig);
+            createAnimation(tl, child, animationType, { ...ixConfig, position });
           });
           return;
         }
 
         // ── all other types ────────────────────────────────────────────────
         // Single element added to the shared load timeline at the resolved position
-        createAnimation(tl, item, animationType, { position }, ixConfig);
+        createAnimation(tl, item, animationType, { ...ixConfig, position });
       });
 
       // Stack subsequent wrap sections so they play after the previous one ends.

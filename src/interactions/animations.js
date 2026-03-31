@@ -303,13 +303,12 @@ export const isAnimationType = function (value) {
 //   tl             — the GSAP timeline to add the tween to
 //   element        — a single DOM element or array of DOM elements
 //   animationType  — a key from ANIMATION_MAP (e.g. 'slide-up-words')
-//   options        — per-call overrides: { stagger, duration, ease, move, position }
-//   configDefaults — site/interaction-level overrides (e.g. from window.ixConfig).
-//                    Merges over ANIMATION_DEFAULTS; options merges over both.
+//   options        — merged overrides: caller pre-merges interaction defaults + ixConfig
+//                    before passing in. Priority (lowest → highest): ANIMATION_DEFAULTS → options
 //
-// Priority (lowest → highest): ANIMATION_DEFAULTS → configDefaults → options
+// Priority (lowest → highest): ANIMATION_DEFAULTS → options
 // ============================================================================
-export const createAnimation = function (tl, element, animationType, options = {}, configDefaults = {}) {
+export const createAnimation = function (tl, element, animationType, options = {}) {
   // Look up the handler — log a warning if the type is not registered
   const handler = ANIMATION_MAP[animationType];
   if (!handler) {
@@ -317,18 +316,14 @@ export const createAnimation = function (tl, element, animationType, options = {
     return;
   }
 
-  // Three-level merge: module defaults → site/interaction config → per-call options.
-  // configDefaults typically comes from window.ixConfig via the interaction's ixConfig.
-  const activeDefaults = { ...ANIMATION_DEFAULTS, ...configDefaults };
-
   const opts = {
-    duration: options.duration ?? activeDefaults.duration,
-    ease: options.ease ?? activeDefaults.ease,
-    move: options.move ?? activeDefaults.move,
-    stagger: options.stagger ?? activeDefaults.stagger,
-    staggerLines: options.staggerLines ?? activeDefaults.staggerLines,
-    staggerWords: options.staggerWords ?? activeDefaults.staggerWords,
-    staggerChars: options.staggerChars ?? activeDefaults.staggerChars,
+    duration: options.duration ?? ANIMATION_DEFAULTS.duration,
+    ease: options.ease ?? ANIMATION_DEFAULTS.ease,
+    move: options.move ?? ANIMATION_DEFAULTS.move,
+    stagger: options.stagger ?? ANIMATION_DEFAULTS.stagger,
+    staggerLines: options.staggerLines ?? ANIMATION_DEFAULTS.staggerLines,
+    staggerWords: options.staggerWords ?? ANIMATION_DEFAULTS.staggerWords,
+    staggerChars: options.staggerChars ?? ANIMATION_DEFAULTS.staggerChars,
     position: options.position, // undefined means GSAP appends sequentially
   };
 
