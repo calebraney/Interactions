@@ -8,6 +8,7 @@ import {
 } from './utilities';
 import { accordion } from './interactions/accordion';
 import { banner } from './interactions/banner';
+import { activate } from './interactions/activate';
 import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
 import { cursor } from './interactions/cursor';
@@ -32,6 +33,7 @@ import { scrollProgress } from './interactions/scroll-progress';
 import { stickyNav } from './interactions/sticky-nav';
 import { tabs } from './interactions/tabs';
 import { slider } from './interactions/slider';
+import { triggerEvent } from './interactions/trigger-event';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
 import { typeText } from './interactions/type-text';
@@ -94,10 +96,12 @@ document.addEventListener('DOMContentLoaded', function () {
     slider();
     tabs();
     accordion();
+    activate();
     clickActive();
     hoverActive();
     playSound();
     stickyNav();
+    triggerEvent();
   };
   gsapInit();
 

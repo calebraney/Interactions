@@ -24,6 +24,32 @@ export const startScroll = function (lenis) {
   }
 };
 
+// ============================================================================
+// getAttrConfig: Batch Attribute Reader
+// ============================================================================
+//
+// HOW IT WORKS:
+// Most interactions follow the same pattern — read 5-15 data attributes from
+// an element and fall back to defaults. This utility does that in one call.
+//
+// It takes three arguments:
+//   1. element  — the DOM element to read attributes from
+//   2. prefix   — the interaction name (e.g. 'scrolling', 'marquee', 'load')
+//   3. defaults — an object where keys are the attribute suffix and values
+//                  are the default values (the types of the defaults drive
+//                  the type coercion via the existing `attr` function)
+//
+// ============================================================================
+export const getAttrConfig = function (element, prefix, defaults) {
+  const config = {};
+  for (const [key, defaultVal] of Object.entries(defaults)) {
+    const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+    const attrName = `data-ix-${prefix}-${kebabKey}`;
+    config[key] = attr(defaultVal, element.getAttribute(attrName));
+  }
+  return config;
+};
+
 // attribute value checker
 export const attr = function (defaultVal, attrVal) {
   //get the type of the default
@@ -31,7 +57,7 @@ export const attr = function (defaultVal, attrVal) {
   if (typeof attrVal !== 'string' || attrVal.trim() === '') return defaultVal;
   if (attrVal?.toLowerCase() === 'true' && defaultValType === 'boolean') return true;
   if (attrVal?.toLowerCase() === 'false' && defaultValType === 'boolean') return false;
-  if (isNaN(attrVal) && defaultValType === 'string') return attrVal;
+  if (isNaN(attrVal) && defaultValType === 'string') return attrVal.toLowerCase();
   if (!isNaN(attrVal) && defaultValType === 'number') return +attrVal;
   return defaultVal;
 };
@@ -222,58 +248,6 @@ export const updaterFooterYear = function () {
   const currentYear = new Date().getFullYear();
   // set the year span element's text to the current year
   yearSpan.innerText = currentYear.toString();
-};
-
-// ============================================================================
-// 3.2 — getAttrConfig: Batch Attribute Reader
-// ============================================================================
-//
-// HOW IT WORKS:
-// Most interactions follow the same pattern — read 5-15 data attributes from
-// an element and fall back to defaults. This utility does that in one call.
-//
-// It takes three arguments:
-//   1. element  — the DOM element to read attributes from
-//   2. prefix   — the interaction name (e.g. 'scrolling', 'marquee', 'load')
-//   3. defaults — an object where keys are the attribute suffix and values
-//                  are the default values (the types of the defaults drive
-//                  the type coercion via the existing `attr` function)
-//
-// For each key in `defaults`, it constructs the full attribute name using:
-//     data-ix-{prefix}-{key}
-//
-// Then it reads the attribute and passes it through `attr()` for type coercion.
-//
-// EXAMPLE — before:
-//   let scrub = attr(0.5, wrap.getAttribute('data-ix-scrolling-scrub'));
-//   let start = attr('top bottom', wrap.getAttribute('data-ix-scrolling-start'));
-//   let end   = attr('bottom top', wrap.getAttribute('data-ix-scrolling-end'));
-//   let ease  = attr('none', wrap.getAttribute('data-ix-scrolling-ease'));
-//
-// EXAMPLE — after:
-//   const config = getAttrConfig(wrap, 'scrolling', {
-//     scrub: 0.5,
-//     start: 'top bottom',
-//     end: 'bottom top',
-//     ease: 'none',
-//   });
-//   // config.scrub, config.start, config.end, config.ease are all typed correctly
-//
-// The key names in `defaults` map directly to the attribute suffix. A key of
-// 'start' looks for 'data-ix-{prefix}-start', 'toggle-actions' looks for
-// 'data-ix-{prefix}-toggle-actions', etc.
-//
-// This keeps each interaction's configuration block to 3-5 lines instead of
-// 10-20, and makes it obvious at a glance what the defaults are.
-// ============================================================================
-export const getAttrConfig = function (element, prefix, defaults) {
-  const config = {};
-  for (const [key, defaultVal] of Object.entries(defaults)) {
-    const kebabKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-    const attrName = `data-ix-${prefix}-${kebabKey}`;
-    config[key] = attr(defaultVal, element.getAttribute(attrName));
-  }
-  return config;
 };
 
 // ============================================================================
