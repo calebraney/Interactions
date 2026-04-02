@@ -6,13 +6,10 @@ import {
   checkRunProp,
   checkContainer,
 } from './utilities';
-import { accordion } from './interactions/accordion';
 import { banner } from './interactions/banner';
 import { activate } from './interactions/activate';
-import { clickActive } from './interactions/click-active';
 import { countUp } from './interactions/count-up';
 import { cursor } from './interactions/cursor';
-import { hoverActive } from './interactions/hover-active';
 import { initLenis } from './interactions/lenis';
 import { imageSwitch } from './interactions/image-switch';
 import { logoSwitch } from './interactions/logo-switch';
@@ -95,10 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     textLinks();
     slider();
     tabs();
-    accordion();
     activate();
-    clickActive();
-    hoverActive();
     playSound();
     stickyNav();
     triggerEvent();
