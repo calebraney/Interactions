@@ -30,6 +30,7 @@ export const activate = function () {
       scrollRefreshDelay: 800, //miliseconds to delay ScrollTrigger.refresh()
       ariaLabels: true, //add aria-expanded attributes to the trigger elements for better accessibility
       deactivateDelay: 0, // seconds; if > 0, auto-deactivates the item after this delay
+      secondClickDeactivate: true, // for click type: if false, clicking an active trigger does nothing
     });
 
     if (isWrap) {
@@ -106,13 +107,15 @@ export const activate = function () {
               activateItem(item);
             }
             scheduleDeactivate(item);
-          } else if (!config.keepOneActive) {
-            activateItem(item, false);
-          } else {
-            const activeCount = items.filter((el) =>
-              el.classList.contains(config.activeClass)
-            ).length;
-            if (activeCount > 1) activateItem(item, false);
+          } else if (config.secondClickDeactivate) {
+            if (!config.keepOneActive) {
+              activateItem(item, false);
+            } else {
+              const activeCount = items.filter((el) =>
+                el.classList.contains(config.activeClass)
+              ).length;
+              if (activeCount > 1) activateItem(item, false);
+            }
           }
 
           if (
