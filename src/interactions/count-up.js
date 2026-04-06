@@ -59,7 +59,7 @@ export const countUp = function () {
   if (ixEnabled === false) return;
 
   // --- Count type animation ---
-  const runCountAnimation = function (item, { duration, start, activeClass, triggerType }) {
+  const runCountAnimation = function (item, { duration, start, activeClass, triggerType, format }) {
     const parent = item.parentElement;
     // if a child element with the text attribute exists, use it as the number source; otherwise use the item itself
     const textEl = item.querySelector(TEXT) || item;
@@ -75,7 +75,13 @@ export const countUp = function () {
     const decimalPlaces = decimalParts.length > 1 ? decimalParts[1].length : 0;
 
     const formatValue = function (val) {
-      return decimalPlaces > 0 ? val.toFixed(decimalPlaces) : Math.round(val).toString();
+      let result = decimalPlaces > 0 ? val.toFixed(decimalPlaces) : Math.round(val).toString();
+      if (format) {
+        const parts = result.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        result = parts.join('.');
+      }
+      return result;
     };
 
     // set element to zero before animating
@@ -309,15 +315,16 @@ export const countUp = function () {
         start: type === 'ticker' ? DEFAULT_TICKER_START : DEFAULT_COUNT_START,
         active: DEFAULT_ACTIVE_CLASS,
         trigger: DEFAULT_TRIGGER,
+        format: true,
       });
-      const { duration, start } = sharedConfig;
+      const { duration, start, format } = sharedConfig;
       const activeClass = sharedConfig.active;
       const triggerType = sharedConfig.trigger;
 
       if (type === 'ticker') {
         runTickerAnimation(item, { duration, start, activeClass, triggerType });
       } else {
-        runCountAnimation(item, { duration, start, activeClass, triggerType });
+        runCountAnimation(item, { duration, start, activeClass, triggerType, format });
       }
     };
 
