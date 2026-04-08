@@ -28,7 +28,9 @@ export const playSound = function () {
 
     if (!src) return;
 
-    const audio = new Audio(src);
+    const audio = new Audio();
+    audio.crossOrigin = 'anonymous';
+    audio.src = src;
 
     // Map the event option to the appropriate DOM event name
     const eventMap = { click: 'click', hover: 'mouseenter', focus: 'focusin' };
