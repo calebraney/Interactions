@@ -2345,7 +2345,9 @@
   };
   var checkContainer = function(containerChild, breakpoint, callback, additionalParams) {
     let containerQuery = breakpoint;
-    if (breakpoint === "medium") {
+    if (breakpoint === "large") {
+      containerQuery = "(width >= 50em)";
+    } else if (breakpoint === "medium") {
       containerQuery = "(width < 50em)";
     } else if (breakpoint === "small") {
       containerQuery = "(width < 35em)";
@@ -2572,9 +2574,12 @@
         //add aria-expanded attributes to the trigger elements for better accessibility
         deactivateDelay: 0,
         // seconds; if > 0, auto-deactivates the item after this delay
-        secondClickDeactivate: true
+        secondClickDeactivate: true,
         // for click type: if false, clicking an active trigger does nothing
+        breakpointState: "preserve"
+        // 'preserve', 'active', or 'inactive' — state items are forced to when the interaction is disabled at the breakpoint
       });
+      const breakpoint = attr("none", rootElement.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
       if (isWrap) {
         if (checkRunProp(rootElement, ANIMATION_ID) === false) return;
       }
@@ -2603,13 +2608,16 @@
           triggerEl.setAttribute("aria-expanded", makeActive ? "true" : "false");
         }
       };
+      let isDisabled = false;
       if (config.type === "hover") {
         items.forEach((currentItem) => {
           const triggerEl = getTrigger(currentItem);
           triggerEl.addEventListener("mouseenter", function() {
+            if (isDisabled) return;
             items.forEach((child) => activateItem(child, child === currentItem));
           });
           triggerEl.addEventListener("mouseleave", function() {
+            if (isDisabled) return;
             if (!config.keepOneActive) activateItem(currentItem, false);
           });
         });
@@ -2629,6 +2637,7 @@
           activateItem(item, startActive);
           const triggerEl = getTrigger(item);
           triggerEl.addEventListener("click", function() {
+            if (isDisabled) return;
             const itemIsActive = item.classList.contains(config.activeClass);
             if (!itemIsActive) {
               if (config.oneActive) {
@@ -2656,6 +2665,16 @@
           activateItem(items[0]);
         }
       }
+      checkContainer(items[0], breakpoint, (match) => {
+        isDisabled = match;
+        if (config.breakpointState === "preserve") return;
+        if (match) {
+          const makeActive = config.breakpointState === "active";
+          items.forEach((item) => activateItem(item, makeActive));
+        } else {
+          items.forEach((item) => activateItem(item, false));
+        }
+      });
     };
     const wraps = Array.from(document.querySelectorAll(WRAP));
     if (wraps.length === 0) {

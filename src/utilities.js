@@ -84,7 +84,9 @@ export const runSplit = function (text, types = 'lines, words') {
 export const checkContainer = function (containerChild, breakpoint, callback, additionalParams) {
   let containerQuery = breakpoint;
   //for breakpoint keywords use global breakpoint values.
-  if (breakpoint === 'medium') {
+  if (breakpoint === 'large') {
+    containerQuery = '(width >= 50em)';
+  } else if (breakpoint === 'medium') {
     containerQuery = '(width < 50em)';
   } else if (breakpoint === 'small') {
     containerQuery = '(width < 35em)';

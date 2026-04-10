@@ -1,4 +1,4 @@
-import { checkRunProp, attr, getAttrConfig, getIxConfig } from '../utilities';
+import { checkRunProp, attr, getAttrConfig, getIxConfig, checkContainer } from '../utilities';
 
 export const activate = function () {
   //animation ID
@@ -31,7 +31,9 @@ export const activate = function () {
       ariaLabels: true, //add aria-expanded attributes to the trigger elements for better accessibility
       deactivateDelay: 0, // seconds; if > 0, auto-deactivates the item after this delay
       secondClickDeactivate: true, // for click type: if false, clicking an active trigger does nothing
+      breakpointState: 'preserve', // 'preserve', 'active', or 'inactive' — state items are forced to when the interaction is disabled at the breakpoint
     });
+    const breakpoint = attr('none', rootElement.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
 
     if (isWrap) {
       if (checkRunProp(rootElement, ANIMATION_ID) === false) return;
@@ -66,15 +68,19 @@ export const activate = function () {
         triggerEl.setAttribute('aria-expanded', makeActive ? 'true' : 'false');
       }
     };
+    let isDisabled = false;
+
     // hover type
     if (config.type === 'hover') {
       items.forEach((currentItem) => {
         const triggerEl = getTrigger(currentItem);
         // mouseenter/mouseleave avoids re-firing when hovering over child elements
         triggerEl.addEventListener('mouseenter', function () {
+          if (isDisabled) return;
           items.forEach((child) => activateItem(child, child === currentItem));
         });
         triggerEl.addEventListener('mouseleave', function () {
+          if (isDisabled) return;
           if (!config.keepOneActive) activateItem(currentItem, false);
         });
       });
@@ -98,6 +104,7 @@ export const activate = function () {
 
         const triggerEl = getTrigger(item);
         triggerEl.addEventListener('click', function () {
+          if (isDisabled) return;
           const itemIsActive = item.classList.contains(config.activeClass);
 
           if (!itemIsActive) {
@@ -132,6 +139,17 @@ export const activate = function () {
         activateItem(items[0]);
       }
     }
+
+    checkContainer(items[0], breakpoint, (match) => {
+      isDisabled = match;
+      if (config.breakpointState === 'preserve') return;
+      if (match) {
+        const makeActive = config.breakpointState === 'active';
+        items.forEach((item) => activateItem(item, makeActive));
+      } else {
+        items.forEach((item) => activateItem(item, false));
+      }
+    });
   };
 
   const wraps = Array.from(document.querySelectorAll(WRAP));
