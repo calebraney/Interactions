@@ -1,4 +1,4 @@
-import { checkRunProp, checkContainer, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const imageSwitch = function (gsapContext) {
   const ANIMATION_ID = 'imageswitch';
@@ -42,57 +42,63 @@ export const imageSwitch = function (gsapContext) {
         tab.classList.remove(ACTIVE_CLASS);
       }
     };
-    // remove all active classes
-    images.forEach((item) => item.classList.remove(ACTIVE_CLASS));
-    //activate first item
-    activateItem(0);
-    // animate each item
-    items.forEach((item, index) => {
-      const image = images[index];
-      const tab = tabLinks[index];
-      if (!item || !image) return;
-      const imageTL = gsap.timeline({
-        scrollTrigger: {
-          trigger: item,
-          start: 'top center',
-          end: 'bottom center',
-          markers: false,
-          scrub: true,
-          onEnter: () => {
-            activateItem(index);
+    const animation = function (match) {
+      if (match) return;
+      // remove all active classes
+      images.forEach((item) => item.classList.remove(ACTIVE_CLASS));
+      //activate first item
+      activateItem(0);
+      // animate each item
+      items.forEach((item, index) => {
+        const image = images[index];
+        const tab = tabLinks[index];
+        if (!item || !image) return;
+        const imageTL = gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: 'top center',
+            end: 'bottom center',
+            markers: false,
+            scrub: true,
+            onEnter: () => {
+              activateItem(index);
+            },
+            onLeave: () => {
+              // don't remove class on leave of the last item
+              if (index !== items.length - 1) {
+                activateItem(index, false);
+              }
+              tab.classList.remove(ACTIVE_CLASS);
+            },
+            onEnterBack: () => {
+              activateItem(index);
+            },
+            onLeaveBack: () => {
+              // don't remove class on leaveback of the first item
+              if (index !== 0) {
+                activateItem(index, false);
+              }
+              tab.classList.remove(ACTIVE_CLASS);
+            },
           },
-          onLeave: () => {
-            // don't remove class on leave of the last item
-            if (index !== items.length - 1) {
-              activateItem(index, false);
-            }
-            tab.classList.remove(ACTIVE_CLASS);
-          },
-          onEnterBack: () => {
-            activateItem(index);
-          },
-          onLeaveBack: () => {
-            // don't remove class on leaveback of the first item
-            if (index !== 0) {
-              activateItem(index, false);
-            }
-            tab.classList.remove(ACTIVE_CLASS);
-          },
-        },
+        });
       });
-    });
 
-    //manage clicking of tab links (button elements)
-    // tabLinks.forEach((link, index) => {
-    //   if (!link) return;
-    //   link.addEventListener('click', (e) => {
-    //     const el = items[index];
-    //     if (!el) return;
-    //     el.scrollIntoView({
-    //       behavior: 'smooth',
-    //       block: 'center',
-    //     });
-    //   });
-    // });
+      //manage clicking of tab links (button elements)
+      // tabLinks.forEach((link, index) => {
+      //   if (!link) return;
+      //   link.addEventListener('click', (e) => {
+      //     const el = items[index];
+      //     if (!el) return;
+      //     el.scrollIntoView({
+      //       behavior: 'smooth',
+      //       block: 'center',
+      //     });
+      //   });
+      // });
+    };
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(items[0], breakpoint, animation);
   });
 };

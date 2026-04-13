@@ -21,7 +21,8 @@ export const banner = function () {
 
     if (!wrap || !track) return;
 
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       let start = attr('center 80%', wrap.getAttribute(START));
       let end = attr('center 20%', wrap.getAttribute(END));
 

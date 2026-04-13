@@ -57,6 +57,7 @@ export const pageTransition = function (lenis) {
     }
   };
 
+  let isDisabled = false;
   // Link click event listener
   document.querySelectorAll('a').forEach((link) => {
     //get the link url
@@ -67,6 +68,7 @@ export const pageTransition = function (lenis) {
     if (playTransition) {
       // add event listener for link click
       link.addEventListener('click', function (e) {
+        if (isDisabled) return;
         e.preventDefault();
         //turn on if using lenis to prevent scrolling during the transition.
         //lenis.stop()
@@ -90,4 +92,7 @@ export const pageTransition = function (lenis) {
   window.onpageshow = function (event) {
     if (event.persisted) window.location.reload();
   };
+
+  const breakpoint = attr('none', transitionWrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+  checkContainer(transitionWrap, breakpoint, (match) => { isDisabled = match; });
 };

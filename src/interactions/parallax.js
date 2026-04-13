@@ -27,52 +27,50 @@ export const parallax = function () {
     //check if the run prop is set to true
     let runProp = checkRunProp(wrap, ANIMATION_ID);
     if (runProp === false) return;
-    // animationType = attr('uncover', wrap.getAttribute(TYPE));
-    // default GSAP options for uncover animation
-    const settings = {
-      scrub: true,
-      start: 'top bottom',
-      end: 'top top',
-      moveStart: '-100vh',
-      moveEnd: '0vh',
-    };
-    //check for animationType of cover
-    if (animationType === 'cover') {
-      settings.start = 'bottom bottom';
-      settings.end = 'bottom top';
-      settings.moveStart = '0vh';
-      settings.moveEnd = '100vh';
-    }
-    //check for animationType of parallax
-    if (animationType === 'parallax') {
-      settings.moveStart = `-${moveAmount}vh`;
-      settings.moveEnd = '0vh';
-    }
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: trigger,
-        markers: false,
-        start: settings.start,
-        end: settings.end,
-        scrub: settings.scrub,
-      },
-      defaults: {
-        duration: 1,
-        ease: 'none',
-      },
-      onStart: () => {
-        ScrollTrigger.refresh();
-      },
-    });
-    tl.fromTo(
-      section,
-      {
-        y: settings.moveStart,
-      },
-      {
-        y: settings.moveEnd,
+    const animation = function (match) {
+      if (match) return;
+      // default GSAP options for uncover animation
+      const settings = {
+        scrub: true,
+        start: 'top bottom',
+        end: 'top top',
+        moveStart: '-100vh',
+        moveEnd: '0vh',
+      };
+      //check for animationType of cover
+      if (animationType === 'cover') {
+        settings.start = 'bottom bottom';
+        settings.end = 'bottom top';
+        settings.moveStart = '0vh';
+        settings.moveEnd = '100vh';
       }
-    );
+      //check for animationType of parallax
+      if (animationType === 'parallax') {
+        settings.moveStart = `-${moveAmount}vh`;
+        settings.moveEnd = '0vh';
+      }
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: trigger,
+          markers: false,
+          start: settings.start,
+          end: settings.end,
+          scrub: settings.scrub,
+        },
+        defaults: {
+          duration: 1,
+          ease: 'none',
+        },
+        onStart: () => {
+          ScrollTrigger.refresh();
+        },
+      });
+      tl.fromTo(section, { y: settings.moveStart }, { y: settings.moveEnd });
+    };
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(section, breakpoint, animation);
   });
 };

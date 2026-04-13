@@ -1,4 +1,4 @@
-import { attr, checkRunProp, startScroll, stopScroll, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, startScroll, stopScroll, getIxConfig } from '../utilities';
 
 export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
   const ANIMATION_ID = 'lightbox';
@@ -27,6 +27,7 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
 
   //function to activate lightboxes
   const activateLightboxes = function (listElement) {
+    let isDisabled = false;
     //utility function to filter out the players that aren't in lightboxes
     const filterPlayers = function (pagePlayers, pagePlayerComponents) {
       // players = pagePlayers.filter((player) => Boolean(player.closest(LIGHTBOX_COMPONENT)));
@@ -80,6 +81,7 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
       parent.addEventListener('keydown', (e) => {
         // if key is Enter and the target is the lightbox trigger, open lightbox
         if (e.key === 'Enter' && e.target === trigger) {
+          if (isDisabled) return;
           openModal(lightbox);
         }
         // if escape is pressed when lightbox is open, close lightbox
@@ -92,6 +94,7 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
       parent.addEventListener('click', (e) => {
         // if the click target was in the lightbox trigger
         if (e.target.closest(LIGHTBOX_TRIGGER) !== null) {
+          if (isDisabled) return;
           // Find the next dialog sibling and open it
           openModal(lightbox);
         }
@@ -145,6 +148,9 @@ export const lightbox = function (pagePlayers, pagePlayerComponents, lenis) {
       stopScroll(lenis);
       activeLightbox = false;
     };
+
+    const breakpoint = attr('none', listElement.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(listElement, breakpoint, (match) => { isDisabled = match; });
 
     //handled updating the image for lightbox thumbnails
     // const lightboxThumbnails = function (lightbox, player) {

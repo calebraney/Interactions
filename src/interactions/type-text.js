@@ -33,7 +33,8 @@ export const typeText = function () {
     const textEl = wrap.querySelector(TEXT);
     if (!textEl) return;
 
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       // get options
       const config = getAttrConfig(wrap, ANIMATION_ID, {
         type: TYPE_YOYO, // 'yoyo' | 'replace' | 'backspace'

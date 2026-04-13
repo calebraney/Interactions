@@ -1,4 +1,4 @@
-import { attr, checkRunProp, getAttrConfig, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const magnetic = function () {
   //animation ID
@@ -43,8 +43,10 @@ export const magnetic = function () {
     const target = wrap.querySelector(TARGET) || wrap; // element that moves
     const inner = wrap.querySelector(INNER); // optional inner element
 
+    let isDisabled = false;
     // Track mouse position within the trigger and apply magnetic pull
     trigger.addEventListener('mousemove', function (e) {
+      if (isDisabled) return;
       const rect = trigger.getBoundingClientRect();
       // Calculate offset from center of the trigger, in pixels
       const offsetX = e.clientX - rect.left - rect.width / 2;
@@ -73,10 +75,12 @@ export const magnetic = function () {
     });
 
     trigger.addEventListener('mouseenter', function () {
+      if (isDisabled) return;
       wrap.classList.add(config.activeClass);
     });
 
     trigger.addEventListener('mouseleave', function () {
+      if (isDisabled) return;
       wrap.classList.remove(config.activeClass);
       // Snap back to center
       gsap.to(target, {
@@ -98,5 +102,8 @@ export const magnetic = function () {
         });
       }
     });
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
   });
 };

@@ -144,6 +144,7 @@ export const mouseOver = function () {
       //////////////////////
       // Mouse events
       target.addEventListener('mousemove', function (e) {
+        if (isDisabled) return;
         // get bounding rect of target
         const rect = target.getBoundingClientRect();
         // current mouse position - left offset of target: normalized with the targets width
@@ -162,10 +163,14 @@ export const mouseOver = function () {
         setTimelineProgress(mousePercentX, mousePercentY);
       });
       target.addEventListener('mouseleave', function (e) {
+        if (isDisabled) return;
         // on mouse leave set back to default state
         setTimelineProgress(initialProgress.x, initialProgress.y);
       });
     };
+    let isDisabled = false;
     mouseMove();
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
   });
 };

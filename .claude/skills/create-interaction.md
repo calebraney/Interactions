@@ -46,9 +46,25 @@ Before writing, reason through:
 - Use the `attr(default, element.getAttribute(ATTR_NAME))` pattern for all options
 - Use `getAttrConfig(element, prefix, defaults)` if there are > 2 options — cleaner than individual `attr()` calls
 
-**Breakpoints** — Does this need to stop at certain screen sizes?
-- If yes, use `checkContainer(element, breakpoint, animationCallback)` inside the wrap loop
-- The breakpoint attribute follows: `attr('none', wrap.getAttribute(\`data-ix-${ANIMATION_ID}-breakpoint\`))`
+**Breakpoints** — Does this need to stop at certain screen sizes or input types?
+- Every interaction should support `data-ix-{name}-breakpoint` for disabling at a given breakpoint.
+- Use `checkContainer(referenceEl, breakpoint, callback)` — always the last thing set up inside the wrap loop.
+- The callback receives `match` (boolean). `match=true` means the disable condition is active.
+- **Pattern A** (event-listener interactions): `isDisabled` flag, checked at the top of each handler.
+- **Pattern B** (GSAP animation interactions): `if (match) return;` at the top of the animation callback — this prevents initialization when disabled.
+
+Available breakpoint keywords (all mean "disabled when condition is true"):
+
+| Keyword | Disabled when | Enabled when |
+|---|---|---|
+| `medium` | width < 50em | Large screens only |
+| `small` | width < 35em | Medium + large |
+| `xsmall` | width < 20em | Small + medium + large |
+| `large-and-up` | width ≥ 50em | Small screens only |
+| `medium-and-up` | width ≥ 35em | Xsmall only |
+| `small-and-up` | width ≥ 20em | Xsmall only |
+| `touch` | pointer: coarse | Mouse/trackpad only |
+| `pointer` | pointer: fine | Touch devices only |
 
 **Utility functions** — Review `src/utilities.js` before writing. Available utilities:
 - `attr(default, attrVal)` — type-safe attribute reader with coercion
@@ -164,16 +180,27 @@ const config = getAttrConfig(wrap, ANIMATION_ID, {
 // Access as config.duration, config.ease, etc.
 ```
 
-**Breakpoint support (when needed):**
+**Breakpoint support:**
+
+Pattern A — event-listener interactions (modal, hover effects, etc.):
 ```javascript
-// Wrap animation logic in a callback for container-query-based breakpoints
-const animation = function (isSmallBreakpoint) {
-  // if (isSmallBreakpoint) return; // optionally skip on small screens
-  // ... animation setup
+let isDisabled = false;
+// ... set up event listeners, each starting with: if (isDisabled) return;
+const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
+```
+
+Pattern B — GSAP animation interactions (scroll animations, timelines, etc.):
+```javascript
+const animation = function (match) {
+  if (match) return; // disabled at this breakpoint — skip initialization
+  // ... GSAP setup
 };
 const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
 checkContainer(items[0], breakpoint, animation);
 ```
+
+`checkContainer` always goes last inside the wrap loop. `match=false` (default when `breakpoint='none'`) → interaction runs normally.
 
 **Comments:** Add a comment above each logical section (ID block, options block, element queries, animation logic). For non-obvious logic, add inline comments explaining the why.
 
@@ -217,6 +244,7 @@ Before presenting the code:
 - [ ] `checkRunProp` called inside the `wraps.forEach` loop
 - [ ] Options follow the pattern: `attr()` for ≤ 2 options, `getAttrConfig()` for > 2 options
 - [ ] All element queries have `if (!element) return` or length guards
+- [ ] `checkContainer` wired up with the correct pattern (A or B) as the last step inside the wrap loop
 - [ ] Interaction correctly placed in `index.js` (reduce motion block or not)
 - [ ] Import added to `index.js`
 - [ ] Any new utility functions added to `utilities.js` and imported

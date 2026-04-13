@@ -1,4 +1,4 @@
-import { attr, checkRunProp, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const textLinks = function (gsapContext) {
   //animation ID
@@ -52,11 +52,17 @@ export const textLinks = function (gsapContext) {
       },
       0
     );
+    let isDisabled = false;
     wrap.addEventListener('mouseover', function () {
+      if (isDisabled) return;
       tl.play();
     });
     wrap.addEventListener('mouseleave', function () {
+      if (isDisabled) return;
       tl.reverse();
     });
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
   });
 };

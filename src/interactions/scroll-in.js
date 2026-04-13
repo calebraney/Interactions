@@ -1,6 +1,7 @@
 import {
   attr,
   checkRunProp,
+  checkContainer,
   getNonContentsChildren,
   getAttrConfig,
   getIxConfig,
@@ -92,7 +93,8 @@ export const scrollIn = function () {
     const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
     if (items.length === 0) return;
 
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       items.forEach((item) => {
         if (!item) return;
 
@@ -158,9 +160,7 @@ export const scrollIn = function () {
       });
     };
 
-    animation();
-    // Optionally check container breakpoint and run callback:
-    // const breakpoint = attr('small', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
-    // checkContainer(items[0], breakpoint, animation);
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(items[0], breakpoint, animation);
   });
 };

@@ -83,17 +83,32 @@ export const runSplit = function (text, types = 'lines, words') {
 
 export const checkContainer = function (containerChild, breakpoint, callback, additionalParams) {
   let containerQuery = breakpoint;
-  //for breakpoint keywords use global breakpoint values.
-  if (breakpoint === 'large') {
+  //for breakpoint keywords use global breakpoint values , or touch keyword
+  //if a media query matches the callback is run with a match value of true, if not it is run with a match value of false. If the breakpoint is touch, the callback is run with a match value of true if the pointer is coarse (touch) and false if not, and it updates on change.
+  if (breakpoint === 'large-and-up') {
     containerQuery = '(width >= 50em)';
+  } else if (breakpoint === 'medium-and-up') {
+    containerQuery = '(width >= 35em)';
+  } else if (breakpoint === 'small-and-up') {
+    containerQuery = '(width >= 20em)';
   } else if (breakpoint === 'medium') {
     containerQuery = '(width < 50em)';
   } else if (breakpoint === 'small') {
     containerQuery = '(width < 35em)';
   } else if (breakpoint === 'xsmall') {
     containerQuery = '(width < 20em)';
+  } else if (breakpoint === 'touch') {
+    const mq = window.matchMedia('(pointer: coarse)');
+    callback(mq.matches, additionalParams);
+    mq.addEventListener('change', (e) => callback(e.matches, additionalParams));
+    return;
+  } else if (breakpoint === 'pointer') {
+    const mq = window.matchMedia('(pointer: fine)');
+    callback(mq.matches, additionalParams);
+    mq.addEventListener('change', (e) => callback(e.matches, additionalParams));
+    return;
   }
-  //if no container query is set run the ballback with a match of true.
+  //if no container query is set run the callback with a match of false. This allows for the default state of an animation to be the "matched" state, and then if a container query is set it can change to the unmatched state.
   if (containerQuery === 'none') {
     callback(false, additionalParams);
   } else {

@@ -88,7 +88,8 @@ export const load = function (reduceMotion) {
     // Make the wrap itself visible immediately when the timeline starts
     tl.set(wrap, { autoAlpha: 1 });
 
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       items.forEach((item) => {
         if (!item) return;
 

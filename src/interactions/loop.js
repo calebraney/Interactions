@@ -1,4 +1,4 @@
-import { attrIfSet, checkRunProp, buildFromToVars, getIxConfig } from '../utilities';
+import { attr, attrIfSet, checkRunProp, checkContainer, buildFromToVars, getIxConfig } from '../utilities';
 
 export const loop = function () {
   //animation ID
@@ -17,27 +17,34 @@ export const loop = function () {
     let runProp = checkRunProp(item, ANIMATION_ID);
     if (runProp === false) return;
 
-    //////////////////////
-    // Adding tweens
+    const animation = function (match) {
+      if (match) return;
 
-    let tl = gsap.timeline({
-      defaults: {
-        repeat: -1,
-        ease: 'none',
-      },
-    });
+      //////////////////////
+      // Adding tweens
 
-    // Use buildFromToVars for all animatable property pairs (x, y, scale, rotate, etc.)
-    const { varsFrom, varsTo } = buildFromToVars(item, 'loop');
+      let tl = gsap.timeline({
+        defaults: {
+          repeat: -1,
+          ease: 'none',
+        },
+      });
 
-    // Add loop-specific tween properties that only this interaction uses
-    varsTo.yoyo = attrIfSet(item, 'data-ix-loop-yoyo', false);
-    varsTo.delay = attrIfSet(item, 'data-ix-loop-delay', 0);
-    varsTo.repeatDelay = attrIfSet(item, 'data-ix-loop-repeat-delay', 0);
-    varsTo.duration = attrIfSet(item, 'data-ix-loop-duration', 1);
-    varsTo.ease = attrIfSet(item, 'data-ix-loop-ease', 'none');
+      // Use buildFromToVars for all animatable property pairs (x, y, scale, rotate, etc.)
+      const { varsFrom, varsTo } = buildFromToVars(item, 'loop');
 
-    //create tween
-    let tween = tl.fromTo(item, varsFrom, varsTo);
+      // Add loop-specific tween properties that only this interaction uses
+      varsTo.yoyo = attrIfSet(item, 'data-ix-loop-yoyo', false);
+      varsTo.delay = attrIfSet(item, 'data-ix-loop-delay', 0);
+      varsTo.repeatDelay = attrIfSet(item, 'data-ix-loop-repeat-delay', 0);
+      varsTo.duration = attrIfSet(item, 'data-ix-loop-duration', 1);
+      varsTo.ease = attrIfSet(item, 'data-ix-loop-ease', 'none');
+
+      //create tween
+      let tween = tl.fromTo(item, varsFrom, varsTo);
+    };
+
+    const breakpoint = attr('none', item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(item, breakpoint, animation);
   });
 };

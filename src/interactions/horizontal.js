@@ -20,7 +20,8 @@ export const horizontal = function () {
     let inner = wrap.querySelector(INNER);
     let track = wrap.querySelector(TRACK);
     if (!wrap || !inner || !track) return;
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       // function to set wrap height
       const setScrollDistance = function () {
         wrap.style.height = 'calc(' + track.offsetWidth + 'px + 100vh)';

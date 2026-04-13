@@ -47,7 +47,9 @@ export const pathHover = function () {
       tl.progress(1);
     }
 
+    let isDisabled = false;
     wrap.addEventListener('mouseenter', () => {
+      if (isDisabled) return;
       // if reverse is false, play animation on mouse enter, otherwise reverse on mouse enter
       if (!reverse) {
         tl.play();
@@ -56,6 +58,7 @@ export const pathHover = function () {
       }
     });
     wrap.addEventListener('mouseleave', () => {
+      if (isDisabled) return;
       // if reverse is false, reverse animation on mouse leave, otherwise play on mouse enter
       if (reverse) {
         tl.play();
@@ -63,5 +66,8 @@ export const pathHover = function () {
         tl.reverse();
       }
     });
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
   });
 };

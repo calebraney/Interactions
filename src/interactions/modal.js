@@ -27,6 +27,7 @@ export const modal = function (lenis) {
     const closeButtons = [...modal.querySelectorAll(MODAL_CLOSE)];
     const timeout = attr(DEFAULT_TIMEOUT, modal.getAttribute(TIMEOUT));
     const triggerID = attr(MODAL_TRIGGER_DEFAULT, modal.getAttribute(MODAL_TRIGGER));
+    let isDisabled = false;
 
     function getModalTriggers(modal, triggers) {
       // 2. Filter triggers that match the modal ID, but exclude the modal itself
@@ -45,6 +46,7 @@ export const modal = function (lenis) {
         //for each trigger open the modal if it is clicked
         modalTriggers.forEach((trigger, index) => {
           trigger.addEventListener('click', (e) => {
+            if (isDisabled) return;
             // Find the closest dialog parent and close it
             openModal(modal);
           });
@@ -55,6 +57,7 @@ export const modal = function (lenis) {
     if (timeout !== DEFAULT_TIMEOUT) {
       // open based on timer
       setTimeout(() => {
+        if (isDisabled) return;
         openModal(modal);
       }, timeout * 1000);
     }
@@ -73,6 +76,9 @@ export const modal = function (lenis) {
         closeModal(modal);
       });
     });
+
+    const breakpoint = attr('none', modal.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(modal, breakpoint, (match) => { isDisabled = match; });
   });
 
   const openModal = function (modal) {

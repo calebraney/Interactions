@@ -1,4 +1,4 @@
-import { checkRunProp, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 /*
 CSS
@@ -94,6 +94,12 @@ export const textScrub = function (gsapContext) {
 
       return splitText;
     }
-    splitText = createAnimation();
+    const animation = function (match) {
+      if (match) return;
+      splitText = createAnimation();
+    };
+
+    const breakpoint = attr('none', item.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(item, breakpoint, animation);
   });
 };

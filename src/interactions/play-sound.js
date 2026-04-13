@@ -1,4 +1,4 @@
-import { attr, checkRunProp, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getIxConfig } from '../utilities';
 
 export const playSound = function () {
   // ─── IDs & Selectors ────────────────────────────────────────────────────────
@@ -36,14 +36,19 @@ export const playSound = function () {
     const eventMap = { click: 'click', hover: 'mouseenter', focus: 'focusin' };
     const domEvent = eventMap[triggerOn] || 'click';
 
+    let isDisabled = false;
     // ─── Event Listener
     // On each trigger: restart from the beginning so rapid retriggering
     // always replays from the start rather than layering or silently ignoring.
     wrap.addEventListener(domEvent, () => {
+      if (isDisabled) return;
       audio.currentTime = 0;
       // Silently swallow play() rejections (browser autoplay policy).
       // In practice this interaction is always user-initiated so it won't block.
       audio.play().catch(() => {});
     });
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
   });
 };

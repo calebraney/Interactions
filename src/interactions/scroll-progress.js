@@ -30,7 +30,8 @@ export const scrollProgress = function () {
     let runProp = checkRunProp(wrap, ANIMATION_ID);
     if (runProp === false) return;
 
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       // Read all options from data attributes
       let scope = attr('page', wrap.getAttribute(SCOPE));
       let axis = attr('x', wrap.getAttribute(AXIS));

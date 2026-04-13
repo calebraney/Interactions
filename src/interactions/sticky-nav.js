@@ -1,4 +1,4 @@
-import { checkRunProp, getAttrConfig, getIxConfig } from '../utilities';
+import { attr, checkRunProp, checkContainer, getAttrConfig, getIxConfig } from '../utilities';
 
 export const stickyNav = function () {
   //animation ID
@@ -47,6 +47,7 @@ export const stickyNav = function () {
     // Internal state
     let isHidden = startHidden;
     let isScrolled = false;
+    let isDisabled = false;
 
     // Set initial state
     if (startHidden) {
@@ -88,6 +89,7 @@ export const stickyNav = function () {
         start: 0,
         end: 'max',
         onUpdate: (self) => {
+          if (isDisabled) return;
           // Don't hide when near the top of the page
           const scrollY = self.scroll();
           if (scrollY < hideOffset) {
@@ -166,5 +168,8 @@ export const stickyNav = function () {
         },
       });
     }
+
+    const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+    checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
   });
 };

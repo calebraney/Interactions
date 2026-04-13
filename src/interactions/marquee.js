@@ -19,7 +19,8 @@ export const marquee = function () {
     //get lists
     const lists = [...wrap.querySelectorAll(LIST)];
     //animation function
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       const config = getAttrConfig(wrap, ANIMATION_ID, {
         vertical: false,
         reverse: false,

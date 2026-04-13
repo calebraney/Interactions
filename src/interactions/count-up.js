@@ -307,7 +307,8 @@ export const countUp = function () {
   const items = document.querySelectorAll(ITEM);
   items.forEach((item) => {
     //animation function
-    const animation = function () {
+    const animation = function (match) {
+      if (match) return;
       // shared options — type is read first because duration/start defaults depend on it
       const type = attr(DEFAULT_TYPE, item.getAttribute(OPTION_TYPE));
       const sharedConfig = getAttrConfig(item, ANIMATION_ID, {

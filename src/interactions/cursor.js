@@ -110,11 +110,16 @@ export const cursor = function () {
     let outerY = gsap.quickTo(cursorOuter, 'y', { duration: OUTER_DELAY, ease: 'power3' });
     //animate on mouse mouve
     window.addEventListener('mousemove', (e) => {
+      if (isDisabled) return;
       innerX(e.clientX);
       innerY(e.clientY);
       outerX(e.clientX);
       outerY(e.clientY);
     });
   };
+  let isDisabled = false;
   cursorMove();
+
+  const breakpoint = attr('none', wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+  checkContainer(wrap, breakpoint, (match) => { isDisabled = match; });
 };
