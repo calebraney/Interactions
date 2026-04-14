@@ -82,48 +82,81 @@ export const runSplit = function (text, types = 'lines, words') {
 };
 
 export const checkContainer = function (containerChild, breakpoint, callback, additionalParams) {
-  let containerQuery = breakpoint;
-  //for breakpoint keywords use global breakpoint values , or touch keyword
-  //if a media query matches the callback is run with a match value of true, if not it is run with a match value of false. If the breakpoint is touch, the callback is run with a match value of true if the pointer is coarse (touch) and false if not, and it updates on change.
-  if (breakpoint === 'large-and-up') {
-    containerQuery = '(width >= 50em)';
-  } else if (breakpoint === 'medium-and-up') {
-    containerQuery = '(width >= 35em)';
-  } else if (breakpoint === 'small-and-up') {
-    containerQuery = '(width >= 20em)';
-  } else if (breakpoint === 'medium') {
-    containerQuery = '(width < 50em)';
-  } else if (breakpoint === 'small') {
-    containerQuery = '(width < 35em)';
-  } else if (breakpoint === 'xsmall') {
-    containerQuery = '(width < 20em)';
-  } else if (breakpoint === 'touch') {
+  // No breakpoint — run immediately with match=false (no restriction)
+  if (breakpoint === 'none') {
+    callback(false, additionalParams);
+    return;
+  }
+
+  // touch/pointer keywords — use matchMedia, not a container/resize observer
+  if (breakpoint === 'touch') {
     const mq = window.matchMedia('(pointer: coarse)');
     callback(mq.matches, additionalParams);
     mq.addEventListener('change', (e) => callback(e.matches, additionalParams));
     return;
-  } else if (breakpoint === 'pointer') {
+  }
+  if (breakpoint === 'pointer') {
     const mq = window.matchMedia('(pointer: fine)');
     callback(mq.matches, additionalParams);
     mq.addEventListener('change', (e) => callback(e.matches, additionalParams));
     return;
   }
-  //if no container query is set run the callback with a match of false. This allows for the default state of an animation to be the "matched" state, and then if a container query is set it can change to the unmatched state.
-  if (containerQuery === 'none') {
-    callback(false, additionalParams);
-  } else {
-    //make a container query and run the callback function.
-    containerChild.observeContainer(containerQuery, (match) => {
-      callback(match, additionalParams);
 
-      // //Breakpoint tracking
-      // if (match) {
-      //   console.log(match, containerChild);
-      // } else {
-      //   console.log(match, containerChild);
-      // }
-    });
+  // Map size keywords to { em threshold, gte direction }
+  // match=true → interaction disabled; gte=false → disabled below threshold, gte=true → disabled above
+  const KEYWORD_MAP = {
+    xsmall: { em: 20, gte: false },
+    small: { em: 35, gte: false },
+    medium: { em: 50, gte: false },
+    'large-and-up': { em: 50, gte: true },
+    'medium-and-up': { em: 35, gte: true },
+    'small-and-up': { em: 20, gte: true },
+  };
+
+  let thresholdEm, gte;
+  if (KEYWORD_MAP[breakpoint]) {
+    ({ em: thresholdEm, gte } = KEYWORD_MAP[breakpoint]);
+  } else {
+    // Parse custom strings like "(width < 40em)" or "(width >= 40em)"
+    const m = breakpoint.match(/(>=?|<=?)\s*([\d.]+)em/i);
+    if (m) {
+      gte = m[1].startsWith('>');
+      thresholdEm = parseFloat(m[2]);
+    }
   }
+
+  // Unknown breakpoint value — run without restriction
+  if (thresholdEm === undefined) {
+    callback(false, additionalParams);
+    return;
+  }
+
+  // Walk up to the nearest ancestor with container-type set
+  let container = containerChild.parentElement;
+  while (container) {
+    if (getComputedStyle(container).containerType !== 'normal') break;
+    container = container.parentElement;
+  }
+  // No container ancestor found — run without restriction
+  if (!container) {
+    callback(false, additionalParams);
+    return;
+  }
+
+  let lastMatch = null;
+
+  const observer = new ResizeObserver((entries) => {
+    const width = entries[0].contentRect.width;
+    const fontSize = parseFloat(getComputedStyle(container).fontSize);
+    const match = gte ? width >= thresholdEm * fontSize : width < thresholdEm * fontSize;
+    // Only fire callback when crossing the threshold, not on every resize tick
+    if (match !== lastMatch) {
+      lastMatch = match;
+      callback(match, additionalParams);
+    }
+  });
+
+  observer.observe(container);
 };
 
 //check for attributes to stop animation on specific breakpoints

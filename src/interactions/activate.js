@@ -72,20 +72,20 @@ export const activate = function () {
 
     // hover type
     if (config.type === 'hover') {
-      items.forEach((currentItem) => {
+      items.forEach((item) => {
         //set initial active state based on per-item option
         const startActive = attr(false, item.getAttribute(OPTION_START_ACTIVE));
         activateItem(item, startActive);
 
-        const triggerEl = getTrigger(currentItem);
+        const triggerEl = getTrigger(item);
         // mouseenter/mouseleave avoids re-firing when hovering over child elements
         triggerEl.addEventListener('mouseenter', function () {
           if (isDisabled) return;
-          items.forEach((child) => activateItem(child, child === currentItem));
+          items.forEach((child) => activateItem(child, child === item));
         });
         triggerEl.addEventListener('mouseleave', function () {
           if (isDisabled) return;
-          if (!config.keepOneActive) activateItem(currentItem, false);
+          if (!config.keepOneActive) activateItem(item, false);
         });
       });
     } else {
@@ -151,7 +151,11 @@ export const activate = function () {
         const makeActive = config.breakpointState === 'active';
         items.forEach((item) => activateItem(item, makeActive));
       } else {
-        items.forEach((item) => activateItem(item, false));
+        items.forEach((item) => {
+          const startActive = attr(false, item.getAttribute(OPTION_START_ACTIVE));
+          activateItem(item, startActive);
+        });
+        if (config.firstActive) activateItem(items[0]);
       }
     });
   };
