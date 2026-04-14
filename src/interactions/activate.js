@@ -73,6 +73,10 @@ export const activate = function () {
     // hover type
     if (config.type === 'hover') {
       items.forEach((currentItem) => {
+        //set initial active state based on per-item option
+        const startActive = attr(false, item.getAttribute(OPTION_START_ACTIVE));
+        activateItem(item, startActive);
+
         const triggerEl = getTrigger(currentItem);
         // mouseenter/mouseleave avoids re-firing when hovering over child elements
         triggerEl.addEventListener('mouseenter', function () {
@@ -99,6 +103,7 @@ export const activate = function () {
       };
 
       items.forEach((item) => {
+        //set initial active state based on per-item option
         const startActive = attr(false, item.getAttribute(OPTION_START_ACTIVE));
         activateItem(item, startActive);
 
@@ -134,10 +139,9 @@ export const activate = function () {
           }
         });
       });
-
-      if (config.firstActive) {
-        activateItem(items[0]);
-      }
+    }
+    if (config.firstActive) {
+      activateItem(items[0]);
     }
 
     checkContainer(items[0], breakpoint, (match) => {
