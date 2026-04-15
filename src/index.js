@@ -33,6 +33,7 @@ import { slider } from './interactions/slider';
 import { triggerEvent } from './interactions/trigger-event';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
+import { flipText } from './interactions/flip-text';
 import { typeText } from './interactions/type-text';
 import { videoPlyr } from './interactions/video-plyr';
 
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
           imageSwitch();
           banner();
           logoSwitch();
+          flipText();
           typeText();
         }
         //setup video players
