@@ -25,7 +25,7 @@ export const flipText = function () {
       if (match) return;
 
       const config = getAttrConfig(wrap, ANIMATION_ID, {
-        duration: 0.5,
+        duration: 0.6,
         hold: 1.5,
         delay: 1,
         ease: 'power2.inOut',
@@ -33,9 +33,9 @@ export const flipText = function () {
         perspective: 600,
         rotate: 90,
         padding: 1.2, // in em
-        animateTogether: false,
-        direction: 'up', // 'up' or 'down'
-        y: 0, // travel distance in em (0 = auto)
+        transitionDelay: 0, // sentinel: -1 defaults to config.duration (sequential)
+        direction: 'down', // 'up' or 'down'
+        y: 1, // travel distance in em (0 = auto)
       });
 
       // build phrases — prefer the data attribute, fall back to child phrase elements
@@ -69,9 +69,8 @@ export const flipText = function () {
       let maxHeight = 0;
       phrases.forEach((phrase) => {
         textEl.textContent = phrase;
-        maxHeight = Math.max(maxHeight, textEl.offsetHeight);
+        maxHeight = Math.max(maxHeight, textEl.getBoundingClientRect().height);
       });
-
       const pad = config.padding;
       stage.style.height = `${maxHeight}px`;
       stage.style.paddingTop = `${pad}em`;
@@ -84,10 +83,11 @@ export const flipText = function () {
       // If y option is set, convert em to px and use whichever is larger so text
       // always fully clears the clip regardless of phrase length
       const customYPx = config.y > 0 ? config.y * parseFloat(getComputedStyle(textEl).fontSize) : 0;
-      const yDist = customYPx > 0 ? Math.max(autoYDist, customYPx) : autoYDist;
+      const yDist = customYPx > 0 ? customYPx : autoYDist;
       // direction: 'up' exits upward (-), enters from below (+)
       //            'down' exits downward (+), enters from above (-)
       const dirMult = config.direction === 'down' ? 1 : -1;
+      const transitionDelay = config.transitionDelay < 0 ? config.duration : config.transitionDelay;
 
       // Show first phrase at rest
       textEl.textContent = phrases[0];
@@ -110,80 +110,52 @@ export const flipText = function () {
           if (shouldContinue) {
             gsap.delayedCall(config.hold, animateNext);
           } else {
-            stage.parentNode.insertBefore(textEl, stage);
-            stage.remove();
+            stage.style.height = 'auto';
+            stage.replaceWith(textEl);
+            gsap.set(textEl, { clearProps: 'transform,opacity' });
           }
         };
 
-        if (config.animateTogether) {
-          // Clone textEl for the incoming phrase so both animate simultaneously
-          const nextEl = textEl.cloneNode(false);
-          nextEl.textContent = phrases[nextIndex];
-          nextEl.style.position = 'absolute';
-          nextEl.style.top = '0';
-          nextEl.style.left = '0';
-          stage.appendChild(nextEl);
-          gsap.set(nextEl, {
-            y: -dirMult * yDist,
-            rotateX: dirMult * config.rotate,
-            opacity: 0,
-            transformPerspective: config.perspective,
-            transformOrigin: 'center center',
-          });
+        const nextEl = textEl.cloneNode(false);
+        nextEl.textContent = phrases[nextIndex];
+        nextEl.style.position = 'absolute';
+        nextEl.style.top = `${padPx}px`;
+        nextEl.style.left = '0';
+        nextEl.style.right = '0';
+        stage.appendChild(nextEl);
+        gsap.set(nextEl, {
+          y: -dirMult * yDist,
+          rotateX: dirMult * config.rotate,
+          opacity: 0,
+          transformPerspective: config.perspective,
+          transformOrigin: 'center center',
+        });
 
-          const tl = gsap.timeline({
-            onComplete: () => {
-              // Reset textEl to the new phrase in its resting state, then drop the clone
-              textEl.textContent = phrases[nextIndex];
-              gsap.set(textEl, { y: 0, rotateX: 0, opacity: 1 });
-              nextEl.remove();
-              onComplete();
-            },
-          });
+        const tl = gsap.timeline({
+          onComplete: () => {
+            textEl.textContent = phrases[nextIndex];
+            gsap.set(textEl, { y: 0, rotateX: 0, opacity: 1 });
+            nextEl.remove();
+            onComplete();
+          },
+        });
 
-          tl.to(
-            textEl,
-            {
-              y: dirMult * yDist,
-              rotateX: -dirMult * config.rotate,
-              opacity: 0,
-              duration: config.duration,
-              ease: config.ease,
-            },
-            0
-          );
-          tl.to(
-            nextEl,
-            { y: 0, rotateX: 0, opacity: 1, duration: config.duration, ease: config.ease },
-            config.duration * 0.2
-          );
-        } else {
-          const tl = gsap.timeline({ onComplete });
-
-          // Current phrase exits in the direction, next enters from the opposite side
-          tl.to(textEl, {
+        tl.to(
+          textEl,
+          {
             y: dirMult * yDist,
             rotateX: -dirMult * config.rotate,
             opacity: 0,
             duration: config.duration,
             ease: config.ease,
-          });
-
-          // Swap text and position next phrase on the opposite side
-          tl.call(() => {
-            textEl.textContent = phrases[nextIndex];
-          });
-          tl.set(textEl, { y: -dirMult * yDist, rotateX: dirMult * config.rotate, opacity: 0 });
-
-          // Next phrase rotates in from below, fading in
-          tl.to(textEl, {
-            y: 0,
-            rotateX: 0,
-            opacity: 1,
-            duration: config.duration,
-            ease: config.ease,
-          });
-        }
+          },
+          0
+        );
+        tl.to(
+          nextEl,
+          { y: 0, rotateX: 0, opacity: 1, duration: config.duration, ease: config.ease },
+          transitionDelay
+        );
       };
 
       // First phrase holds for delay + hold seconds before the first transition
