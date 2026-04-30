@@ -1,4 +1,14 @@
-import { checkRunProp, getIxConfig } from '../utilities';
+import { checkRunProp, getIxConfig, attr } from '../utilities';
+
+const HIDE_ARROWS_CLASS = 'ix-number-input-no-arrows';
+
+const injectHideArrowsStyle = () => {
+  if (document.getElementById(HIDE_ARROWS_CLASS)) return;
+  const style = document.createElement('style');
+  style.id = HIDE_ARROWS_CLASS;
+  style.textContent = `.${HIDE_ARROWS_CLASS}::-webkit-outer-spin-button,.${HIDE_ARROWS_CLASS}::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.${HIDE_ARROWS_CLASS}{-moz-appearance:textfield}`;
+  document.head.appendChild(style);
+};
 
 export const numberInput = function () {
   const ANIMATION_ID = 'numberInput';
@@ -20,6 +30,12 @@ export const numberInput = function () {
     const incrementBtn = wrap.querySelector(INCREMENT);
     const decrementBtn = wrap.querySelector(DECREMENT);
     if (!input || !incrementBtn || !decrementBtn) return;
+
+    const hideArrows = attr(true, wrap.getAttribute('data-ix-number-input-hide-arrows'));
+    if (hideArrows) {
+      injectHideArrowsStyle();
+      input.classList.add(HIDE_ARROWS_CLASS);
+    }
 
     const getMin = () => (input.hasAttribute('min') ? parseFloat(input.min) : -Infinity);
     const getMax = () => (input.hasAttribute('max') ? parseFloat(input.max) : Infinity);
