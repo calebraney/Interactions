@@ -5,7 +5,7 @@ export const activate = function () {
   const ANIMATION_ID = 'activate';
   //elements
   const WRAP = '[data-ix-activate="wrap"]';
-  const ITEM = '[data-ix-activate="item"]';
+  const ITEM = '[data-ix-activate="item"]'; // required: the element(s) that will receive the active class toggle and optional aria-expanded attribute update when their trigger is clicked or hovered
   const TRIGGER = '[data-ix-activate="trigger"]'; // optional child element — if present, used as the event listener target inside an item
   const TARGET = '[data-ix-activate="target"]'; // additional element to activate (matched by ID attribute)
   const ID = 'data-ix-activate-id';
