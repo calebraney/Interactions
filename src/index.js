@@ -31,6 +31,7 @@ import { stickyNav } from './interactions/sticky-nav';
 import { tabs } from './interactions/tabs';
 import { slider } from './interactions/slider';
 import { triggerEvent } from './interactions/trigger-event';
+import { numberInput } from './interactions/number-input';
 import { textScrub } from './interactions/text-scrub';
 import { textLinks } from './interactions/text-links';
 import { flipText } from './interactions/flip-text';
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
     playSound();
     stickyNav();
     triggerEvent();
+    numberInput();
   };
   gsapInit();
 
