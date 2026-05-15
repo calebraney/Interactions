@@ -74,6 +74,11 @@ const BASE_ANIMATIONS = {
     from: { autoAlpha: 0, x: move },
     to: { autoAlpha: 1, x: '0rem' },
   }),
+  // Move — like slide but 100% of the element's own size (no fade)
+  'move-up': () => ({ from: { y: '100%' }, to: { y: '0%' } }),
+  'move-down': () => ({ from: { y: '-100%' }, to: { y: '0%' } }),
+  'move-right': () => ({ from: { x: '-100%' }, to: { x: '0%' } }),
+  'move-left': () => ({ from: { x: '100%' }, to: { x: '0%' } }),
   // Rotate — gentle 3D lift using the shared move offset
   'rotate-up': ({ move }) => ({
     from: { autoAlpha: 0, y: move, rotateX: 15 },
@@ -87,6 +92,11 @@ const BASE_ANIMATIONS = {
   // Scale entrances — fixed scale values (not affected by move)
   'scale-up': () => ({ from: { autoAlpha: 0, scale: 0.8 }, to: { autoAlpha: 1, scale: 1 } }),
   'scale-down': () => ({ from: { autoAlpha: 0, scale: 1.2 }, to: { autoAlpha: 1, scale: 1 } }),
+  // Axis-specific scale reveals — scaleY/scaleX from 0 acts as the visibility reveal
+  'scale-y-up': () => ({ from: { scaleY: 0 }, to: { scaleY: 1 } }),
+  'scale-y-down': () => ({ from: { scaleY: 1.2 }, to: { scaleY: 1 } }),
+  'scale-x-up': () => ({ from: { scaleX: 0 }, to: { scaleX: 1 } }),
+  'scale-x-down': () => ({ from: { scaleX: 1.2 }, to: { scaleX: 1 } }),
 };
 
 // ============================================================================
@@ -212,12 +222,24 @@ export const ANIMATION_MAP = {
     animateElement(tl, el, opts, BASE_ANIMATIONS['slide-right'](opts)),
   'slide-left': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['slide-left'](opts)),
+  'move-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-up']()),
+  'move-down': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-down']()),
+  'move-right': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-right']()),
+  'move-left': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-left']()),
   'rotate-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up'](opts)),
   'rotate-up-dramatic': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up-dramatic'](opts)),
   'scale-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-up'](opts)),
   'scale-down': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['scale-down'](opts)),
+  'scale-y-up': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y-up'](opts)),
+  'scale-y-down': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y-down'](opts)),
+  'scale-x-up': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x-up'](opts)),
+  'scale-x-down': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x-down'](opts)),
   // --- Clip-path reveal animations ---
   'clip-left': (tl, el, opts) => animateClip(tl, el, opts, 'left'),
   'clip-right': (tl, el, opts) => animateClip(tl, el, opts, 'right'),

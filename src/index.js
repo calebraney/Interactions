@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const gsapInit = function () {
     //first interactions
     lenis = initLenis();
-    pageTransition();
+    pageTransition(lenis);
     //match media interactions
     let mm = gsap.matchMedia();
     mm.add(
