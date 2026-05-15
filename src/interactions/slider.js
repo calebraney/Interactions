@@ -1,9 +1,4 @@
-import {
-  getAttrConfig,
-  flattenDisplayContents,
-  removeCMSList,
-  getIxConfig,
-} from '../utilities';
+import { getAttrConfig, flattenDisplayContents, removeCMSList, getIxConfig } from '../utilities';
 
 export const slider = function () {
   //animation ID
@@ -13,7 +8,9 @@ export const slider = function () {
   const SLIDER = "[data-ix-slider='component']";
   const NEXT = "[data-ix-slider='next']";
   const PREVIOUS = "[data-ix-slider='previous']";
-  const PAGINATION = '.slider_bullet_list';
+  const PAGINATION_BULLETS = '.slider_bullet_list';
+  const PAGINATION_FRACTION = '.slider_fraction_wrap';
+  const PAGINATION_PROGRESSBAR = '.slider_progressbar_wrap';
   const PAGINATION_BUTTON = 'slider_bullet_item';
   const PAGINATION_BUTTON_FILL = 'slider_bullet_item_fill';
   const SCROLLBAR = '.slider_scrollbar';
@@ -47,19 +44,25 @@ export const slider = function () {
       speed: 600,
       autoplay: 0, // autoplay duration in MS
       paginationType: 'bullets', // bullets, fraction, progressbar
+      fractionSeparator: ' of ',
+      fractionPad: false,
+      fade: false,
+      parallax: false,
       centerSlides: false,
       showAutoplayProgress: true,
     });
     //create slider instance
     const swiper = new Swiper(swiperElement, {
-      slidesPerView: 'auto',
+      parallax: config.parallax,
+      effect: config.fade ? 'fade' : 'slide',
+      fadeEffect: { crossFade: true },
+      slidesPerView: config.fade ? 1 : 'auto',
       followFinger: config.followFinger,
       freeMode: config.freeMode,
       slideToClickedSlide: config.slideToClicked,
       centeredSlides: config.centerSlides,
       autoHeight: false,
       loop: config.loop,
-      loopAdditionalSlides: 3,
       speed: config.speed,
       mousewheel: {
         enabled: config.mousewheel,
@@ -76,23 +79,41 @@ export const slider = function () {
       },
       pagination: {
         type: config.paginationType,
-        el: component.querySelector(`${PAGINATION}`),
-        bulletActiveClass: ACTIVE_CLASS,
-        bulletClass: `${PAGINATION_BUTTON}`,
-        bulletElement: 'button',
-        clickable: true,
-        //version for fraction pagination with utility class
-        renderFraction: function (currentClass, totalClass) {
-          return (
-            '<div class="u-text-style-small"><span class="' +
-            currentClass +
-            '"></span>' +
-            ' of ' +
-            '<span class="' +
-            totalClass +
-            '"></span> </div>'
-          );
-        },
+        el: component.querySelector(
+          config.paginationType === 'fraction'
+            ? PAGINATION_FRACTION
+            : config.paginationType === 'progressbar'
+            ? PAGINATION_PROGRESSBAR
+            : PAGINATION_BULLETS
+        ),
+        ...(config.paginationType === 'bullets' && {
+          bulletActiveClass: ACTIVE_CLASS,
+          bulletClass: PAGINATION_BUTTON,
+          bulletElement: 'button',
+          clickable: true,
+        }),
+        ...(config.paginationType === 'fraction' && {
+          renderFraction: function (currentClass, totalClass) {
+            return (
+              '<span class="' +
+              currentClass +
+              ' slider_fraction_current"></span>' +
+              config.fractionSeparator +
+              '<span class="' +
+              totalClass +
+              ' slider_fraction_total"></span>'
+            );
+          },
+          ...(config.fractionPad && {
+            formatFractionCurrent: (n) => String(n).padStart(2, '0'),
+            formatFractionTotal: (n) => String(n).padStart(2, '0'),
+          }),
+        }),
+        ...(config.paginationType === 'progressbar' && {
+          renderProgressbar: function (progressbarFillClass) {
+            return '<span class="' + progressbarFillClass + ' slider_progressbar_fill"></span>';
+          },
+        }),
       },
       scrollbar: {
         el: component.querySelector(SCROLLBAR),

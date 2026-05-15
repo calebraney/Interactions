@@ -39,9 +39,6 @@ export const load = function (reduceMotion) {
   const POSITION = 'data-ix-load-position'; // sequential by default; use "<" to overlap tweens
   const DEFAULT_STAGGER = '<0.2'; // default gap between consecutive load items
 
-  // Tracks total duration of completed load sections for sequential section delays
-  let totalDuration = 0;
-
   // ── Config resolution ─────────────────────────────────────────────────────
   // Maps element-type keywords to animation types.
   // Override per-site via window.ixConfig.load in <head>:
@@ -58,10 +55,14 @@ export const load = function (reduceMotion) {
   const ixConfig = getIxConfig(ANIMATION_ID, ELEMENT_TYPE_DEFAULTS);
   // Exit if the entire load interaction is disabled in site config
   if (ixConfig === false) return;
+  // Exit if page-transition has disabled the load interaction for this page load
+  if (document.body.getAttribute('data-ix-load-page-run')?.toLowerCase() === 'false') return;
 
   // ── Main loop ─────────────────────────────────────────────────────────────
   // Each wrap element creates its own timeline. Multiple wraps are staggered
   // sequentially using totalDuration so later sections don't overlap with earlier ones.
+  // If page-transition is active, totalDuration starts at the synced load delay.
+  let totalDuration = window.__ixPageTransitionLoadDelay || 0;
   const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
   wraps.forEach((wrap) => {
     // Collect all load elements inside this wrap.
@@ -78,7 +79,6 @@ export const load = function (reduceMotion) {
     // Build this wrap's timeline. It starts paused and is played after
     // all items are added (see tl.play() below).
     const tl = gsap.timeline({
-      delay: totalDuration,
       paused: true,
       defaults: {
         ease: ixConfig.ease ?? 'power1.out',
@@ -145,10 +145,13 @@ export const load = function (reduceMotion) {
 
       // Stack subsequent wrap sections so they play after the previous one ends.
       // Subtracting 0.4 creates a slight overlap for a more natural feel.
+      const wrapOffset = totalDuration;
       totalDuration = totalDuration + tl.duration() - 0.4;
 
-      // Play the timeline — fonts are usually ready by the time JS runs
-      tl.play();
+      // Store delayed call reference so page-loader can correct timing in asset mode
+      const playFn = function () { tl.play(); };
+      const dc = gsap.delayedCall(wrapOffset, playFn);
+      (window.__ixLoadDelays = window.__ixLoadDelays || []).push({ dc, fn: playFn, offset: wrapOffset });
     };
 
     // Check container breakpoint and run animation callback

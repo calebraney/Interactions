@@ -20,6 +20,7 @@ import { magnetic } from './interactions/magnetic';
 import { marquee } from './interactions/marquee';
 import { mouseOver } from './interactions/mouse-over';
 import { modal } from './interactions/modal';
+import { pageLoader } from './interactions/page-loader';
 import { pageTransition } from './interactions/page-transition';
 import { parallax } from './interactions/parallax';
 import { pathHover } from './interactions/path-hover';
@@ -51,7 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const gsapInit = function () {
     //first interactions
     lenis = initLenis();
-    pageTransition();
+    pageTransition(lenis);
+    pageLoader(lenis);
     //match media interactions
     let mm = gsap.matchMedia();
     mm.add(
