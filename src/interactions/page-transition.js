@@ -13,7 +13,7 @@ import { createAnimation } from './animations';
 Required CSS — add to page <head>:
 <style>
 .transition_wrap {
-  display: none;
+  display: flex;
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -197,13 +197,14 @@ export const pageTransition = function (lenis) {
     };
 
     if (config.mode === 'loader') {
-      if (checkStorage(config.storage)) return;
-      gsap.set(wrap, { display: wrapDisplay });
+      if (checkStorage(config.storage)) {
+        hideWrap();
+        return;
+      }
       if (config.disableLoad) document.body.setAttribute('data-ix-load-page-run', 'false');
       playOut(config.delay);
     } else {
       // transition mode: half delay on the new page before animating out
-      gsap.set(wrap, { display: wrapDisplay });
       if (config.disableLoad) document.body.setAttribute('data-ix-load-page-run', 'false');
       playOut(config.delay / 2);
 
