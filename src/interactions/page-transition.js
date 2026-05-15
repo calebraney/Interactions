@@ -1,6 +1,7 @@
 import {
   attr,
   stopScroll,
+  startScroll,
   checkContainer,
   getIxConfig,
   checkRunProp,
@@ -11,11 +12,14 @@ import { createAnimation } from './animations';
 /*
 Required CSS — add to page <head>:
 <style>
-[data-ix-pagetransition="wrap"] {
-  display: flex;
+.transition_wrap {
+  display: none;
   position: fixed;
   inset: 0;
   z-index: 9999;
+}
+body:has([data-ix-pagetransition="wrap"]:not([style*="display: none"])) {
+  overflow: hidden;
 }
 </style>
 */
@@ -36,7 +40,7 @@ export const pageTransition = function (lenis) {
   // Storage helper — returns true if the loader/transition should be skipped
   const STORAGE_KEY = 'ix-pagetransition-seen';
   const checkStorage = function (storageValue) {
-    if (!storageValue) return false;
+    if (storageValue === 'none') return false;
     if (storageValue === 'session') {
       if (sessionStorage.getItem(STORAGE_KEY)) return true;
       sessionStorage.setItem(STORAGE_KEY, '1');
@@ -77,8 +81,8 @@ export const pageTransition = function (lenis) {
     return true;
   };
 
-  // buildTimeline — builds the IN animation (hidden → visible in GSAP's model).
-  // isOut=true selects animate-out types per element; caller plays timeline in reverse for the actual out animation.
+  // buildTimeline — builds a forward-playing animation timeline.
+  // isOut=false: bg first → items (hidden→visible). isOut=true: items first → bg last (visible→hidden).
   const buildTimeline = function (wrap, config, isOut) {
     const tl = gsap.timeline({
       paused: true,
@@ -86,33 +90,62 @@ export const pageTransition = function (lenis) {
     });
 
     const bg = wrap.querySelector(BG_SEL);
-    const bgGap = bg ? attr(0, bg.getAttribute(`${ATTRIBUTE}-gap`)) : 0;
-    if (bg) {
-      const bgIn = attr('scale-y-up', bg.getAttribute(`${ATTRIBUTE}-animate`));
-      const bgOut = attr(bgIn, bg.getAttribute(`${ATTRIBUTE}-animate-out`));
-      const bgDuration = attr(config.duration, bg.getAttribute(`${ATTRIBUTE}-duration`));
-      const bgEase = attr(config.ease, bg.getAttribute(`${ATTRIBUTE}-ease`));
-      const bgPosition = attr('0', bg.getAttribute(`${ATTRIBUTE}-position`));
-      createAnimation(tl, bg, isOut ? bgOut : bgIn, {
-        duration: bgDuration,
-        ease: bgEase,
-        position: bgPosition,
+
+    const addBg = function () {
+      const bgConfig = getAttrConfig(bg, ANIMATION_ID, {
+        animateIn: 'move-up',
+        animateOut: 'move-up-out',
+        duration: config.duration,
+        ease: config.ease,
+        easeIn: config.easeIn,
+        easeOut: config.easeOut,
+        positionIn: '0',
+        positionOut: '>-0.3',
       });
-    }
+      bgConfig.easeIn = bgConfig.easeIn || bgConfig.ease;
+      bgConfig.easeOut = bgConfig.easeOut || bgConfig.ease;
+      createAnimation(tl, bg, isOut ? bgConfig.animateOut : bgConfig.animateIn, {
+        duration: bgConfig.duration,
+        ease: isOut ? bgConfig.easeOut : bgConfig.easeIn,
+        position: isOut ? bgConfig.positionOut : bgConfig.positionIn,
+      });
+    };
 
     const items = [...wrap.querySelectorAll(ITEM_SEL)];
-    if (isOut) items.reverse();
-    items.forEach(function (item, index) {
-      const animIn = attr('slide-down', item.getAttribute(`${ATTRIBUTE}-animate`));
-      const animOut = attr(animIn, item.getAttribute(`${ATTRIBUTE}-animate-out`));
-      const duration = attr(config.duration, item.getAttribute(`${ATTRIBUTE}-duration`));
-      const ease = attr(config.ease, item.getAttribute(`${ATTRIBUTE}-ease`));
-      const defaultPosition = isOut && index === 0 ? `>+${bgGap}` : '<0.2';
-      const position = attr(defaultPosition, item.getAttribute(`${ATTRIBUTE}-position`));
-      const stagger = attr(0, item.getAttribute(`${ATTRIBUTE}-stagger`));
-      const target = stagger > 0 ? [...item.children] : item;
-      createAnimation(tl, target, isOut ? animOut : animIn, { duration, ease, position, stagger });
-    });
+    const addItems = function () {
+      items.forEach(function (item, index) {
+        const itemConfig = getAttrConfig(item, ANIMATION_ID, {
+          animateIn: 'slide-up',
+          animateOut: 'slide-up-out',
+          duration: config.duration,
+          ease: config.ease,
+          easeIn: config.easeIn,
+          easeOut: config.easeOut,
+          positionIn: index === 0 ? '<0.6' : '<0.1',
+          positionOut: index === 0 ? '0' : '<0.1',
+          stagger: 0,
+        });
+        itemConfig.easeIn = itemConfig.easeIn || itemConfig.ease;
+        itemConfig.easeOut = itemConfig.easeOut || itemConfig.ease;
+        const target = itemConfig.stagger > 0 ? [...item.children] : item;
+        createAnimation(tl, target, isOut ? itemConfig.animateOut : itemConfig.animateIn, {
+          duration: itemConfig.duration,
+          ease: isOut ? itemConfig.easeOut : itemConfig.easeIn,
+          position: isOut ? itemConfig.positionOut : itemConfig.positionIn,
+          stagger: itemConfig.stagger,
+        });
+      });
+    };
+
+    if (isOut) {
+      // OUT: items first (DOM order), bg last
+      addItems();
+      if (bg) addBg();
+    } else {
+      // IN: bg first, items after
+      if (bg) addBg();
+      addItems();
+    }
 
     return tl;
   };
@@ -122,15 +155,20 @@ export const pageTransition = function (lenis) {
     if (runProp === false) return;
 
     const config = getAttrConfig(wrap, ANIMATION_ID, {
-      mode: 'transition', //transition or loader
-      storage: '',
-      duration: 0.8,
-      ease: 'power3.out',
-      delay: 1,
+      mode: 'transition', // 'transition' (overlay on link click) or 'loader' (plays once on load)
+      storage: 'none', // skip loader after first visit: 'session', '1d', '7d', etc. 'none' = always show
+      duration: 0.8, // animation duration in seconds for all elements
+      ease: 'bounce', // GSAP ease (fallback for ease-in/ease-out)
+      easeIn: 'power3.out', // ease for the IN animation — defaults to ease
+      easeOut: 'power3.in', // ease for the OUT animation — defaults to ease
+      delay: 0.8, // seconds before out animation starts (loader) or half applied each side (transition)
+      disableLoad: false, // true = skip load interaction entirely while transition plays
+      loadOffset: 0.6, // seconds before transition ends that the load interaction starts
     });
+    config.easeIn = config.easeIn || config.ease;
+    config.easeOut = config.easeOut || config.ease;
 
-    // Capture display value before any GSAP manipulation
-    const wrapDisplay = getComputedStyle(wrap).display || 'flex';
+    const wrapDisplay = 'flex';
 
     let isAnimating = false;
     let isDisabled = false;
@@ -140,23 +178,33 @@ export const pageTransition = function (lenis) {
     };
 
     const playOut = function (outDelay) {
+      stopScroll(lenis);
       const tl = buildTimeline(wrap, config, true);
-      tl.seek(tl.totalDuration()); // set to visible state synchronously before any frame is painted
-      const dur = tl.totalDuration();
+      const outDuration = tl.totalDuration();
+      if (!config.disableLoad) {
+        window.__ixPageTransitionLoadDelay = Math.max(
+          0,
+          outDelay + outDuration - config.loadOffset
+        );
+      }
       gsap.delayedCall(outDelay, function () {
-        tl.reverse();
+        tl.play();
       });
-      gsap.delayedCall(outDelay + dur + 0.4, hideWrap);
+      gsap.delayedCall(outDelay + outDuration, function () {
+        hideWrap();
+        startScroll(lenis);
+      });
     };
 
     if (config.mode === 'loader') {
-      if (checkStorage(config.storage)) {
-        hideWrap();
-        return;
-      }
+      if (checkStorage(config.storage)) return;
+      gsap.set(wrap, { display: wrapDisplay });
+      if (config.disableLoad) document.body.setAttribute('data-ix-load-page-run', 'false');
       playOut(config.delay);
     } else {
       // transition mode: half delay on the new page before animating out
+      gsap.set(wrap, { display: wrapDisplay });
+      if (config.disableLoad) document.body.setAttribute('data-ix-load-page-run', 'false');
       playOut(config.delay / 2);
 
       // Only the first wrap handles link clicks to avoid duplicate listeners

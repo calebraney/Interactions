@@ -90,13 +90,46 @@ const BASE_ANIMATIONS = {
     to: { autoAlpha: 1, y: '0%', rotateX: 0 },
   }),
   // Scale entrances — fixed scale values (not affected by move)
-  'scale-up': () => ({ from: { autoAlpha: 0, scale: 0.8 }, to: { autoAlpha: 1, scale: 1 } }),
-  'scale-down': () => ({ from: { autoAlpha: 0, scale: 1.2 }, to: { autoAlpha: 1, scale: 1 } }),
+  'scale-up-partial': () => ({
+    from: { autoAlpha: 0, scale: 0.8 },
+    to: { autoAlpha: 1, scale: 1 },
+  }),
+  'scale-down-partial': () => ({
+    from: { autoAlpha: 0, scale: 1.2 },
+    to: { autoAlpha: 1, scale: 1 },
+  }),
   // Axis-specific scale reveals — scaleY/scaleX from 0 acts as the visibility reveal
-  'scale-y-up': () => ({ from: { scaleY: 0 }, to: { scaleY: 1 } }),
-  'scale-y-down': () => ({ from: { scaleY: 1.2 }, to: { scaleY: 1 } }),
-  'scale-x-up': () => ({ from: { scaleX: 0 }, to: { scaleX: 1 } }),
-  'scale-x-down': () => ({ from: { scaleX: 1.2 }, to: { scaleX: 1 } }),
+  'scale-y': () => ({ from: { scaleY: 0 }, to: { scaleY: 1 } }),
+  'scale-x': () => ({ from: { scaleX: 0 }, to: { scaleX: 1 } }),
+
+  // --- Out variants (visible → hidden, forward-playing) ---
+  'fade-out': () => ({ from: { autoAlpha: 1 }, to: { autoAlpha: 0 } }),
+  'slide-up-out': ({ move }) => ({
+    from: { autoAlpha: 1, y: '0rem' },
+    to: { autoAlpha: 0, y: `-${move}` },
+  }),
+  'slide-down-out': ({ move }) => ({
+    from: { autoAlpha: 1, y: '0rem' },
+    to: { autoAlpha: 0, y: move },
+  }),
+  'slide-right-out': ({ move }) => ({
+    from: { autoAlpha: 1, x: '0rem' },
+    to: { autoAlpha: 0, x: move },
+  }),
+  'slide-left-out': ({ move }) => ({
+    from: { autoAlpha: 1, x: '0rem' },
+    to: { autoAlpha: 0, x: `-${move}` },
+  }),
+  'move-up-out': () => ({ from: { y: '0%' }, to: { y: '-100%' } }),
+  'move-down-out': () => ({ from: { y: '0%' }, to: { y: '100%' } }),
+  'move-right-out': () => ({ from: { x: '0%' }, to: { x: '100%' } }),
+  'move-left-out': () => ({ from: { x: '0%' }, to: { x: '-100%' } }),
+  'rotate-up-out': ({ move }) => ({
+    from: { autoAlpha: 1, y: '0rem', rotateX: 0 },
+    to: { autoAlpha: 0, y: `-${move}`, rotateX: -15 },
+  }),
+  'scale-y-out': () => ({ from: { scaleY: 1 }, to: { scaleY: 0 } }),
+  'scale-x-out': () => ({ from: { scaleX: 1 }, to: { scaleX: 0 } }),
 };
 
 // ============================================================================
@@ -118,7 +151,7 @@ const SPLIT_TYPES = {
 const animateElement = function (tl, element, opts, baseAnim) {
   // Clone to/from vars so we don't mutate the shared BASE_ANIMATIONS objects
   const fromVars = { ...baseAnim.from };
-  const toVars = { ...baseAnim.to };
+  const toVars = { ...baseAnim.to, duration: opts.duration, ease: opts.ease };
 
   // Apply stagger when animating multiple elements at once
   if (Array.isArray(element)) {
@@ -141,6 +174,15 @@ const animateClip = function (tl, element, opts, directionKey) {
   const clipEnd = getClipDirection('full');
   // Make element immediately visible — opacity:0 CSS is overridden by inline opacity:1
   tl.set(element, { autoAlpha: 1 }, opts.position);
+  return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd }, opts.position);
+};
+
+// animateClipOut — handles clip-path hide animations (out direction).
+// Starts from the fully visible clip-path and collapses to the hidden direction.
+// No tl.set() needed — element is already visible when playing out.
+const animateClipOut = function (tl, element, opts, directionKey) {
+  const clipStart = getClipDirection('full');
+  const clipEnd = getClipDirection(directionKey);
   return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd }, opts.position);
 };
 
@@ -216,12 +258,10 @@ export const ANIMATION_MAP = {
   // --- Element animations (no text splitting) ---
   fade: (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS.fade(opts)),
   'slide-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['slide-up'](opts)),
-  'slide-down': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['slide-down'](opts)),
+  'slide-down': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['slide-down'](opts)),
   'slide-right': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['slide-right'](opts)),
-  'slide-left': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['slide-left'](opts)),
+  'slide-left': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['slide-left'](opts)),
   'move-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-up']()),
   'move-down': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-down']()),
   'move-right': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-right']()),
@@ -229,22 +269,43 @@ export const ANIMATION_MAP = {
   'rotate-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up'](opts)),
   'rotate-up-dramatic': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up-dramatic'](opts)),
-  'scale-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-up'](opts)),
+  'scale-up': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-up-partial'](opts)),
   'scale-down': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-down'](opts)),
-  'scale-y-up': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y-up'](opts)),
-  'scale-y-down': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y-down'](opts)),
-  'scale-x-up': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x-up'](opts)),
-  'scale-x-down': (tl, el, opts) =>
-    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x-down'](opts)),
+    animateElement(tl, el, opts, BASE_ANIMATIONS['scale-down-partial'](opts)),
+  'scale-y': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y']()),
+  'scale-x': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x']()),
+  // --- Element out animations ---
+  'fade-out': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['fade-out']()),
+  'slide-up-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['slide-up-out'](opts)),
+  'slide-down-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['slide-down-out'](opts)),
+  'slide-right-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['slide-right-out'](opts)),
+  'slide-left-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['slide-left-out'](opts)),
+  'move-up-out': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['move-up-out']()),
+  'move-down-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['move-down-out']()),
+  'move-right-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['move-right-out']()),
+  'move-left-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['move-left-out']()),
+  'rotate-up-out': (tl, el, opts) =>
+    animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up-out'](opts)),
+  'scale-y-out': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y-out']()),
+  'scale-x-out': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x-out']()),
   // --- Clip-path reveal animations ---
   'clip-left': (tl, el, opts) => animateClip(tl, el, opts, 'left'),
   'clip-right': (tl, el, opts) => animateClip(tl, el, opts, 'right'),
   'clip-top': (tl, el, opts) => animateClip(tl, el, opts, 'top'),
   'clip-bottom': (tl, el, opts) => animateClip(tl, el, opts, 'bottom'),
+  // --- Clip-path hide animations ---
+  'clip-left-out': (tl, el, opts) => animateClipOut(tl, el, opts, 'left'),
+  'clip-right-out': (tl, el, opts) => animateClipOut(tl, el, opts, 'right'),
+  'clip-top-out': (tl, el, opts) => animateClipOut(tl, el, opts, 'top'),
+  'clip-bottom-out': (tl, el, opts) => animateClipOut(tl, el, opts, 'bottom'),
   // --- Image zoom (dual-element: image + parent) ---
   'image-zoom': (tl, el, opts) => animateImageZoom(tl, el, opts),
   // --- Split-text variants ---

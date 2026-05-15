@@ -4495,13 +4495,45 @@
       to: { autoAlpha: 1, y: "0%", rotateX: 0 }
     }),
     // Scale entrances — fixed scale values (not affected by move)
-    "scale-up": () => ({ from: { autoAlpha: 0, scale: 0.8 }, to: { autoAlpha: 1, scale: 1 } }),
-    "scale-down": () => ({ from: { autoAlpha: 0, scale: 1.2 }, to: { autoAlpha: 1, scale: 1 } }),
+    "scale-up-partial": () => ({
+      from: { autoAlpha: 0, scale: 0.8 },
+      to: { autoAlpha: 1, scale: 1 }
+    }),
+    "scale-down-partial": () => ({
+      from: { autoAlpha: 0, scale: 1.2 },
+      to: { autoAlpha: 1, scale: 1 }
+    }),
     // Axis-specific scale reveals — scaleY/scaleX from 0 acts as the visibility reveal
-    "scale-y-up": () => ({ from: { scaleY: 0 }, to: { scaleY: 1 } }),
-    "scale-y-down": () => ({ from: { scaleY: 1.2 }, to: { scaleY: 1 } }),
-    "scale-x-up": () => ({ from: { scaleX: 0 }, to: { scaleX: 1 } }),
-    "scale-x-down": () => ({ from: { scaleX: 1.2 }, to: { scaleX: 1 } })
+    "scale-y": () => ({ from: { scaleY: 0 }, to: { scaleY: 1 } }),
+    "scale-x": () => ({ from: { scaleX: 0 }, to: { scaleX: 1 } }),
+    // --- Out variants (visible → hidden, forward-playing) ---
+    "fade-out": () => ({ from: { autoAlpha: 1 }, to: { autoAlpha: 0 } }),
+    "slide-up-out": ({ move }) => ({
+      from: { autoAlpha: 1, y: "0rem" },
+      to: { autoAlpha: 0, y: `-${move}` }
+    }),
+    "slide-down-out": ({ move }) => ({
+      from: { autoAlpha: 1, y: "0rem" },
+      to: { autoAlpha: 0, y: move }
+    }),
+    "slide-right-out": ({ move }) => ({
+      from: { autoAlpha: 1, x: "0rem" },
+      to: { autoAlpha: 0, x: move }
+    }),
+    "slide-left-out": ({ move }) => ({
+      from: { autoAlpha: 1, x: "0rem" },
+      to: { autoAlpha: 0, x: `-${move}` }
+    }),
+    "move-up-out": () => ({ from: { y: "0%" }, to: { y: "-100%" } }),
+    "move-down-out": () => ({ from: { y: "0%" }, to: { y: "100%" } }),
+    "move-right-out": () => ({ from: { x: "0%" }, to: { x: "100%" } }),
+    "move-left-out": () => ({ from: { x: "0%" }, to: { x: "-100%" } }),
+    "rotate-up-out": ({ move }) => ({
+      from: { autoAlpha: 1, y: "0rem", rotateX: 0 },
+      to: { autoAlpha: 0, y: `-${move}`, rotateX: -15 }
+    }),
+    "scale-y-out": () => ({ from: { scaleY: 1 }, to: { scaleY: 0 } }),
+    "scale-x-out": () => ({ from: { scaleX: 1 }, to: { scaleX: 0 } })
   };
   var SPLIT_TYPES = {
     lines: { type: "lines, words", linesClass: "line", itemsKey: "lines", staggerKey: "lines" },
@@ -4510,7 +4542,7 @@
   };
   var animateElement = function(tl, element, opts, baseAnim) {
     const fromVars = { ...baseAnim.from };
-    const toVars = { ...baseAnim.to };
+    const toVars = { ...baseAnim.to, duration: opts.duration, ease: opts.ease };
     if (Array.isArray(element)) {
       toVars.stagger = { each: opts.stagger, from: "start" };
     }
@@ -4520,6 +4552,11 @@
     const clipStart = getClipDirection(directionKey);
     const clipEnd = getClipDirection("full");
     tl.set(element, { autoAlpha: 1 }, opts.position);
+    return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd }, opts.position);
+  };
+  var animateClipOut = function(tl, element, opts, directionKey) {
+    const clipStart = getClipDirection("full");
+    const clipEnd = getClipDirection(directionKey);
     return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd }, opts.position);
   };
   var animateImageZoom = function(tl, element, opts) {
@@ -4570,17 +4607,33 @@
     "move-left": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["move-left"]()),
     "rotate-up": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["rotate-up"](opts)),
     "rotate-up-dramatic": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["rotate-up-dramatic"](opts)),
-    "scale-up": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-up"](opts)),
-    "scale-down": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-down"](opts)),
-    "scale-y-up": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-y-up"](opts)),
-    "scale-y-down": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-y-down"](opts)),
-    "scale-x-up": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-x-up"](opts)),
-    "scale-x-down": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-x-down"](opts)),
+    "scale-up": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-up-partial"](opts)),
+    "scale-down": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-down-partial"](opts)),
+    "scale-y": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-y"]()),
+    "scale-x": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-x"]()),
+    // --- Element out animations ---
+    "fade-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["fade-out"]()),
+    "slide-up-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["slide-up-out"](opts)),
+    "slide-down-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["slide-down-out"](opts)),
+    "slide-right-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["slide-right-out"](opts)),
+    "slide-left-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["slide-left-out"](opts)),
+    "move-up-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["move-up-out"]()),
+    "move-down-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["move-down-out"]()),
+    "move-right-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["move-right-out"]()),
+    "move-left-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["move-left-out"]()),
+    "rotate-up-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["rotate-up-out"](opts)),
+    "scale-y-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-y-out"]()),
+    "scale-x-out": (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS["scale-x-out"]()),
     // --- Clip-path reveal animations ---
     "clip-left": (tl, el, opts) => animateClip(tl, el, opts, "left"),
     "clip-right": (tl, el, opts) => animateClip(tl, el, opts, "right"),
     "clip-top": (tl, el, opts) => animateClip(tl, el, opts, "top"),
     "clip-bottom": (tl, el, opts) => animateClip(tl, el, opts, "bottom"),
+    // --- Clip-path hide animations ---
+    "clip-left-out": (tl, el, opts) => animateClipOut(tl, el, opts, "left"),
+    "clip-right-out": (tl, el, opts) => animateClipOut(tl, el, opts, "right"),
+    "clip-top-out": (tl, el, opts) => animateClipOut(tl, el, opts, "top"),
+    "clip-bottom-out": (tl, el, opts) => animateClipOut(tl, el, opts, "bottom"),
     // --- Image zoom (dual-element: image + parent) ---
     "image-zoom": (tl, el, opts) => animateImageZoom(tl, el, opts),
     // --- Split-text variants ---
@@ -4653,7 +4706,6 @@
     const STAGGER = "stagger";
     const POSITION = "data-ix-load-position";
     const DEFAULT_STAGGER = "<0.2";
-    let totalDuration = 0;
     const ELEMENT_TYPE_DEFAULTS = {
       [HEADING]: "slide-up-words",
       // strong 3D flip — matches original loadHeading behaviour
@@ -4666,6 +4718,8 @@
     };
     const ixConfig = getIxConfig(ANIMATION_ID, ELEMENT_TYPE_DEFAULTS);
     if (ixConfig === false) return;
+    if (document.body.getAttribute("data-ix-load-page-run")?.toLowerCase() === "false") return;
+    let totalDuration = window.__ixPageTransitionLoadDelay || 0;
     const wraps = gsap.utils.toArray(`[${ATTRIBUTE}="${WRAP}"]`);
     wraps.forEach((wrap) => {
       const items = [...wrap.querySelectorAll(`[${ATTRIBUTE}]:not([${ATTRIBUTE}-run="false" i])`)];
@@ -4674,7 +4728,6 @@
       const wrapRunAttribute = wrap.getAttribute("data-ix-load-run")?.toLowerCase();
       if (runProp === false && wrapRunAttribute === "false") return;
       const tl = gsap.timeline({
-        delay: totalDuration,
         paused: true,
         defaults: {
           ease: ixConfig.ease ?? "power1.out",
@@ -4709,8 +4762,13 @@
           }
           createAnimation(tl, item, animationType, { ...ixConfig, position });
         });
+        const wrapOffset = totalDuration;
         totalDuration = totalDuration + tl.duration() - 0.4;
-        tl.play();
+        const playFn = function() {
+          tl.play();
+        };
+        const dc = gsap.delayedCall(wrapOffset, playFn);
+        (window.__ixLoadDelays = window.__ixLoadDelays || []).push({ dc, fn: playFn, offset: wrapOffset });
       };
       const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
       checkContainer(items[0], breakpoint, animation);
@@ -5119,6 +5177,251 @@
     };
   };
 
+  // src/interactions/page-loader.js
+  init_live_reload();
+  var pageLoader = function(lenis) {
+    const ANIMATION_ID = "pageloader";
+    const ATTRIBUTE = "data-ix-pageloader";
+    const WRAP_SEL = `[${ATTRIBUTE}="wrap"]`;
+    const BG_SEL = `[${ATTRIBUTE}="background"]`;
+    const ITEM_SEL = `[${ATTRIBUTE}="item"]`;
+    const LOADING_ATTR = `${ATTRIBUTE}-loading`;
+    const PROGRESS_SEL = `[${LOADING_ATTR}="progress"]`;
+    const COUNTER_SEL = `[${LOADING_ATTR}="counter"]`;
+    const ixEnabled = getIxConfig(ANIMATION_ID, true);
+    if (ixEnabled === false) return;
+    const wraps = [...document.querySelectorAll(WRAP_SEL)];
+    if (wraps.length === 0) return;
+    const STORAGE_KEY = "ix-pageloader-seen";
+    const checkStorage = function(storageValue) {
+      if (!storageValue || storageValue === "none") return false;
+      if (storageValue === "session") {
+        if (sessionStorage.getItem(STORAGE_KEY)) return true;
+        sessionStorage.setItem(STORAGE_KEY, "1");
+        return false;
+      }
+      const dayMatch = storageValue.match(/^(\d+)d$/i);
+      if (dayMatch) {
+        const days = parseInt(dayMatch[1], 10);
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored && Date.now() < parseInt(stored, 10) + days * 864e5) return true;
+          localStorage.setItem(STORAGE_KEY, String(Date.now()));
+        } catch (_) {
+          return false;
+        }
+        return false;
+      }
+      return false;
+    };
+    const buildLoadTimeline = function(wrap, duration, ease, startPercent) {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo(wrap, { "--progress": startPercent / 100 }, { "--progress": 1, duration, ease }, 0);
+      const progressEls = [...wrap.querySelectorAll(PROGRESS_SEL)];
+      progressEls.forEach(function(el) {
+        const elConfig = getAttrConfig(el, ANIMATION_ID, { type: "scale-x" });
+        const type = elConfig.type;
+        const pct = 100 - startPercent;
+        if (type === "scale-x") {
+          tl.fromTo(el, { scaleX: startPercent / 100 }, { scaleX: 1, duration, ease }, 0);
+        } else if (type === "scale-y") {
+          tl.fromTo(el, { scaleY: startPercent / 100 }, { scaleY: 1, duration, ease }, 0);
+        } else {
+          const clipFrom = {
+            "clip-right": `inset(0% ${pct}% 0% 0%)`,
+            "clip-left": `inset(0% 0% 0% ${pct}%)`,
+            "clip-top": `inset(${pct}% 0% 0% 0%)`,
+            "clip-bottom": `inset(0% 0% ${pct}% 0%)`
+          }[type] || `inset(0% ${pct}% 0% 0%)`;
+          tl.fromTo(
+            el,
+            { clipPath: clipFrom },
+            { clipPath: "inset(0% 0% 0% 0%)", duration, ease },
+            0
+          );
+        }
+      });
+      const counterEls = [...wrap.querySelectorAll(COUNTER_SEL)];
+      counterEls.forEach(function(el) {
+        const elConfig = getAttrConfig(el, ANIMATION_ID, { end: 100 });
+        const proxy = { value: startPercent };
+        el.textContent = Math.round(startPercent);
+        tl.to(
+          proxy,
+          {
+            value: elConfig.end,
+            duration,
+            ease,
+            onUpdate: function() {
+              el.textContent = Math.round(proxy.value);
+            }
+          },
+          0
+        );
+      });
+      if (tl.totalDuration() === 0) tl.to({}, { duration });
+      return tl;
+    };
+    const buildExitTimeline = function(wrap, config) {
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: { duration: config.outDuration, ease: config.outEase }
+      });
+      const items = [...wrap.querySelectorAll(ITEM_SEL)];
+      items.forEach(function(item, index) {
+        const itemConfig = getAttrConfig(item, ANIMATION_ID, {
+          animateOut: "slide-up-out",
+          duration: config.outDuration,
+          ease: config.outEase,
+          positionOut: index === 0 ? "0" : "<0.2",
+          stagger: 0
+        });
+        const target = itemConfig.stagger > 0 ? [...item.children] : item;
+        createAnimation(tl, target, itemConfig.animateOut, {
+          duration: itemConfig.duration,
+          ease: itemConfig.ease,
+          position: itemConfig.positionOut,
+          stagger: itemConfig.stagger
+        });
+      });
+      const bg = wrap.querySelector(BG_SEL);
+      if (bg) {
+        const bgConfig = getAttrConfig(bg, ANIMATION_ID, {
+          animateOut: "move-up-out",
+          duration: config.outDuration,
+          ease: config.outEase,
+          positionOut: ">-0.3"
+        });
+        createAnimation(tl, bg, bgConfig.animateOut, {
+          duration: bgConfig.duration,
+          ease: bgConfig.ease,
+          position: bgConfig.positionOut
+        });
+      }
+      return tl;
+    };
+    wraps.forEach(function(wrap) {
+      const runProp = checkRunProp(wrap, ANIMATION_ID);
+      if (runProp === false) return;
+      const config = getAttrConfig(wrap, ANIMATION_ID, {
+        timing: "asset",
+        // 'fixed' = set duration; 'asset' = wait for window.onload
+        duration: 3,
+        // loading phase duration (fixed) or max duration (asset)
+        ease: "none",
+        // ease for progress/counter animations
+        minDuration: 1,
+        // (asset mode) minimum seconds before exit can start
+        outDuration: 0.8,
+        // exit animation element duration
+        outEase: "power3.out",
+        // exit animation ease
+        delay: 0.2,
+        // pause between loading phase end and exit start
+        storage: "none",
+        // skip after first visit: 'session', '1d', '7d', etc. 'none' = always show
+        fastMode: false,
+        // true = use fastDuration on return visits instead of skipping
+        fastDuration: 1.5,
+        // loading duration for return visits (fastMode only)
+        fastStart: 0,
+        // counter/progress start value for return visits (0–100)
+        disableLoad: false,
+        // true = skip load interaction while preloader plays
+        loadOffset: 0.6
+        // seconds before exit ends that the load interaction starts
+      });
+      const isReturnVisit = checkStorage(config.storage);
+      const hideWrap = function() {
+        gsap.set(wrap, { display: "none" });
+      };
+      if (isReturnVisit && !config.fastMode) return;
+      const loadDuration = isReturnVisit ? config.fastDuration : config.duration;
+      const loadStart = isReturnVisit ? config.fastStart : 0;
+      if (config.disableLoad) document.body.setAttribute("data-ix-load-page-run", "false");
+      if (!config.disableLoad) {
+        const tempExitTl = buildExitTimeline(wrap, config);
+        window.__ixPageTransitionLoadDelay = Math.max(
+          0,
+          loadDuration + config.delay + tempExitTl.totalDuration() - config.loadOffset
+        );
+      }
+      stopScroll(lenis);
+      const runExit = function() {
+        const exitTl = buildExitTimeline(wrap, config);
+        if (!config.disableLoad && window.__ixLoadDelays && window.__ixLoadDelays.length) {
+          const correctDelay = Math.max(0, config.delay + exitTl.totalDuration() - config.loadOffset);
+          const pending = window.__ixLoadDelays;
+          window.__ixLoadDelays = null;
+          const minOffset = pending.reduce(function(min, d) {
+            return Math.min(min, d.offset);
+          }, Infinity);
+          pending.forEach(function(item) {
+            item.dc.kill();
+            gsap.delayedCall(correctDelay + (item.offset - minOffset), item.fn);
+          });
+        }
+        gsap.delayedCall(config.delay, function() {
+          exitTl.play();
+          gsap.delayedCall(exitTl.totalDuration(), function() {
+            hideWrap();
+            startScroll(lenis);
+          });
+        });
+      };
+      const loadTl = buildLoadTimeline(wrap, loadDuration, config.ease, loadStart);
+      if (config.timing === "asset") {
+        let exitTriggered = false;
+        const triggerExit = function() {
+          if (exitTriggered) return;
+          exitTriggered = true;
+          runExit();
+        };
+        let isLoaded = false;
+        let isMinDone = false;
+        const tryFastForward = function() {
+          if (!isLoaded || !isMinDone) return;
+          if (loadTl.progress() < 1) {
+            gsap.to(loadTl, {
+              progress: 1,
+              duration: 0.5,
+              ease: "power2.out",
+              onComplete: triggerExit
+            });
+          } else {
+            triggerExit();
+          }
+        };
+        window.addEventListener(
+          "load",
+          function() {
+            isLoaded = true;
+            tryFastForward();
+          },
+          { once: true }
+        );
+        gsap.delayedCall(config.minDuration, function() {
+          isMinDone = true;
+          tryFastForward();
+        });
+        loadTl.eventCallback("onComplete", triggerExit);
+      } else {
+        loadTl.eventCallback("onComplete", runExit);
+      }
+      loadTl.play();
+      const breakpoint = attr("none", wrap.getAttribute(`data-ix-${ANIMATION_ID}-breakpoint`));
+      checkContainer(wrap, breakpoint, function(match) {
+        if (match) {
+          hideWrap();
+          startScroll(lenis);
+        }
+      });
+    });
+    window.onpageshow = function(event) {
+      if (event.persisted) window.location.reload();
+    };
+  };
+
   // src/interactions/page-transition.js
   init_live_reload();
   var pageTransition = function(lenis) {
@@ -5133,7 +5436,7 @@
     if (wraps.length === 0) return;
     const STORAGE_KEY = "ix-pagetransition-seen";
     const checkStorage = function(storageValue) {
-      if (!storageValue) return false;
+      if (storageValue === "none") return false;
       if (storageValue === "session") {
         if (sessionStorage.getItem(STORAGE_KEY)) return true;
         sessionStorage.setItem(STORAGE_KEY, "1");
@@ -5170,32 +5473,57 @@
         defaults: { duration: config.duration, ease: config.ease }
       });
       const bg = wrap.querySelector(BG_SEL);
-      const bgGap = bg ? attr(0, bg.getAttribute(`${ATTRIBUTE}-gap`)) : 0;
-      if (bg) {
-        const bgIn = attr("scale-y-up", bg.getAttribute(`${ATTRIBUTE}-animate`));
-        const bgOut = attr(bgIn, bg.getAttribute(`${ATTRIBUTE}-animate-out`));
-        const bgDuration = attr(config.duration, bg.getAttribute(`${ATTRIBUTE}-duration`));
-        const bgEase = attr(config.ease, bg.getAttribute(`${ATTRIBUTE}-ease`));
-        const bgPosition = attr("0", bg.getAttribute(`${ATTRIBUTE}-position`));
-        createAnimation(tl, bg, isOut ? bgOut : bgIn, {
-          duration: bgDuration,
-          ease: bgEase,
-          position: bgPosition
+      const addBg = function() {
+        const bgConfig = getAttrConfig(bg, ANIMATION_ID, {
+          animateIn: "move-up",
+          animateOut: "move-up-out",
+          duration: config.duration,
+          ease: config.ease,
+          easeIn: config.easeIn,
+          easeOut: config.easeOut,
+          positionIn: "0",
+          positionOut: ">-0.3"
         });
-      }
+        bgConfig.easeIn = bgConfig.easeIn || bgConfig.ease;
+        bgConfig.easeOut = bgConfig.easeOut || bgConfig.ease;
+        createAnimation(tl, bg, isOut ? bgConfig.animateOut : bgConfig.animateIn, {
+          duration: bgConfig.duration,
+          ease: isOut ? bgConfig.easeOut : bgConfig.easeIn,
+          position: isOut ? bgConfig.positionOut : bgConfig.positionIn
+        });
+      };
       const items = [...wrap.querySelectorAll(ITEM_SEL)];
-      if (isOut) items.reverse();
-      items.forEach(function(item, index) {
-        const animIn = attr("slide-down", item.getAttribute(`${ATTRIBUTE}-animate`));
-        const animOut = attr(animIn, item.getAttribute(`${ATTRIBUTE}-animate-out`));
-        const duration = attr(config.duration, item.getAttribute(`${ATTRIBUTE}-duration`));
-        const ease = attr(config.ease, item.getAttribute(`${ATTRIBUTE}-ease`));
-        const defaultPosition = isOut && index === 0 ? `>+${bgGap}` : "<0.2";
-        const position = attr(defaultPosition, item.getAttribute(`${ATTRIBUTE}-position`));
-        const stagger = attr(0, item.getAttribute(`${ATTRIBUTE}-stagger`));
-        const target = stagger > 0 ? [...item.children] : item;
-        createAnimation(tl, target, isOut ? animOut : animIn, { duration, ease, position, stagger });
-      });
+      const addItems = function() {
+        items.forEach(function(item, index) {
+          const itemConfig = getAttrConfig(item, ANIMATION_ID, {
+            animateIn: "slide-up",
+            animateOut: "slide-up-out",
+            duration: config.duration,
+            ease: config.ease,
+            easeIn: config.easeIn,
+            easeOut: config.easeOut,
+            positionIn: index === 0 ? "<0.6" : "<0.1",
+            positionOut: index === 0 ? "0" : "<0.1",
+            stagger: 0
+          });
+          itemConfig.easeIn = itemConfig.easeIn || itemConfig.ease;
+          itemConfig.easeOut = itemConfig.easeOut || itemConfig.ease;
+          const target = itemConfig.stagger > 0 ? [...item.children] : item;
+          createAnimation(tl, target, isOut ? itemConfig.animateOut : itemConfig.animateIn, {
+            duration: itemConfig.duration,
+            ease: isOut ? itemConfig.easeOut : itemConfig.easeIn,
+            position: isOut ? itemConfig.positionOut : itemConfig.positionIn,
+            stagger: itemConfig.stagger
+          });
+        });
+      };
+      if (isOut) {
+        addItems();
+        if (bg) addBg();
+      } else {
+        if (bg) addBg();
+        addItems();
+      }
       return tl;
     };
     wraps.forEach(function(wrap, wrapIndex) {
@@ -5203,34 +5531,58 @@
       if (runProp === false) return;
       const config = getAttrConfig(wrap, ANIMATION_ID, {
         mode: "transition",
-        //transition or loader
-        storage: "",
+        // 'transition' (overlay on link click) or 'loader' (plays once on load)
+        storage: "none",
+        // skip loader after first visit: 'session', '1d', '7d', etc. 'none' = always show
         duration: 0.8,
-        ease: "power3.out",
-        delay: 1
+        // animation duration in seconds for all elements
+        ease: "bounce",
+        // GSAP ease (fallback for ease-in/ease-out)
+        easeIn: "power3.out",
+        // ease for the IN animation — defaults to ease
+        easeOut: "power3.in",
+        // ease for the OUT animation — defaults to ease
+        delay: 0.8,
+        // seconds before out animation starts (loader) or half applied each side (transition)
+        disableLoad: false,
+        // true = skip load interaction entirely while transition plays
+        loadOffset: 0.6
+        // seconds before transition ends that the load interaction starts
       });
-      const wrapDisplay = getComputedStyle(wrap).display || "flex";
+      config.easeIn = config.easeIn || config.ease;
+      config.easeOut = config.easeOut || config.ease;
+      const wrapDisplay = "flex";
       let isAnimating = false;
       let isDisabled = false;
       const hideWrap = function() {
         gsap.set(wrap, { display: "none" });
       };
       const playOut = function(outDelay) {
+        stopScroll(lenis);
         const tl = buildTimeline(wrap, config, true);
-        tl.seek(tl.totalDuration());
-        const dur = tl.totalDuration();
+        const outDuration = tl.totalDuration();
+        if (!config.disableLoad) {
+          window.__ixPageTransitionLoadDelay = Math.max(
+            0,
+            outDelay + outDuration - config.loadOffset
+          );
+        }
         gsap.delayedCall(outDelay, function() {
-          tl.reverse();
+          tl.play();
         });
-        gsap.delayedCall(outDelay + dur + 0.4, hideWrap);
+        gsap.delayedCall(outDelay + outDuration, function() {
+          hideWrap();
+          startScroll(lenis);
+        });
       };
       if (config.mode === "loader") {
-        if (checkStorage(config.storage)) {
-          hideWrap();
-          return;
-        }
+        if (checkStorage(config.storage)) return;
+        gsap.set(wrap, { display: wrapDisplay });
+        if (config.disableLoad) document.body.setAttribute("data-ix-load-page-run", "false");
         playOut(config.delay);
       } else {
+        gsap.set(wrap, { display: wrapDisplay });
+        if (config.disableLoad) document.body.setAttribute("data-ix-load-page-run", "false");
         playOut(config.delay / 2);
         if (wrapIndex === 0) {
           document.querySelectorAll("a").forEach(function(link) {
@@ -6758,6 +7110,7 @@
     const gsapInit = function() {
       lenis = initLenis();
       pageTransition(lenis);
+      pageLoader(lenis);
       let mm = gsap.matchMedia();
       mm.add(
         {
