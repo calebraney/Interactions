@@ -28,6 +28,7 @@ import { playSound } from './interactions/play-sound';
 import { scrollIn } from './interactions/scroll-in';
 import { scrolling } from './interactions/scrolling';
 import { scrollProgress } from './interactions/scroll-progress';
+import { scrollActivate } from './interactions/scroll-activate';
 import { stickyNav } from './interactions/sticky-nav';
 import { tabs } from './interactions/tabs';
 import { slider } from './interactions/slider';
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
           scrolling();
           pathHover();
           scrollProgress();
+          scrollActivate();
           magnetic();
           imageSwitch();
           banner();
