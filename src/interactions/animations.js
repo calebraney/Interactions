@@ -174,7 +174,7 @@ const animateClip = function (tl, element, opts, directionKey) {
   const clipEnd = getClipDirection('full');
   // Make element immediately visible — opacity:0 CSS is overridden by inline opacity:1
   tl.set(element, { autoAlpha: 1 }, opts.position);
-  return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd }, opts.position);
+  return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd, duration: opts.duration, ease: opts.ease }, opts.position);
 };
 
 // animateClipOut — handles clip-path hide animations (out direction).
@@ -183,7 +183,7 @@ const animateClip = function (tl, element, opts, directionKey) {
 const animateClipOut = function (tl, element, opts, directionKey) {
   const clipStart = getClipDirection('full');
   const clipEnd = getClipDirection(directionKey);
-  return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd }, opts.position);
+  return tl.fromTo(element, { clipPath: clipStart }, { clipPath: clipEnd, duration: opts.duration, ease: opts.ease }, opts.position);
 };
 
 // animateImageZoom — zooms the image OUT while scaling the parent wrapper IN.
@@ -195,9 +195,9 @@ const animateImageZoom = function (tl, element, opts) {
   const position = opts.position ?? '<';
   // Make image immediately visible, then scale from slightly enlarged
   tl.set(element, { autoAlpha: 1 }, position);
-  tl.fromTo(element, { scale: 1.2 }, { scale: 1, duration }, position);
+  tl.fromTo(element, { scale: 1.2 }, { scale: 1, duration, ease: opts.ease }, position);
   // Parent scales up from slightly reduced — '<' makes them run simultaneously
-  tl.fromTo(parent, { scale: 0.9 }, { scale: 1, duration }, '<');
+  tl.fromTo(parent, { scale: 0.9 }, { scale: 1, duration, ease: opts.ease }, '<');
 };
 
 // animateSplit — handles SplitText animations (words / lines / chars).
@@ -238,6 +238,8 @@ const animateSplit = function (tl, element, opts, baseAnim, splitConfig) {
       // Build animation vars from the base definition + stagger for each unit
       const fromVars = {
         ...baseAnim.from,
+        duration: opts.duration,
+        ease: opts.ease,
         stagger: staggerByType[splitConfig.staggerKey],
       };
       const tween = tl.from(self[splitConfig.itemsKey], fromVars, opts.position);
@@ -269,9 +271,9 @@ export const ANIMATION_MAP = {
   'rotate-up': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up'](opts)),
   'rotate-up-dramatic': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['rotate-up-dramatic'](opts)),
-  'scale-up': (tl, el, opts) =>
+  'scale-up-partial': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['scale-up-partial'](opts)),
-  'scale-down': (tl, el, opts) =>
+  'scale-down-partial': (tl, el, opts) =>
     animateElement(tl, el, opts, BASE_ANIMATIONS['scale-down-partial'](opts)),
   'scale-y': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-y']()),
   'scale-x': (tl, el, opts) => animateElement(tl, el, opts, BASE_ANIMATIONS['scale-x']()),
@@ -330,6 +332,13 @@ export const ANIMATION_MAP = {
     animateSplit(tl, el, opts, BASE_ANIMATIONS['slide-down'](opts), SPLIT_TYPES.lines),
   'slide-down-chars': (tl, el, opts) =>
     animateSplit(tl, el, opts, BASE_ANIMATIONS['slide-down'](opts), SPLIT_TYPES.chars),
+  // slide-right splits
+  'slide-right-words': (tl, el, opts) =>
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['slide-right'](opts), SPLIT_TYPES.words),
+  'slide-right-lines': (tl, el, opts) =>
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['slide-right'](opts), SPLIT_TYPES.lines),
+  'slide-right-chars': (tl, el, opts) =>
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['slide-right'](opts), SPLIT_TYPES.chars),
   // slide-left splits
   'slide-left-words': (tl, el, opts) =>
     animateSplit(tl, el, opts, BASE_ANIMATIONS['slide-left'](opts), SPLIT_TYPES.words),
@@ -353,18 +362,18 @@ export const ANIMATION_MAP = {
     animateSplit(tl, el, opts, BASE_ANIMATIONS['rotate-up-dramatic'](opts), SPLIT_TYPES.chars),
   // scale-up splits
   'scale-up-words': (tl, el, opts) =>
-    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-up'](opts), SPLIT_TYPES.words),
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-up-partial'](opts), SPLIT_TYPES.words),
   'scale-up-lines': (tl, el, opts) =>
-    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-up'](opts), SPLIT_TYPES.lines),
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-up-partial'](opts), SPLIT_TYPES.lines),
   'scale-up-chars': (tl, el, opts) =>
-    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-up'](opts), SPLIT_TYPES.chars),
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-up-partial'](opts), SPLIT_TYPES.chars),
   // scale-down splits
   'scale-down-words': (tl, el, opts) =>
-    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-down'](opts), SPLIT_TYPES.words),
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-down-partial'](opts), SPLIT_TYPES.words),
   'scale-down-lines': (tl, el, opts) =>
-    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-down'](opts), SPLIT_TYPES.lines),
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-down-partial'](opts), SPLIT_TYPES.lines),
   'scale-down-chars': (tl, el, opts) =>
-    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-down'](opts), SPLIT_TYPES.chars),
+    animateSplit(tl, el, opts, BASE_ANIMATIONS['scale-down-partial'](opts), SPLIT_TYPES.chars),
 };
 
 // ============================================================================

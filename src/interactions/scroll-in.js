@@ -128,7 +128,7 @@ export const scrollIn = function () {
           const staggerAmount = attr(DEFAULT_STAGGER_AMOUNT, item.getAttribute(SCROLL_STAGGER));
           const children = getNonContentsChildren(item);
           if (children.length === 0) return;
-          createAnimation(scrollInTL(item), children, animationType, { stagger: staggerAmount, ...ixConfig });
+          createAnimation(scrollInTL(item), children, animationType, { ...ixConfig, stagger: staggerAmount });
           return;
         }
 
