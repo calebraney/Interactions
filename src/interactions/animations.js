@@ -242,7 +242,7 @@ const animateSplit = function (tl, element, opts, baseAnim, splitConfig) {
         ease: opts.ease,
         stagger: staggerByType[splitConfig.staggerKey],
       };
-      const tween = tl.from(self[splitConfig.itemsKey], fromVars, opts.position);
+      const tween = tl.from(self[splitConfig.itemsKey], fromVars, '<');
       // Revert the SplitText DOM changes once the animation completes to keep
       // the DOM clean and avoid any layout side-effects from split nodes
       tween.eventCallback('onComplete', () => self.revert());
