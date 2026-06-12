@@ -54,7 +54,11 @@ export const load = function (reduceMotion) {
   };
   const ixConfig = getIxConfig(ANIMATION_ID, ELEMENT_TYPE_DEFAULTS);
   // Exit if the entire load interaction is disabled in site config
-  if (ixConfig === false) return;
+  if (ixConfig === false) {
+    // Disable the FOUC CSS rule so content stays visible without the load animation
+    document.body.setAttribute('data-ix-load-page-run', 'false');
+    return;
+  }
   // Exit if page-transition has disabled the load interaction for this page load
   if (document.body.getAttribute('data-ix-load-page-run')?.toLowerCase() === 'false') return;
 
